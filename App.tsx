@@ -5,9 +5,9 @@
  * @format
  */
 
+import './shim.js';
 import React from 'react';
 import type {PropsWithChildren} from 'react';
-import './shim';
 import {
   SafeAreaView,
   ScrollView,

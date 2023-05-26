@@ -4,6 +4,8 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import sha256 from 'crypto-js/sha256';
 import * as secp from "noble-secp256k1";
+import '../../shim.js';
+import Web3 from 'web3';
 
 let finalDataChain = ''; // append all values to this variable
 

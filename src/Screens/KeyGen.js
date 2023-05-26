@@ -8,6 +8,7 @@ import '../../shim.js';
 import Web3 from 'web3';
 
 let finalDataChain = ''; // append all values to this variable
+var web3 = new Web3(Web3.givenProvider);
 
 function KeyGen() {
 
@@ -40,9 +41,11 @@ function KeyGen() {
         mode="contained" 
         style={styles.btn} 
         onPress={() => {
-            const privateKey = sha256(finalDataChain);
-            const publicKey = secp.getPublicKey(privateKey.toString());
-            console.warn("Private Key: " + privateKey.toString() + "   Public Key: " + publicKey.toString());
+            const accountObject = web3.eth.accounts.create(finalDataChain);
+            console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
+
+            //const privateKey = sha256(finalDataChain);
+            //const publicKey = secp.getPublicKey(privateKey.toString());
             // insert go to done screen to print private/public key pair;
             // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 

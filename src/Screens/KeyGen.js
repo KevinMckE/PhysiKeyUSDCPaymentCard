@@ -2,10 +2,11 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import sha256 from 'crypto-js/sha256';
-import * as secp from "noble-secp256k1";
+import '../../shim.js';
+import Web3 from 'web3';
 
-let finalDataChain = ''; // append all values to this variable
+let finalDataChain = 'anywarewallet'; // append all values to this variable
+var web3 = new Web3(Web3.givenProvider);
 
 function KeyGen() {
 
@@ -38,13 +39,19 @@ function KeyGen() {
         mode="contained" 
         style={styles.btn} 
         onPress={() => {
-            const privateKey = sha256(finalDataChain);
-            const publicKey = secp.getPublicKey(privateKey.toString());
-            console.warn("Private Key: " + privateKey.toString() + "   Public Key: " + publicKey.toString());
+
+          const innerHash = web3.utils.keccak256(finalDataChain);
+          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
+          console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
+
+            //const privateKey = sha256(finalDataChain);
+            //const publicKey = secp.getPublicKey(privateKey.toString());
             // insert go to done screen to print private/public key pair;
             // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
-            finalDataChain = ''; //clear finalDataChain
+            finalDataChain = 'anywarewallet'; //clear finalDataChain
           }
         }>
           Access Account

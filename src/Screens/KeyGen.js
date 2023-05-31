@@ -4,7 +4,6 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shim.js';
 import Web3 from 'web3';
-import { keccak256 } from 'ethereum-cryptography/keccak.js';
 
 let finalDataChain = 'anywarewallet'; // append all values to this variable
 var web3 = new Web3(Web3.givenProvider);
@@ -41,10 +40,10 @@ function KeyGen() {
         style={styles.btn} 
         onPress={() => {
 
-          const innerHash = keccak256(finalDataChain);
-          const privateKey = keccak256(innerHash.toString() + finalDataChain);
+          const innerHash = web3.utils.keccak256(finalDataChain);
+          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey.toString());
+          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
           console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
 
             //const privateKey = sha256(finalDataChain);

@@ -44,7 +44,7 @@ function KeyGen() {
           let innerHash = keccak256(finalDataChain);
           let privateKey = keccak256(innerHash.toString() + finalDataChain);
 
-          let accountObject = web3.eth.accounts.privateKeyToAccount(privateKey.toString());
+          let accountObject = web3.eth.accounts.privateKeyToAccount(privateKey.toString(), true);
           console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
 
             //const privateKey = sha256(finalDataChain);

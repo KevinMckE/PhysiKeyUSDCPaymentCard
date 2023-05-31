@@ -6,7 +6,7 @@ import '../../shim.js';
 import Web3 from 'web3';
 import { keccak256 } from 'ethereum-cryptography/keccak.js';
 
-let finalDataChain = ''; // append all values to this variable
+let finalDataChain = 'anywarewallet'; // append all values to this variable
 var web3 = new Web3(Web3.givenProvider);
 
 function KeyGen() {
@@ -41,10 +41,10 @@ function KeyGen() {
         style={styles.btn} 
         onPress={() => {
 
-          const innerHash = keccak256(finalDataChain);
-          const privateKey = keccak256(innerHash + finalDataChain);
+          let innerHash = keccak256(finalDataChain);
+          let privateKey = keccak256(innerHash + finalDataChain);
 
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
+          let accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
           console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
 
             //const privateKey = sha256(finalDataChain);
@@ -52,7 +52,7 @@ function KeyGen() {
             // insert go to done screen to print private/public key pair;
             // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
-            finalDataChain = ''; //clear finalDataChain
+            finalDataChain = 'anywarewallet'; //clear finalDataChain
           }
         }>
           Access Account

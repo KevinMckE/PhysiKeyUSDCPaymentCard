@@ -11,6 +11,7 @@
     "postinstall": "./node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs' --hack"
   },
   "dependencies": {
+    "@moralisweb3/common-evm-utils": "^2.22.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
@@ -26,6 +27,7 @@
     "domain-browser": "^1.2.0",
     "events": "^1.1.1",
     "https-browserify": "^0.0.1",
+    "moralis": "^2.22.0",
     "noble-secp256k1": "^1.2.14",
     "node-libs-browser": "^2.2.1",
     "path-browserify": "^0.0.0",

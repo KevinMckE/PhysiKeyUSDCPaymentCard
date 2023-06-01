@@ -15,14 +15,14 @@ import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils/lib/index.d.ts@2.22.0";
 
 function AccountDisplay() {
-  const [walletAddress, setWalletAddress] = useState('');
   const [nfts, setNFTs] = useState();
 
   const getNFTdata = async () => {
     try {
-      getNFTS();
-    } catch (err) {
-      console.log(err);
+        const response = getNFTS();
+        setNFTs(response.data.result);
+    } catch (error) {
+        console.log(error);
     }
   };
 
@@ -49,6 +49,7 @@ const getNFTS = async () => {
     }
   
     console.log(allNFTs);
+    return allNFTs;
   };
 
   const NFTCard = ({ nft }) => {
@@ -81,20 +82,6 @@ const getNFTS = async () => {
         style={[backgroundStyle, { flex: 1 }]}
       >
         <View style={styles.container}>
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('./assets/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={styles.appTitle}>Moralis NFTs</Text>
-          <TextInput
-            placeholder="Enter your wallet address"
-            style={styles.input}
-            onChangeText={text => setWalletAddress(text)}
-            value={walletAddress}
-          />
           <TouchableOpacity style={styles.button} onPress={getNFTdata}>
             <Text style={styles.buttonText}>GET NFTs</Text>
           </TouchableOpacity>

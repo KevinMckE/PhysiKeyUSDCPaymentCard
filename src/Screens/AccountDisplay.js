@@ -16,40 +16,16 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();
+  //const walletAddress = props from keygen
 
-  const getNFTdata = async () => {
+  const getNFTs = async () => {
     try {
-        const response = getNFTS();
+        const response = await axios.get('http://10.5.0.2:5002/get_user_nfts?address=${walletAddress}');
         setNFTs(response.data.result);
+        console.log(response.data.result);
     } catch (error) {
         console.log(error);
     }
-  };
-
-const getNFTS = async () => {
-
-    await Moralis.start({
-      apiKey: "MORALIS_API_KEY",
-      // ...and any other configuration
-    });
-  
-    const allNFTs = [];
-  
-    const address = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
-  
-    const chains = [EvmChain.ETHEREUM, EvmChain.BSC, EvmChain.POLYGON];
-  
-    for (const chain of chains) {
-      const response = await Moralis.EvmApi.nft.getWalletNFTs({
-        address,
-        chain,
-      });
-  
-      allNFTs.push(response);
-    }
-  
-    console.log(allNFTs);
-    return allNFTs;
   };
 
   const NFTCard = ({ nft }) => {
@@ -78,7 +54,7 @@ const getNFTS = async () => {
         style={[{ flex: 1 }]}
       >
         <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={getNFTdata}>
+          <TouchableOpacity style={styles.button} onPress={getNFTs}>
             <Text style={styles.buttonText}>GET NFTs</Text>
           </TouchableOpacity>
           {renderedNFts}
@@ -183,3 +159,33 @@ const styles = StyleSheet.create({
 });
 
 export default AccountDisplay;
+
+
+
+//possible code to use for multiple chain config:
+
+// const getNFTS = async () => {
+
+//   await Moralis.start({
+//     apiKey: "MORALIS_API_KEY",
+//     // ...and any other configuration
+//   });
+
+//   const allNFTs = [];
+
+//   const address = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045";
+
+//   const chains = [EvmChain.ETHEREUM, EvmChain.BSC, EvmChain.POLYGON];
+
+//   for (const chain of chains) {
+//     const response = await Moralis.EvmApi.nft.getWalletNFTs({
+//       address,
+//       chain,
+//     });
+
+//     allNFTs.push(response);
+//   }
+
+//   console.log(allNFTs);
+//   return allNFTs;
+// };

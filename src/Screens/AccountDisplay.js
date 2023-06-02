@@ -72,14 +72,10 @@ const getNFTS = async () => {
   const renderedNFts = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} />);
 
   return (
-    <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+    <SafeAreaView style={[{ flex: 1 }]}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={[backgroundStyle, { flex: 1 }]}
+        style={[{ flex: 1 }]}
       >
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={getNFTdata}>

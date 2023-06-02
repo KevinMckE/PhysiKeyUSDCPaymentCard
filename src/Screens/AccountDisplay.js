@@ -12,7 +12,7 @@ import {
   Image,
 } from 'react-native';
 import Moralis from "moralis";
-import { EvmChain } from "@moralisweb3/common-evm-utils/lib/index.d.ts@2.22.0";
+import { EvmChain } from "@moralisweb3/common-evm-utils";
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();

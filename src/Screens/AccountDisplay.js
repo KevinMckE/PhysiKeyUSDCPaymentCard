@@ -17,7 +17,7 @@ import axios from 'axios';
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();
-  const walletAddress = '0xcfBf34d385EA2d5Eb947063b67eA226dcDA3DC38';
+  const walletAddress = '0x951dA59C1f29D11990c1307301A44608688d99Ec';
 
   const getNFTs = async () => {
     try {
@@ -28,6 +28,16 @@ function AccountDisplay() {
         console.log(error);
     }
   };
+
+  const nft = {
+    owner_of: String,
+    normalized_metadata: {
+      image: String,
+      name: String,
+      description: String,
+      attributes: { value: String},
+    },
+  }
 
   const NFTCard = ({ nft }) => {
     return (

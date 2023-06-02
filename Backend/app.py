@@ -14,9 +14,9 @@ def get_nfts():
     address = request.args.get("address")
     params = {
         "address": address,
-        "chain": "goerli",
+        "chain": "eth",
         "format": "decimal",
-        "limit": 100,
+        "limit": 10,
         "token_addresses": [],
         "cursor": "",
         "normalizeMetadata": True,

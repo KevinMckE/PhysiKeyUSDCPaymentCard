@@ -17,11 +17,11 @@ import axios from 'axios';
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();
-  //const walletAddress = props from keygen
+  const walletAddress = 0x18E55D9f0b7Bf66C29c2158c28060bd9C10C997C;
 
   const getNFTs = async () => {
     try {
-        const response = await axios.get('http://10.5.0.2:5002/get_user_nfts?address=${walletAddress}');
+        const response = await axios.get('http://10.5.0.2:5002/get_user_nfts?address='+{walletAddress});
         setNFTs(response.data.result);
         console.log(response.data.result);
     } catch (error) {

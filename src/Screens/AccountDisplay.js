@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
+import axios from 'axios';
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();

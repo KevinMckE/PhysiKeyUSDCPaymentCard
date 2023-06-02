@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "bundle": "metro bundle --platform android --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --dev false",
+    "bundle-ios": "npx react-native bundle --platform ios --entry-file index.js --dev false --bundle-output ios/main.jsbundle",
     "postinstall": "./node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs' --hack"
   },
   "dependencies": {

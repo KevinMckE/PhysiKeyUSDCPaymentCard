@@ -52,6 +52,8 @@ function KeyGen() {
             // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
             finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+            navigation.navigate('Account Display'); //go to account display screen
           }
         }>
           Access Account

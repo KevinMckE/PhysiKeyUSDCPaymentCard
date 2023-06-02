@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './Screens/HomeScreen';
 import KeyGen from './Screens/KeyGen';
 import WriteNdefScreen from './Screens/WriteNdefScreen';
+import AccountDisplay from './Screens/AccountDisplay';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ function AppNavigator() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Account Portal" component={KeyGen} />
         <Stack.Screen name="Create Link Phrase" component={WriteNdefScreen} />
+        <Stack.Screen name="Account Display" component={AccountDisplay} />
       </Stack.Navigator>
     </NavigationContainer>
   );

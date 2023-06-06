@@ -7,6 +7,8 @@ import Web3 from 'web3';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
+var privateKey = '';
+var publicKey = '';
 
 function RawKeys(props) {
 
@@ -14,7 +16,6 @@ function RawKeys(props) {
   const [modalVisible, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
-
 
   //userInput();
   async function writeNdef() {
@@ -120,9 +121,11 @@ function RawKeys(props) {
         onPress={() => {
 
           const innerHash = web3.utils.keccak256(finalDataChain);
-          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+          privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
           const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
+          publicKey = accountObject.address;
+
           console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
 
             // insert modal to done screen to print private/public key pair;
@@ -136,24 +139,29 @@ function RawKeys(props) {
           Show Raw Keys
         </Button>
 
-        <Modal visible = {visible} style={styles.modal}>
-        <Text style={bannerText}>
-        Public Key: 
-        {'\n'}
-        accountObject.address
-        {'\n'}
-        Private Key:
-        {'\n'}
-        accountObject.privateKey
-
-        </Text>
-        <Button 
-        mode="contained"
-        style={styles.btn}
-        onPress={hideModal}>
-          Hide Keys
-        </Button>
-
+        <Modal  
+        visible = {modalVisible}>
+          <View 
+            backgroundColor={'black'}
+            style={styles.wrapper}
+            borderRadius={10}>
+          <Text style={styles.bannerText}>
+            Private Key:
+            {'\n'}
+            {privateKey}
+            {'\n'}
+            Public Key: 
+            {'\n'}
+            {publicKey}
+            {'\n'}
+          </Text>
+          <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={hideModal}>
+            Hide Keys
+          </Button>
+          </View>
         </Modal>
 
       </View>
@@ -177,7 +185,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   bannerText: {
-    fontSize: 42,
+    fontSize: 20,
     textAlign: 'center',
     color: 'white',
     fontVariant: 'small-caps',
@@ -195,7 +203,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     flex: 1,
-    backgroundColor: "#000000aa",
+    backgroundColor: 'green',
     margin: 50,
     padding: 40,
     borderRadius: 10,

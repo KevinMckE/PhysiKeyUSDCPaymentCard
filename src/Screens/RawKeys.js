@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shim.js';
@@ -9,9 +9,12 @@ let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
 
 function RawKeys(props) {
-  const {navigation} = props;
 
   const [inputValue, setInputValues] = React.useState();
+  const [modalVisible, setModalVisible] = React.useState();
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
+
 
   //userInput();
   async function writeNdef() {
@@ -85,7 +88,7 @@ function RawKeys(props) {
             style={styles.btn} 
             onPress={writeNdef}
             >
-              Write to Tag
+            Write to Tag
           </Button>
 
           </View>
@@ -124,12 +127,35 @@ function RawKeys(props) {
 
             // insert modal to done screen to print private/public key pair;
 
-            finalDataChain = 'anywarewallet'; //clear finalDataChain
+          finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+          showModal();
 
           }
         }>
           Show Raw Keys
         </Button>
+
+        <Modal visible = {visible} style={styles.modal}>
+        <Text style={bannerText}>
+        Public Key: 
+        {'\n'}
+        accountObject.address
+        {'\n'}
+        Private Key:
+        {'\n'}
+        accountObject.privateKey
+
+        </Text>
+        <Button 
+        mode="contained"
+        style={styles.btn}
+        onPress={hideModal}>
+          Hide Keys
+        </Button>
+
+        </Modal>
+
       </View>
 
       </View>
@@ -167,6 +193,13 @@ const styles = StyleSheet.create({
     color: 'black',
     backgroundColor: 'white',
   },
+  modal: {
+    flex: 1,
+    backgroundColor: "#000000aa",
+    margin: 50,
+    padding: 40,
+    borderRadius: 10,
+  }
 });
 
 export default RawKeys;

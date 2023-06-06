@@ -5,66 +5,30 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shim.js';
 import Web3 from 'web3';
 
-let finalDataChain = 'anywarewallet'; // append all values to this variable
+let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
 
 function RawKeys(props) {
   const {navigation} = props;
 
-  const [value, setValue] = React.useState();
-
-  function renderNfcButtons() {
-
-    return(
-
-      <View style={styles.bottom}>
-        <Button 
-        mode="contained" 
-        style={[styles.btn]}
-        onPress={() => {
-          readNdef();
-        }}>
-          Input Link Phrase
-        </Button>
-        <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={() => {
-            console.warn(finalDataChain);
-            // insert go to done screen to print private/public key pair;
-          }
-        }>
-          Check Password
-        </Button>
-        <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={() => {
-
-          const innerHash = web3.utils.keccak256(finalDataChain);
-          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
-
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
-          console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
-
-            //const privateKey = sha256(finalDataChain);
-            //const publicKey = secp.getPublicKey(privateKey.toString());
-            // insert go to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
-
-            finalDataChain = 'anywarewallet'; //clear finalDataChain
-
-            navigation.navigate('Account Display'); //go to account display screen
-          }
-        }>
-          Access Account
-        </Button>
-      </View>
-    )
-
-  }
+  const [inputValue, setInputValues] = React.useState();
 
   //userInput();
+  async function writeNdef() {
+    let scheme = '';
+    const nfcInput = Ndef.uriRecord(`${scheme}${inputValue}`);
+    const bytes = Ndef.encodeMessage([nfcInput]);
+    //console.warn(bytes);
+
+    try {
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      await NfcManager.ndefHandler.writeNdefMessage(bytes);
+    } catch (ex) {
+      // bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+  }
 
   async function readNdef() {
     try{
@@ -96,18 +60,12 @@ function RawKeys(props) {
     <ImageBackground source={require('../assets/AnyWareBackground.png')}
     style={styles.backgroundImage}>
       <View style={styles.wrapper}>
-        <View style={styles.wrapper}>
-          <Text style={styles.bannerText}>
-          Account
-          {'\n'}
-          Portal
-          </Text>
-        </View>
           <View style={[styles.textInput]}>
+
           <TextInput
-            label="INPUT LINK CHAIN"
-            value={value}
-            onChangeText={setValue}
+            label="Add Text to Input or Tag"
+            inputValue={inputValue}
+            onChangeText={setInputValues}
             autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
@@ -117,12 +75,66 @@ function RawKeys(props) {
             mode="contained" 
             style={styles.btn} 
             onPress={() => {
-            finalDataChain += value;
+            finalDataChain += inputValue;
             }}>
-            Input Link Chain
+            Add to Input
           </Button>
+
+          <Button 
+            mode="contained" 
+            style={styles.btn} 
+            onPress={writeNdef}
+            >
+              Write to Tag
+          </Button>
+
           </View>
-        {renderNfcButtons()}
+
+        <View style={styles.bottom}>
+        <Button 
+        mode="contained" 
+        style={[styles.btn]}
+        onPress={() => {
+          readNdef();
+        }}>
+          Input From Tag
+        </Button>
+        
+        <Button 
+        mode="contained" 
+        style={styles.btn} 
+        onPress={() => {
+            console.warn(finalDataChain);
+            // insert go to done screen to print private/public key pair;
+          }
+        }>
+          Check Input
+        </Button>
+
+        <Button 
+        mode="contained" 
+        style={styles.btn} 
+        onPress={() => {
+
+          const innerHash = web3.utils.keccak256(finalDataChain);
+          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
+          console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
+
+            // need encryption of private key, and need to pass encryption password to Account Display
+            // insert modal to done screen to print private/public key pair;
+            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
+
+            finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+            navigation.navigate('Account Display'); //go to account display screen
+          }
+        }>
+          Show Raw Keys
+        </Button>
+      </View>
+
       </View>
     </ImageBackground>
     );

@@ -13,7 +13,7 @@ var publicKey = '';
 function RawKeys(props) {
 
   const [inputValue, setInputValues] = React.useState();
-  const [modalVisible, setModalVisible] = React.useState();
+  const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 

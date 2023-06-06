@@ -68,9 +68,9 @@ function HomeScreen(props) {
           mode="contained" 
           style={styles.btn} 
           onPress={() => {
-            navigation.navigate('Create Link Phrase');
+            navigation.navigate('Raw Keys');
           }}>
-            Create Link Phrase
+            Raw Keys
           </Button>
         </View>
       )

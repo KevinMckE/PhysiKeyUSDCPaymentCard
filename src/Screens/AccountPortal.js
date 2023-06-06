@@ -8,7 +8,7 @@ import Web3 from 'web3';
 let finalDataChain = 'anywarewallet'; // append all values to this variable
 var web3 = new Web3(Web3.givenProvider);
 
-function KeyGen(props) {
+function AccountPortal(props) {
   const {navigation} = props;
 
   const [value, setValue] = React.useState();
@@ -160,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KeyGen;
+export default AccountPortal;

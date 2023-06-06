@@ -5,11 +5,11 @@ import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 
 function WriteNdefScreen(props) {
   const [selectedLinkType, setSelectedLinkType] = React.useState('WEB');
-  const [value, setValue] = React.useState('');
+  const [tagValue, setTagValue] = React.useState('');
 
   async function writeNdef() {
     let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${value}`);
+    const nfcInput = Ndef.uriRecord(`${scheme}${tagValue}`);
     const bytes = Ndef.encodeMessage([nfcInput]);
     //console.warn(bytes);
 
@@ -35,8 +35,8 @@ function WriteNdefScreen(props) {
           </Text>
 
           <TextInput style={styles.textInput}
-            value={value}
-            onChangeText={setValue}
+            tagValue={tagValue}
+            onChangeText={setTagValue}
             autoCapitalize={false}
           />
       

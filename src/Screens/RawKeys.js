@@ -122,13 +122,10 @@ function RawKeys(props) {
           const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
           console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
 
-            // need encryption of private key, and need to pass encryption password to Account Display
             // insert modal to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
             finalDataChain = 'anywarewallet'; //clear finalDataChain
 
-            navigation.navigate('Account Display'); //go to account display screen
           }
         }>
           Show Raw Keys

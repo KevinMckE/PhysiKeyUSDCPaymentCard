@@ -83,7 +83,7 @@ function HomeScreen(props) {
       <View style={styles.wrapper}>
         <View style={styles.wrapper}>
           <Text style={styles.bannerText}>
-          No-Ware
+          AnyWare
           {'\n'}
           Access
           </Text>

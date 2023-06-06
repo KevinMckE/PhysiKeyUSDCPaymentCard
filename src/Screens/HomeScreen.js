@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcManager from 'react-native-nfc-manager';
 
@@ -7,6 +7,9 @@ function HomeScreen(props) {
     const {navigation} = props;
     const [hasNfc, setHasNfc] = React.useState(null);
     const [enabled, setEnabled] = React.useState(null);
+    const [modalVisible, setModalVisible] = React.useState();
+    const showModal = () => setModalVisible(true);
+    const hideModal = () => setModalVisible(false);
 
     React.useEffect(() => {
         async function checkNfc() {
@@ -82,6 +85,24 @@ function HomeScreen(props) {
     style={styles.wrapper}>
       <View style={styles.wrapper}>
         <View style={styles.wrapper}>
+          <Modal  
+          visible = {modalVisible}>
+            <View 
+              backgroundColor={'black'}
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText}>
+              Set Your Phone To Airplane Mode
+              Before Creating Or Viewing Keys
+            </Text>
+            <Button 
+              mode="contained"
+              style={styles.btn}
+              onPress={hideModal}>
+              I Promise I Will
+            </Button>
+            </View>
+          </Modal>
           <Text style={styles.bannerText}>
           AnyWare
           {'\n'}

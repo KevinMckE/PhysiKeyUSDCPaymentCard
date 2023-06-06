@@ -5,13 +5,13 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shim.js';
 import Web3 from 'web3';
 
-let finalDataChain = 'anywarewallet'; // append all values to this variable
+let finalDataChain = 'anywarewallet'; // append all textValues to this variable
 var web3 = new Web3(Web3.givenProvider);
 
 function AccountPortal(props) {
   const {navigation} = props;
 
-  const [value, setValue] = React.useState();
+  const [textValue, setTextValue] = React.useState();
 
   function renderNfcButtons() {
 
@@ -24,7 +24,7 @@ function AccountPortal(props) {
         onPress={() => {
           readNdef();
         }}>
-          Input Link Phrase
+          Input From Tag
         </Button>
         <Button 
         mode="contained" 
@@ -34,7 +34,7 @@ function AccountPortal(props) {
             // insert go to done screen to print private/public key pair;
           }
         }>
-          Check Password
+          Check Input
         </Button>
         <Button 
         mode="contained" 
@@ -105,9 +105,9 @@ function AccountPortal(props) {
         </View>
           <View style={[styles.textInput]}>
           <TextInput
-            label="INPUT LINK CHAIN"
-            value={value}
-            onChangeText={setValue}
+            label="Add to Input"
+            textValue={textValue}
+            onChangeText={setTextValue}
             autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
@@ -117,9 +117,9 @@ function AccountPortal(props) {
             mode="contained" 
             style={styles.btn} 
             onPress={() => {
-            finalDataChain += value;
+            finalDataChain += textValue;
             }}>
-            Input Link Chain
+            Add to Input
           </Button>
           </View>
         {renderNfcButtons()}

@@ -64,7 +64,7 @@ function RawKeys(props) {
     <ImageBackground source={require('../assets/AnyWareBackground.png')}
     style={styles.backgroundImage}>
       <View style={styles.wrapper}>
-          <View style={[styles.textInput]}>
+        <View style={[styles.textInput]}>
 
           <TextInput
             label="Add Text to Input or Tag"
@@ -92,29 +92,30 @@ function RawKeys(props) {
             Write to Tag
           </Button>
 
-          </View>
+          <Button 
+          mode="contained" 
+          style={[styles.btn]}
+          onPress={() => {
+            readNdef();
+          }}>
+            Input From Tag
+          </Button>
+        
+          <Button 
+          mode="contained" 
+          style={styles.btn} 
+          onPress={() => {
+              console.warn(finalDataChain);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            Check Input
+          </Button>
+
+        </View>
 
         <View style={styles.bottom}>
-        <Button 
-        mode="contained" 
-        style={[styles.btn]}
-        onPress={() => {
-          readNdef();
-        }}>
-          Input From Tag
-        </Button>
         
-        <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={() => {
-            console.warn(finalDataChain);
-            // insert go to done screen to print private/public key pair;
-          }
-        }>
-          Check Input
-        </Button>
-
         <Button 
         mode="contained" 
         style={styles.btn} 

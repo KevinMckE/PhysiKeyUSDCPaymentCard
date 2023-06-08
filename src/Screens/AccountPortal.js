@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+import { useNavigation } from '@react-navigation/native';
 import '../../shim.js';
 import Web3 from 'web3';
 
@@ -158,12 +159,17 @@ function AccountPortal(props) {
             mode="contained"
             style={styles.btn}
             onPress={() => {
-            // this needs to try to write the JSON file to the tag, if successful then navigate to account display
-            // if not successful, hide modal, clear passwords, and display error message
-            navigation.navigate('Account Display', {
-              oneTimeEncryptionPW,
-              publicKey,
-            });
+              // this needs to try to write the JSON file to the tag, if successful then navigate to account display
+              // if not successful, hide modal, clear passwords, and display error message
+
+              setInputValues = encryptedPrivateKey;
+              writeNdef();
+              publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
+              encryptedPrivateKey = {};
+
+              data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+
+              navigation.navigate('Account Display', { data });
             }}>
             Sign With Tag
           </Button>
@@ -173,12 +179,17 @@ function AccountPortal(props) {
                   // encrypted JSON file, and the public key to the next screen
             mode="contained"
             style={styles.btn}
-            onPress={navigation.navigate('Account Display', {
-              encryptedPrivateKey,
-              oneTimeEncryptionPW,
-            })}>
+            onPress={ () => {
+
+              publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
+              data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+              
+              navigation.navigate('Account Display', {data });
+            }
+            }>
             Easy Sign
           </Button>
+
           <Button 
             mode="contained"
             style={styles.btn}

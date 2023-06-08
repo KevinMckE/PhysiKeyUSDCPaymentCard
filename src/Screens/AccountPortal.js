@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shim.js';
@@ -7,11 +7,17 @@ import Web3 from 'web3';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
+var publicKey = '';
+var oneTimeEncryptionPW = '';
+var encryptedPrivateKey = {};
 
 function AccountPortal(props) {
   const {navigation} = props;
 
   const [inputValue, setInputValues] = React.useState();
+  const [modalVisible=false, setModalVisible] = React.useState();
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
 
   //userInput();
   async function writeNdef() {
@@ -88,51 +94,105 @@ function AccountPortal(props) {
               Write to Tag
           </Button>
 
+          <Button 
+            mode="contained" 
+            style={[styles.btn]}
+            onPress={() => {
+              readNdef();
+            }}>
+              Input From Tag
+          </Button>
+        
+          <Button 
+            mode="contained" 
+            style={styles.btn} 
+            onPress={() => {
+                console.warn(finalDataChain);
+                // insert go to done screen to print private/public key pair;
+              }
+            }>
+              Check Input
+          </Button>
+
           </View>
 
         <View style={styles.bottom}>
-        <Button 
-        mode="contained" 
-        style={[styles.btn]}
-        onPress={() => {
-          readNdef();
-        }}>
-          Input From Tag
-        </Button>
         
         <Button 
         mode="contained" 
         style={styles.btn} 
-        onPress={() => {
-            console.warn(finalDataChain);
-            // insert go to done screen to print private/public key pair;
-          }
-        }>
-          Check Input
-        </Button>
-
-        <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={() => {
+        onPress={ () => {
 
           const innerHash = web3.utils.keccak256(finalDataChain);
           const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
-          console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
+          oneTimeEncryptionPW = web3.utils.randomHex(32);
+          encryptedPrivateKey = web3.eth.accounts.encrypt(privateKey, oneTimeEncryptionPW);
+          privateKey = '';
+          finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+          console.warn(encryptedPrivateKey);
 
             // need encryption of private key, and need to pass encryption password to Account Display
             // insert modal to done screen to print private/public key pair;
             // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
-            finalDataChain = 'anywarewallet'; //clear finalDataChain
+          showModal();
 
-            navigation.navigate('Account Display'); //go to account display screen
           }
         }>
           Access Account
         </Button>
+
+      <Modal  
+        visible = {modalVisible}>
+          <View 
+            backgroundColor={'black'}
+            style={styles.wrapper}
+            borderRadius={10}>
+          
+          <Button // this button needs to write the encrypted private json file to the tag
+                  // then decrypt the private key to initialize the public key
+                  // then navigate to the account display while passing the
+                  // onetimeencryption password and the public key into the next screen
+            mode="contained"
+            style={styles.btn}
+            onPress={() => {
+            // this needs to try to write the JSON file to the tag, if successful then navigate to account display
+            // if not successful, hide modal, clear passwords, and display error message
+            navigation.navigate('Account Display', {
+              oneTimeEncryptionPW,
+              publicKey,
+            });
+            }}>
+            Sign With Tag
+          </Button>
+
+          <Button // this button needs to store the JSON for later use and navigate to 
+                  // the account display while passing the onetimeencryption password, the
+                  // encrypted JSON file, and the public key to the next screen
+            mode="contained"
+            style={styles.btn}
+            onPress={navigation.navigate('Account Display', {
+              encryptedPrivateKey,
+              oneTimeEncryptionPW,
+            })}>
+            Easy Sign
+          </Button>
+          <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={ () => {
+              finalDataChain = 'anywarewallet';
+              encryptedPrivateKey = {};
+              hideModal();
+            }
+            }>
+            Cancel & Clear Keys
+          </Button>
+          </View>
+      </Modal>
+
       </View>
 
       </View>

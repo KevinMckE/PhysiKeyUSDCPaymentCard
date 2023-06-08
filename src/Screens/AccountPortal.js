@@ -172,7 +172,7 @@ function AccountPortal(props) {
               setInputValues(encryptedPrivateKey);
               console.warn(encryptedPrivateKey);
               writeNdef();
-              encryptedPrivateKey = {};
+              encryptedPrivateKey = '';
 
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();

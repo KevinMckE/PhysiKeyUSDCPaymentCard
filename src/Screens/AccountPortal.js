@@ -126,10 +126,13 @@ function AccountPortal(props) {
         onPress={ () => {
 
           const innerHash = web3.utils.keccak256(finalDataChain);
-          const privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+          var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
           oneTimeEncryptionPW = web3.utils.randomHex(32);
           encryptedPrivateKey = web3.eth.accounts.encrypt(privateKey, oneTimeEncryptionPW);
+          var decryptedAccount = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW);
+          publicKey = decryptedAccount.address;
+          decryptedAccount = {};
           privateKey = '';
           finalDataChain = 'anywarewallet'; //clear finalDataChain
 
@@ -165,11 +168,10 @@ function AccountPortal(props) {
 
               privateKeyToTag();
               writeNdef();
-              publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
               encryptedPrivateKey = {};
 
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
-
+              hideModal();
               navigation.navigate('Account Display', { data });
             }}>
             Sign With Tag
@@ -182,9 +184,8 @@ function AccountPortal(props) {
             style={styles.btn}
             onPress={ () => {
 
-              publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
-              
+              hideModal();
               navigation.navigate('Account Display', { data });
             }
             }>

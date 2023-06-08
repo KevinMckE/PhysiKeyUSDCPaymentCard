@@ -5,12 +5,13 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
 import '../../shim.js';
 import Web3 from 'web3';
+import CryptoJS from 'crypto-js';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
 var publicKey = '';
 var oneTimeEncryptionPW = '';
-var encryptedPrivateKey = {};
+var encryptedPrivateKey = '';
 
 function AccountPortal(props) {
   const {navigation} = props;
@@ -128,8 +129,8 @@ function AccountPortal(props) {
           privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
           oneTimeEncryptionPW = web3.utils.randomHex(32);
-          encryptedPrivateKey = web3.eth.accounts.encrypt(privateKey, oneTimeEncryptionPW);
-          var decryptedAccount = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW);
+          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+          var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
           publicKey = decryptedAccount.address;
           decryptedAccount = {};
           privateKey = '';
@@ -168,8 +169,8 @@ function AccountPortal(props) {
               // This isn't working, nothing is getting written,
               // POSSIBLY THE JSON IS TOO LONG TO BE WRITTEN TO THE TAG
               // CHATGPT says the encrypted PrivateKey is 450 bytes
-              setInputValues(JSON.stringify(encryptedPrivateKey));
-              console.warn(JSON.stringify(encryptedPrivateKey));
+              setInputValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
               writeNdef();
               encryptedPrivateKey = {};
 

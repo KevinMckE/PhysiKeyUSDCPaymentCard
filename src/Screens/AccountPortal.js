@@ -16,6 +16,7 @@ function AccountPortal(props) {
   const {navigation} = props;
 
   const [inputValue, setInputValues] = React.useState();
+  const privateKeyToTag = () => setInputValues(encryptedPrivateKey);
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -162,7 +163,7 @@ function AccountPortal(props) {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
 
-              setInputValues = encryptedPrivateKey;
+              privateKeyToTag();
               writeNdef();
               publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
               encryptedPrivateKey = {};
@@ -184,7 +185,7 @@ function AccountPortal(props) {
               publicKey = web3.eth.accounts.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).address;
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               
-              navigation.navigate('Account Display', {data });
+              navigation.navigate('Account Display', { data });
             }
             }>
             Easy Sign

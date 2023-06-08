@@ -16,7 +16,6 @@ function AccountPortal(props) {
   const {navigation} = props;
 
   const [inputValue, setInputValues] = React.useState();
-  const privateKeyToTag = () => setInputValues(encryptedPrivateKey);
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -136,7 +135,7 @@ function AccountPortal(props) {
           privateKey = '';
           finalDataChain = 'anywarewallet'; //clear finalDataChain
 
-          console.warn(encryptedPrivateKey);
+          //console.warn(encryptedPrivateKey);
 
             // need encryption of private key, and need to pass encryption password to Account Display
             // insert modal to done screen to print private/public key pair;
@@ -165,10 +164,13 @@ function AccountPortal(props) {
             onPress={() => {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
-
-              privateKeyToTag();
+              
+              // This isn't working, nothing is getting written,
+              // POSSIBLY THE JSON IS TOO LONG TO BE WRITTEN TO THE TAG
+              setInputValues(JSON.stringify(encryptedPrivateKey));
+              console.warn(JSON.stringify(encryptedPrivateKey));
               writeNdef();
-              encryptedPrivateKey = {};
+              //encryptedPrivateKey = {};
 
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();

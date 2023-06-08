@@ -125,7 +125,7 @@ function AccountPortal(props) {
         onPress={ () => {
 
           const innerHash = web3.utils.keccak256(finalDataChain);
-          var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+          privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
           oneTimeEncryptionPW = web3.utils.randomHex(32);
           encryptedPrivateKey = web3.eth.accounts.encrypt(privateKey, oneTimeEncryptionPW);
@@ -167,10 +167,11 @@ function AccountPortal(props) {
               
               // This isn't working, nothing is getting written,
               // POSSIBLY THE JSON IS TOO LONG TO BE WRITTEN TO THE TAG
+              // CHATGPT says the encrypted PrivateKey is 450 bytes
               setInputValues(JSON.stringify(encryptedPrivateKey));
               console.warn(JSON.stringify(encryptedPrivateKey));
               writeNdef();
-              //encryptedPrivateKey = {};
+              encryptedPrivateKey = {};
 
               data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();

@@ -126,12 +126,14 @@ function AccountPortal(props) {
         onPress={ () => {
 
           const innerHash = web3.utils.keccak256(finalDataChain);
-          privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+          var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
           oneTimeEncryptionPW = web3.utils.randomHex(32);
           encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
           var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
           publicKey = decryptedAccount.address;
+
+          // reset all values containing sensitive data to null / baseline:
           decryptedAccount = {};
           privateKey = '';
           finalDataChain = 'anywarewallet'; //clear finalDataChain
@@ -155,9 +157,9 @@ function AccountPortal(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
+          <Text>{publicKey}</Text>
           
-          <Button // this button needs to write the encrypted private json file to the tag
-                  // then decrypt the private key to initialize the public key
+          <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the
                   // onetimeencryption password and the public key into the next screen
             mode="contained"
@@ -174,7 +176,7 @@ function AccountPortal(props) {
               writeNdef();
               encryptedPrivateKey = '';
 
-              data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+              const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
             }}>
@@ -188,7 +190,7 @@ function AccountPortal(props) {
             style={styles.btn}
             onPress={ () => {
 
-              data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+              const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
             }

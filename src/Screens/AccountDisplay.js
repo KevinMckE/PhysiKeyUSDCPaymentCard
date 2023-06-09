@@ -14,19 +14,19 @@ import {
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 import axios from 'axios';
-// import { useRoute } from '@react-navigation/native';
-
-// const route = useRoute();
-// const { data } = route.params;
-// const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
+import { useRoute } from '@react-navigation/native';
 
 function AccountDisplay() {
   const [nfts, setNFTs] = useState();
-  const walletAddress = '';
-
+  const route = useRoute();
+  const { data } = route.params;
+  const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
+ 
+  
+  
   const getNFTs = async () => {
     try {
-        const response = await axios.get('http://10.0.0.44:5002/get_user_nfts?address=' + walletAddress);
+        const response = await axios.get('http://10.0.0.44:5002/get_user_nfts?address=' + publicKey);
         setNFTs(response.data.result);
         console.log(response.data.result);
     } catch (error) {
@@ -65,7 +65,7 @@ function AccountDisplay() {
 
   return (
     <SafeAreaView style={[{ flex: 1 }]}>
-      <Text style={styles.appTitle}>{walletAddress}</Text>
+      <Text style={styles.appTitle}>{publicKey}</Text>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[{ flex: 1 }]}

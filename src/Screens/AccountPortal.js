@@ -18,7 +18,7 @@ function AccountPortal(props) {
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   var web3 = new Web3(Web3.givenProvider);
   
-  const [inputValue='anywarewallet', setInputValues] = React.useState();
+  const [inputValue='', setInputValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -177,7 +177,7 @@ function AccountPortal(props) {
               
               writeNdef();
               encryptedPrivateKey = '';
-              setInputValues('anywarewallet');
+              setInputValues('');
 
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
@@ -194,7 +194,7 @@ function AccountPortal(props) {
             style={styles.btn}
             onPress={ () => {
 
-              setInputValues('anywarewallet');
+              setInputValues('');
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
@@ -210,7 +210,7 @@ function AccountPortal(props) {
               finalDataChain = 'anywarewallet';
               encryptedPrivateKey = '';
               oneTimeEncryptionPW = '';
-              setInputValues('anywarewallet');
+              setInputValues('');
               hideModal();
             }
             }>

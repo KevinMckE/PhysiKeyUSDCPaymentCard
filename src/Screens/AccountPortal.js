@@ -75,6 +75,7 @@ function AccountPortal(props) {
           <TextInput
             label="Add Text to Input or Tag"
             autoComplete='off'
+            autoCorrect={false}
             inputValue={inputValue}
             onChangeText={setInputValues}
             autoCapitalize={false}

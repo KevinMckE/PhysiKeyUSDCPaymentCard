@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
   Image,
 } from 'react-native';

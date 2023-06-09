@@ -245,6 +245,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
+    padding: 20,
   },
   bottom: {
     paddingHorizontal: 20,

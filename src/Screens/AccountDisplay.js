@@ -74,6 +74,7 @@ function AccountDisplay() {
           </TouchableOpacity>
           {renderedNFts}
         </View>
+        <Text style={styles.appTitle}>No NFTS in this Address</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -85,6 +86,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
+    textAlign: 'center',
+    padding: 20,
   },
   input: {
     borderWidth: 1,

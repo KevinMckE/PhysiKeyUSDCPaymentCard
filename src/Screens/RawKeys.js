@@ -68,6 +68,7 @@ function RawKeys(props) {
 
           <TextInput
             label="Add Text to Input or Tag"
+            autoComplete='off'
             inputValue={inputValue}
             onChangeText={setInputValues}
             autoCapitalize={false}

@@ -21,8 +21,6 @@ function AccountDisplay() {
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
- 
-  
   
   const getNFTs = async () => {
     try {

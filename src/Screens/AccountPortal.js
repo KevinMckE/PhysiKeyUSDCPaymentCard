@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
+import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
@@ -7,16 +7,18 @@ import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 
-let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
-var web3 = new Web3(Web3.givenProvider);
 var publicKey = '';
-var oneTimeEncryptionPW = '';
 var encryptedPrivateKey = '';
+var oneTimeEncryptionPW = '';
 
 function AccountPortal(props) {
   const {navigation} = props;
 
-  const [inputValue, setInputValues] = React.useState();
+  oneTimeEncryptionPW = ''; // zero out encryption password on return to this screen
+  let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+  var web3 = new Web3(Web3.givenProvider);
+  
+  const [inputValue='anywarewallet', setInputValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -72,6 +74,7 @@ function AccountPortal(props) {
 
           <TextInput
             label="Add Text to Input or Tag"
+            autoComplete='off'
             inputValue={inputValue}
             onChangeText={setInputValues}
             autoCapitalize={false}
@@ -133,6 +136,9 @@ function AccountPortal(props) {
           var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
           publicKey = decryptedAccount.address;
 
+          setInputValues(encryptedPrivateKey);
+          console.warn(encryptedPrivateKey);
+
           // reset all values containing sensitive data to null / baseline:
           decryptedAccount = {};
           privateKey = '';
@@ -157,7 +163,7 @@ function AccountPortal(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text>{publicKey}</Text>
+          <Text style={styles.bannerText}>{publicKey}</Text>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the
@@ -168,17 +174,14 @@ function AccountPortal(props) {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
               
-              // This isn't working, nothing is getting written,
-              // POSSIBLY THE JSON IS TOO LONG TO BE WRITTEN TO THE TAG
-              // CHATGPT says the encrypted PrivateKey is 450 bytes
-              setInputValues(encryptedPrivateKey);
-              console.warn(encryptedPrivateKey);
               writeNdef();
               encryptedPrivateKey = '';
+              setInputValues('anywarewallet');
 
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
+              
             }}>
             Sign With Tag
           </Button>
@@ -190,12 +193,13 @@ function AccountPortal(props) {
             style={styles.btn}
             onPress={ () => {
 
+              setInputValues('anywarewallet');
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
             }
             }>
-            Easy Sign
+            Easy Sign (Less Secure)
           </Button>
 
           <Button 
@@ -203,7 +207,9 @@ function AccountPortal(props) {
             style={styles.btn}
             onPress={ () => {
               finalDataChain = 'anywarewallet';
-              encryptedPrivateKey = {};
+              encryptedPrivateKey = '';
+              oneTimeEncryptionPW = '';
+              setInputValues('anywarewallet');
               hideModal();
             }
             }>

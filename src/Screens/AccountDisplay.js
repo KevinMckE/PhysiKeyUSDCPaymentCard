@@ -21,25 +21,30 @@ function AccountDisplay() {
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
 
-  useEffect(() => {
-    getNFTs();
-  }, []);
-
   const [nftIndex, setNftIndex] = React.useState();
+  const [selectedNFT, setSelectedNFT] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
   
-  const getNFTs = async () => {
-    try {
-        const response = await axios.get('http://10.0.0.44:5002/get_user_nfts?address=' + publicKey);
-        setNFTs(response.data.result);
-        console.log(response.data.result);
-    } catch (error) {
-        console.log(error);
-    }
-  };
+  useEffect(() => {
+    const getNFTs = async () => {
+      try {
+          const response = await axios.get('http://10.0.0.44:5002/get_user_nfts?address=' + publicKey);
+          setNFTs(response.data.result);
+          console.log(response.data.result);
+      } catch (error) {
+          console.log(error);
+      }
+    };
+
+    getNFTs();
+  }, []);
+
+  const selectNFT = () => {
+    setSelectedNFT(renderedNFTs[nftIndex]);
+  }
 
   const NFTCard = ({ nft, index }) => {
     return (
@@ -74,17 +79,18 @@ function AccountDisplay() {
         <View style={styles.container}>
           {renderedNFTs}
         </View>
-        <Text style={styles.appTitle}>No NFTS in this Address</Text>
       </ScrollView>
 
       <Modal  
-        visible = {modalVisible}>
+        visible = {modalVisible}
+        onShow = {selectNFT}>
           <View 
             backgroundColor={'black'}
             style={styles.container}
             borderRadius={10}>
 
-          {renderedNFTs[nftIndex]}
+            {selectedNFT}
+            
 
           <Button 
             mode="contained"

@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Modal,
+  Button,
 } from 'react-native';
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
@@ -18,6 +20,10 @@ function AccountDisplay() {
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
+
+  const [modalVisible=false, setModalVisible] = React.useState();
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
   
   const getNFTs = async () => {
     try {
@@ -41,7 +47,8 @@ function AccountDisplay() {
 
   const NFTCard = ({ nft }) => {
     return (
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card}
+        onPress={showModal}>
         <Image source={{ uri: nft.normalized_metadata.image }} style={styles.image} />
         <View style={styles.info}>
           <Text style={styles.title}>{nft.normalized_metadata.name}</Text>
@@ -52,7 +59,7 @@ function AccountDisplay() {
             </Text>
           ))}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -73,6 +80,31 @@ function AccountDisplay() {
         </View>
         <Text style={styles.appTitle}>No NFTS in this Address</Text>
       </ScrollView>
+
+      <Modal  
+        visible = {modalVisible}>
+          <View 
+            backgroundColor={'black'}
+            style={styles.container}
+            borderRadius={10}>
+
+          <Button 
+            mode="contained"
+            style={styles.button}
+            onPress={hideModal}
+            title = 'Send NFT'>
+          </Button>
+
+          <Button 
+            mode="contained"
+            style={styles.button}
+            onPress={hideModal}
+            title = 'Go Back'>
+          </Button>
+
+          </View>
+        </Modal>
+
     </SafeAreaView>
   );
 }

@@ -35,16 +35,6 @@ function AccountDisplay() {
     }
   };
 
-  const nft = {
-    owner_of: String,
-    normalized_metadata: {
-      image: String,
-      name: String,
-      description: String,
-      attributes: { value: String},
-    },
-  }
-
   const NFTCard = ({ nft }) => {
     return (
       <TouchableOpacity style={styles.card}
@@ -63,7 +53,7 @@ function AccountDisplay() {
     );
   };
 
-  const renderedNFts = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} />);
+  const renderedNFts = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} />); // this is an array of nfts
 
   return (
     <SafeAreaView style={[{ flex: 1 }]}>
@@ -87,6 +77,8 @@ function AccountDisplay() {
             backgroundColor={'black'}
             style={styles.container}
             borderRadius={10}>
+
+          {renderedNFts}
 
           <Button 
             mode="contained"

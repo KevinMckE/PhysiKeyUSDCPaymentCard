@@ -21,6 +21,12 @@ function AccountDisplay() {
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
 
+  useEffect(() => {
+    getNFTs();
+  }, []);
+
+  const [nftIndex, setNftIndex] = React.useState();
+
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -35,10 +41,13 @@ function AccountDisplay() {
     }
   };
 
-  const NFTCard = ({ nft }) => {
+  const NFTCard = ({ nft, index }) => {
     return (
       <TouchableOpacity style={styles.card}
-        onPress={showModal}>
+        onPress={() => {
+          setNftIndex(index);
+          showModal();
+          }}>
         <Image source={{ uri: nft.normalized_metadata.image }} style={styles.image} />
         <View style={styles.info}>
           <Text style={styles.title}>{nft.normalized_metadata.name}</Text>
@@ -53,8 +62,8 @@ function AccountDisplay() {
     );
   };
 
-  const renderedNFts = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} />); // this is an array of nfts
-
+  const renderedNFTs = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} index={index}/>); // this is an array of nfts
+  
   return (
     <SafeAreaView style={[{ flex: 1 }]}>
       <Text style={styles.appTitle}>{publicKey}</Text>
@@ -63,10 +72,7 @@ function AccountDisplay() {
         style={[{ flex: 1 }]}
       >
         <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={getNFTs}>
-            <Text style={styles.buttonText}>GET NFTs</Text>
-          </TouchableOpacity>
-          {renderedNFts}
+          {renderedNFTs}
         </View>
         <Text style={styles.appTitle}>No NFTS in this Address</Text>
       </ScrollView>
@@ -78,7 +84,7 @@ function AccountDisplay() {
             style={styles.container}
             borderRadius={10}>
 
-          {renderedNFts}
+          {renderedNFTs[nftIndex]}
 
           <Button 
             mode="contained"

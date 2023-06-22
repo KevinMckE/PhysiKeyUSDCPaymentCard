@@ -16,13 +16,9 @@ import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
 
 function AccountDisplay() {
-  const [nfts, setNFTs] = useState();
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
-
-  const [nftIndex, setNftIndex] = React.useState();
-  const [selectedNFT, setSelectedNFT] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
@@ -41,33 +37,6 @@ function AccountDisplay() {
 
     getNFTs();
   }, []);
-
-  const selectNFT = () => {
-    setSelectedNFT(renderedNFTs[nftIndex]);
-  }
-
-  const NFTCard = ({ nft, index }) => {
-    return (
-      <TouchableOpacity style={styles.card}
-        onPress={() => {
-          setNftIndex(index);
-          showModal();
-          }}>
-        <Image source={{ uri: nft.normalized_metadata.image }} style={styles.image} />
-        <View style={styles.info}>
-          <Text style={styles.title}>{nft.normalized_metadata.name}</Text>
-          <Text style={styles.description}>{nft.normalized_metadata.description}</Text>
-          {nft.normalized_metadata.attributes.map((attr, index) => (
-            <Text style={styles.attribute} key={index}>
-              {attr.value}
-            </Text>
-          ))}
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderedNFTs = nfts && nfts.map((nft, index) => <NFTCard key={index} nft={nft} index={index}/>); // this is an array of nfts
   
   return (
     <SafeAreaView style={[{ flex: 1 }]}>
@@ -77,19 +46,16 @@ function AccountDisplay() {
         style={[{ flex: 1 }]}
       >
         <View style={styles.container}>
-          {renderedNFTs}
+          
         </View>
       </ScrollView>
 
       <Modal  
-        visible = {modalVisible}
-        onShow = {selectNFT}>
+        visible = {modalVisible}>
           <View 
             backgroundColor={'black'}
             style={styles.container}
             borderRadius={10}>
-
-            {selectedNFT}
             
 
           <Button 

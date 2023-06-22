@@ -213,7 +213,7 @@ export default AccountDisplay;
 
 
 
-//possible code to use for multiple chain config:
+// code to use for multiple chain config:
 
 // const getNFTS = async () => {
 

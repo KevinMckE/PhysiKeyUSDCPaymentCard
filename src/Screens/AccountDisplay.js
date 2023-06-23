@@ -12,43 +12,51 @@ import {
 } from 'react-native';
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
-import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import Config from 'react-native-config';
 
 function AccountDisplay() {
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
+  const [accountBalance = 0.0, setAccountBalance] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
   
   useEffect(() => {
-    const getNFTs = async () => {
+    const getBalance = async () => {
       try {
-          const response = await axios.get('http://10.0.0.44:5002/get_user_nfts?address=' + publicKey);
-          setNFTs(response.data.result);
-          console.log(response.data.result);
+        await Moralis.start({
+          apiKey: Config.MORALIS_API_KEY,
+        });
+      
+        const address = publicKey;
+      
+        const chain = EvmChain.GOERLI;
+      
+        const response = await Moralis.EvmApi.balance.getNativeBalance({
+          address,
+          chain,
+        });
+      
+        console.log(response.toJSON());
+        setAccountBalance(response.balance);
+          
       } catch (error) {
           console.log(error);
       }
     };
 
-    getNFTs();
+    getBalance();
+
   }, []);
   
   return (
     <SafeAreaView style={[{ flex: 1 }]}>
       <Text style={styles.appTitle}>{publicKey}</Text>
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={[{ flex: 1 }]}
-      >
-        <View style={styles.container}>
-          
-        </View>
-      </ScrollView>
+      <Text>{accountBalance}</Text>
 
       <Modal  
         visible = {modalVisible}>

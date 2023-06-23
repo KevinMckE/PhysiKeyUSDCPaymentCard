@@ -3,7 +3,7 @@ import {
   SafeAreaView, StyleSheet, Text, View, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import Moralis from "moralis";
-import { EvmChain } from "@moralisweb3/common-evm-utils";
+import { EvmChain, EvmTransaction } from "@moralisweb3/common-evm-utils";
 import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
 
@@ -49,8 +49,20 @@ function AccountDisplay() {
   }, []);
 
   const signTransaction = () => {
+
     // this should check if the private key is null or not(meaning that 
     // the use either did sign with tag or easy sign)
+
+    const tx = new EvmTransaction({
+      from: publicKey,
+      to: accountToSend,
+      value: amountToSend,
+      chainId: 1,
+    });
+
+    const signedTx = tx.sign("<private key>");
+    const txHash = tx.send(signedTx);
+    
   }
   
   return (

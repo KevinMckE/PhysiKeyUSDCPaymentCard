@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Image,
-  Modal,
-  Button,
-} from 'react-native';
+  SafeAreaView, StyleSheet, Text, View, ImageBackground, Modal} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
 import { useRoute } from '@react-navigation/native';
@@ -19,7 +11,9 @@ function AccountDisplay() {
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
-  const [accountBalance = 0.0, setAccountBalance] = React.useState();
+  const [accountBalance, setAccountBalance] = React.useState();
+  const [accountToSend, setAccountToSend] = React.useState();
+  const [amountToSend, setAmountToSend] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
@@ -42,7 +36,8 @@ function AccountDisplay() {
         });
       
         console.log(response.toJSON());
-        setAccountBalance(response.balance);
+        const json = response.toJSON();
+        setAccountBalance(parseInt(json.balance));
           
       } catch (error) {
           console.log(error);
@@ -52,12 +47,55 @@ function AccountDisplay() {
     getBalance();
 
   }, []);
+
+  const signTransaction = () => {
+    // this should check if the private key is null or not(meaning that 
+    // the use either did sign with tag or easy sign)
+  }
   
   return (
+    <ImageBackground source={require('../assets/AnyWareBackground.png')}
+    style={styles.backgroundImage}>
     <SafeAreaView style={[{ flex: 1 }]}>
-      <Text style={styles.appTitle}>{publicKey}</Text>
-      <Text>{accountBalance}</Text>
+      <Text style={styles.bannerText}>{publicKey}</Text>
+      <Text style={styles.bannerText}>{accountBalance}</Text>
 
+      <Text style={styles.bannerText}>Input Address:</Text>
+
+      <TextInput style={styles.textInput}
+            label="Input Address to Send To"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={accountToSend}
+            onChangeText={setAccountToSend}
+            autoCapitalize={false}
+            backgroundColor={'white'}
+            color={'black'}
+          />
+
+      <Text style={styles.bannerText}>Input Amount to Send:</Text>
+
+      <TextInput style={styles.textInput}
+            label="Input Amount to Send To Address"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={amountToSend}
+            onChangeText={setAmountToSend}
+            autoCapitalize={false}
+            backgroundColor={'white'}
+            color={'black'}
+          />
+
+      <Button 
+            mode="contained" 
+            style={styles.btn} 
+            onPress={() => {
+            signTransaction();
+            }}>
+            Sign/Send
+          </Button>
+
+    
       <Modal  
         visible = {modalVisible}>
           <View 
@@ -65,17 +103,16 @@ function AccountDisplay() {
             style={styles.container}
             borderRadius={10}>
             
-
           <Button 
             mode="contained"
-            style={styles.button}
+            style={styles.btn}
             onPress={hideModal}
             title = 'Send NFT'>
           </Button>
 
           <Button 
             mode="contained"
-            style={styles.button}
+            style={styles.btn}
             onPress={hideModal}
             title = 'Go Back'>
           </Button>
@@ -84,16 +121,17 @@ function AccountDisplay() {
         </Modal>
 
     </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  appTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
+  bannerText: {
+    fontSize: 30,
     textAlign: 'center',
+    color: 'white',
+    fontVariant: 'small-caps',
+    fontWeight: 'bold',
     padding: 20,
   },
   input: {
@@ -105,18 +143,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
   },
-  button: {
-    backgroundColor: '#0f8cff',
-    borderRadius: 8,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 30,
+  backgroundImage: {
+    flex: 1,
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  btn: {
+    width: 250,
+    marginBottom: 15,
+    color: 'black',
+    backgroundColor: 'white',
+  },
+  textInput: {
+    padding: 20,
   },
   container: {
     flex: 1,

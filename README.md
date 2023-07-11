@@ -11,3 +11,5 @@ https://stackoverflow.com/questions/60458933/react-native-ios-simulator-connect-
 https://stackoverflow.com/questions/57664177/error-main-jsbundle-does-not-exist-react-native-0-60-4
 
 Generate a new main.jsbundler file with this command: react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios
+
+Bitcoin Testnet Video: https://www.youtube.com/watch?v=LLZNvl90PC0

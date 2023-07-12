@@ -9,7 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "bundle-ios": "npx react-native bundle --platform ios --entry-file index.js --dev false --bundle-output ios/main.jsbundle",
-    "postinstall": "./node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs' --hack"
+    "postinstall": "./node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,vm,stream,http,https,os,url,net,fs' --hack",
+    "postinstallbtc": "rn-nodeify --install stream,buffer,events,assert --hack"
   },
   "dependencies": {
     "@moralisweb3/common-evm-utils": "^2.22.0",

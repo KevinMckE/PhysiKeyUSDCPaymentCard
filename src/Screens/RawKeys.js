@@ -2,7 +2,8 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import '../../shim.js';
+import '../../shimeth.js';
+import './shim.js';
 import Web3 from 'web3';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable

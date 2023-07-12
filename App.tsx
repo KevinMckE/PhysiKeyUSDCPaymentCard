@@ -5,6 +5,7 @@
  * @format
  */
 
+import './shimeth.js';
 import './shim.js';
 import React from 'react';
 import type {PropsWithChildren} from 'react';

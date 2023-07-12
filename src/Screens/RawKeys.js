@@ -4,6 +4,7 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shimeth.js';
 import './shim.js';
+import Bitcoin from 'react-native-bitcoinjs-lib';
 import Web3 from 'web3';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
@@ -135,6 +136,9 @@ function RawKeys(props) {
             // insert modal to done screen to print private/public key pair;
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+          const keypair = Bitcoin.ECPair.makeRandom();
+          console.warn(keypair.getAddress());
 
           showModal();
 

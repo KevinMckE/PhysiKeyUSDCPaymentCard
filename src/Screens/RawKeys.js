@@ -3,8 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from '
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shimeth.js';
-import './shim.js';
-import Bitcoin from 'react-native-bitcoinjs-lib';
+import '../../shim.js';
+import Bitcoin  from 'react-native-bitcoinjs-lib';
 import Web3 from 'web3';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable

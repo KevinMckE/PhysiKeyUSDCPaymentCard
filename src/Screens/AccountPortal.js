@@ -4,7 +4,7 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
 import '../../shimeth.js';
-import './shim.js';
+import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 

@@ -16,6 +16,7 @@ function AppNavigator() {
         <Stack.Screen name="Account Portal" component={AccountPortal} />
         <Stack.Screen name="Raw Keys" component={RawKeys} />
         <Stack.Screen name="Account Display" component={AccountDisplay} />
+        <Stack.Screen name="Account Display BTC" component={AccountDisplayBTC} />
       </Stack.Navigator>
     </NavigationContainer>
   );

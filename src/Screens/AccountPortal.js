@@ -8,7 +8,6 @@ import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
-import Bitcoin  from 'react-native-bitcoinjs-lib';
 
 var publicKey = '';
 var encryptedPrivateKey = '';
@@ -19,7 +18,6 @@ const ec = new EC('secp256k1');
 function AccountPortal(props) {
   const {navigation} = props;
 
-  oneTimeEncryptionPW = ''; // zero out encryption password on return to this screen
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   var web3 = new Web3(Web3.givenProvider);
   
@@ -83,7 +81,6 @@ function AccountPortal(props) {
             autoCorrect={false}
             inputValue={inputValue}
             onChangeText={setInputValues}
-            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />
@@ -144,6 +141,7 @@ function AccountPortal(props) {
 
           setInputValues(encryptedPrivateKey);
           console.warn(encryptedPrivateKey);
+          console.warn(oneTimeEncryptionPW);
 
           // reset all values containing sensitive data to null / baseline:
           decryptedAccount = {};
@@ -178,6 +176,7 @@ function AccountPortal(props) {
 
           setInputValues(encryptedPrivateKey);
           console.warn(encryptedPrivateKey);
+          console.warn(oneTimeEncryptionPW);
 
           // reset all values containing sensitive data to null / baseline:
           decryptedAccount = {};
@@ -203,7 +202,7 @@ function AccountPortal(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText}>{publicKey}</Text>
+          <Text style={styles.bannerText} selectable>{publicKey}</Text>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the

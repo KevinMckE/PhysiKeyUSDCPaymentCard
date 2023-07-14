@@ -164,7 +164,7 @@ function RawKeys(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText}>
+          <Text style={styles.bannerText} selectable>
             BTC Private Key:
             {'\n'}
             {privateKeyBTC}

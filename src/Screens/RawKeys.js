@@ -4,7 +4,6 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shimeth.js';
 import '../../shim.js';
-import Bitcoin  from 'react-native-bitcoinjs-lib';
 import Web3 from 'web3';
 import { SHA256 } from 'crypto-js';
 import { ec as EC } from 'elliptic';
@@ -134,7 +133,7 @@ function RawKeys(props) {
           const innerHash = web3.utils.keccak256(finalDataChain);
           privateKeyETH = web3.utils.keccak256(innerHash + finalDataChain);
 
-          const accountObjectETH = web3.eth.accounts.privateKeyToAccount(privateKeyETH);
+          var accountObjectETH = web3.eth.accounts.privateKeyToAccount(privateKeyETH);
           publicKeyETH = accountObjectETH.address;
 
           console.warn("ETH Private Key Test: " + accountObjectETH.privateKey + "   ETH Public Key: " + accountObjectETH.address);
@@ -143,14 +142,13 @@ function RawKeys(props) {
 
           const firstHash = SHA256(finalDataChain).toString();
           privateKeyBTC = SHA256(firstHash + finalDataChain).toString();
-          const accountObjectBTC = ec.keyFromPrivate(privateKeyBTC);
+          var accountObjectBTC = ec.keyFromPrivate(privateKeyBTC);
           publicKeyBTC = accountObjectBTC.getPublic('hex');
           console.warn("BTC Private Key: " + privateKeyBTC + "   BTC Public Key: " + publicKeyBTC.toString());
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
-
-          const keypair = Bitcoin.ECPair.makeRandom();
-          console.warn(keypair.getAddress());
+          accountObjectBTC = null;
+          accountObjectETH = null;
 
           // insert modal to done screen to print private/public key pair;
           showModal();

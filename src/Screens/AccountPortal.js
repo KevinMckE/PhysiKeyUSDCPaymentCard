@@ -7,10 +7,14 @@ import '../../shimeth.js';
 import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
+import { ec as EC } from 'elliptic';
+import Bitcoin  from 'react-native-bitcoinjs-lib';
 
 var publicKey = '';
 var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
+const ec = new EC('secp256k1');
+
 
 function AccountPortal(props) {
   const {navigation} = props;
@@ -156,7 +160,41 @@ function AccountPortal(props) {
 
           }
         }>
-          Access Account
+          Access ETH Account
+        </Button>
+
+        <Button 
+        mode="contained" 
+        style={styles.btn} 
+        onPress={ () => {
+
+          const firstHash = CryptoJS.SHA256(finalDataChain).toString();
+          privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+
+          oneTimeEncryptionPW = web3.utils.randomHex(32);
+          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+          var decryptedAccount = ec.keyFromPrivate(privateKey);
+          publicKey = decryptedAccount.getPublic('hex');
+
+          setInputValues(encryptedPrivateKey);
+          console.warn(encryptedPrivateKey);
+
+          // reset all values containing sensitive data to null / baseline:
+          decryptedAccount = {};
+          privateKey = '';
+          finalDataChain = 'anywarewallet'; //clear finalDataChain
+
+          //console.warn(encryptedPrivateKey);
+
+            // need encryption of private key, and need to pass encryption password to Account Display
+            // insert modal to done screen to print private/public key pair;
+            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
+
+          showModal();
+
+          }
+        }>
+          Access BTC Account
         </Button>
 
       <Modal  

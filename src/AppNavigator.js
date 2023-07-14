@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './Screens/HomeScreen';
 import AccountPortal from './Screens/AccountPortal';
 import AccountDisplay from './Screens/AccountDisplay';
+import AccountDisplayBTC from './Screens/AccountDisplayBTC';
 import RawKeys from './Screens/RawKeys';
 
 const Stack = createStackNavigator();

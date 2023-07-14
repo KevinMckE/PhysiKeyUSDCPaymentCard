@@ -6,9 +6,8 @@ import '../../shimeth.js';
 import '../../shim.js';
 import Bitcoin  from 'react-native-bitcoinjs-lib';
 import Web3 from 'web3';
-import { createHash } from 'react-native-crypto';
+import { SHA256 } from 'crypto-js';
 import { ec as EC } from 'elliptic';
-
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
@@ -16,6 +15,7 @@ var privateKeyETH = '';
 var publicKeyETH = '';
 var privateKeyBTC = '';
 var publicKeyBTC = '';
+const ec = new EC('secp256k1');
 
 function RawKeys(props) {
 
@@ -134,28 +134,18 @@ function RawKeys(props) {
           const innerHash = web3.utils.keccak256(finalDataChain);
           privateKeyETH = web3.utils.keccak256(innerHash + finalDataChain);
 
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKeyETH);
-          publicKeyETH = accountObject.address;
+          const accountObjectETH = web3.eth.accounts.privateKeyToAccount(privateKeyETH);
+          publicKeyETH = accountObjectETH.address;
 
-          console.warn("ETH Private Key Test: " + accountObject.privateKey + "   ETH Public Key: " + accountObject.address);
+          console.warn("ETH Private Key Test: " + accountObjectETH.privateKey + "   ETH Public Key: " + accountObjectETH.address);
 
           //BTC address creation:
 
-          const sha256 = (message) => createHash('sha256').update(message).digest();
-
-          const generateKeyPair = () => {
-            const ec = new EC('secp256k1');
-            const firstHash = sha256(finalDataChain);
-            privateKeyBTC = sha256(firstHash + finalDataChain);
-            publicKeyBTC = ec.keyFromPrivate(privateKeyBTC).getPublic();
-            return { privateKeyBTC: privateKeyBTC.toString('hex'), publicKeyBTC: publicKeyBTC.toString('hex') };
-          };
-
-          privateKeyBTC, publicKeyBTC = generateKeyPair();
-          console.warn("BTC Private Key: " + privateKeyBTC + "   BTC Public Key: " + publicKeyBTC);
-
-          
-            
+          const firstHash = SHA256(finalDataChain).toString();
+          privateKeyBTC = SHA256(firstHash + finalDataChain).toString();
+          const accountObjectBTC = ec.keyFromPrivate(privateKeyBTC);
+          publicKeyBTC = accountObjectBTC.getPublic('hex');
+          console.warn("BTC Private Key: " + privateKeyBTC + "   BTC Public Key: " + publicKeyBTC.toString());
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
 
@@ -177,11 +167,19 @@ function RawKeys(props) {
             style={styles.wrapper}
             borderRadius={10}>
           <Text style={styles.bannerText}>
-            Private Key:
+            BTC Private Key:
+            {'\n'}
+            {privateKeyBTC}
+            {'\n'}
+            BTC Public Key: 
+            {'\n'}
+            {publicKeyBTC}
+            {'\n'}
+            ETH Private Key:
             {'\n'}
             {privateKeyETH}
             {'\n'}
-            Public Key: 
+            ETH Public Key: 
             {'\n'}
             {publicKeyETH}
             {'\n'}

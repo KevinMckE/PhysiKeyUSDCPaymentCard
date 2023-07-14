@@ -6,11 +6,16 @@ import '../../shimeth.js';
 import '../../shim.js';
 import Bitcoin  from 'react-native-bitcoinjs-lib';
 import Web3 from 'web3';
+import { createHash } from 'react-native-crypto';
+import { ec as EC } from 'elliptic';
+
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
-var privateKey = '';
-var publicKey = '';
+var privateKeyETH = '';
+var publicKeyETH = '';
+var privateKeyBTC = '';
+var publicKeyBTC = '';
 
 function RawKeys(props) {
 
@@ -125,21 +130,39 @@ function RawKeys(props) {
         style={styles.btn} 
         onPress={() => {
 
+          // Eth address creation:
           const innerHash = web3.utils.keccak256(finalDataChain);
-          privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+          privateKeyETH = web3.utils.keccak256(innerHash + finalDataChain);
 
-          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKey);
-          publicKey = accountObject.address;
+          const accountObject = web3.eth.accounts.privateKeyToAccount(privateKeyETH);
+          publicKeyETH = accountObject.address;
 
-          console.warn("Private Key Test: " + accountObject.privateKey + "   Public Key: " + accountObject.address);
+          console.warn("ETH Private Key Test: " + accountObject.privateKey + "   ETH Public Key: " + accountObject.address);
 
-            // insert modal to done screen to print private/public key pair;
+          //BTC address creation:
+
+          const sha256 = (message) => createHash('sha256').update(message).digest();
+
+          const generateKeyPair = () => {
+            const ec = new EC('secp256k1');
+            const firstHash = sha256(finalDataChain);
+            privateKeyBTC = sha256(firstHash + finalDataChain);
+            publicKeyBTC = ec.keyFromPrivate(privateKeyBTC).getPublic();
+            return { privateKeyBTC: privateKeyBTC.toString('hex'), publicKeyBTC: publicKeyBTC.toString('hex') };
+          };
+
+          privateKeyBTC, publicKeyBTC = generateKeyPair();
+          console.warn("BTC Private Key: " + privateKeyBTC + "   BTC Public Key: " + publicKeyBTC);
+
+          
+            
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
 
           const keypair = Bitcoin.ECPair.makeRandom();
           console.warn(keypair.getAddress());
 
+          // insert modal to done screen to print private/public key pair;
           showModal();
 
           }
@@ -156,11 +179,11 @@ function RawKeys(props) {
           <Text style={styles.bannerText}>
             Private Key:
             {'\n'}
-            {privateKey}
+            {privateKeyETH}
             {'\n'}
             Public Key: 
             {'\n'}
-            {publicKey}
+            {publicKeyETH}
             {'\n'}
           </Text>
           <Button 

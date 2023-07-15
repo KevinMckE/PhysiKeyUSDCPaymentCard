@@ -16,7 +16,7 @@ var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
 
 
-function AccountPortal(props) {
+function AccountPortal1(props) {
   const {navigation} = props;
 
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
@@ -298,4 +298,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AccountPortal;
+export default AccountPortal1;

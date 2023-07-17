@@ -3,24 +3,11 @@ import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal}
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
-import '../../shimeth.js';
-import '../../shim.js';
-import Web3 from 'web3';
-import CryptoJS from 'crypto-js';
-import { ec as EC } from 'elliptic';
-import Bitcoin from 'react-native-bitcoinjs-lib';
-
-var publicKey = '';
-var encryptedPrivateKey = '';
-var oneTimeEncryptionPW = '';
-const ec = new EC('secp256k1');
-
 
 function AccountPortal1(props) {
   const {navigation} = props;
 
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
-  var web3 = new Web3(Web3.givenProvider);
   
   const [inputValue='', setInputValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
@@ -132,69 +119,11 @@ function AccountPortal1(props) {
         style={styles.btn} 
         onPress={ () => {
 
-          const innerHash = web3.utils.keccak256(finalDataChain);
-          var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
-
-          oneTimeEncryptionPW = web3.utils.randomHex(32);
-          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
-          var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
-          publicKey = decryptedAccount.address;
-
-          setInputValues(encryptedPrivateKey);
-          console.warn(encryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
-
-          // reset all values containing sensitive data to null / baseline:
-          decryptedAccount = {};
-          privateKey = '';
-          finalDataChain = 'anywarewallet'; //clear finalDataChain
-
-          //console.warn(encryptedPrivateKey);
-
-            // need encryption of private key, and need to pass encryption password to Account Display
-            // insert modal to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
-
           showModal();
 
           }
         }>
-          Access ETH Account
-        </Button>
-
-        <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={ () => {
-
-          const firstHash = CryptoJS.SHA256(finalDataChain).toString();
-          privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
-
-          oneTimeEncryptionPW = web3.utils.randomHex(32);
-          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
-          var decryptedAccount = ec.keyFromPrivate(privateKey);
-          publicKey = decryptedAccount.getPublic('hex');
-
-          setInputValues(encryptedPrivateKey);
-          console.warn(encryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
-
-          // reset all values containing sensitive data to null / baseline:
-          decryptedAccount = {};
-          privateKey = '';
-          finalDataChain = 'anywarewallet'; //clear finalDataChain
-
-          //console.warn(encryptedPrivateKey);
-
-            // need encryption of private key, and need to pass encryption password to Account Display
-            // insert modal to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
-
-          showModal();
-
-          }
-        }>
-          Access BTC Account
+          Next Step
         </Button>
 
       <Modal  
@@ -203,43 +132,21 @@ function AccountPortal1(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>{publicKey}</Text>
+          <Text style={styles.bannerText} selectable>Input Again</Text>
           
-          <Button // this button needs to write the encrypted private key to the tag
-                  // then navigate to the account display while passing the
-                  // onetimeencryption password and the public key into the next screen
+          <Button 
             mode="contained"
             style={styles.btn}
             onPress={() => {
-              // this needs to try to write the JSON file to the tag, if successful then navigate to account display
-              // if not successful, hide modal, clear passwords, and display error message
               
-              writeNdef();
-              encryptedPrivateKey = '';
               setInputValues('');
 
-              const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+              const data = { finalDataChain };
               hideModal();
-              navigation.navigate('Account Display', { data });
+              navigation.navigate('Account Portal 2', { data });
               
             }}>
-            Sign With Tag
-          </Button>
-
-          <Button // this button needs to store the JSON for later use and navigate to 
-                  // the account display while passing the onetimeencryption password, the
-                  // encrypted JSON file, and the public key to the next screen
-            mode="contained"
-            style={styles.btn}
-            onPress={ () => {
-
-              setInputValues('');
-              const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
-              hideModal();
-              navigation.navigate('Account Display', { data });
-            }
-            }>
-            Easy Sign (Less Secure)
+            Input Again
           </Button>
 
           <Button 
@@ -247,13 +154,11 @@ function AccountPortal1(props) {
             style={styles.btn}
             onPress={ () => {
               finalDataChain = 'anywarewallet';
-              encryptedPrivateKey = '';
-              oneTimeEncryptionPW = '';
               setInputValues('');
               hideModal();
             }
             }>
-            Cancel & Clear Keys
+            Cancel & Try Again
           </Button>
           </View>
       </Modal>

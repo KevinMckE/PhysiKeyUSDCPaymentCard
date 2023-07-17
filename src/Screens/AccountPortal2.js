@@ -3,6 +3,7 @@ import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal}
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import '../../shimeth.js';
 import '../../shim.js';
 import Web3 from 'web3';
@@ -15,9 +16,12 @@ var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
 
-
 function AccountPortal2(props) {
   const {navigation} = props;
+
+  const route = useRoute();
+  const { data } = route.params;
+  const { inputCheck } = data;
 
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   var web3 = new Web3(Web3.givenProvider);
@@ -128,69 +132,81 @@ function AccountPortal2(props) {
         <View style={styles.bottom}>
         
         <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={ () => {
+          mode="contained" 
+          style={styles.btn} 
+          onPress={ () => {
 
-          const innerHash = web3.utils.keccak256(finalDataChain);
-          var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+            if (inputCheck === finalDataChain){
 
-          oneTimeEncryptionPW = web3.utils.randomHex(32);
-          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
-          var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
-          publicKey = decryptedAccount.address;
+              const innerHash = web3.utils.keccak256(finalDataChain);
+              var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
 
-          setInputValues(encryptedPrivateKey);
-          console.warn(encryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
+              oneTimeEncryptionPW = web3.utils.randomHex(32);
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+              var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+              publicKey = decryptedAccount.address;
 
-          // reset all values containing sensitive data to null / baseline:
-          decryptedAccount = {};
-          privateKey = '';
-          finalDataChain = 'anywarewallet'; //clear finalDataChain
+              setInputValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
+              console.warn(oneTimeEncryptionPW);
 
-          //console.warn(encryptedPrivateKey);
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = 'anywarewallet'; //clear finalDataChain
+              inputCheck = '';
 
-            // need encryption of private key, and need to pass encryption password to Account Display
-            // insert modal to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
+              //console.warn(encryptedPrivateKey);
 
-          showModal();
+                // need encryption of private key, and need to pass encryption password to Account Display
+                // insert modal to done screen to print private/public key pair;
+                // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
+              showModal();
+            }
+            else{
+              console.warn('Inputs did not match, try again');
+            }
           }
         }>
           Access ETH Account
         </Button>
 
         <Button 
-        mode="contained" 
-        style={styles.btn} 
-        onPress={ () => {
+          mode="contained" 
+          style={styles.btn} 
+          onPress={ () => {
 
-          const firstHash = CryptoJS.SHA256(finalDataChain).toString();
-          privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+            if (inputCheck === finalDataChain){
 
-          oneTimeEncryptionPW = web3.utils.randomHex(32);
-          encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
-          var decryptedAccount = ec.keyFromPrivate(privateKey);
-          publicKey = decryptedAccount.getPublic('hex');
+              const firstHash = CryptoJS.SHA256(finalDataChain).toString();
+              privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
 
-          setInputValues(encryptedPrivateKey);
-          console.warn(encryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
+              oneTimeEncryptionPW = web3.utils.randomHex(32);
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+              var decryptedAccount = ec.keyFromPrivate(privateKey);
+              publicKey = decryptedAccount.getPublic('hex');
 
-          // reset all values containing sensitive data to null / baseline:
-          decryptedAccount = {};
-          privateKey = '';
-          finalDataChain = 'anywarewallet'; //clear finalDataChain
+              setInputValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
+              console.warn(oneTimeEncryptionPW);
 
-          //console.warn(encryptedPrivateKey);
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = 'anywarewallet'; //clear finalDataChain
+              inputCheck = '';
 
-            // need encryption of private key, and need to pass encryption password to Account Display
-            // insert modal to done screen to print private/public key pair;
-            // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
+              //console.warn(encryptedPrivateKey);
 
-          showModal();
+                // need encryption of private key, and need to pass encryption password to Account Display
+                // insert modal to done screen to print private/public key pair;
+                // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
+
+              showModal();
+            } else {
+              console.warn('Inputs did not match, try again.');
+            }
 
           }
         }>

@@ -63,7 +63,7 @@ function HomeScreen(props) {
           mode="contained" 
           style={[styles.btn]}
           onPress={() => {
-            navigation.navigate('Account Portal');
+            navigation.navigate('Account Portal 1');
           }}>
             Access Account
           </Button>

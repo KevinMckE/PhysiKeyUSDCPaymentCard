@@ -132,7 +132,7 @@ function AccountPortal1(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Do It Again</Text>
+          <Text style={styles.bannerText} selectable>Repeat Input or Star Again</Text>
           
           <Button 
             mode="contained"
@@ -141,12 +141,12 @@ function AccountPortal1(props) {
               
               setInputValues('');
 
-              const data = finalDataChain;
+              const { data } = finalDataChain;
               hideModal();
               navigation.navigate('Account Portal 2', { data });
               
             }}>
-            Input Again
+            Repeat Input
           </Button>
 
           <Button 

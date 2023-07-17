@@ -18,4 +18,7 @@ module.exports = {
     },
    }),
   },
+  watchFolders: [
+    'src/Screens',
+  ],
 };

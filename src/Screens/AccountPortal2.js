@@ -20,8 +20,7 @@ function AccountPortal2(props) {
   const {navigation} = props;
 
   const route = useRoute();
-  const { data } = route.params;
-  const { inputCheck } = data;
+  const inputCheck = route.params.myString;
 
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   var web3 = new Web3(Web3.givenProvider);

@@ -166,6 +166,7 @@ function AccountPortal2(props) {
             }
             else{
               console.warn('Inputs did not match, try again');
+              console.warn(inputCheck + " _ " + finalDataChain);
             }
           }
         }>
@@ -206,6 +207,7 @@ function AccountPortal2(props) {
               showModal();
             } else {
               console.warn('Inputs did not match, try again.');
+              console.warn(inputCheck + " _ " + finalDataChain);
             }
 
           }

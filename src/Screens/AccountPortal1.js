@@ -141,7 +141,7 @@ function AccountPortal1(props) {
               
               setInputValues('');
 
-              const { data } = finalDataChain;
+              const data  = finalDataChain;
               hideModal();
               navigation.navigate('Account Portal 2', { data });
               

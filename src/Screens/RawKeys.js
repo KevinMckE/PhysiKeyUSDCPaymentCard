@@ -73,6 +73,8 @@ function RawKeys(props) {
       <View style={styles.wrapper}>
         <View style={[styles.textInput]}>
 
+          <Text styles={styles.bannerText}> {finalDataChain} </Text>
+
           <TextInput
             label="Add Raw Text to Pass Phrase Input"
             autoComplete='off'
@@ -99,6 +101,7 @@ function RawKeys(props) {
             autoCorrect={false}
             inputValue={inputTagValue}
             onChangeText={setInputTagValues}
+            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />

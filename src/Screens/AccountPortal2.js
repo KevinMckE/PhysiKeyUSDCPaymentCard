@@ -15,14 +15,14 @@ var publicKey = '';
 var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
+let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 
 function AccountPortal2(props) {
   const {navigation} = props;
 
   const route = useRoute();
   let inputCheck = route.params.data;
-
-  let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+  
   var web3 = new Web3(Web3.givenProvider);
   
   const [inputTextValue='', setInputTextValues] = React.useState();
@@ -86,6 +86,7 @@ function AccountPortal2(props) {
             autoCorrect={false}
             inputValue={inputTextValue}
             onChangeText={setInputTextValues}
+            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />
@@ -105,6 +106,7 @@ function AccountPortal2(props) {
             autoCorrect={false}
             inputValue={inputTagValue}
             onChangeText={setInputTagValues}
+            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />

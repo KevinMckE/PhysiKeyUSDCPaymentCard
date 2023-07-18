@@ -4,10 +4,10 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
 
+let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+
 function AccountPortal1(props) {
   const {navigation} = props;
-
-  let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   
   const [inputTextValue='', setInputTextValues] = React.useState();
   const [inputTagValue='', setInputTagValues] = React.useState();
@@ -70,6 +70,7 @@ function AccountPortal1(props) {
             autoCorrect={false}
             inputValue={inputTextValue}
             onChangeText={setInputTextValues}
+            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />
@@ -89,6 +90,7 @@ function AccountPortal1(props) {
             autoCorrect={false}
             inputValue={inputTagValue}
             onChangeText={setInputTagValues}
+            autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
           />
@@ -154,6 +156,7 @@ function AccountPortal1(props) {
               setInputTagValues('');
 
               const data  = finalDataChain;
+              finalDataChain = 'anywarewallet';
               hideModal();
               navigation.navigate('Account Portal 2', { data });
               

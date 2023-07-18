@@ -18,7 +18,7 @@ function AccountPortal1(props) {
   //userInput();
   async function writeNdef() {
     let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${inputValue}`);
+    const nfcInput = Ndef.uriRecord(`${scheme}${inputTagValue}`);
     const bytes = Ndef.encodeMessage([nfcInput]);
     //console.warn(bytes);
 
@@ -78,7 +78,7 @@ function AccountPortal1(props) {
             mode="contained" 
             style={styles.btn} 
             onPress={() => {
-            finalDataChain += inputValue;
+            finalDataChain += inputTextValue;
             }}>
             Add to Input
           </Button>
@@ -150,7 +150,8 @@ function AccountPortal1(props) {
             style={styles.btn}
             onPress={() => {
               
-              setInputValues('');
+              setInputTextValues('');
+              setInputTagValues('');
 
               const data  = finalDataChain;
               hideModal();
@@ -165,7 +166,8 @@ function AccountPortal1(props) {
             style={styles.btn}
             onPress={ () => {
               finalDataChain = 'anywarewallet';
-              setInputValues('');
+              setInputTextValues('');
+              setInputTagValues('');
               hideModal();
             }
             }>

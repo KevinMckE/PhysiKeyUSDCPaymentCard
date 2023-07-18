@@ -27,7 +27,7 @@ function RawKeys(props) {
   //userInput();
   async function writeNdef() {
     let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${inputValue}`);
+    const nfcInput = Ndef.uriRecord(`${scheme}${inputTagValue}`);
     const bytes = Ndef.encodeMessage([nfcInput]);
     //console.warn(bytes);
 
@@ -88,7 +88,7 @@ function RawKeys(props) {
             mode="contained" 
             style={styles.btn} 
             onPress={() => {
-            finalDataChain += inputValue;
+            finalDataChain += inputTextValue;
             }}>
             Add to Input
           </Button>

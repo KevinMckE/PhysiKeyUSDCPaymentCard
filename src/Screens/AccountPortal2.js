@@ -34,7 +34,7 @@ function AccountPortal2(props) {
   //userInput();
   async function writeNdef() {
     let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${inputValue}`);
+    const nfcInput = Ndef.uriRecord(`${scheme}${inputTagValue}`);
     const bytes = Ndef.encodeMessage([nfcInput]);
     //console.warn(bytes);
 
@@ -94,7 +94,7 @@ function AccountPortal2(props) {
             mode="contained" 
             style={styles.btn} 
             onPress={() => {
-            finalDataChain += inputValue;
+            finalDataChain += inputTextValue;
             }}>
             Add to Input
           </Button>
@@ -156,7 +156,7 @@ function AccountPortal2(props) {
               var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
               publicKey = decryptedAccount.address;
 
-              setInputValues(encryptedPrivateKey);
+              setInputTagValues(encryptedPrivateKey);
               console.warn(encryptedPrivateKey);
               console.warn(oneTimeEncryptionPW);
 
@@ -198,7 +198,7 @@ function AccountPortal2(props) {
               var decryptedAccount = ec.keyFromPrivate(privateKey);
               publicKey = decryptedAccount.getPublic('hex');
 
-              setInputValues(encryptedPrivateKey);
+              setInputTagValues(encryptedPrivateKey);
               console.warn(encryptedPrivateKey);
               console.warn(oneTimeEncryptionPW);
 
@@ -244,7 +244,8 @@ function AccountPortal2(props) {
               
               writeNdef();
               encryptedPrivateKey = '';
-              setInputValues('');
+              setInputTextValues('');
+              setInputTagValues('');
 
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
@@ -261,7 +262,8 @@ function AccountPortal2(props) {
             style={styles.btn}
             onPress={ () => {
 
-              setInputValues('');
+              setInputTextValues('');
+              setInputTagValues('');
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
               navigation.navigate('Account Display', { data });
@@ -277,7 +279,8 @@ function AccountPortal2(props) {
               finalDataChain = 'anywarewallet';
               encryptedPrivateKey = '';
               oneTimeEncryptionPW = '';
-              setInputValues('');
+              setInputTextValues('');
+              setInputTagValues('');
               hideModal();
             }
             }>

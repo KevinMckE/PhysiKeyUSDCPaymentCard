@@ -18,7 +18,8 @@ const ec = new EC('secp256k1');
 
 function RawKeys(props) {
 
-  const [inputValue='', setInputValues] = React.useState();
+  const [inputTextValue='', setInputTextValues] = React.useState();
+  const [inputTagValue='', setInputTagValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -73,11 +74,11 @@ function RawKeys(props) {
         <View style={[styles.textInput]}>
 
           <TextInput
-            label="Add Text to Input or Tag"
+            label="Add Raw Text to Pass Phrase Input"
             autoComplete='off'
             autoCorrect={false}
-            inputValue={inputValue}
-            onChangeText={setInputValues}
+            inputValue={inputTextValue}
+            onChangeText={setInputTextValues}
             autoCapitalize={false}
             backgroundColor={'white'}
             color={'black'}
@@ -91,6 +92,16 @@ function RawKeys(props) {
             }}>
             Add to Input
           </Button>
+
+          <TextInput
+            label="Write Encoded Text to Tag"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={inputTagValue}
+            onChangeText={setInputTagValues}
+            backgroundColor={'white'}
+            color={'black'}
+          />
 
           <Button 
             mode="contained" 

@@ -25,7 +25,8 @@ function AccountPortal2(props) {
   let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
   var web3 = new Web3(Web3.givenProvider);
   
-  const [inputValue='', setInputValues] = React.useState();
+  const [inputTextValue='', setInputTextValues] = React.useState();
+  const [inputTagValue='', setInputTagValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -80,11 +81,11 @@ function AccountPortal2(props) {
           <View style={[styles.textInput]}>
 
           <TextInput
-            label="Add Text to Input or Tag"
+            label="Add Raw Text to Pass Phrase Input"
             autoComplete='off'
             autoCorrect={false}
-            inputValue={inputValue}
-            onChangeText={setInputValues}
+            inputValue={inputTextValue}
+            onChangeText={setInputTextValues}
             backgroundColor={'white'}
             color={'black'}
           />
@@ -97,6 +98,16 @@ function AccountPortal2(props) {
             }}>
             Add to Input
           </Button>
+
+          <TextInput
+            label="Write Encoded Text to Tag"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={inputTagValue}
+            onChangeText={setInputTagValues}
+            backgroundColor={'white'}
+            color={'black'}
+          />
 
           <Button 
             mode="contained" 

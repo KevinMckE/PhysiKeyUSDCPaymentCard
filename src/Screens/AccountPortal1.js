@@ -41,15 +41,11 @@ function AccountPortal1(props) {
       //console.warn({tagData}); //print whole tag data
       //console.log(tagData.ndefMessage[0].payload); // print only payload
       
-      // turns payload into a single string of numbers without ,'s:
+      // turns payload into a single string of numbers with ,'s:
       const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
-      
       tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
-      let nfcRead = await tagPayload.join(''); // concats the string of the tagPayload into a single string of #s
 
-      //console.warn(nfcRead); //print the information read from the tag
-
-      finalDataChain += nfcRead;
+      finalDataChain += tagPayload;
 
     } catch (ex) {
         //bypass
@@ -82,6 +78,18 @@ function AccountPortal1(props) {
             finalDataChain += inputTextValue;
             }}>
             Add to Input
+          </Button>
+
+          <Button 
+            mode="contained" 
+            style={styles.btn} 
+            onPress={() => {
+            for (let i = 0; i < inputTextValue.length; i++) {
+              finalDataChain += inputTextValue.charCodeAt(i);
+              finalDataChain += inputTextValue.charAt(i);
+            }
+            }}>
+            Add as Numbers to Input
           </Button>
 
           <TextInput
@@ -132,12 +140,12 @@ function AccountPortal1(props) {
         style={styles.btn} 
         onPress={ () => {
 
-          if (finalDataChain.length > 43){
+          if (finalDataChain.length > 53){
 
           showModal();
 
           } else {
-            console.warn("Pass phrase must be minimum of 30 characters long");
+            console.warn("Pass phrase must be minimum of 40 characters long");
           }
 
           }

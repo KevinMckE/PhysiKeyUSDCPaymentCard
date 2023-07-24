@@ -285,16 +285,10 @@ function AccountPortal2(props) {
           <Button 
             mode="contained"
             style={styles.btn}
-            onPress={ () => {
-              finalDataChain = 'anywarewallet';
-              encryptedPrivateKey = '';
-              oneTimeEncryptionPW = '';
-              setInputTextValues('');
-              setInputTagValues('');
-              hideModal();
-            }
-            }>
-            Cancel & Clear Keys
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            Start Over
           </Button>
           </View>
       </Modal>

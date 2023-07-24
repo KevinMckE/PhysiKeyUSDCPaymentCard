@@ -181,14 +181,10 @@ function AccountPortal1(props) {
           <Button 
             mode="contained"
             style={styles.btn}
-            onPress={ () => {
-              finalDataChain = 'anywarewallet';
-              setInputTextValues('');
-              setInputTagValues('');
-              hideModal();
-            }
-            }>
-            Cancel & Try Again
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            Start Over
           </Button>
           </View>
       </Modal>

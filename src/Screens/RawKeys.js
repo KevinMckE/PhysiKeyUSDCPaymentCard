@@ -17,6 +17,7 @@ var publicKeyBTC = '';
 const ec = new EC('secp256k1');
 
 function RawKeys(props) {
+  const {navigation} = props;
 
   const [inputTextValue='', setInputTextValues] = React.useState();
   const [inputTagValue='', setInputTagValues] = React.useState();
@@ -207,8 +208,10 @@ function RawKeys(props) {
           <Button 
             mode="contained"
             style={styles.btn}
-            onPress={hideModal}>
-            Hide Keys
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            Start Over
           </Button>
           </View>
         </Modal>

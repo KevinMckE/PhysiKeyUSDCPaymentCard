@@ -5,15 +5,17 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import '../../shimeth.js';
 import '../../shim.js';
 import Web3 from 'web3';
-import { SHA256 } from 'crypto-js';
+import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
+import Bitcoin from 'react-native-bitcoinjs-lib';
+import wif from 'wif';
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
 var privateKeyETH = '';
 var publicKeyETH = '';
 var privateKeyBTC = '';
-var publicKeyBTC = '';
+var addressBTC = '';
 const ec = new EC('secp256k1');
 
 function RawKeys(props) {
@@ -163,11 +165,14 @@ function RawKeys(props) {
 
           //BTC address creation:
 
-          const firstHash = SHA256(finalDataChain).toString();
-          privateKeyBTC = SHA256(firstHash + finalDataChain).toString();
-          var accountObjectBTC = ec.keyFromPrivate(privateKeyBTC);
-          publicKeyBTC = accountObjectBTC.getPublic('hex');
-          console.warn("BTC Private Key: " + privateKeyBTC + "   BTC Public Key: " + publicKeyBTC.toString());
+          const firstHash = CryptoJS.SHA256(finalDataChain).toString();
+          const secondHash = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+
+          privateKeyBTC = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
+          const keyPairBTC = Bitcoin.ECPair.fromWIF(privateKeyBTC);
+          addressBTC = keyPairBTC.getAddress();
+
+          console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC );
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
           accountObjectBTC = null;
@@ -192,9 +197,9 @@ function RawKeys(props) {
             {'\n'}
             {privateKeyBTC}
             {'\n'}
-            BTC Public Key: 
+            BTC Address: 
             {'\n'}
-            {publicKeyBTC}
+            {addressBTC}
             {'\n'}
             ETH Private Key:
             {'\n'}

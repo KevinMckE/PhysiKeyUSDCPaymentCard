@@ -31,8 +31,6 @@ function AccountDisplayBTC(props) {
 
     });
 
-  }, []);
-
   async function readNdef() {
     try{
       await NfcManager.requestTechnology(NfcTech.Ndef);

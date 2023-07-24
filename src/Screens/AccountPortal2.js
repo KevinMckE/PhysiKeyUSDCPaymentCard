@@ -10,6 +10,7 @@ import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
 import Bitcoin from 'react-native-bitcoinjs-lib';
+import wif from 'wif';
 
 var publicKey = '';
 var encryptedPrivateKey = '';
@@ -203,19 +204,22 @@ function AccountPortal2(props) {
             if (inputCheck === finalDataChain){
 
               const firstHash = CryptoJS.SHA256(finalDataChain).toString();
-              privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+              const secondHash = CryptoJS.SHA256(firstHash + finalDataChain).toString();
 
+              privateKey = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
               oneTimeEncryptionPW = web3.utils.randomHex(32);
-              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
-              var decryptedAccount = ec.keyFromPrivate(privateKey);
-              publicKey = decryptedAccount.getPublic('hex');
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
+              var keyPairBTC = Bitcoin.ECPair.fromWIF(privateKey);
+              publicKey = keyPairBTC.getAddress();
 
               setInputTagValues(encryptedPrivateKey);
+              console.warn(privateKey);
+              console.warn(publicKey);
               console.warn(encryptedPrivateKey);
               console.warn(oneTimeEncryptionPW);
 
               // reset all values containing sensitive data to null / baseline:
-              decryptedAccount = {};
+              keyPairBTC = {};
               privateKey = '';
               finalDataChain = 'anywarewallet'; //clear finalDataChain
               inputCheck = '';

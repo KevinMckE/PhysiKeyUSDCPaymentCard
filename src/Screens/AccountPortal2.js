@@ -61,7 +61,9 @@ function AccountPortal2(props) {
       const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
       tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
 
-      finalDataChain += tagPayload;
+      const sum = tagPayload.reduce((acc, curr) => acc + curr, 0);
+
+      finalDataChain += tagPayload + sum;
 
     } catch (ex) {
         //bypass

@@ -235,6 +235,15 @@ function AccountPortal2(props) {
           Access BTC Account
         </Button>
 
+        <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            Start Over
+        </Button>
+
       <Modal  
         visible = {modalVisible}>
           <View 

@@ -10,7 +10,8 @@ import CryptoJS from 'crypto-js';
 
 var tempEncryptedPrivateKey;
 
-function AccountDisplayBTC() {
+function AccountDisplayBTC(props) {
+  const {navigation} = props;
   const route = useRoute();
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
@@ -197,6 +198,15 @@ function AccountDisplayBTC() {
               }}>
               Refresh Balance
         </Button>
+
+        <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            Start Over
+          </Button>
       </View>
     
       <Modal  

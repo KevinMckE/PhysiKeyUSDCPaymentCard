@@ -132,7 +132,13 @@ function AccountPortal1(props) {
         style={styles.btn} 
         onPress={ () => {
 
+          if (finalDataChain.length > 43){
+
           showModal();
+
+          } else {
+            console.warn("Pass phrase must be minimum of 30 characters long");
+          }
 
           }
         }>

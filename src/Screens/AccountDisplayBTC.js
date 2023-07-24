@@ -27,8 +27,8 @@ function AccountDisplayBTC(props) {
 
   useEffect(() => {
 
-    web3.eth.getBalance(publicKey, (err, bal) => {
-      setAccountBalance(web3.utils.fromWei(bal.toString(), 'ether'));
+    // Get BTC balance
+
     });
 
   }, []);
@@ -46,7 +46,7 @@ function AccountDisplayBTC(props) {
       const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
       
       tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
-      let nfcRead = await String.fromCharCode(...tagPayload); // concats the string of the tagPayload into a single string of #s
+      let nfcRead = await String.fromCharCode(...tagPayload); // concats the string of the tagPayload into original string
 
       //console.warn(nfcRead); //print the information read from the tag
 

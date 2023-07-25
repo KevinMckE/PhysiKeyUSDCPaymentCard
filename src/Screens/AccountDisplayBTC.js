@@ -5,7 +5,7 @@ import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
-import Web3 from 'web3';
+import Bitcoin from 'react-native-bitcoinjs-lib';
 import CryptoJS from 'crypto-js';
 
 var tempEncryptedPrivateKey;
@@ -22,8 +22,6 @@ function AccountDisplayBTC(props) {
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
-
-  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
 
   useEffect(() => {
 
@@ -63,86 +61,13 @@ function AccountDisplayBTC(props) {
     // this should check if the private key is null or not(meaning that 
     // the use either did sign with tag or easy sign)
     if(encryptedPrivateKey != ''){
-
-    web3.eth.getTransactionCount(publicKey, (err, txCount) => {
-
-        txObject = {
-          "nonce": web3.utils.toHex(txCount),
-          "from" : web3.utils.toHex(publicKey),
-          "to": web3.utils.toHex(accountToSend),
-          "value": web3.utils.toHex(web3.utils.toWei(amountToSend, 'ether')),
-          "gasLimit": web3.utils.toHex(21000),
-          "gasPrice" : web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-        }
-    
-        console.log(txObject);
-    
-        try{
-
-          console.warn(encryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
-          console.warn(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-
-          web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), (err, signedTransaction) => {
-          
-          console.log(signedTransaction)
-
-          web3.eth.sendSignedTransaction(signedTransaction.rawTransaction, (err, txHash) => {
-            console.warn('txHash: ', txHash);
-          })
-          
-          });          
-          
-        } catch(error){
-            console.log(error);
-        } 
-        
-      })
       
     } else {
 
       tempEncryptedPrivateKey = await readNdef(); // why isn't this getting called, while the below console.warns are working correctly?
       console.warn('control flow test 1: ' + tempEncryptedPrivateKey);
 
-      web3.eth.getTransactionCount(publicKey, (err, txCount) => {
-
-        txObject = {
-          "nonce": web3.utils.toHex(txCount),
-          "from" : web3.utils.toHex(publicKey),
-          "to": web3.utils.toHex(accountToSend),
-          "value": web3.utils.toHex(web3.utils.toWei(amountToSend, 'ether')),
-          "gasLimit": web3.utils.toHex(21000),
-          "gasPrice" : web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-        }
-    
-        console.log(txObject);
-
-        try{
-
-          console.warn('control flow test');
-          console.warn(tempEncryptedPrivateKey);
-          console.warn(oneTimeEncryptionPW);
-          console.warn(CryptoJS.AES.decrypt(tempEncryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-
-          web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(tempEncryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), (err, signedTransaction) => {
-          
-          tempEncryptedPrivateKey = '';
-
-          console.log(signedTransaction)
-
-          web3.eth.sendSignedTransaction(signedTransaction.rawTransaction, (err, txHash) => {
-            console.warn('txHash: ', txHash);
-          })
-          
-          });
-    
-        } catch(error){
-        console.log(error);
-        }
-    
-        }
-    
-      )}
+    }
     
   }
   
@@ -190,9 +115,7 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-                web3.eth.getBalance(publicKey, (err, bal) => {
-                setAccountBalance(web3.utils.fromWei(bal.toString(), 'ether'));
-                });;
+                
               }}>
               Refresh Balance
         </Button>

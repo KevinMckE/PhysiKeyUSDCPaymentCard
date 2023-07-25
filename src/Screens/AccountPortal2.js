@@ -273,8 +273,12 @@ function AccountPortal2(props) {
 
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
-              navigation.navigate('Account Display', { data });
-              
+
+              if(publicKey.startsWith('0x')){
+                navigation.navigate('Account Display', { data });
+              } else { 
+                navigation.navigate('Account Display BTC', { data });
+              }
             }}>
             Sign With Tag
           </Button>
@@ -290,7 +294,12 @@ function AccountPortal2(props) {
               setInputTagValues('');
               const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
               hideModal();
-              navigation.navigate('Account Display', { data });
+
+              if(publicKey.startsWith('0x')){
+                navigation.navigate('Account Display', { data });
+              } else { 
+                navigation.navigate('Account Display BTC', { data });
+              }
             }
             }>
             Easy Sign (Less Secure)

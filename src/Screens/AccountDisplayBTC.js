@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
 import Bitcoin from 'react-native-bitcoinjs-lib';
 import CryptoJS from 'crypto-js';
+import * as bitcoin from 'bitcoinjs-lib';
 
 var tempEncryptedPrivateKey;
 

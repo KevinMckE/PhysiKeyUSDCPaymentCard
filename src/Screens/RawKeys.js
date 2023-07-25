@@ -171,8 +171,8 @@ function RawKeys(props) {
           const secondHash = CryptoJS.SHA256(firstHash + finalDataChain).toString();
 
           privateKeyBTC = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
-          const keyPairBTC = Bitcoin.ECPair.fromWIF(privateKeyBTC);
-          addressBTC = keyPairBTC.getAddress();
+          var accountObjectBTC = Bitcoin.ECPair.fromWIF(privateKeyBTC);
+          addressBTC = accountObjectBTC.getAddress();
 
           console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC );
 
@@ -195,11 +195,11 @@ function RawKeys(props) {
             style={styles.wrapper}
             borderRadius={10}>
           <Text style={styles.bannerText} selectable>
-            BTC Private Key:
+            BTC Private Key(WIF Format):
             {'\n'}
             {privateKeyBTC}
             {'\n'}
-            BTC Address: 
+            BTC Address(WIF Format): 
             {'\n'}
             {addressBTC}
             {'\n'}

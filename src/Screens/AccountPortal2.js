@@ -204,13 +204,12 @@ function AccountPortal2(props) {
             if (inputCheck === finalDataChain){
 
               const firstHash = CryptoJS.SHA256(finalDataChain).toString();
-              const secondHash = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+              privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
 
-              privateKey = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
               oneTimeEncryptionPW = web3.utils.randomHex(32);
               encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
-              var keyPairBTC = Bitcoin.ECPair.fromWIF(privateKey);
-              publicKey = keyPairBTC.getAddress();
+              var keyPairBTC = ec.keyFromPrivate(privateKey);
+              publicKey = keyPairBTC.getPublic(true, 'hex');
 
               setInputTagValues(encryptedPrivateKey);
               console.warn(privateKey);
@@ -256,7 +255,7 @@ function AccountPortal2(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>{publicKey}</Text>
+          <Text style={styles.bannerText} selectable>Compressed Pub Key:{publicKey}</Text>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the

@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import * as bitcoin from 'bitcoinjs-lib';
+import axios from 'axios';
 
 var tempEncryptedPrivateKey;
 
@@ -23,11 +24,35 @@ function AccountDisplayBTC(props) {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const testnet = bitcoin.networks.testnet;
+
   useEffect(() => {
+
+    async function run(){
+
+    const address = '2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb';
+    try {
+      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${address}`, {
+        headers: {
+          'x-api-key': Config.TATUM_API_KEY
+        }
+      });
+  
+      console.log(response.data);
+      //setAccountBalance(response.data);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
 
     // Get BTC balance
 
+    }
+
+    run();
+
     });
+
+    
 
   async function readNdef() {
     try{
@@ -61,6 +86,8 @@ function AccountDisplayBTC(props) {
     // this should check if the private key is null or not(meaning that 
     // the use either did sign with tag or easy sign)
     if(encryptedPrivateKey != ''){
+
+      let txObject = new bitcoin.TransactionBuilder(testnet);
       
     } else {
 

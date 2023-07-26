@@ -9,7 +9,6 @@ import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
-import Bitcoin from 'react-native-bitcoinjs-lib';
 import wif from 'wif';
 
 var publicKey = '';

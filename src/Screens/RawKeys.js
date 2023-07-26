@@ -7,8 +7,9 @@ import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
-import Bitcoin from 'react-native-bitcoinjs-lib';
 import wif from 'wif';
+import * as bitcoin from 'bitcoinjs-lib';
+
 
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
 var web3 = new Web3(Web3.givenProvider);
@@ -17,6 +18,7 @@ var publicKeyETH = '';
 var privateKeyBTC = '';
 var addressBTC = '';
 const ec = new EC('secp256k1');
+const testnet = bitcoin.networks.testnet;
 
 function RawKeys(props) {
   const {navigation} = props;
@@ -168,13 +170,20 @@ function RawKeys(props) {
           //BTC address creation:
 
           const firstHash = CryptoJS.SHA256(finalDataChain).toString();
-          const secondHash = CryptoJS.SHA256(firstHash + finalDataChain).toString();
+          privateKeyBTC = CryptoJS.SHA256(firstHash + finalDataChain).toString();
 
-          privateKeyBTC = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
-          var accountObjectBTC = Bitcoin.ECPair.fromWIF(privateKeyBTC);
-          addressBTC = accountObjectBTC.getAddress();
+          // wif encoding privateKeyBTC = wif.encode(128, Buffer.from(secondHash, 'hex'), true);
+          var accountObjectBTC = ec.keyFromPrivate(privateKeyBTC);
+          addressBTC = accountObjectBTC.getPublic('hex');
 
-          console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC );
+          var compressedPublicKeyBTC = accountObjectBTC.getPublic(true, 'hex'); // Compressed public key
+
+          var { address } = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(compressedPublicKeyBTC, 'hex') });
+
+          //const address  = bitcoin.payments.p2pkh({ addressBTC });
+          //var address = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(addressBTC, 'hex') }).address;
+
+          console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC + "SegWit: " + address);
 
           finalDataChain = 'anywarewallet'; //clear finalDataChain
           accountObjectBTC = null;

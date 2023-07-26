@@ -178,10 +178,7 @@ function RawKeys(props) {
 
           var compressedPublicKeyBTC = accountObjectBTC.getPublic(true, 'hex'); // Compressed public key
 
-          var { address } = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(compressedPublicKeyBTC, 'hex') });
-
-          //const address  = bitcoin.payments.p2pkh({ addressBTC });
-          //var address = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(addressBTC, 'hex') }).address;
+          var { address } = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(compressedPublicKeyBTC, 'hex'), network: testnet });
 
           console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC + "SegWit: " + address);
 

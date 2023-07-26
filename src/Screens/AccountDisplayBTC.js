@@ -26,30 +26,30 @@ function AccountDisplayBTC(props) {
 
   const testnet = bitcoin.networks.testnet;
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function getBalance(){
+  //   async function getBalance(){
 
-    try {
-      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
-        headers: {
-          'x-api-key': Config.TATUM_API_KEY
-        }
-      });
+  //   try {
+  //     const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
+  //       headers: {
+  //         'x-api-key': Config.TATUM_API_KEY
+  //       }
+  //     });
   
-      console.log(response.data);
-      setAccountBalance(response.data.incoming - response.data.outgoing);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+  //     console.log(response.data);
+  //     setAccountBalance(response.data.incoming - response.data.outgoing);
+  //   } catch (error) {
+  //     console.error('Error:', error.message);
+  //   }
 
-    // Get BTC balance
+  //   // Get BTC balance
 
-    }
+  //   }
 
-    getBalance();
+  //   getBalance();
 
-    });
+  //   });
 
     async function getBalance(){
 
@@ -68,7 +68,29 @@ function AccountDisplayBTC(props) {
   
       // Get BTC balance
   
+    }
+
+    async function getTransactions(){
+
+      try {
+          const query = new URLSearchParams({pageSize: 10}).toString();
+        
+          const response = await fetch(`https://api.tatum.io/v3/bitcoin/transaction/address/${publicKey}?${query}&type=testnet`,
+            {
+              method: 'GET',
+              headers: {
+                'x-api-key': Config.TATUM_API_KEY
+              }
+            }
+          );
+        
+          const data = await response.text();
+          console.log(data);
+      } catch (error) {
+        console.error('Error:', error.message);
       }
+        
+    }
 
   async function readNdef() {
     try{
@@ -104,6 +126,8 @@ function AccountDisplayBTC(props) {
     if(encryptedPrivateKey != ''){
 
       let txObject = new bitcoin.TransactionBuilder(testnet);
+
+
       
     } else {
 
@@ -152,6 +176,15 @@ function AccountDisplayBTC(props) {
               signTransaction();
               }}>
               Sign/Send
+        </Button>
+
+        <Button 
+              mode="contained" 
+              style={styles.btn} 
+              onPress={() => {
+              getTransactions();
+              }}>
+              Get Transactions
         </Button>
 
         <Button 

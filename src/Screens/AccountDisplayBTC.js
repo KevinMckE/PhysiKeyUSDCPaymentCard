@@ -51,7 +51,24 @@ function AccountDisplayBTC(props) {
 
     });
 
+    async function getBalance(){
+
+      try {
+        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
+          headers: {
+            'x-api-key': Config.TATUM_API_KEY
+          }
+        });
     
+        console.log(response.data);
+        setAccountBalance(response.data.incoming - response.data.outgoing);
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+  
+      // Get BTC balance
+  
+      }
 
   async function readNdef() {
     try{

@@ -9,13 +9,15 @@ import '../../shim.js';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
-import wif from 'wif';
+import * as bitcoin from 'bitcoinjs-lib';
+
 
 var publicKey = '';
 var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
 let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+const testnet = bitcoin.networks.testnet;
 
 function AccountPortal2(props) {
   const {navigation} = props;
@@ -208,7 +210,10 @@ function AccountPortal2(props) {
               oneTimeEncryptionPW = web3.utils.randomHex(32);
               encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
               var keyPairBTC = ec.keyFromPrivate(privateKey);
-              publicKey = keyPairBTC.getPublic(true, 'hex');
+              var compressedPublicKeyBTC = keyPairBTC.getPublic(true, 'hex'); // Compressed public key
+
+              var { address } = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(compressedPublicKeyBTC, 'hex'), network: testnet });
+              publicKey = address;
 
               setInputTagValues(encryptedPrivateKey);
               console.warn(privateKey);
@@ -254,7 +259,7 @@ function AccountPortal2(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Compressed Pub Key:{publicKey}</Text>
+          <Text style={styles.bannerText} selectable>Seg Wit Pub Key:{publicKey}</Text>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the

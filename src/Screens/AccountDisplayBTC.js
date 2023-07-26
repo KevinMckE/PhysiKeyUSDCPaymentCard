@@ -28,18 +28,17 @@ function AccountDisplayBTC(props) {
 
   useEffect(() => {
 
-    async function run(){
+    async function getBalance(){
 
-    const address = '2MsM67NLa71fHvTUBqNENW15P68nHB2vVXb';
     try {
-      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${address}`, {
+      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
         headers: {
           'x-api-key': Config.TATUM_API_KEY
         }
       });
   
       console.log(response.data);
-      //setAccountBalance(response.data);
+      setAccountBalance(response.data.incoming - response.data.outgoing);
     } catch (error) {
       console.error('Error:', error.message);
     }
@@ -48,7 +47,7 @@ function AccountDisplayBTC(props) {
 
     }
 
-    run();
+    getBalance();
 
     });
 
@@ -142,7 +141,7 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-                
+                getBalance();
               }}>
               Refresh Balance
         </Button>

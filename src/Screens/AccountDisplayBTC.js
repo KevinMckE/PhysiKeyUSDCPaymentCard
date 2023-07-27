@@ -25,31 +25,32 @@ function AccountDisplayBTC(props) {
   const hideModal = () => setModalVisible(false);
 
   const testnet = bitcoin.networks.testnet;
+  var utxoArray = [];
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   async function getBalance(){
+    async function getBalance(){
 
-  //   try {
-  //     const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
-  //       headers: {
-  //         'x-api-key': Config.TATUM_API_KEY
-  //       }
-  //     });
+    try {
+      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
+        headers: {
+          'x-api-key': Config.TATUM_API_KEY
+        }
+      });
   
-  //     console.log(response.data);
-  //     setAccountBalance(response.data.incoming - response.data.outgoing);
-  //   } catch (error) {
-  //     console.error('Error:', error.message);
-  //   }
+      console.log(response.data);
+      setAccountBalance(response.data.incoming - response.data.outgoing);
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
 
-  //   // Get BTC balance
+    // Get BTC balance
 
-  //   }
+    }
 
-  //   getBalance();
+    getBalance();
 
-  //   });
+    });
 
     async function refreshBalance() {
 
@@ -77,7 +78,7 @@ function AccountDisplayBTC(props) {
       const query = new URLSearchParams({
         chain: 'bitcoin-testnet',
         address: publicKey.toString(),
-        totalValue: '0.00001',
+        totalValue: '0.05896753',
       }).toString();
     
       const response = await axios.get(`https://api.tatum.io/v3/data/utxos?${query}`,{
@@ -86,8 +87,11 @@ function AccountDisplayBTC(props) {
           }
         });
     
-      const data = await response.data;
-      console.log(data);
+      utxoArray = await response.data;
+      console.log(utxoArray);
+      for (let i = 0; i < utxoArray.length; i++) {
+        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
+      }
       } catch (error) {
         console.error('Error:', error.message);
       }
@@ -152,15 +156,22 @@ function AccountDisplayBTC(props) {
     if(encryptedPrivateKey != ''){
 
       let txObject = new bitcoin.TransactionBuilder(testnet);
-      txObject.addInput("d18e7106e5492baf8f3929d2d573d27d89277f3825d3836aa86ea1d843b5158b", 1); //UTXO to spend from
-      txObject.addOutput("12idKQBikRgRuZEbtxXQ4WFYB7Wa3hZzhT", 149000); //Address to send and amount to spend
+
+      for (let i = 0; i < utxoArray.length; i++) {
+        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
+        txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
+      }
+      
+      txObject.addOutput(accountToSend, amountToSend); //Address to send and amount to spend
+
       txObject.sign(0, key); 
+
       console.log(tx.build().toHex());
 
       
     } else {
 
-      tempEncryptedPrivateKey = await readNdef(); // why isn't this getting called, while the below console.warns are working correctly?
+      tempEncryptedPrivateKey = await readNdef();
       console.warn('control flow test 1: ' + tempEncryptedPrivateKey);
 
     }

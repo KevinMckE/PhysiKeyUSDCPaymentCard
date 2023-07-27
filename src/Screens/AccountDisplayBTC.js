@@ -78,7 +78,7 @@ function AccountDisplayBTC(props) {
       const query = new URLSearchParams({
         chain: 'bitcoin-testnet',
         address: publicKey.toString(),
-        totalValue: '0.05896753',
+        totalValue: amountToSend.toString(),
       }).toString();
     
       const response = await axios.get(`https://api.tatum.io/v3/data/utxos?${query}`,{
@@ -88,10 +88,8 @@ function AccountDisplayBTC(props) {
         });
     
       utxoArray = await response.data;
-      console.log(utxoArray);
-      for (let i = 0; i < utxoArray.length; i++) {
-        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-      }
+      //console.log(utxoArray);
+      return utxoArray;
       } catch (error) {
         console.error('Error:', error.message);
       }
@@ -155,19 +153,26 @@ function AccountDisplayBTC(props) {
     // the use either did sign with tag or easy sign)
     if(encryptedPrivateKey != ''){
 
+      utxoArray = await checkUTXOs();
+      console.log(utxoArray);
+
       let txObject = new bitcoin.TransactionBuilder(testnet);
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-        txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
+        //txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
       }
       
       txObject.addOutput(accountToSend, amountToSend); //Address to send and amount to spend
 
-      txObject.sign(0, key); 
+      txObject.sign(0, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), (err, txObject) => {
+        
+        // print transaction if it worked
+        console.log(txObject.build().toHex());
 
-      console.log(tx.build().toHex());
-
+        //broadcast transaction:
+        
+        });
       
     } else {
 

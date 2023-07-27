@@ -160,20 +160,23 @@ function AccountDisplayBTC(props) {
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-        txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
+        txObject.addInput(Buffer.from(utxoArray[i].txHash, 'hex'), utxoArray[i].index); //UTXO to spend from
+        console.log(txObject.ins);
       }
       
-      txObject.addOutput(accountToSend, amountToSend); //Address to send and amount to spend
+      txObject.addOutput(Buffer.from(accountToSend, 'hex'), amountToSend); //Address to send and amount to spend
+      console.log(txObject.outs);
 
-      txObject.sign(0, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), (err, txObject) => {
+      const privateKey = CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8);
+      for (let i = 0; i < utxoArray.length; i++) {
+        await txObject.signInput(i, privateKey);
+      }
         
         // print transaction if it worked
         console.log(txObject.build().toHex());
 
         //broadcast transaction:
         
-        });
-      
     } else {
 
       tempEncryptedPrivateKey = await readNdef();

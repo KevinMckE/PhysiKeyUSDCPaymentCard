@@ -156,11 +156,11 @@ function AccountDisplayBTC(props) {
       utxoArray = await checkUTXOs();
       console.log(utxoArray);
 
-      let txObject = new bitcoin.TransactionBuilder(testnet);
+      let txObject = new bitcoin.Transaction(testnet);
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-        //txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
+        txObject.addInput(utxoArray[i].txHash, utxoArray[i].index); //UTXO to spend from
       }
       
       txObject.addOutput(accountToSend, amountToSend); //Address to send and amount to spend

@@ -51,7 +51,7 @@ function AccountDisplayBTC(props) {
 
   //   });
 
-    async function getBalance(){
+    async function refreshBalance() {
 
       try {
         const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
@@ -70,27 +70,53 @@ function AccountDisplayBTC(props) {
   
     }
 
-    async function getTransactions(){
+    // This API Call will gather all of the UTXOs from an address, check whether it is more than the value of the totalValue param
+    async function checkUTXOs() {
 
-      try {
-          const query = new URLSearchParams({pageSize: 10}).toString();
-        
-          const response = await fetch(`https://api.tatum.io/v3/bitcoin/transaction/address/${publicKey}?${query}&type=testnet`,
-            {
-              method: 'GET',
-              headers: {
-                'x-api-key': Config.TATUM_API_KEY
-              }
-            }
-          );
-        
-          const data = await response.text();
-          console.log(data);
+      try{
+      const query = new URLSearchParams({
+        chain: 'bitcoin-testnet',
+        address: publicKey.toString(),
+        totalValue: '0.00001',
+      }).toString();
+    
+      const response = await axios.get(`https://api.tatum.io/v3/data/utxos?${query}`,{
+          headers: {
+            'x-api-key': Config.TATUM_API_KEY
+          }
+        });
+    
+      const data = await response.data;
+      console.log(data);
       } catch (error) {
         console.error('Error:', error.message);
       }
-        
     }
+
+    // gets a JSON with all transactions of an address, needs additional parsing for individual tx data
+
+    // async function getTransactions(){
+
+    //   try {
+    //       const query = new URLSearchParams({pageSize: 10}).toString();
+        
+    //       const response = await fetch(`https://api.tatum.io/v3/bitcoin/transaction/address/${publicKey}?${query}&type=testnet`,
+    //         {
+    //           method: 'GET',
+    //           headers: {
+    //             'x-api-key': Config.TATUM_API_KEY
+    //           }
+    //         }
+    //       );
+        
+    //       const data = await response.text();
+    //       const formattedData = JSON.stringify(JSON.parse(data), null, 2);
+    //       console.log(formattedData);
+    //   } catch (error) {
+    //     console.error('Error:', error.message);
+    //   }
+        
+    // }
 
   async function readNdef() {
     try{
@@ -185,16 +211,16 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-              getTransactions();
+              checkUTXOs();
               }}>
-              Get Transactions
+              Get UTXOs
         </Button>
 
         <Button 
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-                getBalance();
+                refreshBalance();
               }}>
               Refresh Balance
         </Button>

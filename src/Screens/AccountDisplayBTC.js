@@ -26,31 +26,33 @@ function AccountDisplayBTC(props) {
 
   const testnet = bitcoin.networks.testnet;
   var utxoArray = [];
+  var rawTxHashArray = [];
+  var pubKeyScriptArray = [];
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function getBalance(){
+  //   async function getBalance(){
 
-    try {
-      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
-        headers: {
-          'x-api-key': Config.TATUM_API_KEY
-        }
-      });
+  //   try {
+  //     const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
+  //       headers: {
+  //         'x-api-key': Config.TATUM_API_KEY
+  //       }
+  //     });
   
-      console.log(response.data);
-      setAccountBalance(response.data.incoming - response.data.outgoing);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+  //     console.log(response.data);
+  //     setAccountBalance(response.data.incoming - response.data.outgoing);
+  //   } catch (error) {
+  //     console.error('Error:', error.message);
+  //   }
 
-    // Get BTC balance
+  //   // Get BTC balance
 
-    }
+  //   }
 
-    getBalance();
+  //   getBalance();
 
-    });
+  //   });
 
     async function refreshBalance() {
 
@@ -67,12 +69,10 @@ function AccountDisplayBTC(props) {
         console.error('Error:', error.message);
       }
   
-      // Get BTC balance
-  
     }
 
     // This API Call will gather all of the UTXOs from an address, check whether it is more than the value of the totalValue param
-    async function checkUTXOs() {
+    async function getUTXOs() {
 
       try{
       const query = new URLSearchParams({
@@ -88,38 +88,51 @@ function AccountDisplayBTC(props) {
         });
     
       utxoArray = await response.data;
-      //console.log(utxoArray);
+      console.log(utxoArray);
       return utxoArray;
       } catch (error) {
         console.error('Error:', error.message);
       }
     }
 
-    // gets a JSON with all transactions of an address, needs additional parsing for individual tx data
+    async function getRawTxHash(txHash) {
 
-    // async function getTransactions(){
+      try{
+      const hash = txHash;
+    
+      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/transaction/${hash}?type=testnet`,{
+          headers: {
+            'x-api-key': Config.TATUM_API_KEY
+          }
+        });
+    
+      const data = JSON.stringify(response.data.hex);
+      console.log("PubKey Script Data: " + data);
+      return data;
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
 
-    //   try {
-    //       const query = new URLSearchParams({pageSize: 10}).toString();
-        
-    //       const response = await fetch(`https://api.tatum.io/v3/bitcoin/transaction/address/${publicKey}?${query}&type=testnet`,
-    //         {
-    //           method: 'GET',
-    //           headers: {
-    //             'x-api-key': Config.TATUM_API_KEY
-    //           }
-    //         }
-    //       );
-        
-    //       const data = await response.text();
-    //       const formattedData = JSON.stringify(JSON.parse(data), null, 2);
-    //       console.log(formattedData);
-    //   } catch (error) {
-    //     console.error('Error:', error.message);
-    //   }
-        
-    // }
+    async function getPubKeyScript(txHash, txIndex) {
 
+      try{
+        const hash = txHash;
+        const index = txIndex;
+        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/utxo/${hash}/${index}`,{
+          headers: {
+            'x-api-key': Config.TATUM_API_KEY
+          }
+        });
+    
+      const data = JSON.stringify(response.data.script);
+      console.log("PubKey Script Data: " + data);
+      return data;
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
+    }
+    
   async function readNdef() {
     try{
       await NfcManager.requestTechnology(NfcTech.Ndef);
@@ -153,29 +166,46 @@ function AccountDisplayBTC(props) {
     // the use either did sign with tag or easy sign)
     if(encryptedPrivateKey != ''){
 
-      utxoArray = await checkUTXOs();
+      utxoArray = await getUTXOs();
+
+      //get UTXO hex's to test segwit and use for non-witness inputs
+      for (let i = 0; i < utxoArray.length; i++) {
+        var rawTxHash = await getRawTxHash(utxoArray[i].txHash);
+        rawTxHashArray.push(rawTxHash);
+      }
+
+      //get pubkeyscripts from segwit txs if inputs contains the correct SegWit Flags in the hex above
+      for (let i = 0; i < utxoArray.length; i++) {
+        // if rawTxHashArray[i] contains the segwit flag then get the pubkeyscript and maybe pair them in a transaction dictionary?
+        var pubKeyScript = await getPubKeyScript(utxoArray[i].txHash, utxoArray[i].index);
+        pubKeyScriptArray.push(pubKeyScript);
+        // else if it doesn't contain this then pair the hash with the hex in the transaction dictionary...
+      }
+
+      // create a dictionary that pairs txhashes with witness pubscripts and/or hex's
       console.log(utxoArray);
+      console.log(rawTxHashArray);
 
       let txObject = new bitcoin.Transaction(testnet);
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-        txObject.addInput(Buffer.from(utxoArray[i].txHash, 'hex'), utxoArray[i].index); //UTXO to spend from
-        console.log(txObject.ins);
+        //txObject.addInput(Buffer.from(utxoArray[i].txHash, 'hex'), utxoArray[i].index); //UTXO to spend from
+        //console.log(txObject.ins);
       }
       
-      txObject.addOutput(Buffer.from(accountToSend, 'hex'), amountToSend); //Address to send and amount to spend
-      console.log(txObject.outs);
+      // txObject.addOutput(Buffer.from(accountToSend, 'hex'), amountToSend); //Address to send and amount to spend
+      // console.log(txObject.outs);
 
-      const privateKey = CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8);
-      for (let i = 0; i < utxoArray.length; i++) {
-        await txObject.signInput(i, privateKey);
-      }
+      // const privateKey = CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8);
+      // for (let i = 0; i < utxoArray.length; i++) {
+      //   await txObject.signInput(i, privateKey);
+      // }
         
-        // print transaction if it worked
-        console.log(txObject.build().toHex());
+      //   // print transaction if it worked
+      //   console.log(txObject.build().toHex());
 
-        //broadcast transaction:
+      //   //broadcast transaction:
         
     } else {
 
@@ -230,7 +260,7 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-              checkUTXOs();
+              getUTXOs();
               }}>
               Get UTXOs
         </Button>
@@ -384,3 +414,32 @@ const styles = StyleSheet.create({
 });
 
 export default AccountDisplayBTC;
+
+
+
+
+
+// gets a JSON with all transactions of an address, needs additional parsing for individual tx data
+
+    // async function getTransactions(){
+
+    //   try {
+    //       const query = new URLSearchParams({pageSize: 10}).toString();
+        
+    //       const response = await fetch(`https://api.tatum.io/v3/bitcoin/transaction/address/${publicKey}?${query}&type=testnet`,
+    //         {
+    //           method: 'GET',
+    //           headers: {
+    //             'x-api-key': Config.TATUM_API_KEY
+    //           }
+    //         }
+    //       );
+        
+    //       const data = await response.text();
+    //       const formattedData = JSON.stringify(JSON.parse(data), null, 2);
+    //       console.log(formattedData);
+    //   } catch (error) {
+    //     console.error('Error:', error.message);
+    //   }
+        
+    // }

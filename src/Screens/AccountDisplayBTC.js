@@ -28,7 +28,7 @@ function AccountDisplayBTC(props) {
 
   const testnet = bitcoin.networks.testnet;
   var utxoArray = [];
-  var rawTxHashArray = [];
+  var rawTxDataArray = [];
   var pubKeyScriptArray = [];
 
   // useEffect(() => {
@@ -97,7 +97,7 @@ function AccountDisplayBTC(props) {
       }
     }
 
-    async function getRawTxHash(txHash) {
+    async function getRawTxData(txHash) {
 
       try{
       const hash = txHash;
@@ -108,7 +108,7 @@ function AccountDisplayBTC(props) {
           }
         });
     
-      const data = response.data.hex;
+      const data = response.data;
       console.log("Raw Tx Hex: " + data);
       return data;
       } catch (error) {
@@ -172,15 +172,15 @@ function AccountDisplayBTC(props) {
 
       //get UTXO hex's to test segwit and use for non-witness inputs
       for (let i = 0; i < utxoArray.length; i++) {
-        var rawTxHash = await getRawTxHash(utxoArray[i].txHash);
-        rawTxHashArray.push(rawTxHash);
+        var rawTxData = await getRawTxData(utxoArray[i].txHash);
+        rawTxDataArray.push(rawTxData);
       }
 
       //get pubkeyscripts from segwit txs if inputs contains the correct SegWit Flags in the hex above
       // THIS MAY ALWAYS BE THE SAME PUBKEYSCRIPT FOR THE SAME ADDRESS??
       // MAY NOT NEED TO BE AN ARRAY IF IT IS THE SAME FOR EACH TX/ADDRESS
       for (let i = 0; i < utxoArray.length; i++) {
-        // if rawTxHashArray[i] contains the segwit flag then get the pubkeyscript and maybe pair them in a transaction dictionary?
+        // if rawTxDataArray[i] contains the segwit flag then get the pubkeyscript and maybe pair them in a transaction dictionary?
         var pubKeyScript = await getPubKeyScript(utxoArray[i].txHash, utxoArray[i].index);
         pubKeyScriptArray.push(pubKeyScript);
         // else if it doesn't contain this then pair the hash with the hex in the transaction dictionary...
@@ -189,8 +189,8 @@ function AccountDisplayBTC(props) {
       // create a dictionary that pairs txhashes with witness pubscripts and/or hex's
       console.log("UTXO Array ");
       console.log(utxoArray);
-      console.log("Raw Tx Hash Array: ");
-      console.log(rawTxHashArray);
+      console.log("Raw Tx Data Array: ");
+      console.log(rawTxDataArray);
       console.log("PubKeyScript Array: ");
       console.log(pubKeyScriptArray);
 
@@ -203,7 +203,7 @@ function AccountDisplayBTC(props) {
       try{
 
       for (let i = 0; i < utxoArray.length; i++) {
-        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
+        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index + " Witness Script: " + rawTxDataArray[i].witnessHash);
         
             txObject.addInput({
               hash: utxoArray[i].txHash,
@@ -212,6 +212,7 @@ function AccountDisplayBTC(props) {
                 script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
                 value: pubKeyScriptArray[i].value,
               },
+              witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',),
             });
             console.log("SEGWIT transaction");
           }
@@ -224,7 +225,7 @@ function AccountDisplayBTC(props) {
           });
           txObject.addOutput({
             address: publicKey,
-            value: (accountBalance - amountToSend - 55) * 100000000,
+            value: (accountBalance - amountToSend - 1000) * 100000000,
           });
           txObject.signAllInputs(tempKeyPair);
           txObject.validateSignaturesOfAllInputs(validator);

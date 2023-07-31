@@ -8,8 +8,10 @@ import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import * as bitcoin from 'bitcoinjs-lib';
 import axios from 'axios';
+import { ec as EC } from 'elliptic';
 
 var tempEncryptedPrivateKey;
+const ec = new EC('secp256k1');
 
 function AccountDisplayBTC(props) {
   const {navigation} = props;
@@ -106,8 +108,8 @@ function AccountDisplayBTC(props) {
           }
         });
     
-      const data = JSON.stringify(response.data.hex);
-      console.log("PubKey Script Data: " + data);
+      const data = response.data.hex;
+      console.log("Raw Tx Hex: " + data);
       return data;
       } catch (error) {
         console.error('Error:', error.message);
@@ -125,7 +127,7 @@ function AccountDisplayBTC(props) {
           }
         });
     
-      const data = JSON.stringify(response.data.script);
+      const data = response.data;
       console.log("PubKey Script Data: " + data);
       return data;
       } catch (error) {
@@ -175,6 +177,8 @@ function AccountDisplayBTC(props) {
       }
 
       //get pubkeyscripts from segwit txs if inputs contains the correct SegWit Flags in the hex above
+      // THIS MAY ALWAYS BE THE SAME PUBKEYSCRIPT FOR THE SAME ADDRESS??
+      // MAY NOT NEED TO BE AN ARRAY IF IT IS THE SAME FOR EACH TX/ADDRESS
       for (let i = 0; i < utxoArray.length; i++) {
         // if rawTxHashArray[i] contains the segwit flag then get the pubkeyscript and maybe pair them in a transaction dictionary?
         var pubKeyScript = await getPubKeyScript(utxoArray[i].txHash, utxoArray[i].index);
@@ -183,16 +187,45 @@ function AccountDisplayBTC(props) {
       }
 
       // create a dictionary that pairs txhashes with witness pubscripts and/or hex's
+      console.log("UTXO Array ");
       console.log(utxoArray);
+      console.log("Raw Tx Hash Array: ");
       console.log(rawTxHashArray);
+      console.log("PubKeyScript Array: ");
+      console.log(pubKeyScriptArray);
 
-      let txObject = new bitcoin.Transaction(testnet);
+
+
+      // Actual Transaction Details:
+      var tempKeyPair = ec.keyFromPrivate(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
+      const txObject = new bitcoin.Psbt();
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
-        //txObject.addInput(Buffer.from(utxoArray[i].txHash, 'hex'), utxoArray[i].index); //UTXO to spend from
-        //console.log(txObject.ins);
+        
+            txObject.addInput({
+              hash: utxoArray[i].txHash,
+              index: utxoArray[i].index,
+              witnessUtxo: {
+                script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
+                value: pubKeyScriptArray[i].value,
+              },
+            });
+            console.log("SEGWIT transaction");
+          }
+          const txInputs = txObject.txInputs;
+          console.log(txInputs);
+      } 
+      else {
+
+        tempEncryptedPrivateKey = await readNdef();
+        console.warn('control flow test 1: ' + tempEncryptedPrivateKey);
+  
       }
+      
+    }
+    
+      
       
       // txObject.addOutput(Buffer.from(accountToSend, 'hex'), amountToSend); //Address to send and amount to spend
       // console.log(txObject.outs);
@@ -206,15 +239,6 @@ function AccountDisplayBTC(props) {
       //   console.log(txObject.build().toHex());
 
       //   //broadcast transaction:
-        
-    } else {
-
-      tempEncryptedPrivateKey = await readNdef();
-      console.warn('control flow test 1: ' + tempEncryptedPrivateKey);
-
-    }
-    
-  }
   
   return (
     <ImageBackground source={require('../assets/AnyWareBackground.png')}

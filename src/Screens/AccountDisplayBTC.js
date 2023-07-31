@@ -121,7 +121,7 @@ function AccountDisplayBTC(props) {
       try{
         const hash = txHash;
         const index = txIndex;
-        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/utxo/${hash}/${index}`,{
+        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/utxo/${hash}/${index}?type=testnet`,{
           headers: {
             'x-api-key': Config.TATUM_API_KEY
           }
@@ -198,7 +198,9 @@ function AccountDisplayBTC(props) {
 
       // Actual Transaction Details:
       var tempKeyPair = ec.keyFromPrivate(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-      const txObject = new bitcoin.Psbt();
+      const txObject = new bitcoin.Psbt({testnet});
+
+      try{
 
       for (let i = 0; i < utxoArray.length; i++) {
         console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index);
@@ -215,7 +217,25 @@ function AccountDisplayBTC(props) {
           }
           const txInputs = txObject.txInputs;
           console.log(txInputs);
-      } 
+
+          txObject.addOutput({
+            address: accountToSend,
+            value: (amountToSend * 100000000),
+          });
+          txObject.addOutput({
+            address: publicKey,
+            value: (accountBalance - amountToSend - 55) * 100000000,
+          });
+          txObject.signAllInputs(tempKeyPair);
+          txObject.validateSignaturesOfAllInputs(validator);
+          txObject.finalizeAllInputs();
+          console.log(txObject.extractTransaction().toHex());
+
+      } catch (error) {
+        console.log(error.message);
+
+    } 
+    }
       else {
 
         tempEncryptedPrivateKey = await readNdef();

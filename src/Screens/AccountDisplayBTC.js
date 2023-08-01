@@ -198,39 +198,51 @@ function AccountDisplayBTC(props) {
 
       // Actual Transaction Details:
       var tempKeyPair = ec.keyFromPrivate(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
+      tempKeyPair.getPublic('hex');
+      console.log("keypair: ");
+      console.log(tempKeyPair);
       const txObject = new bitcoin.Psbt({testnet});
+
 
       try{
 
-      for (let i = 0; i < utxoArray.length; i++) {
-        console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index + " Witness Script: " + rawTxDataArray[i].witnessHash);
-        
-            txObject.addInput({
-              hash: utxoArray[i].txHash,
-              index: utxoArray[i].index,
-              witnessUtxo: {
-                script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
-                value: pubKeyScriptArray[i].value,
-              },
-              witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',),
-            });
-            console.log("SEGWIT transaction");
-          }
-          const txInputs = txObject.txInputs;
-          console.log(txInputs);
+        for (let i = 0; i < utxoArray.length; i++) {
+          console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index + " Witness Script: " + rawTxDataArray[i].witnessHash);
+          
+              txObject.addInput({
+                hash: utxoArray[i].txHash,
+                index: utxoArray[i].index,
+                witnessUtxo: {
+                  script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
+                  value: pubKeyScriptArray[i].value,
+                },
+                //witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',),
+              });
+              console.log("SEGWIT transaction");
+              console.log(pubKeyScriptArray[i].script);
+        }
 
-          txObject.addOutput({
-            address: accountToSend,
-            value: (amountToSend * 100000000),
-          });
-          txObject.addOutput({
-            address: publicKey,
-            value: (accountBalance - amountToSend - 1000) * 100000000,
-          });
-          txObject.signAllInputs(tempKeyPair);
-          txObject.validateSignaturesOfAllInputs(validator);
-          txObject.finalizeAllInputs();
-          console.log(txObject.extractTransaction().toHex());
+            const txInputs = txObject.txInputs;
+            console.log(txInputs);
+
+            var returnExcessToAddress = bitcoin.address.fromBech32(publicKey).data;
+            var toAddress = bitcoin.address.fromBech32(accountToSend).data;
+
+            console.log(toAddress);
+            console.log(returnExcessToAddress);
+
+            txObject.addOutput({
+              script: toAddress,
+              value: Math.floor(amountToSend * 100000000),
+            });
+            txObject.addOutput({
+              script: returnExcessToAddress,
+              value: Math.floor((accountBalance - amountToSend) * 100000000) - 100,
+            });
+            txObject.signAllInputs(tempKeyPair);
+            txObject.validateSignaturesOfAllInputs(validator);
+            txObject.finalizeAllInputs();
+            console.log(txObject.extractTransaction().toHex());
 
       } catch (error) {
         console.log(error.message);

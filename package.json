@@ -13,6 +13,7 @@
     "postinstallbtc": "rn-nodeify --install stream,buffer,events,assert --hack"
   },
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.0.5",
     "@moralisweb3/common-evm-utils": "^2.22.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.1.6",
@@ -34,6 +35,7 @@
     "crypto-js": "^4.1.1",
     "dns.js": "^1.0.1",
     "domain-browser": "^1.2.0",
+    "ecpair": "^2.1.0",
     "ecurve": "^1.0.6",
     "events": "^1.1.1",
     "https-browserify": "^0.0.1",

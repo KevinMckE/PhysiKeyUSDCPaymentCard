@@ -9,7 +9,10 @@ import CryptoJS from 'crypto-js';
 import * as bitcoin from 'bitcoinjs-lib';
 import axios from 'axios';
 import { ec as EC } from 'elliptic';
+import ecc from '@bitcoinerlab/secp256k1';
+import { ECPairFactory } from 'ecpair';
 
+const ECPair = ECPairFactory(ecc);
 var tempEncryptedPrivateKey;
 const ec = new EC('secp256k1');
 
@@ -197,9 +200,13 @@ function AccountDisplayBTC(props) {
 
 
       // Actual Transaction Details:
-      var tempKeyPair = ec.keyFromPrivate(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-      tempKeyPair.getPublic('hex');
-      console.log("keypair: ");
+
+
+      var tempKeyPair = ECPair.fromPrivateKey(Buffer.from(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), 'hex'));
+
+
+      //tempKeyPair.getPublic('hex');
+      console.log("temp keypair: ");
       console.log(tempKeyPair);
       const txObject = new bitcoin.Psbt({testnet});
 

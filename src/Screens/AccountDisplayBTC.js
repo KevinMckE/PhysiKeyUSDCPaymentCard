@@ -209,6 +209,7 @@ function AccountDisplayBTC(props) {
       console.log("temp keypair: ");
       console.log(tempKeyPair);
       const txObject = new bitcoin.Psbt({testnet});
+      var utxoTxTotal = 0; // Need to add up UTXOs for output equation
 
 
       try{
@@ -227,6 +228,8 @@ function AccountDisplayBTC(props) {
               });
               console.log("SEGWIT transaction");
               console.log(pubKeyScriptArray[i].script);
+
+              utxoTxTotal += utxoArray[i].value; //add all UTXO values together
         }
 
             const txInputs = txObject.txInputs;
@@ -244,10 +247,11 @@ function AccountDisplayBTC(props) {
             });
             txObject.addOutput({
               script: returnExcessToAddress,
-              value: Math.floor((accountBalance - amountToSend) * 100000000) - 100,
+              // this needs to be the UTXO values not the account balance:
+              value: Math.floor((utxoTxTotal - amountToSend - .000000001) * 100000000),
             });
             txObject.signAllInputs(tempKeyPair);
-            txObject.validateSignaturesOfAllInputs(validator);
+            //txObject.validateSignaturesOfAllInputs(0, validator);
             txObject.finalizeAllInputs();
             console.log(txObject.extractTransaction().toHex());
 

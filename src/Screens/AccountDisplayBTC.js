@@ -173,7 +173,7 @@ function AccountDisplayBTC(props) {
 
       utxoArray = await getUTXOs();
 
-      //get UTXO hex's to test segwit and use for non-witness inputs
+      //get UTXO hex's for get pubkeyscripts API and use for non-witness inputs
       for (let i = 0; i < utxoArray.length; i++) {
         var rawTxData = await getRawTxData(utxoArray[i].txHash);
         rawTxDataArray.push(rawTxData);
@@ -197,13 +197,9 @@ function AccountDisplayBTC(props) {
       console.log("PubKeyScript Array: ");
       console.log(pubKeyScriptArray);
 
-
-
       // Actual Transaction Details:
 
-
       var tempKeyPair = ECPair.fromPrivateKey(Buffer.from(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), 'hex'));
-
 
       //tempKeyPair.getPublic('hex');
       console.log("temp keypair: ");
@@ -211,6 +207,9 @@ function AccountDisplayBTC(props) {
       const txObject = new bitcoin.Psbt({testnet});
       var utxoTxTotal = 0; // Need to add up UTXOs for output equation
 
+      const validator = (pubkey, msghash, signature) => {
+        return tempKeyPair.verify(msghash, signature);
+      };
 
       try{
 
@@ -251,7 +250,7 @@ function AccountDisplayBTC(props) {
               value: Math.floor((utxoTxTotal - amountToSend - .000000001) * 100000000),
             });
             txObject.signAllInputs(tempKeyPair);
-            //txObject.validateSignaturesOfAllInputs(0, validator);
+            txObject.validateSignaturesOfAllInputs(validator);
             txObject.finalizeAllInputs();
             console.log(txObject.extractTransaction().toHex());
 

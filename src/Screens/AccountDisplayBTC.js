@@ -137,6 +137,27 @@ function AccountDisplayBTC(props) {
         console.error('Error:', error.message);
       }
     }
+
+    async function broadcastTransaction(rawTxData) {
+
+      try{
+        const response = await axios.post(`https://api.tatum.io/v3/bitcoin/broadcast?type=testnet`,{
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': Config.TATUM_API_KEY
+          },
+          body: JSON.stringify({
+            txData: rawTxData
+          })
+        });
+    
+      const data = response.json();
+      console.log("Tx Broadcast Data: " + data);
+      return data;
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
     
   async function readNdef() {
     try{
@@ -252,7 +273,11 @@ function AccountDisplayBTC(props) {
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);
             txObject.finalizeAllInputs();
-            console.log(txObject.extractTransaction().toHex());
+            const txToBroadcast = txObject.extractTransaction().toHex();
+            console.log(txToBroadcast);
+
+            broadcastTransaction(txToBroadcast);
+
 
       } catch (error) {
         console.log(error.message);

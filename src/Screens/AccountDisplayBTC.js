@@ -272,7 +272,7 @@ function AccountDisplayBTC(props) {
             txObject.addOutput({
               script: returnExcessToAddress,
               // this needs to be the UTXO values not the account balance:
-              value: Math.floor((utxoTxTotal - amountToSend - .000000001) * 100000000),
+              value: Math.floor((utxoTxTotal - amountToSend - .0000001) * 100000000),
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);

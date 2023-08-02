@@ -33,6 +33,7 @@ function AccountDisplayBTC(props) {
   var utxoArray = [];
   var rawTxDataArray = [];
   var pubKeyScriptArray = [];
+  var txToBroadcast = '';
 
   // useEffect(() => {
 
@@ -141,21 +142,24 @@ function AccountDisplayBTC(props) {
     async function broadcastTransaction(rawTxData) {
 
       try{
-        const response = await axios.post(`https://api.tatum.io/v3/bitcoin/broadcast?type=testnet`,{
+        const response = await axios.post(`https://api.tatum.io/v3/bitcoin/broadcast?type=testnet`,
+          {
+          txData: rawTxData
+          },
+          {
           headers: {
             'Content-Type': 'application/json',
             'x-api-key': Config.TATUM_API_KEY
           },
-          body: JSON.stringify({
-            txData: rawTxData
-          })
-        });
+          
+          }
+        );
     
       const data = response.json();
       console.log("Tx Broadcast Data: " + data);
       return data;
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', JSON.stringify(error));
       }
     }
     
@@ -273,10 +277,8 @@ function AccountDisplayBTC(props) {
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);
             txObject.finalizeAllInputs();
-            const txToBroadcast = txObject.extractTransaction().toHex();
+            txToBroadcast = txObject.extractTransaction().toHex();
             console.log(txToBroadcast);
-
-            broadcastTransaction(txToBroadcast);
 
 
       } catch (error) {
@@ -352,9 +354,9 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.btn} 
               onPress={() => {
-              getUTXOs();
+                broadcastTransaction(txToBroadcast);;
               }}>
-              Get UTXOs
+              Broadcast Transaction
         </Button>
 
         <Button 

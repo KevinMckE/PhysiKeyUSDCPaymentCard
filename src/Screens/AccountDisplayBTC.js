@@ -159,7 +159,7 @@ function AccountDisplayBTC(props) {
       console.log("Tx Broadcast Data: " + data);
       return data;
       } catch (error) {
-        console.error('Error:', JSON.stringify(error));
+        console.error(error.response.data);
       }
     }
     
@@ -272,7 +272,7 @@ function AccountDisplayBTC(props) {
             txObject.addOutput({
               script: returnExcessToAddress,
               // this needs to be the UTXO values not the account balance:
-              value: Math.floor((utxoTxTotal - amountToSend - .0000001) * 100000000),
+              value: Math.floor((utxoTxTotal - amountToSend) * 100000000),
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);

@@ -11,6 +11,7 @@ import axios from 'axios';
 import { ec as EC } from 'elliptic';
 import ecc from '@bitcoinerlab/secp256k1';
 import { ECPairFactory } from 'ecpair';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const ECPair = ECPairFactory(ecc);
 var tempEncryptedPrivateKey;
@@ -162,6 +163,39 @@ function AccountDisplayBTC(props) {
         console.error(error.response.data);
       }
     }
+
+    async function getRelayFee(fromAddress, accountToSend, amountToSend) {
+      try{
+        const response = await axios.post(`https://api.tatum.io/v3/blockchain/estimate?type=testnet`,
+          {
+            chain: 'BTC',
+            type: 'TRANSFER',
+            fromAddress: [
+              fromAddress,
+            ], 
+            to: [
+              {
+                address: accountToSend,
+                value: parseFloat(amountToSend)
+              }
+            ]
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': Config.TATUM_API_KEY
+            }
+          });
+    
+      const data = response.data;
+      console.log("Relay Fee: ")
+      console.log(data);
+      return data.fast;
+      } catch (error) {
+        console.error(error.response);
+      }
+    }
+
     
   async function readNdef() {
     try{
@@ -240,7 +274,6 @@ function AccountDisplayBTC(props) {
 
         for (let i = 0; i < utxoArray.length; i++) {
           console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index + " Witness Script: " + rawTxDataArray[i].witnessHash);
-          
               txObject.addInput({
                 hash: utxoArray[i].txHash,
                 index: utxoArray[i].index,
@@ -269,10 +302,19 @@ function AccountDisplayBTC(props) {
               script: toAddress,
               value: Math.floor(amountToSend * 100000000),
             });
+
+            relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
+
+            console.log("Amount To Send: ");
+            console.log(amountToSend);
+
+            console.log('Relay Fee');
+            console.log(relayFee);
+
             txObject.addOutput({
               script: returnExcessToAddress,
               // this needs to be the UTXO values not the account balance:
-              value: Math.floor((utxoTxTotal - amountToSend) * 100000000),
+              value: Math.floor((utxoTxTotal - amountToSend) * 100000000 - (relayFee * 100000000)),
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);

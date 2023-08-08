@@ -285,6 +285,8 @@ function AccountDisplayBTC(props) {
               });
               console.log("SEGWIT transaction");
               console.log(pubKeyScriptArray[i].script);
+              console.log("Tx Value:");
+              console.log(pubKeyScriptArray[i].value);
 
               utxoTxTotal += utxoArray[i].value; //add all UTXO values together
         }
@@ -292,15 +294,15 @@ function AccountDisplayBTC(props) {
             const txInputs = txObject.txInputs;
             console.log(txInputs);
 
-            var returnExcessToAddress = bitcoin.address.fromBech32(publicKey).data;
+            var changeAddress = bitcoin.address.fromBech32(publicKey).data;
             var toAddress = bitcoin.address.fromBech32(accountToSend).data;
 
             console.log(toAddress);
-            console.log(returnExcessToAddress);
+            console.log(changeAddress);
 
             txObject.addOutput({
               script: toAddress,
-              value: (parseFloat(amountToSend) * 100000000).toString(16),
+              value: (parseFloat(amountToSend) * 100000000)
             });
 
             relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
@@ -315,9 +317,9 @@ function AccountDisplayBTC(props) {
             console.log(relayFee);
 
             txObject.addOutput({
-              script: returnExcessToAddress,
+              script: changeAddress,
               // this needs to be the UTXO values not the account balance:
-              value: ((parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000).toString(16),
+              value: (parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);
@@ -325,6 +327,7 @@ function AccountDisplayBTC(props) {
             txToBroadcast = txObject.extractTransaction().toHex();
             console.log(txToBroadcast);
 
+            console.log(txObject.txOutputs);
 
       } catch (error) {
         console.log(error.message);

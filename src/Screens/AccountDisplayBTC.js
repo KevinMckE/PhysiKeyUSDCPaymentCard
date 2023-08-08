@@ -64,7 +64,7 @@ function AccountDisplayBTC(props) {
     async function refreshBalance() {
 
       try {
-        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}?type=testnet`, {
+        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/address/balance/${publicKey}`, {
           headers: {
             'x-api-key': Config.TATUM_API_KEY
           }
@@ -107,7 +107,7 @@ function AccountDisplayBTC(props) {
       try{
       const hash = txHash;
     
-      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/transaction/${hash}?type=testnet`,{
+      const response = await axios.get(`https://api.tatum.io/v3/bitcoin/transaction/${hash}`,{
           headers: {
             'x-api-key': Config.TATUM_API_KEY
           }
@@ -126,7 +126,7 @@ function AccountDisplayBTC(props) {
       try{
         const hash = txHash;
         const index = txIndex;
-        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/utxo/${hash}/${index}?type=testnet`,{
+        const response = await axios.get(`https://api.tatum.io/v3/bitcoin/utxo/${hash}/${index}`,{
           headers: {
             'x-api-key': Config.TATUM_API_KEY
           }
@@ -143,7 +143,7 @@ function AccountDisplayBTC(props) {
     async function broadcastTransaction(rawTxData) {
 
       try{
-        const response = await axios.post(`https://api.tatum.io/v3/bitcoin/broadcast?type=testnet`,
+        const response = await axios.post(`https://api.tatum.io/v3/bitcoin/broadcast`,
           {
           txData: rawTxData
           },
@@ -166,7 +166,7 @@ function AccountDisplayBTC(props) {
 
     async function getRelayFee(fromAddress, accountToSend, amountToSend) {
       try{
-        const response = await axios.post(`https://api.tatum.io/v3/blockchain/estimate?type=testnet`,
+        const response = await axios.post(`https://api.tatum.io/v3/blockchain/estimate`,
           {
             chain: 'BTC',
             type: 'TRANSFER',
@@ -281,7 +281,7 @@ function AccountDisplayBTC(props) {
                   script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
                   value: pubKeyScriptArray[i].value,
                 },
-                //witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',),
+                //witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',)
               });
               console.log("SEGWIT transaction");
               console.log(pubKeyScriptArray[i].script);
@@ -301,8 +301,9 @@ function AccountDisplayBTC(props) {
             console.log(changeAddress);
 
             txObject.addOutput({
+              //address: accountToSend,
               script: toAddress,
-              value: (parseFloat(amountToSend) * 100000000)
+              value: parseInt(parseFloat(amountToSend) * 100000000)
             });
 
             relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
@@ -317,9 +318,10 @@ function AccountDisplayBTC(props) {
             console.log(relayFee);
 
             txObject.addOutput({
+              //address: publicKey,
               script: changeAddress,
               // this needs to be the UTXO values not the account balance:
-              value: (parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000
+              value: parseInt((parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000)
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);

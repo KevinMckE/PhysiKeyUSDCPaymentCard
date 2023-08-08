@@ -304,9 +304,12 @@ function AccountDisplayBTC(props) {
             });
 
             relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
+      
+            console.log("UTXO total: ");
+            console.log(utxoTxTotal);
 
             console.log("Amount To Send: ");
-            console.log(amountToSend);
+            console.log(parseFloat(amountToSend));
 
             console.log('Relay Fee');
             console.log(relayFee);
@@ -314,7 +317,7 @@ function AccountDisplayBTC(props) {
             txObject.addOutput({
               script: returnExcessToAddress,
               // this needs to be the UTXO values not the account balance:
-              value: Math.floor((utxoTxTotal - amountToSend) * 100000000 - (relayFee * 100000000)),
+              value: Math.floor(((parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000)),
             });
             txObject.signAllInputs(tempKeyPair);
             txObject.validateSignaturesOfAllInputs(validator);

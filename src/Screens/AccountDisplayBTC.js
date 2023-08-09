@@ -79,13 +79,15 @@ function AccountDisplayBTC(props) {
     }
 
     // This API Call will gather all of the UTXOs from an address, check whether it is more than the value of the totalValue param
-    async function getUTXOs() {
+    async function getUTXOs(relayFee) {
+
+      var totalValue = parseFloat(amountToSend) + parseFloat(relayFee);
 
       try{
       const query = new URLSearchParams({
         chain: 'bitcoin-testnet',
         address: publicKey.toString(),
-        totalValue: amountToSend.toString(),
+        totalValue: totalValue.toString(),
       }).toString();
     
       const response = await axios.get(`https://api.tatum.io/v3/data/utxos?${query}`,{
@@ -230,7 +232,9 @@ function AccountDisplayBTC(props) {
     // the use either did sign with tag or easy sign)
     if(encryptedPrivateKey != ''){
 
-      utxoArray = await getUTXOs();
+      relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
+
+      utxoArray = await getUTXOs(relayFee);
 
       //get UTXO hex's for get pubkeyscripts API and use for non-witness inputs
       for (let i = 0; i < utxoArray.length; i++) {
@@ -306,7 +310,7 @@ function AccountDisplayBTC(props) {
               value: parseInt(parseFloat(amountToSend) * 100000000)
             });
 
-            relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
+            
       
             console.log("UTXO total: ");
             console.log(utxoTxTotal);

@@ -261,7 +261,7 @@ function AccountDisplayBTC(props) {
       // Actual Transaction Details:
 
       var tempKeyPair = ECPair.fromPrivateKey(Buffer.from(CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), 'hex'));
-
+      //var tempToKeyPair = ECPair.fromPublicKey(Buffer.from(accountToSend.toString(CryptoJS.enc.Utf8), 'hex'));
       //tempKeyPair.getPublic('hex');
       console.log("temp keypair: ");
       console.log(tempKeyPair);
@@ -289,13 +289,13 @@ function AccountDisplayBTC(props) {
         }
 
             var changeAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
-            var toAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
+            //var toAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempToKeyPair.publicKey, network: testnet});
 
-            console.log(toAddressP2wpkh.address);
+            //console.log(toAddressP2wpkh.address);
             console.log(changeAddressP2wpkh.address);
 
             txObject.addOutput({
-              address: toAddressP2wpkh.address,
+              address: accountToSend,
               value: parseInt(parseFloat(amountToSend) * 100000000)
             });
 

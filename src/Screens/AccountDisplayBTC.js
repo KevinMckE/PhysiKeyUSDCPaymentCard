@@ -233,7 +233,6 @@ function AccountDisplayBTC(props) {
     if(encryptedPrivateKey != ''){
 
       relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
-
       utxoArray = await getUTXOs(relayFee);
 
       //get UTXO hex's for get pubkeyscripts API and use for non-witness inputs
@@ -252,7 +251,6 @@ function AccountDisplayBTC(props) {
         // else if it doesn't contain this then pair the hash with the hex in the transaction dictionary...
       }
 
-      // create a dictionary that pairs txhashes with witness pubscripts and/or hex's
       console.log("UTXO Array ");
       console.log(utxoArray);
       console.log("Raw Tx Data Array: ");
@@ -267,7 +265,7 @@ function AccountDisplayBTC(props) {
       //tempKeyPair.getPublic('hex');
       console.log("temp keypair: ");
       console.log(tempKeyPair);
-      const txObject = new bitcoin.Psbt({testnet});
+      const txObject = new bitcoin.Psbt({network: testnet});
       var utxoTxTotal = 0; // Need to add up UTXOs for output equation
 
       const validator = (pubkey, msghash, signature) => {
@@ -285,33 +283,22 @@ function AccountDisplayBTC(props) {
                   script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
                   value: pubKeyScriptArray[i].value,
                 },
-                //witnessScript: Buffer.from(rawTxDataArray[i].witnessHash, 'hex',)
               });
-              console.log("SEGWIT transaction");
-              console.log(pubKeyScriptArray[i].script);
-              console.log("Tx Value:");
-              console.log(pubKeyScriptArray[i].value);
 
               utxoTxTotal += utxoArray[i].value; //add all UTXO values together
         }
 
-            const txInputs = txObject.txInputs;
-            console.log(txInputs);
+            var changeAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
+            var toAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
 
-            var changeAddress = bitcoin.address.fromBech32(publicKey).data;
-            var toAddress = bitcoin.address.fromBech32(accountToSend).data;
-
-            console.log(toAddress);
-            console.log(changeAddress);
+            console.log(toAddressP2wpkh.address);
+            console.log(changeAddressP2wpkh.address);
 
             txObject.addOutput({
-              //address: accountToSend,
-              script: toAddress,
+              address: toAddressP2wpkh.address,
               value: parseInt(parseFloat(amountToSend) * 100000000)
             });
 
-            
-      
             console.log("UTXO total: ");
             console.log(utxoTxTotal);
 
@@ -322,8 +309,7 @@ function AccountDisplayBTC(props) {
             console.log(relayFee);
 
             txObject.addOutput({
-              //address: publicKey,
-              script: changeAddress,
+              address: changeAddressP2wpkh.address,
               // this needs to be the UTXO values not the account balance:
               value: parseInt((parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000)
             });

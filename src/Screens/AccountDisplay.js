@@ -149,9 +149,8 @@ function AccountDisplay(props) {
   }
   
   return (
-    <ImageBackground source={require('../assets/AnyWareBackground.png')}
-    style={styles.backgroundImage}>
     <SafeAreaView style={[{ flex: 1 }]}>
+      <Text style={styles.bannerText}>Public Key: </Text>
       <Text style={styles.bannerText} selectable>{publicKey}</Text>
       <Text style={styles.bannerText}>Account Balance: {accountBalance}</Text>
 
@@ -163,8 +162,10 @@ function AccountDisplay(props) {
             autoCorrect={false}
             inputValue={accountToSend}
             onChangeText={setAccountToSend}
-            backgroundColor={'white'}
-            color={'black'}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
 
       <Text style={styles.bannerText}>Input Amount to Send:</Text>
@@ -175,38 +176,49 @@ function AccountDisplay(props) {
             autoCorrect={false}
             inputValue={amountToSend}
             onChangeText={setAmountToSend}
-            backgroundColor={'white'}
-            color={'black'}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
+            keyboardType={'numeric'}
           />
+
       <View style={styles.wrapper}>
         <Button 
               mode="contained" 
-              style={styles.btn} 
+              style={styles.bigBtn} 
               onPress={() => {
               signTransaction();
               }}>
-              Sign/Send
+              <Text style={styles.buttonText}>
+                Sign/Send
+              </Text> 
         </Button>
 
         <Button 
               mode="contained" 
-              style={styles.btn} 
+              style={styles.bigBtn} 
               onPress={() => {
                 web3.eth.getBalance(publicKey, (err, bal) => {
                 setAccountBalance(web3.utils.fromWei(bal.toString(), 'ether'));
                 });;
               }}>
+              <Text style={styles.buttonText}>
               Refresh Balance
+              </Text> 
+              
         </Button>
 
         <Button 
             mode="contained"
-            style={styles.btn}
+            style={styles.smallBtn}
             onPress={() => {
             navigation.navigate('Home');
             }}>
-            Start Over
-          </Button>
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
+        </Button>
       </View>
     
       <Modal  
@@ -234,7 +246,6 @@ function AccountDisplay(props) {
         </Modal>
 
     </SafeAreaView>
-    </ImageBackground>
   );
 }
 
@@ -245,9 +256,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bannerText: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
     padding: 20,
@@ -264,11 +275,29 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
   },
-  btn: {
-    width: 250,
+  smallBtn: {
+    width: 200,
+    height: 50,
     marginBottom: 15,
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontVariant: 'small-caps',
   },
   textInput: {
     padding: 20,

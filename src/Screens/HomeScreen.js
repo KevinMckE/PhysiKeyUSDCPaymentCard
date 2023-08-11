@@ -65,7 +65,9 @@ function HomeScreen(props) {
           onPress={() => {
             navigation.navigate('Account Portal 1');
           }}>
-            Access Account
+            <Text style={styles.buttonText}>
+                Account Portal
+            </Text>
           </Button>
           <Button 
           mode="contained" 
@@ -73,7 +75,9 @@ function HomeScreen(props) {
           onPress={() => {
             navigation.navigate('Raw Keys');
           }}>
-            Raw Keys
+            <Text style={styles.buttonText}>
+                Export Keys
+            </Text>
           </Button>
         </View>
       )
@@ -81,14 +85,12 @@ function HomeScreen(props) {
     }
 
   return (
-    <ImageBackground source={require('../assets/AnyWareBackground.png')}
-    style={styles.wrapper}>
       <View style={styles.wrapper}>
         <View style={styles.wrapper}>
           <Modal  
           visible = {modalVisible}>
             <View 
-              backgroundColor={'black'}
+              backgroundColor={'white'}
               style={styles.wrapper}
               borderRadius={10}>
             <Text style={styles.bannerText}>
@@ -99,7 +101,9 @@ function HomeScreen(props) {
               mode="contained"
               style={styles.btn}
               onPress={hideModal}>
-              I Promise I Will
+              <Text style={styles.buttonText}>
+                I Promise I Will
+              </Text>
             </Button>
             </View>
           </Modal>
@@ -111,7 +115,6 @@ function HomeScreen(props) {
         </View>
         {renderNfcButtons()}
       </View>
-    </ImageBackground>
   );
 }
 
@@ -120,13 +123,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
   bannerText: {
-    fontSize: 42,
+    fontSize: 40,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontVariant: 'small-caps',
   },
   bottom: {
     paddingHorizontal: 20,
@@ -134,9 +145,12 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: 250,
+    height: 70,
     marginBottom: 15,
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

@@ -354,9 +354,8 @@ function AccountDisplayBTC(props) {
       //   //broadcast transaction:
   
   return (
-    <ImageBackground source={require('../assets/AnyWareBackground.png')}
-    style={styles.backgroundImage}>
     <SafeAreaView style={[{ flex: 1 }]}>
+      <Text style={styles.bannerText}>Public Key: </Text>
       <Text style={styles.bannerText} selectable>{publicKey}</Text>
       <Text style={styles.bannerText}>Account Balance: {accountBalance}</Text>
 
@@ -368,8 +367,10 @@ function AccountDisplayBTC(props) {
             autoCorrect={false}
             inputValue={accountToSend}
             onChangeText={setAccountToSend}
-            backgroundColor={'white'}
-            color={'black'}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
 
       <Text style={styles.bannerText}>Input Amount to Send:</Text>
@@ -380,45 +381,57 @@ function AccountDisplayBTC(props) {
             autoCorrect={false}
             inputValue={amountToSend}
             onChangeText={setAmountToSend}
-            backgroundColor={'white'}
-            color={'black'}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
+            keyboardType={'numeric'}
           />
+
       <View style={styles.wrapper}>
         <Button 
               mode="contained" 
-              style={styles.btn} 
+              style={styles.bigBtn} 
               onPress={() => {
               signTransaction();
               }}>
-              Sign/Send
+              <Text style={styles.buttonText}>
+                Sign/Send
+              </Text> 
         </Button>
 
         <Button 
               mode="contained" 
-              style={styles.btn} 
+              style={styles.bigBtn} 
               onPress={() => {
                 broadcastTransaction(txToBroadcast);;
               }}>
-              Broadcast Transaction
+              <Text style={styles.buttonText}>
+                Broadcast Tx
+              </Text>  
         </Button>
 
         <Button 
               mode="contained" 
-              style={styles.btn} 
+              style={styles.smallBtn} 
               onPress={() => {
                 refreshBalance();
               }}>
-              Refresh Balance
+              <Text style={styles.buttonText}>
+                Get Balance
+              </Text>
         </Button>
 
         <Button 
             mode="contained"
-            style={styles.btn}
+            style={styles.smallBtn}
             onPress={() => {
             navigation.navigate('Home');
             }}>
-            Start Over
-          </Button>
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
+        </Button>
       </View>
     
       <Modal  
@@ -446,7 +459,6 @@ function AccountDisplayBTC(props) {
         </Modal>
 
     </SafeAreaView>
-    </ImageBackground>
   );
 }
 
@@ -455,11 +467,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'white',
   },
   bannerText: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
     padding: 20,
@@ -473,14 +486,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
   },
-  backgroundImage: {
-    flex: 1,
-  },
-  btn: {
-    width: 250,
+  smallBtn: {
+    width: 200,
+    height: 50,
     marginBottom: 15,
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontVariant: 'small-caps',
   },
   textInput: {
     padding: 20,

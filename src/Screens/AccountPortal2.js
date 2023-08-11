@@ -75,89 +75,101 @@ function AccountPortal2(props) {
   }
 
   return (
-    <ImageBackground source={require('../assets/AnyWareBackground.png')}
-    style={styles.backgroundImage}>
-      <View style={styles.wrapper}>
-          <View style={[styles.textInput]}>
+    <View style={styles.wrapper}>
+        <View style={[styles.textInput]}>
 
           <TextInput
-            label="Add Raw Text to Pass Phrase Input"
+            style={styles.textInput}
+            label="Add Text to Input"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTextValue}
             onChangeText={setInputTextValues}
             autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
           
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={() => {
             finalDataChain += inputTextValue;
             }}>
-            Add to Input
+            <Text style={styles.buttonText}>
+              Raw Text Input
+            </Text>
           </Button>
 
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={() => {
             for (let i = 0; i < inputTextValue.length; i++) {
               finalDataChain += inputTextValue.charCodeAt(i);
               finalDataChain += inputTextValue.charAt(i);
             }
             }}>
-            Add as Numbers to Input
+            <Text style={styles.buttonText}>
+              Encoded Input
+            </Text>
           </Button>
 
           <TextInput
-            label="Write Encoded Text to Tag"
+            style={styles.textInput}
+            label="Add Text to Tag"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTagValue}
             onChangeText={setInputTagValues}
             autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
 
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={writeNdef}
             >
-              Write to Tag
+            <Text style={styles.buttonText}>
+              Write To Tag
+            </Text>
           </Button>
 
           <Button 
-            mode="contained" 
-            style={[styles.btn]}
-            onPress={() => {
-              readNdef();
-            }}>
+          mode="contained" 
+          style={[styles.smallBtn]}
+          onPress={() => {
+            readNdef();
+          }}>
+            <Text style={styles.buttonText}>
               Input From Tag
-          </Button>
-        
-          <Button 
-            mode="contained" 
-            style={styles.btn} 
-            onPress={() => {
-                console.warn(finalDataChain);
-                // insert go to done screen to print private/public key pair;
-              }
-            }>
-              Check Input
+            </Text>
           </Button>
 
-          </View>
+        </View>
 
         <View style={styles.bottom}>
+
+        <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              console.warn(finalDataChain);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Check Input
+            </Text>
+          </Button>
         
         <Button 
           mode="contained" 
-          style={styles.btn} 
+          style={styles.bigBtn} 
           onPress={ () => {
 
             if (inputCheck === finalDataChain){
@@ -194,12 +206,14 @@ function AccountPortal2(props) {
             }
           }
         }>
-          Access ETH Account
+          <Text style={styles.buttonText}>
+            Access ETH
+          </Text>
         </Button>
 
         <Button 
           mode="contained" 
-          style={styles.btn} 
+          style={styles.bigBtn} 
           onPress={ () => {
 
             if (inputCheck === finalDataChain){
@@ -241,17 +255,22 @@ function AccountPortal2(props) {
 
           }
         }>
-          Access BTC Account
+          <Text style={styles.buttonText}>
+            Access BTC
+          </Text>
         </Button>
 
         <Button 
             mode="contained"
-            style={styles.btn}
+            style={styles.smallBtn}
             onPress={() => {
             navigation.navigate('Home');
             }}>
-            Start Over
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>        
         </Button>
+        
 
       <Modal  
         visible = {modalVisible}>
@@ -259,13 +278,13 @@ function AccountPortal2(props) {
             backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Seg Wit Pub Key:{publicKey}</Text>
+          <Text style={styles.bannerText} selectable>Public Key:{publicKey}</Text>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the
                   // onetimeencryption password and the public key into the next screen
             mode="contained"
-            style={styles.btn}
+            style={styles.bigBtn}
             onPress={() => {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
@@ -284,14 +303,17 @@ function AccountPortal2(props) {
                 navigation.navigate('Account Display BTC', { data });
               }
             }}>
-            Sign With Tag
+            <Text style={styles.buttonText}>
+              Sign With Tag
+            </Text>
+            
           </Button>
 
           <Button // this button needs to store the JSON for later use and navigate to 
                   // the account display while passing the onetimeencryption password, the
                   // encrypted JSON file, and the public key to the next screen
             mode="contained"
-            style={styles.btn}
+            style={styles.bigBtn}
             onPress={ () => {
 
               setInputTextValues('');
@@ -306,16 +328,22 @@ function AccountPortal2(props) {
               }
             }
             }>
-            Easy Sign (Less Secure)
+            <Text style={styles.buttonText}>
+              Easy Sign
+            </Text>
+            
           </Button>
 
           <Button 
             mode="contained"
-            style={styles.btn}
+            style={styles.smallBtn}
             onPress={() => {
             navigation.navigate('Home');
             }}>
-            Start Over
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
+            
           </Button>
           </View>
       </Modal>
@@ -323,7 +351,6 @@ function AccountPortal2(props) {
       </View>
 
       </View>
-    </ImageBackground>
     );
 
 }
@@ -333,17 +360,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
+    backgroundColor: 'white',
   },
   textInput: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   bannerText: {
-    fontSize: 42,
+    fontSize: 20,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
     padding: 20,
@@ -351,13 +376,40 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: 20,
     paddingVertical: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  btn: {
-    width: 250,
+  smallBtn: {
+    width: 200,
+    height: 50,
     marginBottom: 15,
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontVariant: 'small-caps',
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: 'green',
+    margin: 50,
+    padding: 40,
+    borderRadius: 10,
+  }
 });
 
 export default AccountPortal2;

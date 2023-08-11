@@ -70,91 +70,101 @@ function RawKeys(props) {
   }
 
   return (
-    <ImageBackground source={require('../assets/AnyWareBackground.png')}
-    style={styles.backgroundImage}>
       <View style={styles.wrapper}>
         <View style={[styles.textInput]}>
 
-          <Text styles={styles.bannerText}> {finalDataChain} </Text>
-
           <TextInput
-            label="Add Raw Text to Pass Phrase Input"
+            style={styles.textInput}
+            label="Add Text to Input"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTextValue}
             onChangeText={setInputTextValues}
             autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
           
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={() => {
             finalDataChain += inputTextValue;
             }}>
-            Add to Input
+            <Text style={styles.buttonText}>
+              Raw Text Input
+            </Text>
           </Button>
 
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={() => {
             for (let i = 0; i < inputTextValue.length; i++) {
               finalDataChain += inputTextValue.charCodeAt(i);
               finalDataChain += inputTextValue.charAt(i);
             }
             }}>
-            Add as Numbers to Input
+            <Text style={styles.buttonText}>
+              Encoded Input
+            </Text>
           </Button>
 
           <TextInput
-            label="Write Encoded Text to Tag"
+            style={styles.textInput}
+            label="Add Text to Tag"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTagValue}
             onChangeText={setInputTagValues}
             autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
           />
 
           <Button 
             mode="contained" 
-            style={styles.btn} 
+            style={styles.smallBtn} 
             onPress={writeNdef}
             >
-            Write to Tag
+            <Text style={styles.buttonText}>
+              Write To Tag
+            </Text>
           </Button>
 
           <Button 
           mode="contained" 
-          style={[styles.btn]}
+          style={[styles.smallBtn]}
           onPress={() => {
             readNdef();
           }}>
-            Input From Tag
-          </Button>
-        
-          <Button 
-          mode="contained" 
-          style={styles.btn} 
-          onPress={() => {
-              console.warn(finalDataChain);
-              // insert go to done screen to print private/public key pair;
-            }
-          }>
-            Check Input
+            <Text style={styles.buttonText}>
+              Input From Tag
+            </Text>
           </Button>
 
         </View>
 
         <View style={styles.bottom}>
+
+        <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              console.warn(finalDataChain);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Check Input
+            </Text>
+          </Button>
         
         <Button 
         mode="contained" 
-        style={styles.btn} 
+        style={styles.bigBtn} 
         onPress={() => {
 
           // Eth address creation:
@@ -190,40 +200,50 @@ function RawKeys(props) {
 
           }
         }>
-          Show Raw Keys
+          <Text style={styles.buttonText}>
+              Show Raw Keys
+          </Text>
         </Button>
 
         <Modal  
         visible = {modalVisible}>
           <View 
-            backgroundColor={'black'}
+            backgroundColor={'white'}
             style={styles.wrapper}
             borderRadius={10}>
+          <Text style={styles.bannerText} selectable>
+            BTC Address(WIF Format): 
+            {'\n'}
+            {addressBTC}
+            {'\n'}
+          </Text>
           <Text style={styles.bannerText} selectable>
             BTC Private Key(WIF Format):
             {'\n'}
             {privateKeyBTC}
             {'\n'}
-            BTC Address(WIF Format): 
-            {'\n'}
-            {addressBTC}
-            {'\n'}
-            ETH Private Key:
-            {'\n'}
-            {privateKeyETH}
-            {'\n'}
+          </Text>
+          <Text style={styles.bannerText} selectable>
             ETH Public Key: 
             {'\n'}
             {publicKeyETH}
             {'\n'}
           </Text>
+          <Text style={styles.bannerText} selectable>
+            ETH Private Key:
+            {'\n'}
+            {privateKeyETH}
+            {'\n'}
+          </Text>
           <Button 
             mode="contained"
-            style={styles.btn}
+            style={styles.bigBtn}
             onPress={() => {
             navigation.navigate('Home');
             }}>
-            Start Over
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
           </Button>
           </View>
         </Modal>
@@ -231,7 +251,6 @@ function RawKeys(props) {
       </View>
 
       </View>
-    </ImageBackground>
     );
 
 }
@@ -241,17 +260,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backgroundImage: {
-    flex: 1,
+    backgroundColor: 'white',
   },
   textInput: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   bannerText: {
     fontSize: 20,
     textAlign: 'center',
-    color: 'white',
+    color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
     padding: 20,
@@ -260,11 +277,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 40,
   },
-  btn: {
-    width: 250,
+  smallBtn: {
+    width: 200,
+    height: 50,
     marginBottom: 15,
-    color: 'black',
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+    fontWeight: 'bold',
+    fontVariant: 'small-caps',
   },
   modal: {
     flex: 1,

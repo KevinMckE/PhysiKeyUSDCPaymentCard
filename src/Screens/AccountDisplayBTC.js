@@ -359,7 +359,7 @@ function AccountDisplayBTC(props) {
       <Text style={styles.bannerText} selectable>{publicKey}</Text>
       <Text style={styles.bannerText}>Account Balance: {accountBalance}</Text>
 
-      <Text style={styles.bannerText}>Input Address:</Text>
+      <Text style={styles.bannerText}>Input Native SegWit Address(Must Start With TB1):</Text>
 
       <TextInput style={styles.textInput}
             label="Input Address to Send To"
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     fontVariant: 'small-caps',
   },
   textInput: {
-    padding: 20,
+    padding: 2,
   },
   container: {
     flex: 1,

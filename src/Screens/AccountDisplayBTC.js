@@ -288,6 +288,9 @@ function AccountDisplayBTC(props) {
               utxoTxTotal += utxoArray[i].value; //add all UTXO values together
         }
 
+        // insert if statement that checks what kind of address the account to send is, if it's 
+        // an m, this is legacy, if it's a 2 then it's regular segwit, else it's native segwit
+
             var changeAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
             //var toAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempToKeyPair.publicKey, network: testnet});
 

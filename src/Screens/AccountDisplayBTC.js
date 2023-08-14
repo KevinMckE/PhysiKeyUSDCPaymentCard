@@ -158,8 +158,9 @@ function AccountDisplayBTC(props) {
           }
         );
     
-      const data = response.json();
-      console.log("Tx Broadcast Data: " + data);
+      const data = response.data;
+      console.log("Tx Hash: ");
+      console.log(data);
       return data;
       } catch (error) {
         console.error(error.response.data);
@@ -192,7 +193,7 @@ function AccountDisplayBTC(props) {
       const data = response.data;
       console.log("Relay Fee: ")
       console.log(data);
-      return data.fast;
+      return data.slow;
       } catch (error) {
         console.error(error.response);
       }
@@ -331,12 +332,107 @@ function AccountDisplayBTC(props) {
     }
       else {
 
-        tempEncryptedPrivateKey = await readNdef();
-        console.warn('control flow test 1: ' + tempEncryptedPrivateKey);
+      relayFee = await getRelayFee(publicKey, accountToSend, amountToSend);
+      utxoArray = await getUTXOs(relayFee);
+
+      //get UTXO hex's for get pubkeyscripts API and use for non-witness inputs
+      for (let i = 0; i < utxoArray.length; i++) {
+        var rawTxData = await getRawTxData(utxoArray[i].txHash);
+        rawTxDataArray.push(rawTxData);
+      }
+
+      //get pubkeyscripts from segwit txs if inputs contains the correct SegWit Flags in the hex above
+      // THIS MAY ALWAYS BE THE SAME PUBKEYSCRIPT FOR THE SAME ADDRESS??
+      // MAY NOT NEED TO BE AN ARRAY IF IT IS THE SAME FOR EACH TX/ADDRESS
+      for (let i = 0; i < utxoArray.length; i++) {
+        // if rawTxDataArray[i] contains the segwit flag then get the pubkeyscript and maybe pair them in a transaction dictionary?
+        var pubKeyScript = await getPubKeyScript(utxoArray[i].txHash, utxoArray[i].index);
+        pubKeyScriptArray.push(pubKeyScript);
+        // else if it doesn't contain this then pair the hash with the hex in the transaction dictionary...
+      }
+
+      console.log("UTXO Array ");
+      console.log(utxoArray);
+      console.log("Raw Tx Data Array: ");
+      console.log(rawTxDataArray);
+      console.log("PubKeyScript Array: ");
+      console.log(pubKeyScriptArray);
+
+      // Actual Transaction Details:
+      tempEncryptedPrivateKey = await readNdef();
+      var tempKeyPair = ECPair.fromPrivateKey(Buffer.from(CryptoJS.AES.decrypt(tempEncryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), 'hex'));
+      //var tempToKeyPair = ECPair.fromPublicKey(Buffer.from(accountToSend.toString(CryptoJS.enc.Utf8), 'hex'));
+      //tempKeyPair.getPublic('hex');
+      console.log("temp keypair: ");
+      console.log(tempKeyPair);
+      const txObject = new bitcoin.Psbt({network: testnet});
+      var utxoTxTotal = 0; // Need to add up UTXOs for output equation
+
+      const validator = (pubkey, msghash, signature) => {
+        return tempKeyPair.verify(msghash, signature);
+      };
+
+      try{
+
+        for (let i = 0; i < utxoArray.length; i++) {
+          console.log("TxHash: " + utxoArray[i].txHash + " Index: " + utxoArray[i].index + " Witness Script: " + rawTxDataArray[i].witnessHash);
+              txObject.addInput({
+                hash: utxoArray[i].txHash,
+                index: utxoArray[i].index,
+                witnessUtxo: {
+                  script: Buffer.from(pubKeyScriptArray[i].script, 'hex',),
+                  value: pubKeyScriptArray[i].value,
+                },
+              });
+
+              utxoTxTotal += utxoArray[i].value; //add all UTXO values together
+        }
+
+        // insert if statement that checks what kind of address the account to send is, if it's 
+        // an m, this is legacy, if it's a 2 then it's regular segwit, else it's native segwit
+
+            var changeAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempKeyPair.publicKey, network: testnet});
+            //var toAddressP2wpkh = bitcoin.payments.p2wpkh({pubkey: tempToKeyPair.publicKey, network: testnet});
+
+            //console.log(toAddressP2wpkh.address);
+            console.log(changeAddressP2wpkh.address);
+
+            txObject.addOutput({
+              address: accountToSend,
+              value: parseInt(parseFloat(amountToSend) * 100000000)
+            });
+
+            console.log("UTXO total: ");
+            console.log(utxoTxTotal);
+
+            console.log("Amount To Send: ");
+            console.log(parseFloat(amountToSend));
+
+            console.log('Relay Fee');
+            console.log(relayFee);
+
+            txObject.addOutput({
+              address: changeAddressP2wpkh.address,
+              // this needs to be the UTXO values not the account balance:
+              value: parseInt((parseFloat(utxoTxTotal) - parseFloat(amountToSend) - parseFloat(relayFee)) * 100000000)
+            });
+            txObject.signAllInputs(tempKeyPair);
+            txObject.validateSignaturesOfAllInputs(validator);
+            txObject.finalizeAllInputs();
+            txToBroadcast = txObject.extractTransaction().toHex();
+
+            tempEncryptedPrivateKey = '';
+            tempKeyPair = {};
+            console.log(txToBroadcast);
+
+            console.log(txObject.txOutputs);
   
+      }catch (error) {
+      console.log(error.message);
       }
       
     }
+  }
     
       
       
@@ -404,7 +500,7 @@ function AccountDisplayBTC(props) {
               mode="contained" 
               style={styles.bigBtn} 
               onPress={() => {
-                broadcastTransaction(txToBroadcast);;
+                broadcastTransaction(txToBroadcast);
               }}>
               <Text style={styles.buttonText}>
                 Broadcast Tx

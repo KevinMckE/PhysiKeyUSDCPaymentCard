@@ -16,6 +16,7 @@ var privateKeyETH = '';
 var publicKeyETH = '';
 var privateKeyBTC = '';
 var addressBTC = '';
+var addressNativeSegWit = '';
 const ec = new EC('secp256k1');
 const testnet = bitcoin.networks.testnet;
 
@@ -188,6 +189,7 @@ function RawKeys(props) {
           var compressedPublicKeyBTC = accountObjectBTC.getPublic(true, 'hex'); // Compressed public key
 
           var { address } = bitcoin.payments.p2wpkh({ pubkey: Buffer.from(compressedPublicKeyBTC, 'hex'), network: testnet });
+          addressNativeSegWit = address;
 
           console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC + "SegWit: " + address);
 
@@ -215,19 +217,21 @@ function RawKeys(props) {
             BTC Address(WIF Format): 
             {'\n'}
             {addressBTC}
+          </Text>
+          <Text style={styles.bannerText} selectable>
+            BTC Address(Native SegWit): 
             {'\n'}
+            {addressNativeSegWit}
           </Text>
           <Text style={styles.bannerText} selectable>
             BTC Private Key(WIF Format):
             {'\n'}
             {privateKeyBTC}
-            {'\n'}
           </Text>
           <Text style={styles.bannerText} selectable>
             ETH Public Key: 
             {'\n'}
             {publicKeyETH}
-            {'\n'}
           </Text>
           <Text style={styles.bannerText} selectable>
             ETH Private Key:

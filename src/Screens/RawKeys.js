@@ -8,6 +8,7 @@ import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
 import * as bitcoin from 'bitcoinjs-lib';
+import argon2 from 'react-native-argon2';
 
 
 let finalDataChain = ''; // append all inputValues to this variable
@@ -201,7 +202,19 @@ function RawKeys(props) {
         <Button 
         mode="contained" 
         style={styles.bigBtn} 
-        onPress={() => {
+        onPress={ async () => {
+
+          const argonResult = await argon2(
+              tempDataChain,
+              salt,
+              {
+                //iterations: 2,
+                //memory: 12288,
+                //parallelism: 2,
+                //mode: 'argon2i'
+              }
+          ); 
+          finalDataChain = argonResult.rawHash;
 
           // Eth address creation:
           const innerHash = web3.utils.keccak256(finalDataChain);

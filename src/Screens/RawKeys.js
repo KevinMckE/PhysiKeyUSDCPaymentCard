@@ -19,7 +19,7 @@ var publicKeyETH = '';
 var privateKeyBTC = '';
 var addressBTC = '';
 var addressNativeSegWit = '';
-var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1000 });
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 const ec = new EC('secp256k1');
 const testnet = bitcoin.networks.testnet;
 

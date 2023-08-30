@@ -204,16 +204,18 @@ function RawKeys(props) {
         style={styles.bigBtn} 
         onPress={ async () => {
 
+          console.warn('temp data chain before argon: ' + tempDataChain);
           const argonResult = await argon2(
               tempDataChain,
               salt,
               {
-                //iterations: 2,
-                //memory: 12288,
-                //parallelism: 2,
-                //mode: 'argon2i'
+                iterations:8,
+                memory: 65536,
+                parallelism: 8,
+                mode: 'argon2id'
               }
           ); 
+          console.warn(argonResult);
           finalDataChain = argonResult.rawHash;
 
           // Eth address creation:

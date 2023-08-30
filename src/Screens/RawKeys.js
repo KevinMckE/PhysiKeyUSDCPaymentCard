@@ -10,13 +10,16 @@ import { ec as EC } from 'elliptic';
 import * as bitcoin from 'bitcoinjs-lib';
 
 
-let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+let finalDataChain = ''; // append all inputValues to this variable
+var tempDataChain = '';
+var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 var web3 = new Web3(Web3.givenProvider);
 var privateKeyETH = '';
 var publicKeyETH = '';
 var privateKeyBTC = '';
 var addressBTC = '';
 var addressNativeSegWit = '';
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1000 });
 const ec = new EC('secp256k1');
 const testnet = bitcoin.networks.testnet;
 
@@ -25,9 +28,14 @@ function RawKeys(props) {
 
   const [inputTextValue='', setInputTextValues] = React.useState();
   const [inputTagValue='', setInputTagValues] = React.useState();
+
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const [textCount, setTextCount] = React.useState(0);
+  const [numCount, setNumCount] = React.useState(0);
+  const [tagCount, setTagCount] = React.useState(0);
 
   //userInput();
   async function writeNdef() {
@@ -61,7 +69,8 @@ function RawKeys(props) {
 
       const sum = tagPayload.reduce((acc, curr) => acc + curr, 0);
 
-      finalDataChain += tagPayload + sum;
+      tempDataChain += tagPayload + sum;
+      console.warn(tempDataChain);
 
     } catch (ex) {
         //bypass
@@ -72,6 +81,16 @@ function RawKeys(props) {
 
   return (
       <View style={styles.wrapper}>
+      <Text style={styles.bannerText}>
+        
+        Input Count: 
+        {'\n'}
+        Text: {textCount}
+        {' '}Num: {numCount}
+        {' '}Tag: {tagCount}
+
+        
+        </Text>
         <View style={[styles.textInput]}>
 
           <TextInput
@@ -91,8 +110,14 @@ function RawKeys(props) {
             mode="contained" 
             style={styles.smallBtn} 
             onPress={() => {
-            finalDataChain += inputTextValue;
-            }}>
+              tempDataChain += inputTextValue;
+              console.warn(tempDataChain);
+              finalDataChain += kdf.compute(tempDataChain, salt).toString();
+              console.warn(finalDataChain);
+              tempDataChain = finalDataChain;
+              setTextCount(textCount+1); // plain text input count ++
+            }
+            }>
             <Text style={styles.buttonText}>
               Raw Text Input
             </Text>
@@ -103,9 +128,14 @@ function RawKeys(props) {
             style={styles.smallBtn} 
             onPress={() => {
             for (let i = 0; i < inputTextValue.length; i++) {
-              finalDataChain += inputTextValue.charCodeAt(i);
-              finalDataChain += inputTextValue.charAt(i);
+              tempDataChain += inputTextValue.charCodeAt(i);
+              tempDataChain += inputTextValue.charAt(i); 
             }
+            console.warn(tempDataChain);
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setNumCount(numCount+1); //Encoded input count ++
             }}>
             <Text style={styles.buttonText}>
               Encoded Input
@@ -138,8 +168,12 @@ function RawKeys(props) {
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
-          onPress={() => {
-            readNdef();
+          onPress={ async () => {
+            await readNdef();
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setTagCount(tagCount+1); // Tag input count ++
           }}>
             <Text style={styles.buttonText}>
               Input From Tag
@@ -155,6 +189,7 @@ function RawKeys(props) {
           style={styles.bigBtn} 
           onPress={() => {
               console.warn(finalDataChain);
+              console.warn(tempDataChain);
               // insert go to done screen to print private/public key pair;
             }
           }>
@@ -193,7 +228,8 @@ function RawKeys(props) {
 
           console.warn("BTC Private Key: " + privateKeyBTC + "   Address: " + addressBTC + "SegWit: " + address);
 
-          finalDataChain = 'anywarewallet'; //clear finalDataChain
+          finalDataChain = ''; //clear finalDataChain
+          tempDataChain = ''; //clear tempDataChain
           accountObjectBTC = null;
           accountObjectETH = null;
 

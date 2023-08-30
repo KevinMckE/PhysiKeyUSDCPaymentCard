@@ -211,7 +211,7 @@ function RawKeys(props) {
               {
                 iterations:8,
                 memory: 65536,
-                parallelism: 8,
+                parallelism: 3,
                 mode: 'argon2id'
               }
           ); 

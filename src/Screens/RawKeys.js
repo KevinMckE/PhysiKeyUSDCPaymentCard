@@ -209,9 +209,9 @@ function RawKeys(props) {
               tempDataChain,
               salt,
               {
-                iterations:8,
+                iterations:5,
                 memory: 65536,
-                parallelism: 3,
+                parallelism: 2,
                 mode: 'argon2id'
               }
           ); 

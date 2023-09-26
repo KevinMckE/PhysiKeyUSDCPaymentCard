@@ -7,6 +7,7 @@ import AccountPortal2 from './Screens/AccountPortal2';
 import AccountDisplay from './Screens/AccountDisplay';
 import AccountDisplayBTC from './Screens/AccountDisplayBTC';
 import RawKeys from './Screens/RawKeys';
+import CreateAccessCard from './Screens/CreateAccessCard';
 
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function AppNavigator() {
         <Stack.Screen name="Raw Keys" component={RawKeys} />
         <Stack.Screen name="Account Display" component={AccountDisplay} options={{headerShown: false}}/>
         <Stack.Screen name="Account Display BTC" component={AccountDisplayBTC} options={{headerShown: false}}/>
+        <Stack.Screen name="Create Access Card" component={CreateAccessCard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -59,6 +59,7 @@ function HomeScreen(props) {
 
       return(
         <View style={styles.bottom}>
+
           <Button 
           mode="contained" 
           style={[styles.btn]}
@@ -69,6 +70,7 @@ function HomeScreen(props) {
                 Account Portal
             </Text>
           </Button>
+
           <Button 
           mode="contained" 
           style={styles.btn} 
@@ -77,6 +79,17 @@ function HomeScreen(props) {
           }}>
             <Text style={styles.buttonText}>
                 Export Keys
+            </Text>
+          </Button>
+
+          <Button 
+          mode="contained" 
+          style={[styles.btn]}
+          onPress={() => {
+            navigation.navigate('Create Access Card');
+          }}>
+            <Text style={styles.buttonText}>
+                Create Access Card
             </Text>
           </Button>
         </View>

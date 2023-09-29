@@ -5,7 +5,9 @@ import NfcManager, {Ndef, NfcTech, makeReadOnly} from 'react-native-nfc-manager'
 import { randomBytes } from 'react-native-randombytes';
 
 function CreateAccessCard(props) {
-  const [tagValue, setTagValue] = React.useState('');
+  const [tagValue='---', setTagValue] = React.useState('');
+  const [isLocked='---', setIsLocked] = React.useState('');
+  const [readTagValue='---', setReadTagValue] = React.useState('');
 
   async function writeNdef() {
     let scheme = '';
@@ -19,6 +21,29 @@ function CreateAccessCard(props) {
     } catch (error) {
       console.error(error);
       // bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+    setReadTagValue('---');
+  }
+
+  async function readCardCode() {
+    try{
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      // Testing just to get the Ndef data
+      const tagData = await NfcManager.ndefHandler.getNdefMessage();
+      
+      // turns payload into a single string of numbers with ,'s:
+      const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
+      tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
+
+      // turns the NDEF record into a string
+      const ndefString = String.fromCharCode(...tagPayload);
+
+      setReadTagValue(ndefString);
+
+    } catch (ex) {
+        //bypass
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
@@ -37,6 +62,7 @@ function CreateAccessCard(props) {
           
         } finally { 
           NfcManager.cancelTechnologyRequest();
+          setIsLocked('Locked');
           
         }
   }
@@ -54,7 +80,8 @@ function CreateAccessCard(props) {
             
           } finally { 
             NfcManager.cancelTechnologyRequest();
-            
+            setIsLocked('Unlocked');
+
           }
   }
 
@@ -90,14 +117,12 @@ function CreateAccessCard(props) {
         respBytes[14],
         respBytes[15],
       ]);
-      console.warn(writeRespBytes);
 
       writeRespBytes = await NfcManager.nfcAHandler.transceive([
         0xa2,
         authPageIdx + 2,
         ...password,
       ]);
-      console.warn(writeRespBytes);
 
       writeRespBytes = await NfcManager.nfcAHandler.transceive([
         0xa2,
@@ -107,7 +132,6 @@ function CreateAccessCard(props) {
         respBytes[6],
         respBytes[7],
       ]);
-      console.warn(writeRespBytes);
 
       writeRespBytes = await NfcManager.nfcAHandler.transceive([
         0xa2,
@@ -117,14 +141,12 @@ function CreateAccessCard(props) {
         respBytes[2],
         4,
       ]);
-      console.warn(writeRespBytes);
     } else {
       // send password to NFC tags, so we can perform write operations
       writeRespBytes = await NfcManager.nfcAHandler.transceive([
         0x1b,
         ...password,
       ]);
-      console.warn(writeRespBytes);
       if (writeRespBytes[0] !== pack[0] || writeRespBytes[1] !== pack[1]) {
         throw new Error("incorrect password");
       }
@@ -166,10 +188,8 @@ function CreateAccessCard(props) {
         if (writeRespBytes[0] !== pack[0] || writeRespBytes[1] !== pack[1]) {
           throw new Error("incorrect password");
         }
-        console.warn('control flow test');
 
         // disable password protection
-
         writeRespBytes = await NfcManager.nfcAHandler.transceive([
           0xa2,
           authPageIdx + 3,
@@ -177,14 +197,12 @@ function CreateAccessCard(props) {
           respBytes[14],
           respBytes[15],
         ]);
-        console.warn(writeRespBytes);
 
         writeRespBytes = await NfcManager.nfcAHandler.transceive([
           0xa2,
           authPageIdx + 2,
           ...passwordFormat,
         ]);
-        console.warn(writeRespBytes);
 
         writeRespBytes = await NfcManager.nfcAHandler.transceive([
           0xa2,
@@ -194,7 +212,6 @@ function CreateAccessCard(props) {
           respBytes[6],
           respBytes[7],
         ]);
-        console.warn(writeRespBytes);
 
         writeRespBytes = await NfcManager.nfcAHandler.transceive([
           0xa2,
@@ -204,7 +221,6 @@ function CreateAccessCard(props) {
           respBytes[2],
           255,
         ]);
-        console.warn(writeRespBytes);
 
       }
 
@@ -217,13 +233,13 @@ function CreateAccessCard(props) {
 
           <Text style={styles.bannerText}>
             
-            {'\n'}Create Web 3 Access Card{'\n'}
+            {'\n'}Generated Web 3 Access Code:
 
           </Text>
 
           <Text style={styles.bannerText} selectable>
             
-            {'\n'}{tagValue}{'\n'}
+            {tagValue}{'\n'}
 
           </Text>
 
@@ -257,7 +273,7 @@ function CreateAccessCard(props) {
 
           <Button 
             mode="contained" 
-            style={styles.bigBtn} 
+            style={styles.smallBtn} 
             onPress={lockNFC}
             >
             <Text style={styles.buttonText}>
@@ -268,7 +284,7 @@ function CreateAccessCard(props) {
 
           <Button 
             mode="contained" 
-            style={styles.bigBtn} 
+            style={styles.smallBtn} 
             onPress={unlockNFC}
             >
             <Text style={styles.buttonText}>
@@ -276,6 +292,30 @@ function CreateAccessCard(props) {
             </Text>
               
           </Button>
+
+          <Button 
+            mode="contained" 
+            style={styles.smallBtn} 
+            onPress={readCardCode}
+            >
+            <Text style={styles.buttonText}>
+              Check Card Status
+            </Text>
+              
+          </Button>
+
+          <Text style={styles.bannerText}>
+            
+            {'\n'}Card Status:
+
+          </Text>
+
+          <Text style={styles.bannerText} selectable>
+            
+            Access Code: {readTagValue}{'\n'}
+            Card Lock: {isLocked}{'\n'}
+
+          </Text>
           
         </View>
         <SafeAreaView/>

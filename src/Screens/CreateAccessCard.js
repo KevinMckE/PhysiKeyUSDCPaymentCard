@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, SafeAreaView, Platform, ImageBackground} from 'react-native';
+import {View, StyleSheet, SafeAreaView, Platform, ImageBackground, NativeModules} from 'react-native';
 import {Button, TextInput, Text, Chip} from 'react-native-paper';
-import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
+import NfcManager, {Ndef, NfcTech, makeReadOnly} from 'react-native-nfc-manager';
 import { randomBytes } from 'react-native-randombytes';
 
 function CreateAccessCard(props) {
@@ -16,12 +16,64 @@ function CreateAccessCard(props) {
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
       await NfcManager.ndefHandler.writeNdefMessage(bytes);
-    } catch (ex) {
+    } catch (error) {
+      console.error(error);
       // bypass
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
   }
+
+  async function lockNFC() {
+
+      try {
+  
+        await NfcManager.requestTechnology(NfcTech.Ndef);
+        await NfcManager.ndefHandler.makeReadOnly();
+        
+      } catch (error) {
+  
+        console.error(error);
+        
+      } finally { 
+        NfcManager.cancelTechnologyRequest();
+        
+      }
+    }
+
+
+  //  trying to use the NativeModules stuff:
+  // async function lockNFC() {
+
+  //   try {
+
+  //     await NativeModules.NfcManager.requestTechnology([NfcTech.Ndef], (error, result) => {
+
+  //         if (error) {
+  //             console.error('Error making tag read-only:', error);
+  //         } else {
+  //             console.log('Tag made read-only:', result);
+  //         }
+  //       }) ;
+
+  //     await NativeModules.NfcManager.makeReadOnly((error, result) => {
+
+  //         if (error) {
+  //             console.error('Error making tag read-only:', error);
+  //         } else {
+  //             console.log('Tag made read-only:', result);
+  //         }
+  //       });
+      
+  //   } catch (error) {
+
+  //     console.error(error.message);
+      
+  //   } finally { 
+  //     NativeModules.NfcManager.cancelTechnologyRequest();
+      
+  //   }
+  // }
 
   return (
       <View style={styles.wrapper}>
@@ -29,7 +81,13 @@ function CreateAccessCard(props) {
         <View style={[styles.wrapper, styles.pad]}>
 
           <Text style={styles.bannerText}>
+            
             {'\n'}Create Web 3 Access Card{'\n'}
+
+          </Text>
+
+          <Text style={styles.bannerText} selectable>
+            
             {'\n'}{tagValue}{'\n'}
 
           </Text>
@@ -39,8 +97,9 @@ function CreateAccessCard(props) {
             style={styles.bigBtn} 
             onPress={ async () => {
               
-              setTagValue = randomBytes(16).toString();
-              console.warn(tagValue);
+              const randVal = randomBytes(16).toString('hex');
+              console.warn(randVal);
+              setTagValue(randVal);
               // create a random value and pass it to the settagvalue
               }
             }>
@@ -64,22 +123,10 @@ function CreateAccessCard(props) {
           <Button 
             mode="contained" 
             style={styles.bigBtn} 
-            onPress={ async () => {
-
-              try {
-                await NfcManager.requestTechnology(NfcTech.Ndef);
-                await NfcManager.ndefHandler.makeReadOnly();
-              } catch (ex) {
-                // bypass
-              } finally {
-                NfcManager.cancelTechnologyRequest();
-              }
-              // change the NDEF to read only using nfcmanager.ndefHandler.makeReadOnly() function to lock
-              // pop up a modal that asks to clarify if the user wants to lock this card forever
-              }
-            }>
+            onPress={lockNFC}
+            >
             <Text style={styles.buttonText}>
-              Lock Card Forever(Irreversible)
+              Lock Card Forever (Irreversible)
             </Text>
               
           </Button>

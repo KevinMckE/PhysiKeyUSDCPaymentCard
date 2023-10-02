@@ -10,13 +10,18 @@ import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
 import * as bitcoin from 'bitcoinjs-lib';
+import argon2 from 'react-native-argon2';
 
 
 var publicKey = '';
 var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
-let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+let finalDataChain = ''; // append all inputValues to this variable
+var tempDataChain = '';
+var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+var web3 = new Web3(Web3.givenProvider);
 const testnet = bitcoin.networks.testnet;
 
 function AccountPortal2(props) {
@@ -25,13 +30,15 @@ function AccountPortal2(props) {
   const route = useRoute();
   let inputCheck = route.params.data;
   
-  var web3 = new Web3(Web3.givenProvider);
-  
   const [inputTextValue='', setInputTextValues] = React.useState();
   const [inputTagValue='', setInputTagValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const [textCount, setTextCount] = React.useState(0);
+  const [numCount, setNumCount] = React.useState(0);
+  const [tagCount, setTagCount] = React.useState(0);
 
   //userInput();
   async function writeNdef() {
@@ -65,7 +72,7 @@ function AccountPortal2(props) {
 
       const sum = tagPayload.reduce((acc, curr) => acc + curr, 0);
 
-      finalDataChain += tagPayload + sum;
+      tempDataChain += tagPayload + sum;
 
     } catch (ex) {
         //bypass
@@ -76,6 +83,16 @@ function AccountPortal2(props) {
 
   return (
     <View style={styles.wrapper}>
+      <Text style={styles.bannerText}>
+        
+        Input Count: 
+        {'\n'}
+        Text: {textCount}
+        {' '}Num: {numCount}
+        {' '}Tag: {tagCount}
+
+        
+      </Text>
         <View style={[styles.textInput]}>
 
           <TextInput
@@ -95,8 +112,14 @@ function AccountPortal2(props) {
             mode="contained" 
             style={styles.smallBtn} 
             onPress={() => {
-            finalDataChain += inputTextValue;
-            }}>
+              tempDataChain += inputTextValue;
+              console.warn(tempDataChain);
+              finalDataChain += kdf.compute(tempDataChain, salt).toString();
+              console.warn(finalDataChain);
+              tempDataChain = finalDataChain;
+              setTextCount(textCount+1); // plain text input count ++
+            }
+            }>
             <Text style={styles.buttonText}>
               Raw Text Input
             </Text>
@@ -107,9 +130,14 @@ function AccountPortal2(props) {
             style={styles.smallBtn} 
             onPress={() => {
             for (let i = 0; i < inputTextValue.length; i++) {
-              finalDataChain += inputTextValue.charCodeAt(i);
-              finalDataChain += inputTextValue.charAt(i);
+              tempDataChain += inputTextValue.charCodeAt(i);
+              tempDataChain += inputTextValue.charAt(i); 
             }
+            console.warn(tempDataChain);
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setNumCount(numCount+1); //Encoded input count ++
             }}>
             <Text style={styles.buttonText}>
               Encoded Input
@@ -142,8 +170,12 @@ function AccountPortal2(props) {
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
-          onPress={() => {
-            readNdef();
+          onPress={ async () => {
+            await readNdef();
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setTagCount(tagCount+1); // Tag input count ++
           }}>
             <Text style={styles.buttonText}>
               Input From Tag
@@ -159,6 +191,7 @@ function AccountPortal2(props) {
           style={styles.bigBtn} 
           onPress={() => {
               console.warn(finalDataChain);
+              console.warn(tempDataChain);
               // insert go to done screen to print private/public key pair;
             }
           }>
@@ -170,9 +203,23 @@ function AccountPortal2(props) {
         <Button 
           mode="contained" 
           style={styles.bigBtn} 
-          onPress={ () => {
+          onPress={ async () => {
 
             if (inputCheck === finalDataChain){
+
+              console.warn('temp data chain before argon: ' + tempDataChain);
+              const argonResult = await argon2(
+                tempDataChain,
+                salt,
+                {
+                  iterations:5,
+                  memory: 65536,
+                  parallelism: 2,
+                  mode: 'argon2id'
+                }
+              ); 
+              console.warn(argonResult);
+              finalDataChain = argonResult.rawHash;
 
               const innerHash = web3.utils.keccak256(finalDataChain);
               var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
@@ -189,7 +236,7 @@ function AccountPortal2(props) {
               // reset all values containing sensitive data to null / baseline:
               decryptedAccount = {};
               privateKey = '';
-              finalDataChain = 'anywarewallet'; //clear finalDataChain
+              finalDataChain = ''; //clear finalDataChain
               inputCheck = '';
 
               //console.warn(encryptedPrivateKey);
@@ -214,9 +261,23 @@ function AccountPortal2(props) {
         <Button 
           mode="contained" 
           style={styles.bigBtn} 
-          onPress={ () => {
+          onPress={ async () => {
 
             if (inputCheck === finalDataChain){
+
+              console.warn('temp data chain before argon: ' + tempDataChain);
+              const argonResult = await argon2(
+                  tempDataChain,
+                  salt,
+                  {
+                    iterations:5,
+                    memory: 65536,
+                    parallelism: 2,
+                    mode: 'argon2id'
+                  }
+              ); 
+              console.warn(argonResult);
+              finalDataChain = argonResult.rawHash;
 
               const firstHash = CryptoJS.SHA256(finalDataChain).toString();
               privateKey = CryptoJS.SHA256(firstHash + finalDataChain).toString();
@@ -238,7 +299,7 @@ function AccountPortal2(props) {
               // reset all values containing sensitive data to null / baseline:
               keyPairBTC = {};
               privateKey = '';
-              finalDataChain = 'anywarewallet'; //clear finalDataChain
+              finalDataChain = ''; //clear finalDataChain
               inputCheck = '';
 
               //console.warn(encryptedPrivateKey);
@@ -285,11 +346,11 @@ function AccountPortal2(props) {
                   // onetimeencryption password and the public key into the next screen
             mode="contained"
             style={styles.bigBtn}
-            onPress={() => {
+            onPress={ async () => {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
               
-              writeNdef();
+              await writeNdef();
               encryptedPrivateKey = '';
               setInputTextValues('');
               setInputTagValues('');
@@ -314,7 +375,7 @@ function AccountPortal2(props) {
                   // encrypted JSON file, and the public key to the next screen
             mode="contained"
             style={styles.bigBtn}
-            onPress={ () => {
+            onPress={ async () => {
 
               setInputTextValues('');
               setInputTagValues('');

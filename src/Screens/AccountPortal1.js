@@ -2,9 +2,14 @@ import React from 'react';
 import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+import CryptoJS from 'crypto-js';
 import { useNavigation } from '@react-navigation/native';
 
-let finalDataChain = 'anywarewallet'; // append all inputValues to this variable
+let finalDataChain = ''; // append all inputValues to this variable
+var tempDataChain = '';
+var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+
 
 function AccountPortal1(props) {
   const {navigation} = props;
@@ -14,6 +19,10 @@ function AccountPortal1(props) {
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const [textCount, setTextCount] = React.useState(0);
+  const [numCount, setNumCount] = React.useState(0);
+  const [tagCount, setTagCount] = React.useState(0);
 
   //userInput();
   async function writeNdef() {
@@ -47,7 +56,7 @@ function AccountPortal1(props) {
 
       const sum = tagPayload.reduce((acc, curr) => acc + curr, 0);
 
-      finalDataChain += tagPayload + sum;
+      tempDataChain += tagPayload + sum;
 
     } catch (ex) {
         //bypass
@@ -58,6 +67,16 @@ function AccountPortal1(props) {
 
   return (
     <View style={styles.wrapper}>
+      <Text style={styles.bannerText}>
+        
+        Input Count: 
+        {'\n'}
+        Text: {textCount}
+        {' '}Num: {numCount}
+        {' '}Tag: {tagCount}
+
+        
+      </Text>
         <View style={[styles.textInput]}>
 
           <TextInput
@@ -77,8 +96,14 @@ function AccountPortal1(props) {
             mode="contained" 
             style={styles.smallBtn} 
             onPress={() => {
-            finalDataChain += inputTextValue;
-            }}>
+              tempDataChain += inputTextValue;
+              console.warn(tempDataChain);
+              finalDataChain += kdf.compute(tempDataChain, salt).toString();
+              console.warn(finalDataChain);
+              tempDataChain = finalDataChain;
+              setTextCount(textCount+1); // plain text input count ++
+            }
+            }>
             <Text style={styles.buttonText}>
               Raw Text Input
             </Text>
@@ -89,9 +114,14 @@ function AccountPortal1(props) {
             style={styles.smallBtn} 
             onPress={() => {
             for (let i = 0; i < inputTextValue.length; i++) {
-              finalDataChain += inputTextValue.charCodeAt(i);
-              finalDataChain += inputTextValue.charAt(i);
+              tempDataChain += inputTextValue.charCodeAt(i);
+              tempDataChain += inputTextValue.charAt(i); 
             }
+            console.warn(tempDataChain);
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setNumCount(numCount+1); //Encoded input count ++
             }}>
             <Text style={styles.buttonText}>
               Encoded Input
@@ -124,8 +154,12 @@ function AccountPortal1(props) {
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
-          onPress={() => {
-            readNdef();
+          onPress={ async () => {
+            await readNdef();
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setTagCount(tagCount+1); // Tag input count ++
           }}>
             <Text style={styles.buttonText}>
               Input From Tag
@@ -186,7 +220,7 @@ function AccountPortal1(props) {
               setInputTagValues('');
 
               const data  = finalDataChain;
-              finalDataChain = 'anywarewallet';
+              finalDataChain = '';
               hideModal();
               navigation.navigate('Account Portal 2', { data });
               

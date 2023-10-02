@@ -17,9 +17,9 @@ function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Account Portal 1" component={AccountPortal1} />
+        <Stack.Screen name="Account Portal 1" component={AccountPortal1} options={{headerShown: false}}/>
         <Stack.Screen name="Account Portal 2" component={AccountPortal2} options={{headerShown: false}}/>
-        <Stack.Screen name="Raw Keys" component={RawKeys} />
+        <Stack.Screen name="Raw Keys" component={RawKeys} options={{headerShown: false}}/>
         <Stack.Screen name="Account Display" component={AccountDisplay} options={{headerShown: false}}/>
         <Stack.Screen name="Account Display BTC" component={AccountDisplayBTC} options={{headerShown: false}}/>
         <Stack.Screen name="Create Access Card" component={CreateAccessCard} />

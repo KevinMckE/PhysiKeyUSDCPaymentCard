@@ -28,32 +28,18 @@ function RawKeys(props) {
   const {navigation} = props;
 
   const [inputTextValue='', setInputTextValues] = React.useState();
-  const [inputTagValue='', setInputTagValues] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const [keyStatusModal=false, setKeyStatusModal] = React.useState();
+  const showKeyStatusModal = () => setKeyStatusModal(true);
+  const hideKeyStatusModal = () => setKeyStatusModal(false);
+
   const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
   const [tagCount, setTagCount] = React.useState(0);
-
-  //userInput();
-  async function writeNdef() {
-    let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${inputTagValue}`);
-    const bytes = Ndef.encodeMessage([nfcInput]);
-    //console.warn(bytes);
-
-    try {
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      await NfcManager.ndefHandler.writeNdefMessage(bytes);
-    } catch (ex) {
-      // bypass
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  }
 
   async function readNdef() {
     try{
@@ -143,29 +129,6 @@ function RawKeys(props) {
             </Text>
           </Button>
 
-          <TextInput
-            style={styles.textInput}
-            label="Add Text to Tag"
-            autoComplete='off'
-            autoCorrect={false}
-            inputValue={inputTagValue}
-            onChangeText={setInputTagValues}
-            autoCapitalize={false}
-            backgroundColor={'grey'}
-            color={'white'}
-            returnKeyType={'done'}
-          />
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={writeNdef}
-            >
-            <Text style={styles.buttonText}>
-              Write To Tag
-            </Text>
-          </Button>
-
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
@@ -187,7 +150,7 @@ function RawKeys(props) {
 
         <Button 
           mode="contained" 
-          style={styles.bigBtn} 
+          style={styles.smallBtn} 
           onPress={() => {
               console.warn(finalDataChain);
               console.warn(tempDataChain);
@@ -198,11 +161,30 @@ function RawKeys(props) {
               Check Input
             </Text>
           </Button>
+
+          <Button 
+          mode="contained" 
+          style={styles.smallBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Clear Input
+            </Text>
+          </Button>
         
         <Button 
         mode="contained" 
         style={styles.bigBtn} 
         onPress={ async () => {
+
+          showKeyStatusModal();
 
           console.warn('temp data chain before argon: ' + tempDataChain);
           const argonResult = await argon2(
@@ -249,7 +231,9 @@ function RawKeys(props) {
           accountObjectETH = null;
 
           // insert modal to done screen to print private/public key pair;
+          
           showModal();
+          hideKeyStatusModal();
 
           }
         }>
@@ -257,6 +241,23 @@ function RawKeys(props) {
               Show Raw Keys
           </Text>
         </Button>
+
+        <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              navigation.navigate('Home');
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Home
+            </Text>
+          </Button>
 
         <Modal  
         visible = {modalVisible}>
@@ -300,6 +301,16 @@ function RawKeys(props) {
               Start Over
             </Text>
           </Button>
+          </View>
+        </Modal>
+
+        <Modal  
+          visible = {keyStatusModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+            
           </View>
         </Modal>
 

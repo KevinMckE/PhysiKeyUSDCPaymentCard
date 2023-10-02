@@ -15,7 +15,6 @@ function AccountPortal1(props) {
   const {navigation} = props;
   
   const [inputTextValue='', setInputTextValues] = React.useState();
-  const [inputTagValue='', setInputTagValues] = React.useState();
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
@@ -23,23 +22,6 @@ function AccountPortal1(props) {
   const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
   const [tagCount, setTagCount] = React.useState(0);
-
-  //userInput();
-  async function writeNdef() {
-    let scheme = '';
-    const nfcInput = Ndef.uriRecord(`${scheme}${inputTagValue}`);
-    const bytes = Ndef.encodeMessage([nfcInput]);
-    //console.warn(bytes);
-
-    try {
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      await NfcManager.ndefHandler.writeNdefMessage(bytes);
-    } catch (ex) {
-      // bypass
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  }
 
   async function readNdef() {
     try{
@@ -128,29 +110,6 @@ function AccountPortal1(props) {
             </Text>
           </Button>
 
-          <TextInput
-            style={styles.textInput}
-            label="Add Text to Tag"
-            autoComplete='off'
-            autoCorrect={false}
-            inputValue={inputTagValue}
-            onChangeText={setInputTagValues}
-            autoCapitalize={false}
-            backgroundColor={'grey'}
-            color={'white'}
-            returnKeyType={'done'}
-          />
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={writeNdef}
-            >
-            <Text style={styles.buttonText}>
-              Write To Tag
-            </Text>
-          </Button>
-
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
@@ -172,7 +131,7 @@ function AccountPortal1(props) {
 
         <Button 
           mode="contained" 
-          style={styles.bigBtn} 
+          style={styles.smallBtn} 
           onPress={() => {
               console.warn(finalDataChain);
               console.warn(tempDataChain);
@@ -181,6 +140,23 @@ function AccountPortal1(props) {
           }>
             <Text style={styles.buttonText}>
               Check Input
+            </Text>
+          </Button>
+
+          <Button 
+          mode="contained" 
+          style={styles.smallBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Clear Input
             </Text>
           </Button>
         
@@ -204,10 +180,26 @@ function AccountPortal1(props) {
             </Text>
         </Button>
 
+        <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              navigation.navigate('Home');
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Home
+            </Text>
+          </Button>
+
       <Modal  
         visible = {modalVisible}>
           <View 
-            backgroundColor={'black'}
             style={styles.wrapper}
             borderRadius={10}>
           <Text style={styles.bannerText} selectable>Repeat Input or Start Again</Text>
@@ -218,7 +210,6 @@ function AccountPortal1(props) {
             onPress={() => {
               
               setInputTextValues('');
-              setInputTagValues('');
 
               const data  = finalDataChain;
               finalDataChain = '';

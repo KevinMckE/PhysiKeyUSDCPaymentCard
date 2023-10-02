@@ -36,6 +36,10 @@ function AccountPortal2(props) {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const [keyStatusModal=false, setKeyStatusModal] = React.useState();
+  const showKeyStatusModal = () => setKeyStatusModal(true);
+  const hideKeyStatusModal = () => setKeyStatusModal(false);
+
   const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
   const [tagCount, setTagCount] = React.useState(0);
@@ -144,29 +148,6 @@ function AccountPortal2(props) {
             </Text>
           </Button>
 
-          <TextInput
-            style={styles.textInput}
-            label="Add Text to Tag"
-            autoComplete='off'
-            autoCorrect={false}
-            inputValue={inputTagValue}
-            onChangeText={setInputTagValues}
-            autoCapitalize={false}
-            backgroundColor={'grey'}
-            color={'white'}
-            returnKeyType={'done'}
-          />
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={writeNdef}
-            >
-            <Text style={styles.buttonText}>
-              Write To Tag
-            </Text>
-          </Button>
-
           <Button 
           mode="contained" 
           style={[styles.smallBtn]}
@@ -188,7 +169,7 @@ function AccountPortal2(props) {
 
         <Button 
           mode="contained" 
-          style={styles.bigBtn} 
+          style={styles.smallBtn} 
           onPress={() => {
               console.warn(finalDataChain);
               console.warn(tempDataChain);
@@ -199,6 +180,23 @@ function AccountPortal2(props) {
               Check Input
             </Text>
           </Button>
+
+          <Button 
+          mode="contained" 
+          style={styles.smallBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Clear Input
+            </Text>
+          </Button>
         
         <Button 
           mode="contained" 
@@ -206,6 +204,8 @@ function AccountPortal2(props) {
           onPress={ async () => {
 
             if (inputCheck === finalDataChain){
+
+              showKeyStatusModal();
 
               console.warn('temp data chain before argon: ' + tempDataChain);
               const argonResult = await argon2(
@@ -245,8 +245,8 @@ function AccountPortal2(props) {
                 // need encryption of private key, and need to pass encryption password to Account Display
                 // insert modal to done screen to print private/public key pair;
                 // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
-
               showModal();
+              hideKeyStatusModal();
             }
             else{
               console.warn('Inputs did not match, try again');
@@ -265,6 +265,8 @@ function AccountPortal2(props) {
           onPress={ async () => {
 
             if (inputCheck === finalDataChain){
+
+              showKeyStatusModal();
 
               console.warn('temp data chain before argon: ' + tempDataChain);
               const argonResult = await argon2(
@@ -311,6 +313,7 @@ function AccountPortal2(props) {
                 // when you do the comparison, only store the public key, so the private key isn't in memory until verifcation
 
               showModal();
+              hideKeyStatusModal();
             } else {
               console.warn('Inputs did not match, try again.');
               console.warn(inputCheck + " _ " + finalDataChain);
@@ -324,17 +327,21 @@ function AccountPortal2(props) {
         </Button>
 
         <Button 
-            mode="contained"
-            style={styles.smallBtn}
-            onPress={() => {
-            finalDataChain = '';
-            tempDataChain = '';
-            navigation.navigate('Home');
-            }}>
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              navigation.navigate('Home');
+            }
+          }>
             <Text style={styles.buttonText}>
-              Start Over
-            </Text>        
-        </Button>
+              Home
+            </Text>
+          </Button>
         
 
       <Modal  
@@ -413,6 +420,16 @@ function AccountPortal2(props) {
             </Text>
             
           </Button>
+          </View>
+      </Modal>
+
+      <Modal  
+          visible = {keyStatusModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+            
           </View>
       </Modal>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
@@ -175,6 +175,7 @@ function AccountPortal1(props) {
           style={styles.bigBtn} 
           onPress={() => {
               console.warn(finalDataChain);
+              console.warn(tempDataChain);
               // insert go to done screen to print private/public key pair;
             }
           }>
@@ -221,6 +222,7 @@ function AccountPortal1(props) {
 
               const data  = finalDataChain;
               finalDataChain = '';
+              tempDataChain = '';
               hideModal();
               navigation.navigate('Account Portal 2', { data });
               
@@ -235,6 +237,9 @@ function AccountPortal1(props) {
             mode="contained"
             style={styles.smallBtn}
             onPress={() => {
+            // reset all inputValues
+            finalDataChain = '';
+            tempDataChain = '';
             navigation.navigate('Home');
             }}>
             <Text style={styles.buttonText}>

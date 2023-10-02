@@ -237,6 +237,7 @@ function AccountPortal2(props) {
               decryptedAccount = {};
               privateKey = '';
               finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';
               inputCheck = '';
 
               //console.warn(encryptedPrivateKey);
@@ -300,6 +301,7 @@ function AccountPortal2(props) {
               keyPairBTC = {};
               privateKey = '';
               finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';
               inputCheck = '';
 
               //console.warn(encryptedPrivateKey);
@@ -325,6 +327,8 @@ function AccountPortal2(props) {
             mode="contained"
             style={styles.smallBtn}
             onPress={() => {
+            finalDataChain = '';
+            tempDataChain = '';
             navigation.navigate('Home');
             }}>
             <Text style={styles.buttonText}>
@@ -399,6 +403,9 @@ function AccountPortal2(props) {
             mode="contained"
             style={styles.smallBtn}
             onPress={() => {
+            // reset all inputValues
+            finalDataChain = '';
+            tempDataChain = '';
             navigation.navigate('Home');
             }}>
             <Text style={styles.buttonText}>

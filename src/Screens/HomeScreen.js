@@ -13,10 +13,13 @@ function HomeScreen(props) {
     const hideModal = () => setModalVisible(false);
 
     const swiperSlides = [
-      [require('../assets/TutorialArt1.png'),'Anywhere Access is a secure crypto wallet where you can access and store all your info simply through scanning your tag','Welcome to ','Anywhere Access'],
-      [require('../assets/TutorialArt2.png'),'You can view and store all your assets like Bitcoin and Etheruem in one place now.','Manage your digital assets'],
-      [require('../assets/TutorialArt3.png'),'You can input the public key and other significant information simply by scanning tag','Sign in With Tag'],
-      [require('../assets/TutorialArt4.png'),'With Anywhere Access you can easily access all your blockchain information anytime, anywhere!','Access anywhere, anytime!'],
+      [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
+      [require('../assets/Logo.png'),'Create your own Web 3 access cards','Create Access Cards'],
+      [require('../assets/TutorialArt3.png'),'Use these cards like a debit card \n to generate your private keys like magic','We store nothing'],
+      [require('../assets/TutorialArt3.png'),'Air gapped private key storage','"Sign with Tag" functionality'],
+      [require('../assets/VerificationSuccessful.png'),'Keep your key on an air gapped \n NFC tag until you are ready to tap to sign','Tap to Sign'],
+      [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
+      [require('../assets/TutorialArt4.png'),'With Anywhere Access you can access your assets on any phone with our app installed!','Access anywhere!'],
     ];
 
     React.useEffect(() => {

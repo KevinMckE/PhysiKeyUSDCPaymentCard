@@ -14,12 +14,16 @@ function HomeScreen(props) {
 
     const swiperSlides = [
       [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
-      [require('../assets/Logo.png'),'Create your own Web 3 access cards','Create Access Cards'],
-      [require('../assets/TutorialArt3.png'),'Use these cards like a debit card \n to generate your private keys like magic','We store nothing'],
-      [require('../assets/TutorialArt3.png'),'Air gapped private key storage','"Sign with Tag" functionality'],
-      [require('../assets/VerificationSuccessful.png'),'Keep your key on an air gapped \n NFC tag until you are ready to tap to sign','Tap to Sign'],
       [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
-      [require('../assets/TutorialArt4.png'),'With Anywhere Access you can access your assets on any phone with our app installed!','Access anywhere!'],
+      [require('../assets/SimplifySeed.png'),'Web 3 access as easy as using a credit card','No More Seed Phrases'],
+      [require('../assets/SplashScreenBackgroundPattern.png'),'Generate a unique card code - then write that code to several NFC cards','Create Access Cards'],
+      [require('../assets/StorageSystem.png'),'Your access card is used with a password combination to regenerate your keys every login','Keep Your Cards Safe'],
+      [require('../assets/EthereumGraphic.png'),'One card can be paired with different passwords to create unique accounts','One Card - Many Accounts'],
+      [require('../assets/VerificationSuccessful.png'),'Use these cards like a debit card \n to generate your private keys like magic','We Store Nothing'],
+      [require('../assets/SendMoney.png'),'Because we never store your keys, we cannot help you recover them, or unlock your account for you','True Mobile Self-Custody'],
+      [require('../assets/AboutMissionGlobe.png'),'Use sign with tag after card input process to air gap your key onto an NFC tag during your signing session','True Air-Gapped Mobile Wallet'],
+      [require('../assets/TutorialArt3.png'),'Keep this tag away from your phone \n until you are ready to tap to sign the transaction','Tap to Sign'],
+      [require('../assets/TutorialArt4.png'),'Use on any phone with our app installed. For FAQs and a demo go to website','Access anywhere!'],
     ];
 
     React.useEffect(() => {

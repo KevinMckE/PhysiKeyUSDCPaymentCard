@@ -16,7 +16,7 @@ function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Account Portal 1" component={AccountPortal1} options={{headerShown: false}}/>
         <Stack.Screen name="Account Portal 2" component={AccountPortal2} options={{headerShown: false}}/>
         <Stack.Screen name="Raw Keys" component={RawKeys} options={{headerShown: false}}/>

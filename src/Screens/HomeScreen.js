@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal, Image} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcManager from 'react-native-nfc-manager';
 import AppIntroSlider from 'react-native-app-intro-slider';
@@ -17,27 +17,27 @@ function HomeScreen(props) {
       title: '1st Slide',
       text: 'Example Text 1',
       image: require('../assets/Tutorial Art 1.png'),
-      backgroundColor: 'white',
+      backgroundColor: 'black',
     },
     {
       key: '2',
       title: '2nd Slide',
       text: 'Example Text 2',
       image: require('../assets/Tutorial Art 2.png'),
-      backgroundColor: 'white',
+      backgroundColor: 'black',
     },
     {
       key: '3',
       title: '3rd Slide',
       text: 'Example Text 3',
       image: require('../assets/Tutorial Art 3.png'),
-      backgroundColor: 'white',
+      backgroundColor: 'black',
     }];
 
     const renderSwiper = ({item}) => {
       return <View>
         <Text>{item.title}</Text>
-        <Image source={item.image} />
+        <Image style={styles.wrapper} source={item.image} />
         <Text>{item.text}</Text>
       </View>
     };
@@ -135,8 +135,13 @@ function HomeScreen(props) {
           visible = {modalVisible}>
               
             <AppIntroSlider
+              style={styles.slide}
               data={swiperSlides}
               renderItem={renderSwiper}
+              showSkipButton={true}
+              showDoneButton={true}
+              onDone={hideModal}
+              onSkip={hideModal}
             />
 
           </Modal>
@@ -175,6 +180,9 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: 20,
     paddingVertical: 40,
+  },
+  slide: {
+    backgroundColor: 'gray',
   },
   btn: {
     width: 250,

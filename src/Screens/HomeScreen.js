@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button} from 'react-native-paper';
 import NfcManager from 'react-native-nfc-manager';
+import AppIntroSlider from 'react-native-app-intro-slider';
 
 function HomeScreen(props) {
     const {navigation} = props;
@@ -10,6 +11,36 @@ function HomeScreen(props) {
     const [modalVisible, setModalVisible] = React.useState();
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
+
+    const swiperSlides = [{
+      key: '1',
+      title: '1st Slide',
+      text: 'Example Text 1',
+      image: require('../assets/Tutorial Art 1.png'),
+      backgroundColor: 'white',
+    },
+    {
+      key: '2',
+      title: '2nd Slide',
+      text: 'Example Text 2',
+      image: require('../assets/Tutorial Art 2.png'),
+      backgroundColor: 'white',
+    },
+    {
+      key: '3',
+      title: '3rd Slide',
+      text: 'Example Text 3',
+      image: require('../assets/Tutorial Art 3.png'),
+      backgroundColor: 'white',
+    }];
+
+    const renderSwiper = ({item}) => {
+      return <View>
+        <Text>{item.title}</Text>
+        <Image source={item.image} />
+        <Text>{item.text}</Text>
+      </View>
+    };
 
     React.useEffect(() => {
         async function checkNfc() {
@@ -102,23 +133,12 @@ function HomeScreen(props) {
         <View style={styles.wrapper}>
           <Modal  
           visible = {modalVisible}>
-            <View 
-              backgroundColor={'white'}
-              style={styles.wrapper}
-              borderRadius={10}>
-            <Text style={styles.bannerText}>
-              Set Your Phone To Airplane Mode
-              Before Creating Or Viewing Keys
-            </Text>
-            <Button 
-              mode="contained"
-              style={styles.btn}
-              onPress={hideModal}>
-              <Text style={styles.buttonText}>
-                I Promise I Will
-              </Text>
-            </Button>
-            </View>
+              
+            <AppIntroSlider
+              data={swiperSlides}
+              renderItem={renderSwiper}
+            />
+
           </Modal>
           <Text style={styles.bannerText}>
           AnyWare

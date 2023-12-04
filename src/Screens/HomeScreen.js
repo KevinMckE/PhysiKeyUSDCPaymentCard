@@ -11,6 +11,15 @@ function HomeScreen(props) {
     const [modalVisible, setModalVisible] = React.useState();
     const showModal = () => setModalVisible(true);
     const hideModal = () => setModalVisible(false);
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [isButtonActive, setIsButtonActive] = React.useState(false);
+
+    const handleSwiperMomentumScrollEnd = (e, state) => {
+      if (state.index === swiperSlides.length - 2) {
+        if (!isButtonActive) {
+          setIsButtonActive(true);
+        }
+      }};
 
     const swiperSlides = [
       [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
@@ -114,6 +123,9 @@ function HomeScreen(props) {
                 showsPagination={true}
                 dotColor="#1234" // Customize dot color
                 activeDotColor="#364A7F" // Customize active dot color
+                loop ={false}
+                index={activeIndex} 
+                onMomentumScrollEnd={handleSwiperMomentumScrollEnd}
               >
                 
                 {swiperSlides.map((image, index ) => (
@@ -134,9 +146,9 @@ function HomeScreen(props) {
             <View style={styles.buttonAlignment}>
               <Button 
                 mode="contained" 
-                style={[styles.filledButton]}
-                onPress={hideModal}>
-                  <Text style={styles.buttonText1}>
+                style={[styles.filledButton, {opacity: isButtonActive ? 1 : 0.3,}]}
+                onPress={hideModal} disabled={!isButtonActive}>
+                  <Text style={[styles.buttonText1, { opacity: isButtonActive ? 1 : 0.7 }]}>
                       Skip
                   </Text>
               </Button>

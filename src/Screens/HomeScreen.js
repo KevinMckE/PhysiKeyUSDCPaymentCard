@@ -99,7 +99,7 @@ function HomeScreen(props) {
           mode="contained" 
           style={[styles.unfilledButton]}
           onPress={() => {
-            navigation.navigate('Create Access Card');
+            navigation.navigate('Create Access Cards');
           }}>
             <Text style={styles.buttonText2}>
                 Create Access Cards

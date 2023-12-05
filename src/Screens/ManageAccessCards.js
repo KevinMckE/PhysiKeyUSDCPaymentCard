@@ -4,7 +4,8 @@ import {Button, TextInput, Text, Chip} from 'react-native-paper';
 import NfcManager, {Ndef, NfcTech, makeReadOnly} from 'react-native-nfc-manager';
 import { randomBytes } from 'react-native-randombytes';
 
-function CreateAccessCard(props) {
+function ManageAccessCards(props) {
+  const {navigation} = props;
   const [tagValue='---', setTagValue] = React.useState('');
   const [isLocked='---', setIsLocked] = React.useState('');
   const [readTagValue='---', setReadTagValue] = React.useState('');
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateAccessCard;
+export default ManageAccessCards;
 
 
 

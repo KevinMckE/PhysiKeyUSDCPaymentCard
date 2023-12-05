@@ -10,6 +10,36 @@ function ManageAccessCards(props) {
   const [isLocked='---', setIsLocked] = React.useState('');
   const [readTagValue='---', setReadTagValue] = React.useState('');
 
+  const [cardOneCode, setCardOneCode] = React.useState('');
+  const [cardTwoCode, setCardTwoCode] = React.useState('');
+
+  const [showCardDetails, setShowCardDetails] = React.useState({ card1: false, card2: false });
+  const [lockButtonStates, setLockButtonStates] = React.useState({ card1: false, card2: false });
+
+  const toggleCardDetails = (card) => {
+    setShowCardDetails((prevState) => ({ ...prevState, [card]: !prevState[card] }));
+  };
+
+  const toggleLockButton = (card) => {
+    setLockButtonStates((prevState) => ({ ...prevState, [card]: !prevState[card] }));
+  };
+    
+  const getLockButtonText = (card) => {
+    return lockButtonStates[card] ? 'Unlock' : 'Lock';
+  };
+  const getBoxHeight = (card) => (showCardDetails[card] ? 360 : 100);
+    
+  const getViewButtonText = (card) => {
+    return showCardDetails[card] ? 'View Less' : 'View Status';
+  };
+
+  async function clearInputs() {
+    setCardOneCode('');
+    setCardTwoCode('');
+    setReadTagValue('');
+    setTagValue('');
+  }
+
   async function writeNdef() {
     let scheme = '';
     const nfcInput = Ndef.uriRecord(`${scheme}${tagValue}`);
@@ -28,7 +58,7 @@ function ManageAccessCards(props) {
     setReadTagValue('---');
   }
 
-  async function readCardCode() {
+  async function readCardOne() {
     try{
       await NfcManager.requestTechnology(NfcTech.Ndef);
       // Testing just to get the Ndef data
@@ -41,7 +71,29 @@ function ManageAccessCards(props) {
       // turns the NDEF record into a string
       const ndefString = String.fromCharCode(...tagPayload);
 
-      setReadTagValue(ndefString);
+      setCardOneCode(ndefString);
+
+    } catch (ex) {
+        //bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+  }
+
+  async function readCardTwo() {
+    try{
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      // Testing just to get the Ndef data
+      const tagData = await NfcManager.ndefHandler.getNdefMessage();
+      
+      // turns payload into a single string of numbers with ,'s:
+      const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
+      tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
+
+      // turns the NDEF record into a string
+      const ndefString = String.fromCharCode(...tagPayload);
+
+      setCardTwoCode(ndefString);
 
     } catch (ex) {
         //bypass
@@ -228,99 +280,131 @@ function ManageAccessCards(props) {
   } 
 
   return (
-      <View style={styles.wrapper}>
-        <SafeAreaView />
-        <View style={[styles.wrapper, styles.pad]}>
+      <View>
 
-          <Text style={styles.bannerText}>
-            
-            {'\n'}Generated Web 3 Access Code:
+        <Text style={styles.cardStatusText}>Manage Cards</Text>
+         
+         <View style={styles.container}>
+         
+         <View style={[styles.box, { height: getBoxHeight('card1') }]}>
+           <View style={styles.circleBlue}></View>
+           <Text style={styles.cardTitleText}>Card 1</Text> 
+           <Text style={styles.statusText}>Status: </Text>
+       
+           <Button 
+              style={styles.grayButton} 
+              onPress={() => toggleCardDetails('card1')}>
+                <Text style={styles.viewCodeText}>
+                 {getViewButtonText('card1')}
+                </Text>
+           </Button>
+   
+           {showCardDetails.card1 && (
+              
+                 <View style={styles.graybox}>
 
-          </Text>
+                  <Button 
+                      mode="contained" 
+                      style={styles.readButton} 
+                      onPress={async() => {  
+                        await readCardOne();
+                      }}>
+                    <Text style={styles.lockButtonText}>
+                      Read
+                    </Text>
+                  </Button>
 
-          <Text style={styles.bannerText} selectable>
-            
-            {tagValue}{'\n'}
+                  <Button 
+                      mode="contained" 
+                      style={styles.lockButton} 
+                      onPress={async () => {  
+                        if(getLockButtonText('card1')==='Lock'){
+                        await lockNFC();
+                      } else {
+                        await unlockNFC();
+                      }
+                      toggleLockButton('card1');
+                      }}>
+                    <Text style={styles.lockButtonText}>
+                      {getLockButtonText('card1')}
+                    </Text>
+                  </Button>
 
-          </Text>
+                   <Text style={styles.cardTitleText}>Access Code: </Text>
+                   <Text style={styles.codeText}>{cardOneCode}</Text>
+
+                 </View> 
+              
+             )}
+             <View style={styles.horizontalLine} />
+           </View>
+           
+           <View style={[styles.box2, { height: getBoxHeight('card2') }]}>
+           <View style={styles.circleRed}></View>
+           <Text style={styles.cardTitleText}>Card 2</Text> 
+           <Text style={styles.statusText}>Status: </Text>
+           <Button 
+               style={styles.grayButton} 
+               onPress={() => toggleCardDetails('card2')}>
+                 <Text style={styles.viewCodeText}>
+                 {getViewButtonText('card2')}
+                 </Text>
+           </Button>
+   
+           {showCardDetails.card2 && (
+              
+                <View style={styles.graybox}>
+
+                <Button 
+                      mode="contained" 
+                      style={styles.readButton} 
+                      onPress={async() => {  
+                        await readCardTwo();
+                      }}>
+                    <Text style={styles.lockButtonText}>
+                      Read
+                    </Text>
+                  </Button>
+
+                <Button 
+                  mode="contained" 
+                  style={styles.lockButton} 
+                  onPress={async () => {  
+                      if(getLockButtonText('card2')==='Lock'){
+                        await lockNFC();
+                      } else {
+                        await unlockNFC();
+                      }
+                      toggleLockButton('card2');
+                  }}>
+                  <Text style={styles.lockButtonText}>
+                  {getLockButtonText('card2')}
+                  </Text>
+                </Button>
+   
+                <Text style={styles.cardTitleText}>Access Code: </Text>
+                <Text style={styles.codeText}>{cardTwoCode}</Text>
+
+                </View> 
+              
+             )}
+           
+          </View>
 
           <Button 
-            mode="contained" 
-            style={styles.bigBtn} 
-            onPress={ async () => {
-              
-              const randVal = randomBytes(16).toString('hex');
-              console.warn(randVal);
-              setTagValue(randVal);
-              // create a random value and pass it to the settagvalue
-              }
-            }>
-            <Text style={styles.buttonText}>
-              Create Access Code
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+              clearInputs();
+            }}>
+            <Text style={styles.ManageCardText}>
+              Clear All Inputs
             </Text>
-            
-          </Button>
-      
-          <Button 
-            mode="contained" 
-            style={styles.bigBtn} 
-            onPress={writeNdef}
-            >
-            <Text style={styles.buttonText}>
-              Write Code to Card
-            </Text>
-              
           </Button>
 
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={lockNFC}
-            >
-            <Text style={styles.buttonText}>
-              Lock Card
-            </Text>
-              
-          </Button>
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={unlockNFC}
-            >
-            <Text style={styles.buttonText}>
-              Unlock Card
-            </Text>
-              
-          </Button>
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={readCardCode}
-            >
-            <Text style={styles.buttonText}>
-              Check Card Status
-            </Text>
-              
-          </Button>
-
-          <Text style={styles.bannerText}>
-            
-            {'\n'}Card Status:
-
-          </Text>
-
-          <Text style={styles.bannerText} selectable>
-            
-            Access Code: {readTagValue}{'\n'}
-            Card Lock: {isLocked}{'\n'}
-
-          </Text>
-          
+        </View> 
         </View>
-        <SafeAreaView/>
-      </View>
+        
   );
 }
 
@@ -350,6 +434,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     marginBottom: 15,
+    marginTop: 30,
     color: 'white',
     backgroundColor: 'black',
     alignItems: 'center',
@@ -376,7 +461,236 @@ const styles = StyleSheet.create({
     margin: 50,
     padding: 40,
     borderRadius: 10,
-  }
+  },
+  container: {
+    flex:0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  textContainer2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft:35,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingHorizontal: 1,  
+  },
+
+  watermarkAlignment: {
+    width: 250,
+    height: 200,
+    alignItems:'center',
+    justifyContent:'center',
+    marginTop: 70,
+    marginLeft: 0,
+  },
+
+  
+
+  box: {
+    width: 350,
+    height: 180,
+    marginBottom: 0,
+    marginTop: 15,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    paddingTop: 35,
+    paddingLeft: 20,
+    paddingRight: 20,
+    //justifyContent: 'center',
+    //alignItems: 'center',
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  horizontalLine: {
+    height: 1, 
+    backgroundColor: '#EBEBEB', 
+    marginTop: 0, 
+    marginBottom: 0, 
+  },
+
+ 
+  box2: {
+    width: 350,
+    height: 180,
+    marginBottom: 0,
+    marginTop: 0,
+    backgroundColor: 'white',
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    paddingTop: 35,
+    paddingLeft: 20,
+    paddingRight: 20,
+    //justifyContent: 'center',
+    //alignItems: 'center',
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  
+cardStatusText: {
+    fontSize: 21,
+//textAlign:'left',
+    fontWeight:'500',
+    color: '#5D6994',
+    marginLeft: 35,
+    marginTop: 25,
+
+
+  },
+
+  cardTitleText: {
+    fontSize: 19,
+    fontWeight:'500',
+    color: '#363636',
+    marginTop: -17,
+    marginBottom: 2,
+    marginLeft: 17,
+  },
+
+  cardDetails: {
+    backgroundColor: '#F5F5F5',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+
+  grayButton: {
+    width: 130,
+    height: 45,
+    marginBottom:0,
+    marginLeft: 180,
+    marginTop:-65,
+    borderRadius:10, 
+    borderWidth: 1,
+    backgroundColor: '#EAEAEA',
+     alignItems: 'center',
+     justifyContent: 'center',
+  },
+  lockButton: {
+    width: 120,
+    height: 40,
+    marginBottom: 30,
+    marginTop: 0,
+    borderRadius:15, 
+    borderColor:'#ACA9A9',
+    color: 'white',
+    borderWidth: 1,
+    backgroundColor: 'Black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  readButton: {
+    width: 120,
+    height: 40,
+    marginBottom: 20,
+    marginTop: 20,
+    borderRadius:15, 
+    borderColor:'#ACA9A9',
+    color: 'white',
+    borderWidth: 1,
+    backgroundColor: 'Black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  graybox : {
+    width: 310,
+  height: 210,
+  backgroundColor: '#F0F0F0',
+  borderRadius: 15,
+  paddingTop: 0,
+  marginBottom:10,
+  marginTop:30,
+  paddingBottom:0,
+ alignItems: 'center',
+ justifyContent:'flex-start',
+  paddingHorizontal: 55,
+  },
+  
+  circleRed: {
+    width: 10, 
+    height: 10,
+    backgroundColor: '#F05858',
+    borderRadius: 5, 
+
+  },
+  
+  circleBlue: {
+    width: 10, 
+    height: 10,
+    backgroundColor: '#2F97FF',
+    borderRadius: 5, 
+  },
+
+      arrowPosition: {
+        position: 'absolute',
+        top: 60,  
+        left: 15,
+
+      },
+      lockButtonText:{
+        color:'#ACA9A9', 
+        fontSize: 18,
+        fontWeight:'400',
+    
+      },
+
+      backText: {
+        color:'#009DFF', 
+        fontSize: 20,
+        paddingLeft:40,
+        marginTop: 60,
+      },
+
+      viewCodeText: {
+        fontSize: 17,
+        color:'#7E7E7E',
+        fontWeight:'500',
+        fontVariant:'small',
+      },
+
+      
+      codeText:{
+
+        color:'#909090', 
+        fontSize: 17,
+        textAlign: 'center'
+       
+      },
+
+      statusText: {
+        fontSize: 17,
+        color:'#B2B2B2',
+        fontWeight:'400',
+        fontVariant:'small',
+        marginBottom: 15,
+        marginLeft: 17,
+
+      },
+
+      horizontalLine: {
+        height: 1, 
+        backgroundColor: '#EBEBEB', 
+        marginTop: 30, 
+        marginBottom: 30, 
+      },
 });
 
 export default ManageAccessCards;

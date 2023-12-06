@@ -488,8 +488,9 @@ function AccountDisplayBTC(props) {
         <Button 
           mode=  "contained" 
           style={[styles.sendMoneyButton]}
-          onPress={() => {
-              signTransaction();
+          onPress={async () => {
+              await signTransaction();
+              broadcastTransaction(txToBroadcast);
               }}>
             <Text style={styles.sendMoneyButtonText}>
               Send Money

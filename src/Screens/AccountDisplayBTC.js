@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  SafeAreaView, StyleSheet, Text, View, ImageBackground, Modal} from 'react-native';
+  Image, SafeAreaView, StyleSheet, Text, View, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useRoute } from '@react-navigation/native';
@@ -431,8 +431,504 @@ function AccountDisplayBTC(props) {
       //   //broadcast transaction:
   
   return (
-    <SafeAreaView style={[{ flex: 1 }]}>
-      <Text style={styles.bannerText}>Public Key: </Text>
+      
+      <View style={{ flex: 1, backgroundColor: '#F4F5F7' }} >
+
+      <View style={styles.container}>
+      
+        <View style={styles.whiteBoxPublicKey}>
+        <View style={styles.blackSquare}>
+        <Image source={require('../assets/Logo.png')} style={styles.LogoWhiteSize}/>
+        </View>
+        <Text style={styles.publicKeyText}>Public Key</Text>
+        <Text selectable style={styles.publicKeyText2}>{publicKey}</Text>
+        
+        </View>
+        <View style={styles.blackBox}>
+        <View style={styles.whiteSquare}>
+        <Image source={require('../assets/MoneyInWalletImage.jpg')} style={styles.LogoWhiteSize}/>
+        </View>
+        <Text style={styles.amountText}>{accountBalance} BTC</Text>
+        <Text style={styles.accountBalanceText}>Account Balance</Text>
+    
+        </View>
+        
+        </View> 
+        <Text style={styles.sendMoneyText}>Manage Transaction</Text>
+        <View style={styles.whiteBoxTransaction}>
+
+        <Text style={styles.inputText}>Input Address :</Text>
+
+        <TextInput
+
+            style={styles.inputBox}
+            placeholder="Input Address to Send To"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={accountToSend}
+            onChangeText={setAccountToSend}
+            autoCapitalize={false}
+            returnKeyType={'done'}
+            
+
+            />
+        <Text style={styles.inputText}>Input Amount:</Text>
+
+        <TextInput
+            style={styles.inputBox}
+            placeholder="Input Amount to Send To Address"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={amountToSend}
+            onChangeText={setAmountToSend}
+            autoCapitalize={false}
+            returnKeyType={'done'}
+            keyboardType={'numeric'}
+            />
+        <Button 
+          mode=  "contained" 
+          style={[styles.sendMoneyButton]}
+          onPress={() => {
+              signTransaction();
+              }}>
+            <Text style={styles.sendMoneyButtonText}>
+              Send Money
+            </Text>
+        </Button>
+
+        <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+            navigation.navigate('Home');
+            }}>
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
+        </Button>
+    
+      <Modal  
+        visible = {modalVisible}>
+          <View 
+            backgroundColor={'black'}
+            style={styles.container}
+            borderRadius={10}>
+            
+          <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={hideModal}
+            title = 'Send NFT'>
+          </Button>
+
+          <Button 
+            mode="contained"
+            style={styles.btn}
+            onPress={hideModal}
+            title = 'Go Back'>
+          </Button>
+
+          </View>
+        </Modal>
+
+        </View>
+
+      </View>
+
+  );
+}
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bannerText: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'black',
+    fontVariant: 'small-caps',
+    fontWeight: 'bold',
+    padding: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginBottom: 10,
+    width: '100%',
+  },
+  backgroundImage: {
+    flex: 1,
+  },
+  smallBtn: {
+    width: 200,
+    height: 40,
+    marginLeft: 55,
+    color: 'wblack',
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: '#9F9D9D',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 10,
+    color: 'black',
+    fontWeight: '500',
+    fontVariant: 'small',
+  },
+  textInput: {
+    padding: 20,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  logoContainer: {
+    height: 200,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  logo: {
+    flex: 1,
+    alignSelf: 'stretch',
+    width: undefined,
+    height: undefined,
+  },
+  containerCard: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    marginHorizontal: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin: 10,
+  },
+  info: {
+    flex: 1,
+    margin: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  description: {
+    marginBottom: 5,
+  },
+  attribute: {
+    color: '#777',
+    fontSize: 12,
+  },
+  container: {
+    flex:0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  textContainer2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft:35,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingHorizontal: 1,  
+  },
+
+  imageAlignment: {
+    width: 250,
+    height: 200,
+    alignItems:'center',
+    justifyContent:'center',
+    marginTop: 70,
+    marginLeft: 0,
+  },
+
+  
+  whiteBoxPublicKey: {
+    width: 365,
+    height: 140,
+    marginBottom: 0,
+    marginTop: 15,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 165,
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+
+  blackBox: {
+    width: 365,
+    height: 140,
+    marginBottom: 0,
+    marginTop: 25,
+    backgroundColor: 'black',
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  blackSquare: {
+    width: 100,
+    height: 100,
+    marginBottom: 0,
+    backgroundColor: 'black',
+    borderRadius: 10,
+    paddingTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  whiteSquare: {
+    width: 100,
+    height: 100,
+    marginBottom: 0,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+
+  LogoWhiteSize:{
+    width:90,
+    height:90,
+  },
+  
+publicKeyText: {
+    fontSize: 24,
+    fontWeight:'500',
+    color: 'black',
+    position: 'absolute',
+    top: 30,
+    left: 140,
+  },
+
+  publicKeyText2:{
+    color:'#BABABA', 
+    fontSize: 15,
+    position: 'absolute',
+    top: 65,
+    left: 140,
+    textAlign:"left"
+   
+  },
+  amountText:{
+    fontSize: 36,
+    fontWeight:'700',
+    color: 'white',
+    position: 'absolute',
+    top: 32,
+    left: 140,
+
+  },
+
+  accountBalanceText:{
+    fontSize: 19,
+    fontWeight:'400',
+    color: '#D9D9D9',
+    position: 'absolute',
+    top: 72,
+    left: 140,
+
+  },
+
+  
+  exportKeyButton: {
+    width: 150,
+    height: 45,
+    borderRadius:12, 
+    borderColor:'gray',
+    color: 'white',
+    borderWidth: 1,
+    backgroundColor: 'Black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -30,
+    marginLeft: 240,
+  },
+
+
+      arrowPosition: {
+        position: 'absolute',
+        top: 60,  
+        left: 15,
+
+      },
+
+
+      homeText: {
+        color:'#009DFF', 
+        fontSize: 20,
+        paddingLeft:40,
+        marginTop: 60,
+      },
+
+      exportKeyText: {
+        fontSize: 19,
+        color:'#9D9A9A',
+        fontWeight:'400',
+        fontVariant:'small',
+        marginBottom: 15,
+        marginLeft: 17,
+
+      },
+
+      whiteBoxTransaction: {
+        width: 365,
+        height: 365,
+        marginBottom: 0,
+        marginTop: 15,
+        marginLeft: 25,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 165,
+        shadowColor: "#989AA0",
+        shadowOffset: {
+          width: 0,
+          height: 5,
+        },
+        shadowOpacity: 0.04,
+        shadowRadius: 1.84,
+        elevation: 5,
+      },
+
+      sendMoneyText: {
+        fontSize: 21,
+        fontWeight:'500',
+        color: '#5D6994',
+        textAlign: 'left',
+        marginLeft: 25,
+        marginTop: 40,
+    
+    
+      },
+
+      inputText:{
+        fontSize: 18,
+        fontWeight:'500',
+        color: 'black',
+        textAlign: 'left',
+        marginLeft: 7,
+        marginTop: 5,
+        marginBottom: 7,
+
+
+      },
+
+      inputBox: {
+        width: 320,
+        height: 30,
+        borderColor: '#9F9D9D',
+        borderRadius: 5,
+        borderWidth: 2,
+        backgroundColor: 'white',
+        padding: 10,
+        marginBottom: 20,
+        fontSize: 16,
+      },
+
+      sendMoneyButton: {
+        width: 320,
+        height: 55,
+        marginBottom: 5,
+        marginTop: 5,
+        borderRadius:15, 
+        color: 'white',
+        backgroundColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+
+      sendMoneyButtonText: {                
+        fontSize: 20,
+        color: 'white',
+        fontWeight:'500',
+        fontVariant:'small',
+      },
+
+});
+
+export default AccountDisplayBTC;
+
+
+// Buttons in original UI for reference
+
+{/* <Text style={styles.bannerText}>Public Key: </Text>
       <Text style={styles.bannerText} selectable>{publicKey}</Text>
       <Text style={styles.bannerText}>Account Balance: {accountBalance}</Text>
 
@@ -509,153 +1005,7 @@ function AccountDisplayBTC(props) {
               Start Over
             </Text>
         </Button>
-      </View>
-    
-      <Modal  
-        visible = {modalVisible}>
-          <View 
-            backgroundColor={'black'}
-            style={styles.container}
-            borderRadius={10}>
-            
-          <Button 
-            mode="contained"
-            style={styles.btn}
-            onPress={hideModal}
-            title = 'Send NFT'>
-          </Button>
-
-          <Button 
-            mode="contained"
-            style={styles.btn}
-            onPress={hideModal}
-            title = 'Go Back'>
-          </Button>
-
-          </View>
-        </Modal>
-
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-  },
-  bannerText: {
-    fontSize: 20,
-    textAlign: 'center',
-    color: 'black',
-    fontVariant: 'small-caps',
-    fontWeight: 'bold',
-    padding: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    marginBottom: 10,
-    width: '100%',
-  },
-  smallBtn: {
-    width: 200,
-    height: 50,
-    marginBottom: 15,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bigBtn: {
-    width: 250,
-    height: 70,
-    marginBottom: 15,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
-    fontVariant: 'small-caps',
-  },
-  textInput: {
-    padding: 2,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  logoContainer: {
-    height: 200,
-    alignSelf: 'stretch',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  logo: {
-    flex: 1,
-    alignSelf: 'stretch',
-    width: undefined,
-    height: undefined,
-  },
-  containerCard: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-    marginHorizontal: 20,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    margin: 10,
-  },
-  info: {
-    flex: 1,
-    margin: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  description: {
-    marginBottom: 5,
-  },
-  attribute: {
-    color: '#777',
-    fontSize: 12,
-  },
-});
-
-export default AccountDisplayBTC;
+      </View> */}
 
 
 

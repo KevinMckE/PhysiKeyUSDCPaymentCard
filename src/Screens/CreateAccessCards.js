@@ -246,7 +246,7 @@ function CreateAccessCards(props) {
               navigation.navigate('Manage Access Cards'); 
             }}>
               <Text style={styles.ManageCardText}>
-                  Manage Access Cards
+                  Lock Access Cards
               </Text>
         </Button>
 
@@ -351,7 +351,7 @@ function CreateAccessCards(props) {
               hideModal();
             }}>
             <Text style={styles.ManageCardText}>
-              Manage Access Cards
+              Lock Access Cards
             </Text>
             
           </Button>

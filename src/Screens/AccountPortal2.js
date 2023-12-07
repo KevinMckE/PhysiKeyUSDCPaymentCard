@@ -52,12 +52,13 @@ function AccountPortal2(props) {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const swiperSlides = [
-    [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
-    [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
-    [require('../assets/SimplifySeed.png'),'Web 3 access as easy as using a credit card','No More Seed Phrases'],
-    [require('../assets/SplashScreenBackgroundPattern.png'),'Generate a unique card code - then write that code to several NFC cards','Create Access Cards'],
-    [require('../assets/StorageSystem.png'),'Your access card is used with a password combination to regenerate your keys every login','Keep Your Cards Safe'],
-    ];
+    [require('../assets/TutorialArt1.png'),'','Two Signing Options',''],
+    [require('../assets/VerificationSuccessful.png'),'No Signing Tag? No problem. Click Easy Sign and Send Crypto On The Next Screen.','Easy Sign'],
+    [require('../assets/TutorialArt2.png'),'For A More Secure Signing Session, Sign With Tag','Sign With Tag\n(Do Not Use Access Card)'],
+    [require('../assets/TutorialArt3.png'),'Write your private key to the tag ','Sign With Tag\n(Do Not Use Access Card)'],
+    [require('../assets/TutorialArt3.png'),'Tap your Tag On The Next Screen to sign the transaction','Sign With Tag\n(Do Not Use Access Card)'],
+
+  ];
 
   //userInput();
   async function writeNdef() {
@@ -104,11 +105,11 @@ function AccountPortal2(props) {
     <View style={styles.wrapper}>
       <Text style={styles.bannerText}>
         
-        Input Count: 
+        Access Combination: 
+        {'\n'} {'\n'}
+        Password Count: {textCount}
         {'\n'}
-        Text: {textCount}
-        {' '}Num: {numCount}
-        {' '}Tag: {tagCount}
+        {' '}Card Count: {tagCount}
 
         
       </Text>
@@ -116,7 +117,7 @@ function AccountPortal2(props) {
 
           <TextInput
             style={styles.textInput}
-            label="Add Text to Input"
+            placeholder="Type Password or PIN"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTextValue}
@@ -140,26 +141,7 @@ function AccountPortal2(props) {
             }
             }>
             <Text style={styles.buttonText}>
-              Raw Text Input
-            </Text>
-          </Button>
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={() => {
-            for (let i = 0; i < inputTextValue.length; i++) {
-              tempDataChain += inputTextValue.charCodeAt(i);
-              tempDataChain += inputTextValue.charAt(i); 
-            }
-            console.warn(tempDataChain);
-            finalDataChain += kdf.compute(tempDataChain, salt).toString();
-            console.warn(finalDataChain);
-            tempDataChain = finalDataChain;
-            setNumCount(numCount+1); //Encoded input count ++
-            }}>
-            <Text style={styles.buttonText}>
-              Encoded Input
+              Password Input
             </Text>
           </Button>
 
@@ -174,44 +156,13 @@ function AccountPortal2(props) {
             setTagCount(tagCount+1); // Tag input count ++
           }}>
             <Text style={styles.buttonText}>
-              Input From Tag
+              Read Card
             </Text>
           </Button>
 
         </View>
 
         <View style={styles.bottom}>
-
-        <Button 
-          mode="contained" 
-          style={styles.smallBtn} 
-          onPress={() => {
-              console.warn(finalDataChain);
-              console.warn(tempDataChain);
-              // insert go to done screen to print private/public key pair;
-            }
-          }>
-            <Text style={styles.buttonText}>
-              Check Input
-            </Text>
-          </Button>
-
-          <Button 
-          mode="contained" 
-          style={styles.smallBtn} 
-          onPress={() => {
-              finalDataChain = '';
-              tempDataChain = '';
-              setNumCount(0);
-              setTagCount(0);
-              setTextCount(0);
-              // insert go to done screen to print private/public key pair;
-            }
-          }>
-            <Text style={styles.buttonText}>
-              Clear Input
-            </Text>
-          </Button>
         
         <Button 
           mode="contained" 
@@ -352,7 +303,7 @@ function AccountPortal2(props) {
             }
           }>
             <Text style={styles.buttonText}>
-              Home
+              Start Over
             </Text>
           </Button>
         
@@ -548,7 +499,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   smallBtn: {
-    width: 200,
+    width: 300,
     height: 50,
     marginBottom: 15,
     borderRadius:15, 

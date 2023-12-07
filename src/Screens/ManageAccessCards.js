@@ -282,7 +282,7 @@ function ManageAccessCards(props) {
   return (
       <View>
 
-        <Text style={styles.cardStatusText}>Manage Cards</Text>
+        <Text style={styles.cardStatusText}>Manage Cards - Codes Must Match</Text>
          
          <View style={styles.container}>
          
@@ -310,7 +310,7 @@ function ManageAccessCards(props) {
                         await readCardOne();
                       }}>
                     <Text style={styles.lockButtonText}>
-                      Read
+                      Verify
                     </Text>
                   </Button>
 
@@ -362,7 +362,7 @@ function ManageAccessCards(props) {
                         await readCardTwo();
                       }}>
                     <Text style={styles.lockButtonText}>
-                      Read
+                      Verify
                     </Text>
                   </Button>
 

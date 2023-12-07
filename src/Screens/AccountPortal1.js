@@ -56,11 +56,12 @@ function AccountPortal1(props) {
     <View style={styles.wrapper}>
       <Text style={styles.bannerText}>
         
-        Input Count: 
+        Access Combination: 
         {'\n'}
-        Text: {textCount}
-        {' '}Num: {numCount}
-        {' '}Tag: {tagCount}
+        {'\n'}
+        Password Count: {textCount}
+        {'\n'}
+        {' '}Card Count: {tagCount}
 
         
       </Text>
@@ -68,7 +69,7 @@ function AccountPortal1(props) {
 
           <TextInput
             style={styles.textInput}
-            label="Add Text to Input"
+            placeholder="Type Password or PIN"
             autoComplete='off'
             autoCorrect={false}
             inputValue={inputTextValue}
@@ -92,26 +93,7 @@ function AccountPortal1(props) {
             }
             }>
             <Text style={styles.buttonText}>
-              Raw Text Input
-            </Text>
-          </Button>
-
-          <Button 
-            mode="contained" 
-            style={styles.smallBtn} 
-            onPress={() => {
-            for (let i = 0; i < inputTextValue.length; i++) {
-              tempDataChain += inputTextValue.charCodeAt(i);
-              tempDataChain += inputTextValue.charAt(i); 
-            }
-            console.warn(tempDataChain);
-            finalDataChain += kdf.compute(tempDataChain, salt).toString();
-            console.warn(finalDataChain);
-            tempDataChain = finalDataChain;
-            setNumCount(numCount+1); //Encoded input count ++
-            }}>
-            <Text style={styles.buttonText}>
-              Encoded Input
+              Password Input
             </Text>
           </Button>
 
@@ -126,44 +108,13 @@ function AccountPortal1(props) {
             setTagCount(tagCount+1); // Tag input count ++
           }}>
             <Text style={styles.buttonText}>
-              Input From Tag
+              Read Card
             </Text>
           </Button>
 
         </View>
 
         <View style={styles.bottom}>
-
-        <Button 
-          mode="contained" 
-          style={styles.smallBtn} 
-          onPress={() => {
-              console.warn(finalDataChain);
-              console.warn(tempDataChain);
-              // insert go to done screen to print private/public key pair;
-            }
-          }>
-            <Text style={styles.buttonText}>
-              Check Input
-            </Text>
-          </Button>
-
-          <Button 
-          mode="contained" 
-          style={styles.smallBtn} 
-          onPress={() => {
-              finalDataChain = '';
-              tempDataChain = '';
-              setNumCount(0);
-              setTagCount(0);
-              setTextCount(0);
-              // insert go to done screen to print private/public key pair;
-            }
-          }>
-            <Text style={styles.buttonText}>
-              Clear Input
-            </Text>
-          </Button>
         
         <Button 
         mode="contained" 
@@ -181,7 +132,7 @@ function AccountPortal1(props) {
           }
         }>
             <Text style={styles.buttonText}>
-              Next Step
+              Continue
             </Text>
         </Button>
 
@@ -198,7 +149,7 @@ function AccountPortal1(props) {
             }
           }>
             <Text style={styles.buttonText}>
-              Home
+              Start Over
             </Text>
           </Button>
 
@@ -207,7 +158,7 @@ function AccountPortal1(props) {
           <View 
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Repeat Input or Start Again</Text>
+          <Text style={styles.bannerText} selectable>Repeat Card/Password Input Order On Next Screen To Verify Access Combination</Text>
           
           <Button 
             mode="contained"
@@ -224,7 +175,7 @@ function AccountPortal1(props) {
               
             }}>
             <Text style={styles.buttonText}>
-              Repeat Input Check
+              Repeat And Verify
             </Text>
             
           </Button>
@@ -251,7 +202,7 @@ function AccountPortal1(props) {
             <View 
               style={styles.wrapper}
               borderRadius={10}>
-            <Text style={styles.bannerText} selectable>No Inputs Selected</Text>
+            <Text style={styles.bannerText} selectable>No Access Combination Detected - Start Again</Text>
 
             <Button 
             mode="contained"
@@ -301,7 +252,7 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
   },
   smallBtn: {
-    width: 200,
+    width: 300,
     height: 50,
     marginBottom: 15,
     borderRadius:15, 
@@ -382,13 +333,11 @@ const styles = StyleSheet.create({
 
   TotalInputCountText: {
     fontSize: 20,
-textAlign:'left',
-fontWeight:'500',
-color: 'black',
-marginLeft: 35,
-  marginTop: 30,
-
-
+    textAlign:'left',
+    fontWeight:'500',
+    color: 'black',
+    marginLeft: 35,
+    marginTop: 30,
   },
   PlainText : {
     fontSize: 15,
@@ -397,12 +346,8 @@ marginLeft: 35,
     color: 'gray',
     alignItems: 'center',
     marginTop: 10,
-    
-
-  paddingTop: 5,
-  marginRight:55,
-
-
+    paddingTop: 5,
+    marginRight:55,
   },
   InputPlainText: {
     fontSize: 20,

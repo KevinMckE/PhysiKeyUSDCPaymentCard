@@ -22,17 +22,17 @@ function HomeScreen(props) {
       }};
 
     const swiperSlides = [
-      [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
-      [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
-      [require('../assets/SimplifySeed.png'),'Web 3 access as easy as using a credit card','No More Seed Phrases'],
-      [require('../assets/SplashScreenBackgroundPattern.png'),'Generate a unique card code - then write that code to several NFC cards','Create Access Cards'],
-      [require('../assets/StorageSystem.png'),'Your access card is used with a password combination to regenerate your keys every login','Keep Your Cards Safe'],
-      [require('../assets/EthereumGraphic.png'),'One card can be paired with different passwords to create unique accounts','One Card - Many Accounts'],
-      [require('../assets/VerificationSuccessful.png'),'Use these cards like a debit card \n to generate your private keys like magic','We Store Nothing'],
-      [require('../assets/SendMoney.png'),'Because we never store your keys, we cannot help you recover them, or unlock your account for you','True Mobile Self-Custody'],
-      [require('../assets/AboutMissionGlobe.png'),'Use sign with tag after card input process to air gap your key onto an NFC tag during your signing session','True Air-Gapped Mobile Wallet'],
-      [require('../assets/TutorialArt3.png'),'Keep this tag away from your phone \n until you are ready to tap to sign the transaction','Tap to Sign'],
-      [require('../assets/TutorialArt4.png'),'Use on any phone with our app installed. For FAQs and a demo go to website','Access anywhere!'],
+      [require('../assets/TutorialArt1.png'),'A Whole New Digital Access Experience','Welcome to ','Anywhere Access'],
+      [require('../assets/CardsImage.png'),'Create An Access Card','Step 1 - Create Card'],
+      [require('../assets/StorageSystem.png'),'Backup Your Access Card By Duplicating It','Step 2 - Copy Card'],
+      [require('../assets/VerificationSuccessful.png'),'Lock Your Access Cards To Prevent Overwrites','Step 3 - Lock Cards'],
+      [require('../assets/VerificationSuccessful.png'),'Use Your Card Like a Credit Card To Access Your Accounts','Step 4 - Account Portal'],
+      [require('../assets/SendMoney.png'),'Tap Your Access Card and Input Your Password/PIN To Create Your Access Combination','Step 5 - Access Combination'],
+      [require('../assets/SendMoney.png'),'Verify Your Access Combination \n By Repeating It','Step 6 - Verify Access Combination'],
+      [require('../assets/SendMoney.png'),'Your Access Combination Must Be In The Same Order Of Operations Every Time','Step 7 - \n Access Combination = \n Account Number'],
+      [require('../assets/SendMoney.png'),'Every New Access Combination Creates Different Accounts','Different Order / Different Accounts'],
+      [require('../assets/TutorialArt2.png'),'Send and Receive \n Bitcoin and Ethereum!','Step 8'],
+
     ];
 
     React.useEffect(() => {
@@ -91,7 +91,7 @@ function HomeScreen(props) {
             navigation.navigate('Account Portal 1');
           }}>
             <Text style={styles.buttonText1}>
-                Account Portal
+                Access Account
             </Text>
           </Button>
 
@@ -158,7 +158,17 @@ function HomeScreen(props) {
 
           <View>
             <Text style={styles.titleTextBlack}>Get Started</Text>
-            <Text style={styles.bodyTextGray}>Access your account {'\n'} or create your access cards</Text>
+            <Text style={styles.bodyTextGray}>Create Your Cards - Then Access Your Account</Text>
+            <Button 
+              mode="contained" 
+              style={[styles.btn]}
+              onPress={() => {
+                showModal();
+              }}>
+            <Text style={styles.buttonText}>
+                Repeat Tutorial
+            </Text>
+          </Button>
           </View>
 
           <ImageBackground
@@ -181,10 +191,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonText: {
-    fontSize: 20,
-    color: 'white',
+    fontSize: 15,
+    color: 'black',
     fontWeight: 'bold',
-    fontVariant: 'small-caps',
+    fontVariant: 'small',
   },
   backgroundImage: {
     width: 400,
@@ -198,11 +208,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
   },
   btn: {
-    width: 250,
-    height: 70,
-    marginBottom: 15,
-    color: 'white',
-    backgroundColor: 'black',
+    width: 410,
+    height: 50,
+    marginBottom: 0,
+    color: 'black',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -210,7 +220,6 @@ const styles = StyleSheet.create({
     width: 350,
     height: 400,
   },
-
   titleTextBlack: {                        
     backgroundColor: '#FFF',
     fontSize: 26,
@@ -285,12 +294,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-  },
-  buttonText: {                
-    fontSize: 20,
-    color: 'white',
-    fontWeight:'500',
-    fontVariant:'small',
   },
   buttonAlignment: {
     alignItems: 'center',
@@ -368,3 +371,16 @@ export default HomeScreen;
               onDone={hideModal}
               onSkip={hideModal}
             /> */}
+
+          // OTHER SLIDE OPTIONS:
+
+      //     [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
+      // [require('../assets/SimplifySeed.png'),'Web 3 access as easy as using a credit card','No More Seed Phrases'],
+      
+      // [require('../assets/StorageSystem.png'),'Your access card is used with a password combination to regenerate your keys every login','Keep Your Cards Safe'],
+      // [require('../assets/EthereumGraphic.png'),'One card can be paired with different passwords to create unique accounts','One Card - Many Accounts'],
+      // [require('../assets/VerificationSuccessful.png'),'Use these cards like a debit card \n to generate your private keys like magic','We Store Nothing'],
+      // [require('../assets/SendMoney.png'),'Because we never store your keys, we cannot help you recover them, or unlock your account for you','True Mobile Self-Custody'],
+      // [require('../assets/AboutMissionGlobe.png'),'Use sign with tag after card input process to air gap your key onto an NFC tag during your signing session','True Air-Gapped Mobile Wallet'],
+      // [require('../assets/TutorialArt3.png'),'Keep this tag away from your phone \n until you are ready to tap to sign the transaction','Tap to Sign'],
+      // [require('../assets/TutorialArt4.png'),'Use on any phone with our app installed. For FAQs and a demo go to website','Access anywhere!'],

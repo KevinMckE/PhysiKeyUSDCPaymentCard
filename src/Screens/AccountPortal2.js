@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
+import {Image, Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import { useNavigation } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
 import * as bitcoin from 'bitcoinjs-lib';
 import argon2 from 'react-native-argon2';
+import Swiper from 'react-native-swiper';
 
 
 var publicKey = '';
@@ -40,9 +41,23 @@ function AccountPortal2(props) {
   const showKeyStatusModal = () => setKeyStatusModal(true);
   const hideKeyStatusModal = () => setKeyStatusModal(false);
 
+  const [errorModal=false, setErrorModal] = React.useState();
+  const showErrorModal = () => setErrorModal(true);
+  const hideErrorModal = () => setErrorModal(false);
+
   const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
   const [tagCount, setTagCount] = React.useState(0);
+
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const swiperSlides = [
+    [require('../assets/TutorialArt1.png'),'','Welcome to ','Anywhere Access'],
+    [require('../assets/TutorialArt2.png'),'Send and receive \n Bitcoin and Ethereum','Manage your digital assets'],
+    [require('../assets/SimplifySeed.png'),'Web 3 access as easy as using a credit card','No More Seed Phrases'],
+    [require('../assets/SplashScreenBackgroundPattern.png'),'Generate a unique card code - then write that code to several NFC cards','Create Access Cards'],
+    [require('../assets/StorageSystem.png'),'Your access card is used with a password combination to regenerate your keys every login','Keep Your Cards Safe'],
+    ];
 
   //userInput();
   async function writeNdef() {
@@ -249,8 +264,7 @@ function AccountPortal2(props) {
               hideKeyStatusModal();
             }
             else{
-              console.warn('Inputs did not match, try again');
-              console.warn(inputCheck + " _ " + finalDataChain);
+              showErrorModal();
             }
           }
         }>
@@ -315,8 +329,7 @@ function AccountPortal2(props) {
               showModal();
               hideKeyStatusModal();
             } else {
-              console.warn('Inputs did not match, try again.');
-              console.warn(inputCheck + " _ " + finalDataChain);
+              showErrorModal();
             }
 
           }
@@ -349,14 +362,59 @@ function AccountPortal2(props) {
           <View 
             backgroundColor={'black'}
             style={styles.wrapper}
-            borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Public Key:{publicKey}</Text>
+            >
+
+          <Button 
+            mode="contained" 
+            style={styles.exportKeyButton} 
+            onPress={() => {
+              navigation.navigate('Raw Keys');
+              hideModal();
+            }}>
+              <Text style={styles.exportKeyText}>
+                  Export Keys
+              </Text>
+          </Button>
+
+          <View style={styles.whiteBox}>
+          <View style={styles.blackBox}>
+          <Image source={require('../assets/Logo.png')} style={styles.LogoWhiteSize}/>
+          </View>
+          <Text style={styles.publicKeyText}>Public Key</Text>
+          <Text style={styles.publicKeyText2} selectable>{publicKey}</Text>
+          
+          </View>
+
+          <Swiper
+                
+                showsButtons={false}
+                showsPagination={true}
+                dotColor="#1234" // Customize dot color
+                activeDotColor="#364A7F" // Customize active dot color
+                loop ={false}
+                index={activeIndex} 
+              >
+                
+                {swiperSlides.map((image, index ) => (
+
+                  <View key={index} style={styles.swiperAlignment}>  
+
+                  <Text style={styles.titleTextBlack}>{image[2]}</Text>
+                  <Text style={styles.bodyTextBlue}>{image[3]}</Text>
+                  <Text style={styles.bodyTextGray}>{image[1]}</Text>
+                  <Image source={image[0]} style={styles.imageAlignment} resizeMode='contain'/>
+
+                  </View>
+                  
+                ))}
+
+            </Swiper>
           
           <Button // this button needs to write the encrypted private key to the tag
                   // then navigate to the account display while passing the
                   // onetimeencryption password and the public key into the next screen
             mode="contained"
-            style={styles.bigBtn}
+            style={styles.signWithTagButton}
             onPress={ async () => {
               // this needs to try to write the JSON file to the tag, if successful then navigate to account display
               // if not successful, hide modal, clear passwords, and display error message
@@ -375,7 +433,7 @@ function AccountPortal2(props) {
                 navigation.navigate('Account Display BTC', { data });
               }
             }}>
-            <Text style={styles.buttonText}>
+            <Text style={styles.signWithTagbuttonText}>
               Sign With Tag
             </Text>
             
@@ -385,7 +443,7 @@ function AccountPortal2(props) {
                   // the account display while passing the onetimeencryption password, the
                   // encrypted JSON file, and the public key to the next screen
             mode="contained"
-            style={styles.bigBtn}
+            style={styles.easySignButton}
             onPress={ async () => {
 
               setInputTextValues('');
@@ -400,7 +458,7 @@ function AccountPortal2(props) {
               }
             }
             }>
-            <Text style={styles.buttonText}>
+            <Text style={styles.easySignButtonText}>
               Easy Sign
             </Text>
             
@@ -415,7 +473,7 @@ function AccountPortal2(props) {
             tempDataChain = '';
             navigation.navigate('Home');
             }}>
-            <Text style={styles.buttonText}>
+            <Text style={styles.easySignButtonText}>
               Start Over
             </Text>
             
@@ -429,6 +487,31 @@ function AccountPortal2(props) {
               style={styles.wrapper}
               borderRadius={10}>
             <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+            
+          </View>
+      </Modal>
+
+      <Modal  
+          visible = {errorModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>Inputs Did Not Match</Text>
+
+            <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+            // reset all inputValues
+            finalDataChain = '';
+            tempDataChain = '';
+            navigation.navigate('Home');
+            }}>
+            <Text style={styles.easySignButtonText}>
+              Start Over
+            </Text>
+            
+          </Button>
             
           </View>
       </Modal>
@@ -468,8 +551,12 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     marginBottom: 15,
+    borderRadius:15, 
+    borderColor:'gray',
     color: 'white',
-    backgroundColor: 'black',
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -477,16 +564,19 @@ const styles = StyleSheet.create({
     width: 250,
     height: 70,
     marginBottom: 15,
+    borderRadius:15, 
+    borderColor:'gray',
     color: 'white',
-    backgroundColor: 'black',
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
-    fontVariant: 'small-caps',
+    color: 'black',
+    fontVariant: 'small',
   },
   modal: {
     flex: 1,
@@ -494,7 +584,202 @@ const styles = StyleSheet.create({
     margin: 50,
     padding: 40,
     borderRadius: 10,
-  }
+  },
+  container: {
+    flex:0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  swiperAlignment: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textContainer2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft:35,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingHorizontal: 1,  
+  },
+  imageAlignment: {
+    width: 150,
+    height: 150,
+    alignItems:'center',
+    justifyContent:'center',
+    marginTop: 0,
+    marginLeft: 0,
+  },
+  whiteBox: {
+    width: 365,
+    height: 145,
+    marginBottom: 0,
+    marginTop: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 165,
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  blackBox: {
+    width: 100,
+    height: 100,
+    marginBottom: 0,
+    backgroundColor: 'black',
+    borderRadius: 10,
+    paddingTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#989AA0",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.04,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+  LogoWhiteSize:{
+    width:90,
+    height:90,
+  },
+publicKeyText: {
+    fontSize: 24,
+    fontWeight:'500',
+    color: 'black',
+    position: 'absolute',
+    top: 30,
+    left: 140,
+  },
+  publicKeyText2:{
+    color:'#BABABA', 
+    fontSize: 16,
+    position: 'absolute',
+    top: 65,
+    left: 140,
+    textAlign:"left"
+  },
+  ethereumText:{
+    color:'#5D5D5D', 
+    fontSize: 22,
+    fontWeight: '700',
+    alignSelf: 'center'
+  },
+  ethText:{
+    color:'#767474', 
+    marginTop: 5,
+    marginBottom: 90,
+    fontSize: 20,
+    alignSelf: 'center'
+  },
+  signWithTagButton: {
+    width: 350,
+    height: 55,
+    marginBottom: 5,
+    marginTop: 20,
+    borderRadius:15, 
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  easySignButton: {
+    width: 350,
+    height: 55,
+    marginBottom: 20,
+    marginTop: 5,
+    borderRadius:15, 
+    borderColor:'gray',
+    color: 'white',
+    borderWidth: 1,
+    backgroundColor: 'Black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  exportKeyButton: {
+    width: 150,
+    height: 45,
+    borderRadius:12, 
+    borderColor:'gray',
+    color: 'white',
+    borderWidth: 1,
+    backgroundColor: 'Black',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 80,
+    marginLeft: 200,
+  },
+  signWithTagbuttonText: {                
+    fontSize: 20,
+    color: 'white',
+    fontWeight:'500',
+    fontVariant:'small',
+  },
+  easySignButtonText: {
+    fontSize: 20,
+    color:'gray',
+    fontWeight:'500',
+    fontVariant:'small',
+  },
+      arrowPosition: {
+        position: 'absolute',
+        top: 60,  
+        left: 15,
+
+      },
+      homeText: {
+        color:'#009DFF', 
+        fontSize: 20,
+        paddingLeft:40,
+        marginTop: 60,
+      },
+      exportKeyText: {
+        fontSize: 19,
+        color:'#9D9A9A',
+        fontWeight:'400',
+        fontVariant:'small',
+        marginBottom: 15,
+        marginLeft: 17,
+
+      },
+      titleTextBlack: {                        
+        backgroundColor: '#FFF',
+        fontSize: 26,
+        textAlign:'center',
+        paddingTop:10,
+        fontWeight:'bold',
+        marginTop: 20,
+      },
+      bodyTextGray: {                       
+        backgroundColor: '#FFF',
+        fontSize: 16,
+        paddingTop:20,
+        paddingBottom:20,
+        textAlign:'center',
+        fontWeight:'400',
+        color: '#8D8A8A',
+        paddingLeft:20,
+        paddingRight: 20,
+      },
+      bodyTextBlue: {                     
+        backgroundColor: '#FFF',
+        fontSize: 26,
+        textAlign:'center',
+        paddingTop:0,
+        fontWeight:'bold',
+        color: '#364A7F',
+      },
+
 });
 
 export default AccountPortal2;

@@ -15,9 +15,14 @@ function AccountPortal1(props) {
   const {navigation} = props;
   
   const [inputTextValue='', setInputTextValues] = React.useState();
+
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const [errorModal=false, setErrorModal] = React.useState();
+  const showErrorModal = () => setErrorModal(true);
+  const hideErrorModal = () => setErrorModal(false);
 
   const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
@@ -49,6 +54,498 @@ function AccountPortal1(props) {
 
   return (
     <View style={styles.wrapper}>
+      <Text style={styles.bannerText}>
+        
+        Input Count: 
+        {'\n'}
+        Text: {textCount}
+        {' '}Num: {numCount}
+        {' '}Tag: {tagCount}
+
+        
+      </Text>
+        <View style={[styles.textInput]}>
+
+          <TextInput
+            style={styles.textInput}
+            label="Add Text to Input"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={inputTextValue}
+            onChangeText={setInputTextValues}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
+          />
+          
+          <Button 
+            mode="contained" 
+            style={styles.smallBtn} 
+            onPress={() => {
+              tempDataChain += inputTextValue;
+              console.warn(tempDataChain);
+              finalDataChain += kdf.compute(tempDataChain, salt).toString();
+              console.warn(finalDataChain);
+              tempDataChain = finalDataChain;
+              setTextCount(textCount+1); // plain text input count ++
+            }
+            }>
+            <Text style={styles.buttonText}>
+              Raw Text Input
+            </Text>
+          </Button>
+
+          <Button 
+            mode="contained" 
+            style={styles.smallBtn} 
+            onPress={() => {
+            for (let i = 0; i < inputTextValue.length; i++) {
+              tempDataChain += inputTextValue.charCodeAt(i);
+              tempDataChain += inputTextValue.charAt(i); 
+            }
+            console.warn(tempDataChain);
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setNumCount(numCount+1); //Encoded input count ++
+            }}>
+            <Text style={styles.buttonText}>
+              Encoded Input
+            </Text>
+          </Button>
+
+          <Button 
+          mode="contained" 
+          style={[styles.smallBtn]}
+          onPress={ async () => {
+            await readNdef();
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
+            setTagCount(tagCount+1); // Tag input count ++
+          }}>
+            <Text style={styles.buttonText}>
+              Input From Tag
+            </Text>
+          </Button>
+
+        </View>
+
+        <View style={styles.bottom}>
+
+        <Button 
+          mode="contained" 
+          style={styles.smallBtn} 
+          onPress={() => {
+              console.warn(finalDataChain);
+              console.warn(tempDataChain);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Check Input
+            </Text>
+          </Button>
+
+          <Button 
+          mode="contained" 
+          style={styles.smallBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              // insert go to done screen to print private/public key pair;
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Clear Input
+            </Text>
+          </Button>
+        
+        <Button 
+        mode="contained" 
+        style={styles.bigBtn} 
+        onPress={ () => {
+
+          if (finalDataChain.length > 53){
+
+          showModal();
+
+          } else {
+            showErrorModal()
+          }
+
+          }
+        }>
+            <Text style={styles.buttonText}>
+              Next Step
+            </Text>
+        </Button>
+
+        <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              setNumCount(0);
+              setTagCount(0);
+              setTextCount(0);
+              navigation.navigate('Home');
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Home
+            </Text>
+          </Button>
+
+      <Modal  
+        visible = {modalVisible}>
+          <View 
+            style={styles.wrapper}
+            borderRadius={10}>
+          <Text style={styles.bannerText} selectable>Repeat Input or Start Again</Text>
+          
+          <Button 
+            mode="contained"
+            style={styles.bigBtn}
+            onPress={() => {
+              
+              setInputTextValues('');
+
+              const data  = finalDataChain;
+              finalDataChain = '';
+              tempDataChain = '';
+              hideModal();
+              navigation.navigate('Account Portal 2', { data });
+              
+            }}>
+            <Text style={styles.buttonText}>
+              Repeat Input Check
+            </Text>
+            
+          </Button>
+
+          <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+            // reset all inputValues
+            finalDataChain = '';
+            tempDataChain = '';
+            navigation.navigate('Home');
+            }}>
+            <Text style={styles.buttonText}>
+              Start Over
+            </Text>
+            
+          </Button>
+        </View>
+      </Modal>
+
+      <Modal  
+          visible = {errorModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>No Inputs Selected</Text>
+
+            <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+            // reset all inputValues
+            finalDataChain = '';
+            tempDataChain = '';
+            navigation.navigate('Home');
+            }}>
+            <Text style={styles.easySignButtonText}>
+              Start Over
+            </Text>
+            
+          </Button>
+            
+          </View>
+      </Modal>
+
+      </View>
+
+      </View>
+    );
+
+}
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  textInput: {
+    paddingHorizontal: 20,
+  },
+  bannerText: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: 'black',
+    fontVariant: 'small-caps',
+    fontWeight: 'bold',
+    padding: 20,
+  },
+  bottom: {
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+  },
+  smallBtn: {
+    width: 200,
+    height: 50,
+    marginBottom: 15,
+    borderRadius:15, 
+    borderColor:'gray',
+    color: 'white',
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigBtn: {
+    width: 250,
+    height: 70,
+    marginBottom: 15,
+    borderRadius:15, 
+    borderColor:'gray',
+    color: 'white',
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'black',
+    fontVariant: 'small',
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: 'green',
+    margin: 50,
+    padding: 40,
+    borderRadius: 10,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'left',
+    paddingLeft: 45,
+    paddingTop: 85,
+    paddingBottom: 35,
+  },
+
+  textContainer2: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft:35,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingHorizontal: 1,  
+  },
+  
+  box: {
+    width: 350,
+    height: 450,
+    backgroundColor: 'white',
+    borderRadius: 15,
+    paddingTop: 10,
+    paddingBottom: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.09,
+    shadowRadius: 1.84,
+    elevation: 5,
+  },
+
+  TotalInputCountText: {
+    fontSize: 20,
+textAlign:'left',
+fontWeight:'500',
+color: 'black',
+marginLeft: 35,
+  marginTop: 30,
+
+
+  },
+  PlainText : {
+    fontSize: 15,
+    textAlign:'center',
+    fontWeight:'300',
+    color: 'gray',
+    alignItems: 'center',
+    marginTop: 10,
+    
+
+  paddingTop: 5,
+  marginRight:55,
+
+
+  },
+  InputPlainText: {
+    fontSize: 20,
+//textAlign:'left',
+    fontWeight:'500',
+    color: '#5D6994',
+    marginLeft: 35,
+    marginTop: 45,
+
+
+  },
+
+  circleRed: {
+    width: 14, 
+    height: 14,
+    backgroundColor: '#F05858',
+    borderRadius: 7, 
+    position: 'absolute',
+    top: 155,  
+    left: 35,
+  },
+
+  circleGreen: {
+    width: 14, 
+    height: 14,
+    backgroundColor: '#83C83C',
+    borderRadius: 7, 
+    position: 'absolute',
+    top: 155,  
+    left: 140,
+  },
+
+  circleBlue: {
+    width: 14, 
+    height: 14,
+    backgroundColor: '#304170',
+    borderRadius: 7, 
+    position: 'absolute',
+    top: 155,  
+    left: 275,
+  },
+
+  graybox : {
+    width: 300,
+  height: 350,
+  backgroundColor: '#F4F4F4',
+  borderRadius: 15,
+  paddingTop: 5,
+  paddingBottom: 5,
+  justifyContent: 'center',
+  alignItems: 'center',
+  },
+  
+
+  btn: {
+    width: 260,
+    height: 45,
+    marginBottom: 10,
+    borderRadius:15, 
+    
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  buttonNext: {
+    width: 350,
+    height: 50,
+    marginTop: 30,
+    borderRadius:15, 
+    
+    color: 'white',
+    backgroundColor: 'black',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  
+
+
+    input: {
+        width: 300,
+        height: 45,
+        borderColor: '#DFDFDF',
+        borderRadius:10,
+        borderWidth: 1,
+        padding: 10,
+        marginBottom: 20,
+      },
+      
+      homeText: {
+         fontSize: 20,
+        color: '#459BF8',
+        fontWeight:'500',
+        fontVariant:'small',
+        
+        marginLeft: 50,
+        marginTop: 60,
+
+      },
+  
+      btnsmall: {
+        width: 70,
+        height: 50,
+        borderRadius:15, 
+        color: 'white',
+        backgroundColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+         position: 'absolute',
+        top: 3,  
+        left: 238,
+        
+      },
+
+      arrowPosition: {
+        position: 'absolute',
+        top: 16,  
+        left: 262,
+
+      },
+
+      smallText:{
+        fontSize: 17,
+        color: '#BCBCBC',
+        fontWeight:'250',
+        fontVariant:'small',
+        marginBottom: 60,
+        marginTop: 10,
+        paddingTop: 20,
+
+
+      }
+});
+
+export default AccountPortal1;
+
+
+
+// OLD UI For Reference:
+
+{/* <View style={styles.wrapper}>
       <Text style={styles.bannerText}>
         
         Input Count: 
@@ -243,64 +740,4 @@ function AccountPortal1(props) {
 
       </View>
 
-      </View>
-    );
-
-}
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-  },
-  textInput: {
-    paddingHorizontal: 20,
-  },
-  bannerText: {
-    fontSize: 20,
-    textAlign: 'center',
-    color: 'black',
-    fontVariant: 'small-caps',
-    fontWeight: 'bold',
-    padding: 20,
-  },
-  bottom: {
-    paddingHorizontal: 20,
-    paddingVertical: 40,
-  },
-  smallBtn: {
-    width: 200,
-    height: 50,
-    marginBottom: 15,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bigBtn: {
-    width: 250,
-    height: 70,
-    marginBottom: 15,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: 'bold',
-    fontVariant: 'small-caps',
-  },
-  modal: {
-    flex: 1,
-    backgroundColor: 'green',
-    margin: 50,
-    padding: 40,
-    borderRadius: 10,
-  }
-});
-
-export default AccountPortal1;
+      </View> */}

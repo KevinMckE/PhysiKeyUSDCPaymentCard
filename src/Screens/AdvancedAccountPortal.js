@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Alert, Image, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
+import {Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import CryptoJS from 'crypto-js';
@@ -24,7 +24,7 @@ function AccountPortal1(props) {
   const showErrorModal = () => setErrorModal(true);
   const hideErrorModal = () => setErrorModal(false);
 
-  const [pinCount, setPinCount] = React.useState(0);
+  const [textCount, setTextCount] = React.useState(0);
   const [numCount, setNumCount] = React.useState(0);
   const [tagCount, setTagCount] = React.useState(0);
 
@@ -55,15 +55,51 @@ function AccountPortal1(props) {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.bannerText}>
+        
+        Access Combination: 
+        {'\n'}
+        {'\n'}
+        Password Count: {textCount}
+        {'\n'}
+        {' '}Card Count: {tagCount}
 
-      Scan Card Once Then Input PIN
         
       </Text>
         <View style={[styles.textInput]}>
 
+          <TextInput
+            style={styles.textInput}
+            placeholder="Type Password or PIN"
+            autoComplete='off'
+            autoCorrect={false}
+            inputValue={inputTextValue}
+            onChangeText={setInputTextValues}
+            autoCapitalize={false}
+            backgroundColor={'grey'}
+            color={'white'}
+            returnKeyType={'done'}
+          />
+          
+          <Button 
+            mode="contained" 
+            style={styles.smallBtn} 
+            onPress={() => {
+              tempDataChain += inputTextValue;
+              console.warn(tempDataChain);
+              finalDataChain += kdf.compute(tempDataChain, salt).toString();
+              console.warn(finalDataChain);
+              tempDataChain = finalDataChain;
+              setTextCount(textCount+1); // plain text input count ++
+            }
+            }>
+            <Text style={styles.buttonText}>
+              Password Input
+            </Text>
+          </Button>
+
           <Button 
           mode="contained" 
-          style={[styles.scanBtn]}
+          style={[styles.smallBtn]}
           onPress={ async () => {
             await readNdef();
             finalDataChain += kdf.compute(tempDataChain, salt).toString();
@@ -71,57 +107,34 @@ function AccountPortal1(props) {
             tempDataChain = finalDataChain;
             setTagCount(tagCount+1); // Tag input count ++
           }}>
-            <Text style={styles.scanButtonText}>
-              Scan Card
-            </Text>
-          </Button>
-
-          <Image
-            source={require('../assets/SendMoney.png')}
-            style={styles.backgroundImage}>    
-          </Image>
-
-          <TextInput
-            style={styles.textInput}
-            placeholder="Type PIN"
-            autoComplete='off'
-            autoCorrect={false}
-            inputValue={inputTextValue}
-            onChangeText={setInputTextValues}
-            autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
-            returnKeyType={'done'}
-            keyboardType={'numeric'}
-          />
-          
-          <Button 
-            mode="contained" 
-            style={styles.pinBtn} 
-            onPress={() => {
-
-              if(tagCount === 1 && inputTextValue !== ''){
-
-              tempDataChain += inputTextValue;
-              console.warn(tempDataChain);
-              finalDataChain += kdf.compute(tempDataChain, salt).toString();
-              console.warn(finalDataChain);
-              tempDataChain = finalDataChain;
-              showModal();
-              } else {
-                showErrorModal()
-              }
-
-            }
-            }>
             <Text style={styles.buttonText}>
-              Input PIN
+              Read Card
             </Text>
           </Button>
 
         </View>
 
         <View style={styles.bottom}>
+        
+        <Button 
+        mode="contained" 
+        style={styles.bigBtn} 
+        onPress={ () => {
+
+          if (finalDataChain.length > 53){
+
+          showModal();
+
+          } else {
+            showErrorModal()
+          }
+
+          }
+        }>
+            <Text style={styles.buttonText}>
+              Continue
+            </Text>
+        </Button>
 
         <Button 
           mode="contained" 
@@ -131,7 +144,7 @@ function AccountPortal1(props) {
               tempDataChain = '';
               setNumCount(0);
               setTagCount(0);
-              setPinCount(0);
+              setTextCount(0);
               navigation.navigate('Home');
             }
           }>
@@ -145,7 +158,7 @@ function AccountPortal1(props) {
           <View 
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Repeat Card/PIN Input To Verify Access</Text>
+          <Text style={styles.bannerText} selectable>Repeat Card/Password Input Order On Next Screen To Verify Access Combination</Text>
           
           <Button 
             mode="contained"
@@ -169,7 +182,7 @@ function AccountPortal1(props) {
 
           <Button 
             mode="contained"
-            style={styles.bigBtn}
+            style={styles.smallBtn}
             onPress={() => {
             // reset all inputValues
             finalDataChain = '';
@@ -189,11 +202,11 @@ function AccountPortal1(props) {
             <View 
               style={styles.wrapper}
               borderRadius={10}>
-            <Text style={styles.bannerText} selectable>Access Error {'\n'} {'\n'} Scan Card Once Then Input PIN</Text>
+            <Text style={styles.bannerText} selectable>No Access Combination Detected - Start Again</Text>
 
             <Button 
             mode="contained"
-            style={styles.bigBtn}
+            style={styles.smallBtn}
             onPress={() => {
             // reset all inputValues
             finalDataChain = '';
@@ -225,37 +238,21 @@ const styles = StyleSheet.create({
   },
   textInput: {
     paddingHorizontal: 20,
-    alignItems: 'center',
-    padding: 2,
-    marginBottom: 5,
   },
   bannerText: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'center',
     color: 'black',
     fontVariant: 'small-caps',
     fontWeight: 'bold',
-    padding: 30,
+    padding: 20,
   },
   bottom: {
     paddingHorizontal: 20,
     paddingVertical: 40,
   },
-  scanBtn: {
+  smallBtn: {
     width: 300,
-    height: 50,
-    marginBottom: 15,
-    borderRadius:15, 
-    borderColor:'gray',
-    color: 'black',
-    borderWidth: 1,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pinBtn: {
-    width: 200,
     height: 50,
     marginBottom: 15,
     borderRadius:15, 
@@ -283,11 +280,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: 'black',
-    fontVariant: 'small',
-  },
-  scanButtonText: {
-    fontSize: 20,
-    color: 'white',
     fontVariant: 'small',
   },
   modal: {
@@ -479,11 +471,6 @@ const styles = StyleSheet.create({
 
       },
 
-      backgroundImage: {
-        width: 250,
-        height: 200,
-      },
-
       smallText:{
         fontSize: 17,
         color: '#BCBCBC',
@@ -492,6 +479,8 @@ const styles = StyleSheet.create({
         marginBottom: 60,
         marginTop: 10,
         paddingTop: 20,
+
+
       }
 });
 

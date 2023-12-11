@@ -22,16 +22,12 @@ function HomeScreen(props) {
       }};
 
     const swiperSlides = [
-      [require('../assets/TutorialArt1.png'),'A Whole New Digital Access Experience','Welcome to ','Anywhere Access'],
-      [require('../assets/CardsImage.png'),'Create An Access Card','Step 1 - Create Card'],
-      [require('../assets/StorageSystem.png'),'Backup Your Access Card By Duplicating It','Step 2 - Copy Card'],
-      [require('../assets/VerificationSuccessful.png'),'Lock Your Access Cards To Prevent Overwrites','Step 3 - Lock Cards'],
-      [require('../assets/VerificationSuccessful.png'),'Use Your Card Like a Credit Card To Access Your Accounts','Step 4 - Account Portal'],
-      [require('../assets/SendMoney.png'),'Tap Your Access Card and Input Your Password/PIN To Create Your Access Combination','Step 5 - Access Combination'],
-      [require('../assets/SendMoney.png'),'Verify Your Access Combination \n By Repeating It','Step 6 - Verify Access Combination'],
-      [require('../assets/SendMoney.png'),'Your Access Combination Must Be In The Same Order Of Operations Every Time','Step 7 - \n Access Combination = \n Account Number'],
-      [require('../assets/SendMoney.png'),'Every New Access Combination Creates Different Accounts','Different Order / Different Accounts'],
-      [require('../assets/TutorialArt2.png'),'Send and Receive \n Bitcoin and Ethereum!','Step 8'],
+      [require('../assets/TutorialArt1.png'),'A Whole New \n Digital Access Experience','Anywhere Access \n Tutorial'],
+      [require('../assets/CardsImage.png'),'Create An Access Card','1 - Create Card'],
+      [require('../assets/StorageSystem.png'),'Backup Your Access \n Card For Safekeeping','2 - Copy Card'],
+      [require('../assets/VerificationSuccessful.png'),'Lock Your Access Cards \n To Prevent Overwrites','3 - Lock Your Cards'],
+      [require('../assets/TutorialArt3.png'),'Scan Your Card Like a Credit Card To Access Your Accounts','4 - Account Portal'],
+      [require('../assets/TutorialArt4.png'),'Send and Receive \n Bitcoin and Ethereum!'],
 
     ];
 
@@ -157,8 +153,7 @@ function HomeScreen(props) {
           </Modal>
 
           <View>
-            <Text style={styles.titleTextBlack}>Get Started</Text>
-            <Text style={styles.bodyTextGray}>Create Your Cards - Then Access Your Account</Text>
+            <Text style={styles.titleTextBlack}>Create Your Cards {'\n'} Then Access Your Account</Text>
             <Button 
               mode="contained" 
               style={[styles.btn]}
@@ -198,7 +193,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: 400,
-    height: 450,
+    height: 400,
   },
   bottom: {
     paddingHorizontal: 20,
@@ -222,7 +217,7 @@ const styles = StyleSheet.create({
   },
   titleTextBlack: {                        
     backgroundColor: '#FFF',
-    fontSize: 26,
+    fontSize: 35,
     textAlign:'center',
     paddingTop:10,
     fontWeight:'bold',
@@ -230,7 +225,7 @@ const styles = StyleSheet.create({
   },
   bodyTextGray: {                       
     backgroundColor: '#FFF',
-    fontSize: 16,
+    fontSize: 24,
     paddingTop:20,
     paddingBottom:20,
     textAlign:'center',

@@ -1,14 +1,29 @@
-import React, { useEffect } from 'react';
-import {Alert, Image, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
+import React from 'react';
+import {Image, Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import CryptoJS from 'crypto-js';
 import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+import '../../shimeth.js';
+import '../../shim.js';
+import Web3 from 'web3';
+import CryptoJS from 'crypto-js';
+import { ec as EC } from 'elliptic';
+import * as bitcoin from 'bitcoinjs-lib';
+import argon2 from 'react-native-argon2';
+import Swiper from 'react-native-swiper';
+import Config from 'react-native-config';
 
+var publicKey = '';
+var encryptedPrivateKey = '';
+var oneTimeEncryptionPW = '';
+const ec = new EC('secp256k1');
 let finalDataChain = ''; // append all inputValues to this variable
 var tempDataChain = '';
 var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+var web3 = new Web3(Web3.givenProvider);
+const testnet = bitcoin.networks.testnet;
 
 
 function ConceptApp(props) {
@@ -16,7 +31,7 @@ function ConceptApp(props) {
   
   const [inputTextValue='', setInputTextValues] = React.useState();
 
-  const [modalVisible=false, setModalVisible] = React.useState();
+  const [modalVisible=true, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
@@ -24,35 +39,16 @@ function ConceptApp(props) {
   const showErrorModal = () => setErrorModal(true);
   const hideErrorModal = () => setErrorModal(false);
 
-  const [pinCount, setPinCount] = React.useState(0);
-  const [numCount, setNumCount] = React.useState(0);
-  const [tagCount, setTagCount] = React.useState(0);
+  const [keyStatusModal=false, setKeyStatusModal] = React.useState();
+  const showKeyStatusModal = () => setKeyStatusModal(true);
+  const hideKeyStatusModal = () => setKeyStatusModal(false);
 
-  async function readNdef() {
-    try{
-      await NfcManager.requestTechnology(NfcTech.Ndef);
-      // Testing just to get the Ndef data
-      const tagData = await NfcManager.ndefHandler.getNdefMessage();
+  const [inputTagValue='', setInputTagValues] = React.useState();
 
-      //console.warn({tagData}); //print whole tag data
-      //console.log(tagData.ndefMessage[0].payload); // print only payload
-      
-      // turns payload into a single string of numbers with ,'s:
-      const tagPayload = tagData.ndefMessage[0].payload; //isolates payload of the ndefmessage
-      tagPayload.shift(); // removes the 0th index of the tagPayload so it is only the record written to the tag
-
-      const sum = tagPayload.reduce((acc, curr) => acc + curr, 0);
-
-      tempDataChain += tagPayload + sum;
-
-    } catch (ex) {
-        //bypass
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  }
+  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
 
   async function readSerial() {
+
     try{
       await NfcManager.requestTechnology(NfcTech.NfcA);
       const tag = await NfcManager.getTag();
@@ -63,87 +59,84 @@ function ConceptApp(props) {
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
-
     
+    tempDataChain += tag.id;
+
+  }
+
+  async function createKeys() {
+
+    try{
+
+              showKeyStatusModal();
+
+              console.warn('temp data chain before argon: ' + tempDataChain);
+              const argonResult = await argon2(
+                tempDataChain,
+                salt,
+                {
+                  iterations:5,
+                  memory: 65536,
+                  parallelism: 2,
+                  mode: 'argon2id'
+                }
+              ); 
+              console.warn(argonResult);
+              finalDataChain = argonResult.rawHash;
+
+              const innerHash = web3.utils.keccak256(finalDataChain);
+              var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+              oneTimeEncryptionPW = web3.utils.randomHex(32);
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+              var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+              publicKey = decryptedAccount.address;
+
+              setInputTagValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
+              console.warn(oneTimeEncryptionPW);
+              console.warn(publicKey);
+
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';  
+
+    } catch (ex) {
+      showErrorModal();
+    } finally {
+      hideKeyStatusModal();
+    }
+
   }
 
   return (
     <View style={styles.wrapper}>
       <Text style={styles.bannerText}>
 
-      Scan Card Once Then Input PIN
+      Scan Card To Login
         
       </Text>
         <View style={[styles.textInput]}>
-
-        <Button 
-          mode="contained" 
-          style={[styles.scanBtn]}
-          onPress={ async () => {
-            await readSerial();
-          }}>
-            <Text style={styles.scanButtonText}>
-              Scan Serial
-            </Text>
-          </Button>
-
-          <Button 
-          mode="contained" 
-          style={[styles.scanBtn]}
-          onPress={ async () => {
-            await readNdef();
-            finalDataChain += kdf.compute(tempDataChain, salt).toString();
-            console.warn(finalDataChain);
-            tempDataChain = finalDataChain;
-            setTagCount(tagCount+1); // Tag input count ++
-          }}>
-            <Text style={styles.scanButtonText}>
-              Scan Card
-            </Text>
-          </Button>
 
           <Image
             source={require('../assets/SendMoney.png')}
             style={styles.backgroundImage}>    
           </Image>
 
-          <TextInput
-            style={styles.textInput}
-            placeholder="Type PIN"
-            autoComplete='off'
-            autoCorrect={false}
-            inputValue={inputTextValue}
-            onChangeText={setInputTextValues}
-            autoCapitalize={false}
-            backgroundColor={'white'}
-            color={'black'}
-            returnKeyType={'done'}
-            keyboardType={'numeric'}
-          />
-          
           <Button 
-            mode="contained" 
-            style={styles.pinBtn} 
-            onPress={() => {
+          mode="contained" 
+          style={styles.pinBtn} 
+          onPress={ async () => {
+            await createKeys();
+          }
+        }>
+          <Text style={styles.buttonText}>
+            Access ETH
+          </Text>
+        </Button>
 
-              if(tagCount === 1 && inputTextValue !== ''){
-
-              tempDataChain += inputTextValue;
-              console.warn(tempDataChain);
-              finalDataChain += kdf.compute(tempDataChain, salt).toString();
-              console.warn(finalDataChain);
-              tempDataChain = finalDataChain;
-              showModal();
-              } else {
-                showErrorModal()
-              }
-
-            }
-            }>
-            <Text style={styles.buttonText}>
-              Input PIN
-            </Text>
-          </Button>
 
         </View>
 
@@ -155,10 +148,10 @@ function ConceptApp(props) {
           onPress={() => {
               finalDataChain = '';
               tempDataChain = '';
-              setNumCount(0);
-              setTagCount(0);
-              setPinCount(0);
-              navigation.navigate('Home');
+              publicKey = '';
+              encryptedPrivateKey = '';
+              oneTimeEncryptionPW = '';
+              showModal();
             }
           }>
             <Text style={styles.buttonText}>
@@ -171,43 +164,35 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Repeat Card/PIN Input To Verify Access</Text>
+          <Text style={styles.bannerText} selectable>Scan Card to Login</Text>
           
           <Button 
-            mode="contained"
-            style={styles.bigBtn}
-            onPress={() => {
-              
-              setInputTextValues('');
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideModal();
+            await readSerial();
+            finalDataChain += kdf.compute(tempDataChain, salt).toString();
+            console.warn(finalDataChain);
+            tempDataChain = finalDataChain;
 
-              const data  = finalDataChain;
-              finalDataChain = '';
-              tempDataChain = '';
-              hideModal();
-              navigation.navigate('Account Portal 2', { data });
-              
-            }}>
-            <Text style={styles.buttonText}>
-              Repeat And Verify
+          }}>
+            <Text style={styles.scanButtonText}>
+              Scan Serial
             </Text>
-            
           </Button>
 
-          <Button 
-            mode="contained"
-            style={styles.bigBtn}
-            onPress={() => {
-            // reset all inputValues
-            finalDataChain = '';
-            tempDataChain = '';
-            navigation.navigate('Home');
-            }}>
-            <Text style={styles.buttonText}>
-              Start Over
-            </Text>
-            
-          </Button>
         </View>
+      </Modal>
+
+      <Modal  
+          visible = {keyStatusModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+            
+          </View>
       </Modal>
 
       <Modal  

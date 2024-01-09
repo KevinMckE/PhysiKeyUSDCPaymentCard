@@ -11,6 +11,7 @@ import RawKeys from './Screens/RawKeys';
 import CreateAccessCards from './Screens/CreateAccessCards';
 import ManageAccessCards from './Screens/ManageAccessCards';
 import ConceptApp from './Screens/ConceptApp';
+import ConceptAppAccountDisplay from './Screens/ConceptAppAccountDisplay';
 
 
 const Stack = createStackNavigator();
@@ -20,7 +21,11 @@ function AppNavigator({navigation}) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="Concept App" component={ConceptApp} options={{headerShown: false}}/>
+        <Stack.Screen name="Concept App" component={ConceptApp} options={{headerShown: false}}/>
+        <Stack.Screen name="Concept App Account Display" component={ConceptAppAccountDisplay} options={{
+            headerLeft: () => null, // Hide the back button
+            headerTitle: 'Account Display', // Set the title
+          }}/>
         <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
         <Stack.Screen name="Account Portal 1" component={AccountPortal1} options={{headerShown: false}}/>
         <Stack.Screen name="Account Portal 2" component={AccountPortal2} options={{headerShown: false}}/>

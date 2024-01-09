@@ -43,6 +43,10 @@ function ConceptApp(props) {
   const showKeyStatusModal = () => setKeyStatusModal(true);
   const hideKeyStatusModal = () => setKeyStatusModal(false);
 
+  const [nextScreenModal=false, setNextScreenModal] = React.useState();
+  const showNextScreenModal = () => setNextScreenModal(true);
+  const hideNextScreenModal = () => setNextScreenModal(false);
+
   const [inputTagValue='', setInputTagValues] = React.useState();
 
   const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
@@ -105,10 +109,12 @@ function ConceptApp(props) {
               privateKey = '';
               finalDataChain = ''; //clear finalDataChain
               tempDataChain = '';  
+              showNextScreenModal();
 
     } catch (ex) {
       showErrorModal();
     } finally {
+      
       hideKeyStatusModal();
     }
 
@@ -133,6 +139,7 @@ function ConceptApp(props) {
           style={styles.pinBtn} 
           onPress={ async () => {
             await createKeys();
+
           }
         }>
           <Text style={styles.buttonText}>
@@ -191,6 +198,33 @@ function ConceptApp(props) {
               style={styles.wrapper}
               borderRadius={10}>
             <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+            
+          </View>
+      </Modal>
+
+      <Modal  
+          visible = {nextScreenModal}>
+            <View 
+              style={styles.wrapper}
+              borderRadius={10}>
+            <Text style={styles.bannerText} selectable>Creating Keys...</Text>
+
+            <Button 
+              mode="contained" 
+              style={[styles.scanBtn]}
+              onPress={ async () => {
+
+                setInputTextValues('');
+                setInputTagValues('');
+                const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+                hideNextScreenModal();
+                navigation.navigate('Concept App Account Display', { data });
+              
+              }}>
+            <Text style={styles.scanButtonText}>
+              Account Display
+            </Text>
+          </Button>
             
           </View>
       </Modal>

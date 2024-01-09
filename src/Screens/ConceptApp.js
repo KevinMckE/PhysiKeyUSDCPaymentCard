@@ -53,14 +53,17 @@ function ConceptApp(props) {
       await NfcManager.requestTechnology(NfcTech.NfcA);
       const tag = await NfcManager.getTag();
       console.warn(tag.id);
+      tempDataChain += tag.id;
+
+      finalDataChain += kdf.compute(tempDataChain, salt).toString();
+      console.warn(finalDataChain);
+      tempDataChain = finalDataChain;
 
     } catch (ex) {
         //bypass
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
-    
-    tempDataChain += tag.id;
 
   }
 
@@ -172,9 +175,6 @@ function ConceptApp(props) {
           onPress={ async () => {
             hideModal();
             await readSerial();
-            finalDataChain += kdf.compute(tempDataChain, salt).toString();
-            console.warn(finalDataChain);
-            tempDataChain = finalDataChain;
 
           }}>
             <Text style={styles.scanButtonText}>

@@ -21,7 +21,10 @@ function AppNavigator({navigation}) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Concept App" component={ConceptApp} options={{headerShown: false}}/>
+        <Stack.Screen name="Concept App" component={ConceptApp} options={{
+            headerLeft: () => null, // Hide the back button
+            headerTitle: 'Touch Here', // Set the title
+          }}/>
         <Stack.Screen name="Concept App Account Display" component={ConceptAppAccountDisplay} options={{
             headerLeft: () => null, // Hide the back button
             headerTitle: 'Account Display', // Set the title

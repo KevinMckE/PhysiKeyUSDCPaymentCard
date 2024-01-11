@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {Image, Alert, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Modal} from 'react-native';
 import {Button, TextInput} from 'react-native-paper';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
@@ -13,6 +13,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 import argon2 from 'react-native-argon2';
 import Swiper from 'react-native-swiper';
 import Config from 'react-native-config';
+import DatePicker from 'react-native-date-picker';
 
 var publicKey = '';
 var encryptedPrivateKey = '';
@@ -30,6 +31,8 @@ function ConceptApp(props) {
   const {navigation} = props;
   
   const [inputTextValue='', setInputTextValues] = React.useState();
+
+  const [accountNumber, setAccountNumber] = useState(new Date())
 
   const [modalVisible=true, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
@@ -51,45 +54,24 @@ function ConceptApp(props) {
 
   const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
 
+  useEffect(() => {
+
+    showModal();
+
+  }, []);
+
   async function readSerial() {
 
     try{
       await NfcManager.requestTechnology(NfcTech.NfcA);
       const tag = await NfcManager.getTag();
       console.warn(tag.id);
+      constole.warn(Date.date);
       tempDataChain += tag.id;
 
       finalDataChain += kdf.compute(tempDataChain, salt).toString();
       console.warn(finalDataChain);
       tempDataChain = finalDataChain;
-
-    } catch (ex) {
-        //bypass
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-
-  }
-
-  async function createKeys() {
-
-    try{
-
-              showKeyStatusModal();
-
-              console.warn('temp data chain before argon: ' + tempDataChain);
-              const argonResult = await argon2(
-                tempDataChain,
-                salt,
-                {
-                  iterations:5,
-                  memory: 65536,
-                  parallelism: 2,
-                  mode: 'argon2id'
-                }
-              ); 
-              console.warn(argonResult);
-              finalDataChain = argonResult.rawHash;
 
               const innerHash = web3.utils.keccak256(finalDataChain);
               var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
@@ -103,50 +85,47 @@ function ConceptApp(props) {
               console.warn(encryptedPrivateKey);
               console.warn(oneTimeEncryptionPW);
               console.warn(publicKey);
+              
 
               // reset all values containing sensitive data to null / baseline:
               decryptedAccount = {};
               privateKey = '';
               finalDataChain = ''; //clear finalDataChain
               tempDataChain = '';  
-              showNextScreenModal();
+
+                      setInputTextValues('');
+                      setInputTagValues('');
+                      const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+                      navigation.navigate('Concept App Account Display', { data });
 
     } catch (ex) {
-      showErrorModal();
+        //bypass
     } finally {
-      
-      hideKeyStatusModal();
+      NfcManager.cancelTechnologyRequest();
     }
 
   }
 
   return (
+    
     <View style={styles.wrapper}>
+
+          <Image
+            source={require('../assets/LogoGlow.png')}
+            style={styles.topImage}>    
+          </Image>
+
       <Text style={styles.bannerText}>
 
-      Scan Card To Login
+      Touch Tag To Top Of The Phone To Login
         
       </Text>
         <View style={[styles.textInput]}>
 
           <Image
-            source={require('../assets/SendMoney.png')}
+            source={require('../assets/TutorialArt3.png')}
             style={styles.backgroundImage}>    
           </Image>
-
-          <Button 
-          mode="contained" 
-          style={styles.pinBtn} 
-          onPress={ async () => {
-            await createKeys();
-
-          }
-        }>
-          <Text style={styles.buttonText}>
-            Access ETH
-          </Text>
-        </Button>
-
 
         </View>
 
@@ -165,7 +144,7 @@ function ConceptApp(props) {
             }
           }>
             <Text style={styles.buttonText}>
-              Start Over
+              Scan Again
             </Text>
           </Button>
 
@@ -173,8 +152,8 @@ function ConceptApp(props) {
         visible = {modalVisible}>
           <View 
             style={styles.wrapper}
-            borderRadius={10}>
-          <Text style={styles.bannerText} selectable>Scan Card to Login</Text>
+            borderRadius={20}>
+          <Text style={styles.bannerText} selectable>Touch Tag Here {'\n'} {'\n'}</Text>
           
           <Button 
           mode="contained" 
@@ -185,9 +164,11 @@ function ConceptApp(props) {
 
           }}>
             <Text style={styles.scanButtonText}>
-              Scan Serial
+              Scan To Enter
             </Text>
           </Button>
+
+          <DatePicker date={accountNumber} onDateChange={setAccountNumber} mode={"time"} textColor='#000000'/>
 
         </View>
       </Modal>
@@ -234,7 +215,7 @@ function ConceptApp(props) {
             <View 
               style={styles.wrapper}
               borderRadius={10}>
-            <Text style={styles.bannerText} selectable>Access Error {'\n'} {'\n'} Scan Card Once Then Input PIN</Text>
+            <Text style={styles.bannerText} selectable>Access Error {'\n'} {'\n'} Start Over And Try Again</Text>
 
             <Button 
             mode="contained"
@@ -243,7 +224,7 @@ function ConceptApp(props) {
             // reset all inputValues
             finalDataChain = '';
             tempDataChain = '';
-            navigation.navigate('Home');
+            hideErrorModal();
             }}>
             <Text style={styles.easySignButtonText}>
               Start Over
@@ -263,7 +244,7 @@ function ConceptApp(props) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
+    
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -279,8 +260,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     fontVariant: 'small-caps',
-    fontWeight: 'bold',
-    padding: 30,
+    padding: 75,
   },
   bottom: {
     paddingHorizontal: 20,
@@ -527,6 +507,12 @@ const styles = StyleSheet.create({
       backgroundImage: {
         width: 250,
         height: 200,
+      },
+
+      topImage: {
+
+        width: 175,
+        height: 175,
       },
 
       smallText:{

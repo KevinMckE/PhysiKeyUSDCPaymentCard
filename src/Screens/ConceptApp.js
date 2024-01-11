@@ -38,6 +38,10 @@ function ConceptApp(props) {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const [accountModalVisible=false, setAccountModalVisible] = React.useState();
+  const showAccountModal = () => setAccountModalVisible(true);
+  const hideAccountModal = () => setAccountModalVisible(false);
+
   const [errorModal=false, setErrorModal] = React.useState();
   const showErrorModal = () => setErrorModal(true);
   const hideErrorModal = () => setErrorModal(false);
@@ -66,8 +70,55 @@ function ConceptApp(props) {
       await NfcManager.requestTechnology(NfcTech.NfcA);
       const tag = await NfcManager.getTag();
       console.warn(tag.id);
-      constole.warn(Date.date);
       tempDataChain += tag.id;
+
+      finalDataChain += kdf.compute(tempDataChain, salt).toString();
+      console.warn(finalDataChain);
+      tempDataChain = finalDataChain;
+
+              const innerHash = web3.utils.keccak256(finalDataChain);
+              var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+              oneTimeEncryptionPW = web3.utils.randomHex(32);
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+              var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+              publicKey = decryptedAccount.address;
+
+              setInputTagValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
+              console.warn(oneTimeEncryptionPW);
+              console.warn(publicKey);
+              
+
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';  
+
+                      setInputTextValues('');
+                      setInputTagValues('');
+                      const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+                      navigation.navigate('Concept App Account Display', { data });
+
+    } catch (ex) {
+        //bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+  }
+
+  async function readSerialWithAccountNumber() {
+
+    try{
+      await NfcManager.requestTechnology(NfcTech.NfcA);
+      const tag = await NfcManager.getTag();
+      const account = accountNumber.toDateString();
+      console.warn(account);
+      console.warn(tag.id);
+      tempDataChain += tag.id;
+      tempDataChain += account;
 
       finalDataChain += kdf.compute(tempDataChain, salt).toString();
       console.warn(finalDataChain);
@@ -110,11 +161,6 @@ function ConceptApp(props) {
     
     <View style={styles.wrapper}>
 
-          <Image
-            source={require('../assets/LogoGlow.png')}
-            style={styles.topImage}>    
-          </Image>
-
       <Text style={styles.bannerText}>
 
       Touch Tag To Top Of The Phone To Login
@@ -148,6 +194,23 @@ function ConceptApp(props) {
             </Text>
           </Button>
 
+          <Button 
+          mode="contained" 
+          style={styles.bigBtn} 
+          onPress={() => {
+              finalDataChain = '';
+              tempDataChain = '';
+              publicKey = '';
+              encryptedPrivateKey = '';
+              oneTimeEncryptionPW = '';
+              showAccountModal();
+            }
+          }>
+            <Text style={styles.buttonText}>
+              Alternative Access
+            </Text>
+          </Button>
+
       <Modal  
         visible = {modalVisible}>
           <View 
@@ -168,7 +231,32 @@ function ConceptApp(props) {
             </Text>
           </Button>
 
-          <DatePicker date={accountNumber} onDateChange={setAccountNumber} mode={"time"} textColor='#000000'/>
+        </View>
+      </Modal>
+
+      <Modal  
+        visible = {accountModalVisible}>
+          <View 
+            style={styles.wrapper}
+            borderRadius={20}>
+          <Text style={styles.bannerText} selectable>Touch Tag Here {'\n'} {'\n'}</Text>
+          
+          <Button 
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideAccountModal();
+            await readSerialWithAccountNumber();
+
+          }}>
+            <Text style={styles.scanButtonText}>
+              Scan To Enter
+            </Text>
+          </Button>
+
+          <Text style={styles.bannerText} selectable> Each Date Accesses A Different Account When Paired With Your Tag</Text>
+
+          <DatePicker date={accountNumber} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
 
         </View>
       </Modal>

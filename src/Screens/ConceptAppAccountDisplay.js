@@ -6,8 +6,17 @@ import { useRoute } from '@react-navigation/native';
 import Config from 'react-native-config';
 import Web3 from 'web3';
 import CryptoJS from 'crypto-js';
+import DatePicker from 'react-native-date-picker';
+
+var receiverPublicKey = '';
+let finalDataChain = ''; // append all inputValues to this variable
+var tempDataChain = '';
+var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+var web3 = new Web3(Web3.givenProvider);
 
 var tempEncryptedPrivateKey;
+var receiverPublicKey = '';
 
 function ConceptAppAccountDisplay(props) {
   const {navigation} = props;
@@ -15,12 +24,22 @@ function ConceptAppAccountDisplay(props) {
   const { data } = route.params;
   const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
   const [accountBalance, setAccountBalance] = React.useState();
+
   const [accountToSend, setAccountToSend] = React.useState();
+  const setReceiverAccount = () => setAccountToSend(receiverPublicKey);
+
   const [amountToSend, setAmountToSend] = React.useState();
 
   const [modalVisible=false, setModalVisible] = React.useState();
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
+
+  const [accountModalVisible=false, setAccountModalVisible] = React.useState();
+  const showAccountModal = () => setAccountModalVisible(true);
+  const hideAccountModal = () => setAccountModalVisible(false);
+
+  const [accountNumber, setAccountNumber] = useState(new Date())
+
 
   const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
 
@@ -31,6 +50,46 @@ function ConceptAppAccountDisplay(props) {
     });
 
   }, []);
+
+  async function readReceiverAccountNumber() {
+
+    try{
+      await NfcManager.requestTechnology(NfcTech.NfcA);
+      const tag = await NfcManager.getTag();
+      const account = accountNumber.toDateString();
+      console.warn(account);
+      console.warn(tag.id);
+      tempDataChain += tag.id;
+      tempDataChain += account;
+
+      finalDataChain += kdf.compute(tempDataChain, salt).toString();
+      console.warn(finalDataChain);
+      tempDataChain = finalDataChain;
+
+              const innerHash = web3.utils.keccak256(finalDataChain);
+              var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+              var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+              receiverPublicKey = decryptedAccount.address;
+
+              setReceiverAccount(receiverPublicKey);
+              console.warn(receiverPublicKey);
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';  
+
+                      setInputTextValues('');
+                      setInputTagValues('');
+
+    } catch (ex) {
+        //bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+
+  }
 
   async function readNdef() {
     try{
@@ -171,10 +230,19 @@ function ConceptAppAccountDisplay(props) {
         </View>
         
         </View> 
-        <Text style={styles.sendMoneyText}>Manage Transaction</Text>
         <View style={styles.whiteBoxTransaction}>
 
-        <Text style={styles.inputText}>Input Address :</Text>
+        <Text style={styles.inputText}>Input Address : {accountToSend}</Text>
+        <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+            showAccountModal();
+            }}>
+            <Text style={styles.buttonText}>
+              Scan Tag To Input
+            </Text>
+        </Button>
 
         <TextInput
 
@@ -213,17 +281,6 @@ function ConceptAppAccountDisplay(props) {
             </Text>
         </Button>
 
-        <Button 
-            mode="contained"
-            style={styles.smallBtn}
-            onPress={() => {
-            navigation.navigate('Concept App');
-            }}>
-            <Text style={styles.buttonText}>
-              Start Over
-            </Text>
-        </Button>
-
         <Modal  
         visible = {modalVisible}>
           <View 
@@ -247,6 +304,34 @@ function ConceptAppAccountDisplay(props) {
 
           </View>
         </Modal>
+
+        <Modal  
+        visible = {accountModalVisible}>
+          <View 
+            style={styles.wrapper}
+            borderRadius={20}>
+          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
+
+          <Text style={styles.bannerText} selectable> Each Date Creates A Unique Account With Your Tag</Text>
+          <Text selectable> Date: {accountNumber.toDateString()} </Text>
+
+          <DatePicker date={accountNumber} minimumDate={new Date("1600-01-01")} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
+
+          <Button 
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideAccountModal();
+            await readReceiverAccountNumber();
+
+          }}>
+            <Text style={styles.scanButtonText}>
+              Scan Tag
+            </Text>
+          </Button>
+
+        </View>
+      </Modal>
 
         </View>
 

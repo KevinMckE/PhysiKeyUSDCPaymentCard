@@ -70,6 +70,8 @@ function ConceptApp(props) {
       await NfcManager.requestTechnology(NfcTech.NfcA);
       const tag = await NfcManager.getTag();
       console.warn(tag.id);
+      console.warn(tag);
+      
       tempDataChain += tag.id;
 
       finalDataChain += kdf.compute(tempDataChain, salt).toString();
@@ -216,7 +218,7 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Tag Here {'\n'} {'\n'}</Text>
+          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
           
           <Button 
           mode="contained" 
@@ -227,9 +229,14 @@ function ConceptApp(props) {
 
           }}>
             <Text style={styles.scanButtonText}>
-              Scan To Enter
+              Scan Tag
             </Text>
           </Button>
+
+          <Image
+            source={require('../assets/TutorialArt3.png')}
+            >    
+          </Image>
 
         </View>
       </Modal>
@@ -239,8 +246,13 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Tag Here {'\n'} {'\n'}</Text>
-          
+          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
+
+          <Text style={styles.bannerText} selectable> Each Date Creates A Unique Account With Your Tag</Text>
+          <Text selectable> Date: {accountNumber.toDateString()} </Text>
+
+          <DatePicker date={accountNumber} minimumDate={new Date("1600-01-01")} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
+
           <Button 
           mode="contained" 
           style={[styles.scanBtn]}
@@ -250,13 +262,9 @@ function ConceptApp(props) {
 
           }}>
             <Text style={styles.scanButtonText}>
-              Scan To Enter
+              Scan Tag
             </Text>
           </Button>
-
-          <Text style={styles.bannerText} selectable> Each Date Accesses A Different Account When Paired With Your Tag</Text>
-
-          <DatePicker date={accountNumber} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
 
         </View>
       </Modal>
@@ -357,7 +365,7 @@ const styles = StyleSheet.create({
   scanBtn: {
     width: 300,
     height: 50,
-    marginBottom: 15,
+    marginBottom: 100,
     borderRadius:15, 
     borderColor:'gray',
     color: 'black',

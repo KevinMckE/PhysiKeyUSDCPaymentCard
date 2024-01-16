@@ -22,11 +22,10 @@ function AppNavigator({navigation}) {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Concept App" component={ConceptApp} options={{
-            headerLeft: () => null, // Hide the back button
-            headerTitle: 'Touch Here', // Set the title
+            headerShown: false,// Set the title
           }}/>
         <Stack.Screen name="Concept App Account Display" component={ConceptAppAccountDisplay} options={{
-            headerLeft: () => null, // Hide the back button
+            headerBackTitle: 'Back',
             headerTitle: 'Account Display', // Set the title
           }}/>
         <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>

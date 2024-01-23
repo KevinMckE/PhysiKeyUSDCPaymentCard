@@ -34,6 +34,10 @@ function ConceptAppAccountDisplay(props) {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const [scanModalVisible=false, setScanModalVisible] = React.useState();
+  const showScanModal = () => setScanModalVisible(true);
+  const hideScanModal = () => setScanModalVisible(false);
+
   const [accountModalVisible=false, setAccountModalVisible] = React.useState();
   const showAccountModal = () => setAccountModalVisible(true);
   const hideAccountModal = () => setAccountModalVisible(false);
@@ -52,6 +56,8 @@ function ConceptAppAccountDisplay(props) {
   }, []);
 
   async function readReceiverAccountNumber() {
+
+    showScanModal();
 
     try{
       await NfcManager.requestTechnology(NfcTech.NfcA);
@@ -88,6 +94,8 @@ function ConceptAppAccountDisplay(props) {
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
+
+    hideScanModal();
 
   }
 
@@ -232,7 +240,7 @@ function ConceptAppAccountDisplay(props) {
         </View> 
         <View style={styles.whiteBoxTransaction}>
 
-        <Text style={styles.inputText}>Input Address : {accountToSend}</Text>
+        <Text selectable style={styles.buttonText}>{accountToSend}</Text>
         <Button 
             mode="contained"
             style={styles.smallBtn}
@@ -304,6 +312,33 @@ function ConceptAppAccountDisplay(props) {
 
           </View>
         </Modal>
+
+        <Modal  
+        visible = {scanModalVisible}>
+          <View 
+            style={styles.wrapper}
+            borderRadius={20}>
+          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone{'\n'} {'\n'} *Touch Here* </Text>
+
+          <Image
+            style={[styles.backgroundImage]}
+            source={require('../assets/TutorialArt3.png')}
+            >    
+          </Image>
+
+          <Button 
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideScanModal();
+          }}>
+            <Text style={styles.scanButtonText}>
+              Cancel
+            </Text>
+          </Button>
+
+        </View>
+      </Modal>
 
         <Modal  
         visible = {accountModalVisible}>
@@ -724,6 +759,54 @@ publicKeyText: {
         fontWeight:'500',
         fontVariant:'small',
       },
+
+      bannerText: {
+        fontSize: 30,
+        textAlign: 'center',
+        color: 'black',
+        fontVariant: 'small-caps',
+        padding: 75,
+      },
+      bottom: {
+        paddingHorizontal: 20,
+        paddingVertical: 40,
+      },
+      scanBtn: {
+        width: 300,
+        height: 50,
+        marginBottom: 100,
+        borderRadius:15, 
+        borderColor:'gray',
+        color: 'black',
+        borderWidth: 1,
+        color: 'white',
+        backgroundColor: 'black',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      bigBtn: {
+        width: 250,
+        height: 70,
+        marginBottom: 15,
+        borderRadius:15, 
+        borderColor:'gray',
+        color: 'white',
+        borderWidth: 1,
+        color: 'black',
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      scanButtonText: {
+        fontSize: 20,
+        color: 'white',
+        fontVariant: 'small',
+      },
+    
+          backgroundImage: {
+            width: 250,
+            height: 200,
+          },
 
 });
 

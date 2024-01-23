@@ -38,6 +38,10 @@ function ConceptApp(props) {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const [scanModalVisible=false, setScanModalVisible] = React.useState();
+  const showScanModal = () => setScanModalVisible(true);
+  const hideScanModal = () => setScanModalVisible(false);
+
   const [accountModalVisible=false, setAccountModalVisible] = React.useState();
   const showAccountModal = () => setAccountModalVisible(true);
   const hideAccountModal = () => setAccountModalVisible(false);
@@ -65,6 +69,8 @@ function ConceptApp(props) {
   }, []);
 
   async function readSerial() {
+
+    showScanModal();
 
     try{
       await NfcManager.requestTechnology(NfcTech.NfcA);
@@ -109,9 +115,13 @@ function ConceptApp(props) {
       NfcManager.cancelTechnologyRequest();
     }
 
+    hideScanModal();
+
   }
 
   async function readSerialWithAccountNumber() {
+
+    showScanModal();
 
     try{
       await NfcManager.requestTechnology(NfcTech.NfcA);
@@ -157,6 +167,8 @@ function ConceptApp(props) {
       NfcManager.cancelTechnologyRequest();
     }
 
+    hideScanModal();
+
   }
 
   return (
@@ -165,7 +177,7 @@ function ConceptApp(props) {
 
       <Text style={styles.bannerText}>
 
-      Touch Tag To Top Of The Phone To Login
+      Tap Tag To Back Of The Phone To Login
         
       </Text>
         <View style={[styles.textInput]}>
@@ -218,7 +230,7 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
+          <Text style={styles.bannerText} selectable>Press To Scan{'\n'} {'\n'}</Text>
           
           <Button 
           mode="contained" 
@@ -234,9 +246,37 @@ function ConceptApp(props) {
           </Button>
 
           <Image
+            style={[styles.backgroundImage]}
             source={require('../assets/TutorialArt3.png')}
             >    
           </Image>
+
+        </View>
+      </Modal>
+
+      <Modal  
+        visible = {scanModalVisible}>
+          <View 
+            style={styles.wrapper}
+            borderRadius={20}>
+          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone{'\n'} {'\n'} *Touch Here* </Text>
+
+          <Image
+            style={[styles.backgroundImage]}
+            source={require('../assets/TutorialArt3.png')}
+            >    
+          </Image>
+
+          <Button 
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideScanModal();
+          }}>
+            <Text style={styles.scanButtonText}>
+              Cancel
+            </Text>
+          </Button>
 
         </View>
       </Modal>
@@ -246,12 +286,11 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
 
           <Text style={styles.bannerText} selectable> Each Date Creates A Unique Account With Your Tag</Text>
           <Text selectable> Date: {accountNumber.toDateString()} </Text>
 
-          <DatePicker date={accountNumber} minimumDate={new Date("1600-01-01")} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
+          <DatePicker date={accountNumber} minimumDate={new Date("1600-01-01")} maximumDate={new Date("9999-12-31")} onDateChange={setAccountNumber} mode={"date"} textColor='#000000'/>
 
           <Button 
           mode="contained" 
@@ -375,19 +414,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pinBtn: {
-    width: 200,
-    height: 50,
-    marginBottom: 15,
-    borderRadius:15, 
-    borderColor:'gray',
-    color: 'white',
-    borderWidth: 1,
-    color: 'black',
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   bigBtn: {
     width: 250,
     height: 70,
@@ -411,215 +437,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontVariant: 'small',
   },
-  modal: {
-    flex: 1,
-    backgroundColor: 'green',
-    margin: 50,
-    padding: 40,
-    borderRadius: 10,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  textContainer: {
-    justifyContent: 'center',
-    alignItems: 'left',
-    paddingLeft: 45,
-    paddingTop: 85,
-    paddingBottom: 35,
-  },
-
-  textContainer2: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft:35,
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    paddingHorizontal: 1,  
-  },
-  
-  box: {
-    width: 350,
-    height: 450,
-    backgroundColor: 'white',
-    borderRadius: 15,
-    paddingTop: 10,
-    paddingBottom: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.09,
-    shadowRadius: 1.84,
-    elevation: 5,
-  },
-
-  TotalInputCountText: {
-    fontSize: 20,
-    textAlign:'left',
-    fontWeight:'500',
-    color: 'black',
-    marginLeft: 35,
-    marginTop: 30,
-  },
-  PlainText : {
-    fontSize: 15,
-    textAlign:'center',
-    fontWeight:'300',
-    color: 'gray',
-    alignItems: 'center',
-    marginTop: 10,
-    paddingTop: 5,
-    marginRight:55,
-  },
-  InputPlainText: {
-    fontSize: 20,
-//textAlign:'left',
-    fontWeight:'500',
-    color: '#5D6994',
-    marginLeft: 35,
-    marginTop: 45,
-
-
-  },
-
-  circleRed: {
-    width: 14, 
-    height: 14,
-    backgroundColor: '#F05858',
-    borderRadius: 7, 
-    position: 'absolute',
-    top: 155,  
-    left: 35,
-  },
-
-  circleGreen: {
-    width: 14, 
-    height: 14,
-    backgroundColor: '#83C83C',
-    borderRadius: 7, 
-    position: 'absolute',
-    top: 155,  
-    left: 140,
-  },
-
-  circleBlue: {
-    width: 14, 
-    height: 14,
-    backgroundColor: '#304170',
-    borderRadius: 7, 
-    position: 'absolute',
-    top: 155,  
-    left: 275,
-  },
-
-  graybox : {
-    width: 300,
-  height: 350,
-  backgroundColor: '#F4F4F4',
-  borderRadius: 15,
-  paddingTop: 5,
-  paddingBottom: 5,
-  justifyContent: 'center',
-  alignItems: 'center',
-  },
-  
-
-  btn: {
-    width: 260,
-    height: 45,
-    marginBottom: 10,
-    borderRadius:15, 
-    
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  buttonNext: {
-    width: 350,
-    height: 50,
-    marginTop: 30,
-    borderRadius:15, 
-    
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  
-
-
-    input: {
-        width: 300,
-        height: 45,
-        borderColor: '#DFDFDF',
-        borderRadius:10,
-        borderWidth: 1,
-        padding: 10,
-        marginBottom: 20,
-      },
-      
-      homeText: {
-         fontSize: 20,
-        color: '#459BF8',
-        fontWeight:'500',
-        fontVariant:'small',
-        
-        marginLeft: 50,
-        marginTop: 60,
-
-      },
-  
-      btnsmall: {
-        width: 70,
-        height: 50,
-        borderRadius:15, 
-        color: 'white',
-        backgroundColor: 'black',
-        alignItems: 'center',
-        justifyContent: 'center',
-         position: 'absolute',
-        top: 3,  
-        left: 238,
-        
-      },
-
-      arrowPosition: {
-        position: 'absolute',
-        top: 16,  
-        left: 262,
-
-      },
 
       backgroundImage: {
         width: 250,
         height: 200,
       },
 
-      topImage: {
-
-        width: 175,
-        height: 175,
-      },
-
-      smallText:{
-        fontSize: 17,
-        color: '#BCBCBC',
-        fontWeight:'250',
-        fontVariant:'small',
-        marginBottom: 60,
-        marginTop: 10,
-        paddingTop: 20,
-      }
 });
 
 export default ConceptApp;

@@ -9,11 +9,10 @@
 //------------------------------------------------------------------------------//
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { Modal, Button, TextInput, Portal } from 'react-native-paper';
-import { POLYSCAN_API_KEY, ETHERSCAN_API_KEY } from '@env';
 import CustomSnackbar from './CustomSnackbar';
-import styles from './styles.js';
+import Config from 'react-native-config';
 
 const NFTDetailsScreen = ({ route, network }) => {
   const [transferResult, setTransferResult] = useState('');
@@ -65,9 +64,9 @@ const NFTDetailsScreen = ({ route, network }) => {
   const setAPI = () => {
     let apiUrl = '';
     if (selectedNFT.chain === 'polygon-mumbai') {
-      apiUrl = `https://api-testnet.polygonscan.com/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${POLYSCAN_API_KEY}`;
+      apiUrl = `https://api-testnet.polygonscan.com/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${Config.POLYSCAN_API_KEY}`;
     } else if (selectedNFT.chain === 'ethereum') {
-      apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${ETHERSCAN_API_KEY}`;
+      apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${Config.ETHERSCAN_API_KEY}`;
     }
     return apiUrl;
   };
@@ -198,5 +197,23 @@ const NFTDetailsScreen = ({ route, network }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalStyle: {
+    padding: 20,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  defaultSpacing: {
+    width: 250,
+    marginBottom: 20,
+  },
+});
 
 export default NFTDetailsScreen;

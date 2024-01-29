@@ -9,11 +9,10 @@
 //------------------------------------------------------------------------------//
 
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { TatumSDK, Network, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
 import CustomSnackbar from './CustomSnackbar';
-import styles from './styles.js';
 
 const NFTList = ({ route, navigation }) => {
   const [nfts, setNfts] = useState([]);
@@ -135,6 +134,24 @@ const NFTList = ({ route, navigation }) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalStyle: {
+    padding: 20,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  defaultSpacing: {
+    width: 250,
+    marginBottom: 20,
+  },
+});
 
 export default NFTList;
 

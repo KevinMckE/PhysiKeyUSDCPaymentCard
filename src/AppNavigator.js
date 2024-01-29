@@ -12,6 +12,8 @@ import CreateAccessCards from './Screens/CreateAccessCards';
 import ManageAccessCards from './Screens/ManageAccessCards';
 import ConceptApp from './Screens/ConceptApp';
 import ConceptAppAccountDisplay from './Screens/ConceptAppAccountDisplay';
+import NFTList from './Screens/NFTList';
+import NFTView from './Screens/NFTView';
 
 
 const Stack = createStackNavigator();
@@ -42,6 +44,28 @@ function AppNavigator({navigation}) {
         }}/>
         <Stack.Screen name="Create Access Cards" component={CreateAccessCards} />
         <Stack.Screen name="Manage Access Cards" component={ManageAccessCards} />
+        <Stack.Screen
+            name="NFTList"
+            component={NFTList}
+            options={{
+              title: 'NFT Collection',
+              headerStyle: {
+                backgroundColor: '#ffffff',
+              },
+              headerTintColor: '#303030',
+            }}
+          />
+          <Stack.Screen
+            name="NFTView"
+            component={NFTView}
+            options={{
+              title: 'Item Details',
+              headerStyle: {
+                backgroundColor: '#ffffff',
+              },
+              headerTintColor: '#303030',
+            }}
+          />
       </Stack.Navigator>
     </NavigationContainer>
   );

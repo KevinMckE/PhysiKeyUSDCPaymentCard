@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card, Text } from 'react-native-paper';
-import { TatumSDK, Network, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
+import { TatumSDK, Network, ApiVersion, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
 import CustomSnackbar from './CustomSnackbar';
 import Web3 from 'web3';
 import Config from 'react-native-config';
@@ -39,9 +39,11 @@ const NFTList = (props) => {
 
 
   const viewNFTs = async () => {
-    let tatum;
     try {
-        tatum = await TatumSDK.init<Ethereum>({ network: Network.ETHEREUM_SEPOLIA, })
+        const tatum = await TatumSDK.init({ 
+          network: Network.ETHEREUM_SEPOLIA,
+          version: ApiVersion.V4,
+          apiKey: { v4: '' + Config.TATUM_API_KEY } });
       const nftsResponse = await tatum.nft.getBalance({
         addresses: [publicKey],
       });
@@ -92,7 +94,7 @@ const NFTList = (props) => {
 
   useEffect(() => {
     viewNFTs();
-  });
+  }, []);
 
   useEffect(() => {
     const fetchImageUris = async () => {

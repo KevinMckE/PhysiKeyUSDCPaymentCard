@@ -45,7 +45,7 @@ function ConceptAppAccountDisplay(props) {
   const [accountNumber, setAccountNumber] = useState(new Date())
 
 
-  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
+  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-sepolia/' + Config.TATUM_API_KEY);
 
   useEffect(() => {
 
@@ -226,6 +226,17 @@ function ConceptAppAccountDisplay(props) {
         </View>
         <Text style={styles.publicKeyText}>Public Key</Text>
         <Text selectable style={styles.publicKeyText2}>{publicKey}</Text>
+        <Button 
+            mode="contained"
+            style={styles.smallBtn}
+            onPress={() => {
+              navigation.navigate('NFTList', { data });
+            }}>
+            <Text style={styles.buttonText}>
+              View NFTs
+            </Text>
+        </Button>
+
         
         </View>
         <View style={styles.blackBox}>

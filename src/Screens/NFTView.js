@@ -10,11 +10,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
-import { Modal, Button, TextInput, Portal } from 'react-native-paper';
+import { useRoute } from '@react-navigation/native';
+import { Snackbar, Modal, Button, TextInput, Portal } from 'react-native-paper';
 import CustomSnackbar from './CustomSnackbar';
 import Config from 'react-native-config';
+import Web3 from 'web3';
 
-const NFTDetailsScreen = ({ route, network }) => {
+const NFTDetailsScreen = (props) => {
+
+  const {navigation} = props;
+  const route = useRoute();
+  const { data } = route.params;
+  const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey, selectedNFT, imageUri  } = data;
+
   const [transferResult, setTransferResult] = useState('');
   const [ercStandard, setStandard] = useState('');
   const [abi, setABI] = useState();
@@ -26,7 +34,7 @@ const NFTDetailsScreen = ({ route, network }) => {
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { publicKey, selectedNFT, imageUri, web3Instance } = route.params;
+  const web3Instance = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-sepolia/' + Config.TATUM_API_KEY);
   
   const getABI = async (apiUrl) => {
     try {
@@ -62,12 +70,9 @@ const NFTDetailsScreen = ({ route, network }) => {
   };
 
   const setAPI = () => {
-    let apiUrl = '';
-    if (selectedNFT.chain === 'polygon-mumbai') {
-      apiUrl = `https://api-testnet.polygonscan.com/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${Config.POLYSCAN_API_KEY}`;
-    } else if (selectedNFT.chain === 'ethereum') {
-      apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${Config.ETHERSCAN_API_KEY}`;
-    }
+    
+    apiUrl = `https://api.etherscan.io/api?module=contract&action=getabi&address=${selectedNFT.tokenAddress}&apikey=${Config.ETHERSCAN_API_KEY}`;
+    
     return apiUrl;
   };
 

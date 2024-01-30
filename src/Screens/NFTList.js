@@ -9,12 +9,21 @@
 //------------------------------------------------------------------------------//
 
 import React, { useEffect, useState } from 'react';
+import { useRoute } from '@react-navigation/native';
 import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { TatumSDK, Network, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
 import CustomSnackbar from './CustomSnackbar';
+import Web3 from 'web3';
+import Config from 'react-native-config';
 
-const NFTList = ({ route, navigation }) => {
+const NFTList = (props) => {
+
+  const {navigation} = props;
+  const route = useRoute();
+  let { data } = route.params;
+  const { publicKey, oneTimeEncryptionPW, encryptedPrivateKey } = data;
+
   const [nfts, setNfts] = useState([]);
   const [isSuccess, setSuccess] = useState(false);
   const [imageUris, setImageUris] = useState([]);
@@ -24,18 +33,15 @@ const NFTList = ({ route, navigation }) => {
   const [header, setHeader] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const { publicKey, rpc, web3Instance } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const halfWindowsWidth = Dimensions.get('window').width / 2;
+  const web3Instance = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-sepolia/' + Config.TATUM_API_KEY);
+
 
   const viewNFTs = async () => {
     let tatum;
     try {
-      if (rpc === 'https://sepolia.drpc.org') {
         tatum = await TatumSDK.init<Ethereum>({ network: Network.ETHEREUM_SEPOLIA, })
-      } else if (rpc === 'https://rpc-mumbai.maticvigil.com/') {
-        tatum = await TatumSDK.init<Polygon>({ network: Network.POLYGON_MUMBAI, })
-      }
       const nftsResponse = await tatum.nft.getBalance({
         addresses: [publicKey],
       });
@@ -74,7 +80,8 @@ const NFTList = ({ route, navigation }) => {
   };
 
   const openDetailsScreen = (nft, imageUri) => {
-    navigation.navigate('NFTView', { publicKey, selectedNFT: nft, imageUri, web3Instance });
+    data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey, selectedNFT: nft, imageUri  };
+    navigation.navigate('NFTView', { data });
   };
 
   const handleSnackbar = (success, text) => {
@@ -85,7 +92,7 @@ const NFTList = ({ route, navigation }) => {
 
   useEffect(() => {
     viewNFTs();
-  }, [rpc]);
+  });
 
   useEffect(() => {
     const fetchImageUris = async () => {

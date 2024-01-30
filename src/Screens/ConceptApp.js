@@ -60,7 +60,7 @@ function ConceptApp(props) {
 
   const [inputTagValue='', setInputTagValues] = React.useState();
 
-  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-goerli/' + Config.TATUM_API_KEY);
+  const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-sepolia/' + Config.TATUM_API_KEY);
 
   useEffect(() => {
 

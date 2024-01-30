@@ -226,17 +226,6 @@ function ConceptAppAccountDisplay(props) {
         </View>
         <Text style={styles.publicKeyText}>Public Key</Text>
         <Text selectable style={styles.publicKeyText2}>{publicKey}</Text>
-        <Button 
-            mode="contained"
-            style={styles.smallBtn}
-            onPress={() => {
-              navigation.navigate('NFTList', { data });
-            }}>
-            <Text style={styles.buttonText}>
-              View NFTs
-            </Text>
-        </Button>
-
         
         </View>
         <View style={styles.blackBox}>
@@ -898,3 +887,14 @@ export default ConceptAppAccountDisplay;
             </Text>
         </Button>
       </View> */}
+
+      // <Button 
+      //       mode="contained"
+      //       style={styles.smallBtn}
+      //       onPress={() => {
+      //         navigation.navigate('NFTList', { data });
+      //       }}>
+      //       <Text style={styles.buttonText}>
+      //         View NFTs
+      //       </Text>
+      //   </Button>

@@ -305,6 +305,18 @@ function ConceptApp(props) {
             </Text>
           </Button>
 
+          <Button 
+          mode="contained" 
+          style={[styles.scanBtn]}
+          onPress={ async () => {
+            hideAccountModal();
+
+          }}>
+            <Text style={styles.scanButtonText}>
+              Cancel
+            </Text>
+          </Button>
+
         </View>
       </Modal>
 
@@ -399,7 +411,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingVertical: 80,
   },
   scanBtn: {
     width: 300,

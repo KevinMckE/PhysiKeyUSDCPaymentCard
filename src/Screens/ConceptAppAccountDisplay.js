@@ -318,13 +318,14 @@ function ConceptAppAccountDisplay(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone{'\n'} {'\n'} *Touch Here* </Text>
 
           <Image
-            style={[styles.backgroundImage]}
-            source={require('../assets/TutorialArt3.png')}
+            style={styles.backgroundImage}
+            source={require('../assets/scanningTag.png')}
             >    
           </Image>
+
+          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone Behind Logo Above</Text>
 
           <Button 
           mode="contained" 
@@ -345,7 +346,6 @@ function ConceptAppAccountDisplay(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Here {'\n'} {'\n'}</Text>
 
           <Text style={styles.bannerText} selectable> Each Date Creates A Unique Account With Your Tag</Text>
           <Text selectable> Date: {accountNumber.toDateString()} </Text>
@@ -805,7 +805,9 @@ publicKeyText: {
     
           backgroundImage: {
             width: 250,
-            height: 200,
+            height: 250,
+            marginBottom:40,
+            marginTop:40,
           },
 
 });

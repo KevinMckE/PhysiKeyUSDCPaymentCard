@@ -177,13 +177,13 @@ function ConceptApp(props) {
 
       <Text style={styles.bannerText}>
 
-      Tap Tag To Back Of The Phone To Login
+      
         
       </Text>
         <View style={[styles.textInput]}>
 
           <Image
-            source={require('../assets/TutorialArt3.png')}
+            source={require('../assets/LogoGlow.png')}
             style={styles.backgroundImage}>    
           </Image>
 
@@ -246,7 +246,7 @@ function ConceptApp(props) {
           </Button>
 
           <Image
-            style={[styles.backgroundImage]}
+            style={[styles.modalBackgroundImage]}
             source={require('../assets/TutorialArt3.png')}
             >    
           </Image>
@@ -259,13 +259,14 @@ function ConceptApp(props) {
           <View 
             style={styles.wrapper}
             borderRadius={20}>
-          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone{'\n'} {'\n'} *Touch Here* </Text>
 
           <Image
-            style={[styles.backgroundImage]}
-            source={require('../assets/TutorialArt3.png')}
+            style={styles.backgroundImage}
+            source={require('../assets/scanningTag.png')}
             >    
           </Image>
+
+          <Text style={styles.bannerText} selectable>Touch Token To Back of Phone Behind Logo Above</Text>
 
           <Button 
           mode="contained" 
@@ -395,6 +396,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
+    flex: 1,
   },
   textInput: {
     paddingHorizontal: 20,
@@ -452,7 +454,16 @@ const styles = StyleSheet.create({
 
       backgroundImage: {
         width: 250,
-        height: 200,
+        height: 250,
+        marginBottom:40,
+        marginTop:40,
+      },
+
+      modalBackgroundImage: {
+        width: 300,
+        height: 250,
+        marginBottom:100,
+        
       },
 
 });

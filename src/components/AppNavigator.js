@@ -1,8 +1,9 @@
 import React from 'react';
-import { ImageBackground} from 'react-native';
+import { ImageBackground } from 'react-native';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
+import Login from '../screens/Login';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -18,6 +19,13 @@ const AppNavigator = () => {
           <Stack.Screen
             name="Landing"
             component={Landing}
+            options={{
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
             options={{
               headerShown: false
             }}

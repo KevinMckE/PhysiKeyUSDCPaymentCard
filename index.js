@@ -1,7 +1,3 @@
-/**
- * @format
- */
-
 import './shimeth.js';
 import './shim.js';
 import {AppRegistry} from 'react-native';

@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-const Login = () => {
+const NftCollection = () => {
   return (
     <>
     </>
   );
 }
 
-export default Login;
+export default NftCollection;

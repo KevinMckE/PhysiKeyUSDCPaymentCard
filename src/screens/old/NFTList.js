@@ -13,7 +13,7 @@ import { useRoute } from '@react-navigation/native';
 import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { TatumSDK, Network, ApiVersion, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
-import CustomSnackbar from './CustomSnackbar';
+import CustomSnackbar from '../../components/CustomSnackbar';
 import Web3 from 'web3';
 import Config from 'react-native-config';
 

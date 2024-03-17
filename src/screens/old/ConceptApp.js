@@ -183,7 +183,7 @@ function ConceptApp(props) {
         <View style={[styles.textInput]}>
 
           <Image
-            source={require('../assets/LogoGlow.png')}
+            source={require('../../assets/old/LogoGlow.png')}
             style={styles.backgroundImage}>    
           </Image>
 
@@ -247,7 +247,7 @@ function ConceptApp(props) {
 
           <Image
             style={[styles.modalBackgroundImage]}
-            source={require('../assets/TutorialArt3.png')}
+            source={require('../../assets/old/TutorialArt3.png')}
             >    
           </Image>
 
@@ -262,7 +262,7 @@ function ConceptApp(props) {
 
           <Image
             style={styles.backgroundImage}
-            source={require('../assets/scanningTag.png')}
+            source={require('../../assets/old/scanningTag.png')}
             >    
           </Image>
 

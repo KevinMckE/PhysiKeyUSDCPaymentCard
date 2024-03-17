@@ -4,6 +4,8 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
+import ConceptApp from '../screens/old/ConceptApp';
+
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };

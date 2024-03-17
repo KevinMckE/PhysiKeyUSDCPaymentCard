@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { Snackbar, Modal, Button, TextInput, Portal } from 'react-native-paper';
-import CustomSnackbar from './CustomSnackbar';
+import CustomSnackbar from '../../components/CustomSnackbar';
 import Config from 'react-native-config';
 import Web3 from 'web3';
 

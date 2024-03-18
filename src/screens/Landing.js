@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 
-//source={require('../assets/blob_background.png')}
 const Landing = ({ navigation }) => {
 
   const handleLinkPress = () => {

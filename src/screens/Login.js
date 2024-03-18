@@ -5,8 +5,6 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import DatePickerInput from '../components/DatePickerInput';
 
 const Login = ({ navigation }) => {
-  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-
   useEffect(() => {
     readSerial();
   }, []);
@@ -17,38 +15,22 @@ const Login = ({ navigation }) => {
       const tag = await NfcManager.getTag();
       console.warn(tag.id);
       console.warn(tag);
+
       // Open the DatePickerInput modal when an NFC tag is scanned
-      setDatePickerVisible(true);
     } catch (ex) {
-      // Handle any exceptions
       console.error(ex);
     } finally {
       NfcManager.cancelTechnologyRequest();
     }
   };
 
-  // Function to handle closing the DatePickerInput modal
-  const handleCloseDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  // Function to handle entering the selected dates
-  const handleEnterDate = (selectedDate, confirmDate) => {
-    // Add your logic to handle the selected dates
-    console.log('Selected Date:', selectedDate);
-    console.log('Confirm Date:', confirmDate);
-    // Close the DatePickerInput modal
-    setDatePickerVisible(false);
-  };
 
   return (
     <View style={styles.container}>
-      {isDatePickerVisible && (
-        <DatePickerInput visible={isDatePickerVisible} onClose={handleCloseDatePicker} onEnter={handleEnterDate} />
-      )}
+
+      <DatePickerInput />
 
       <View style={styles.topContainer}>
-        <Text style={styles.headingTitle}>Access Assets</Text>
         <Text style={styles.headingText}>Scan your card and input Date Passcode.</Text>
       </View>
 
@@ -105,12 +87,6 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headingTitle: {
-    fontSize: 24,
-    color: '#000000',
-    fontWeight: 'bold',
-    marginBottom: 15,
   },
   headingText: {
     fontSize: 18,

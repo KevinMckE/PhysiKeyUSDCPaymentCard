@@ -4,6 +4,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
+import CreateNewCard from '../screens/CreateNewCard';
 //import ConceptApp from '../screens/old/ConceptApp';
 
 
@@ -29,7 +30,16 @@ const AppNavigator = () => {
             name="Login"
             component={Login}
             options={{
-              headerShown: false
+              title: 'Access Assets',
+
+            }}
+          />
+          <Stack.Screen
+            name="CreateNewCard"
+            component={CreateNewCard}
+            options={{
+              title: 'Setup New Access (1/3)',
+
             }}
           />
         </Stack.Navigator>

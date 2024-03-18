@@ -10,7 +10,7 @@ const NavigationButton = ({ navigation, text, type, target, size }) => {
     <Button
       mode={type === 'primary' ? 'contained' : 'outlined'}
       onPress={handlePress}
-      style={[{ marginVertical: 10 }, size === 'small' ? { width: '100%' } : { width: 250 }]} 
+      style={[{ marginVertical: 10, }, size === 'small' ? { width: '100%' } : { width: 250 }]} 
       buttonColor={type === 'primary' ? '#332eb3' : undefined}
       labelStyle={size === 'small' ? { fontSize: 14 } : { fontSize: 18 }}
     >

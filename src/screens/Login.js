@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import DatePickerInput from '../components/DatePickerInput';
 
 const Login = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
   useEffect(() => {
     readSerial();
   }, []);
@@ -16,7 +19,7 @@ const Login = ({ navigation }) => {
       console.warn(tag.id);
       console.warn(tag);
 
-      // Open the DatePickerInput modal when an NFC tag is scanned
+      setModalVisible(true); 
     } catch (ex) {
       console.error(ex);
     } finally {
@@ -24,11 +27,14 @@ const Login = ({ navigation }) => {
     }
   };
 
+  const handleDateSelect = (date, confirmDate) => {
+    // You can perform any logic with the selected date here
+    setSelectedDate(date);
+    setModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
-
-      <DatePickerInput />
 
       <View style={styles.topContainer}>
         <Text style={styles.headingText}>Scan your card and input Date Passcode.</Text>
@@ -50,8 +56,25 @@ const Login = ({ navigation }) => {
 
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
-        <NavigationButton navigation={navigation} text='Continue' type='primary' target='Login' size='large' />
+        <NavigationButton navigation={navigation} text='Continue' type='primary' target='CreateNewCard' size='large' />
       </View>
+      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <DatePickerInput onEnter={handleDateSelect} onClose={() => setModalVisible(false)} />
+            <NavigationButton navigation={navigation} text='Close' type='secondary' target='Landing' size='large' />
+            <NavigationButton navigation={navigation} text='Enter' type='secondary' target='Landing' size='large' />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -92,6 +115,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#000000',
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
 });
 

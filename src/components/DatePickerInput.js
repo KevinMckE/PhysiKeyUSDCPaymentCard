@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-const DatePickerInput = ({ onDateChange }) => {
+const DatePickerInput = () => {
   const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const [confirmDate, setConfirmDate] = useState(null);
   const [confirmVisible, setConfirmVisible] = useState(false);
 
   const handleDateSelection = () => {
@@ -18,7 +20,7 @@ const DatePickerInput = ({ onDateChange }) => {
 
   const handleDateChange = (selectedDate) => {
     if (confirmVisible) {
-      onDateChange(selectedDate);
+      setConfirmDate(selectedDate);
     } else {
       setDate(selectedDate);
     }
@@ -40,7 +42,7 @@ const DatePickerInput = ({ onDateChange }) => {
         <TextInput
           style={styles.textInput}
           placeholder="Confirm Date"
-          value={date ? date.toDateString() : ''}
+          value={confirmDate ? confirmDate.toDateString() : ''}
           editable={false}
           secureTextEntry={confirmVisible}
         />
@@ -56,7 +58,7 @@ const DatePickerInput = ({ onDateChange }) => {
       <TouchableOpacity
         style={styles.toggleButton}
         onPress={() => setConfirmVisible(!confirmVisible)}>
-        <Text>{confirmVisible ? 'Hide' : 'Show'}</Text>
+        <Text>{confirmVisible ? 'Show' : 'Hide'}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -65,19 +67,15 @@ const DatePickerInput = ({ onDateChange }) => {
 const styles = StyleSheet.create({
   textInput: {
     marginTop: 10,
-    width: 200,
+    width: 250,
     height: 40,
+    borderRadius: 50,
     borderColor: 'gray',
     borderWidth: 1,
     paddingLeft: 10,
   },
   toggleButton: {
     marginTop: 10,
-    width: 100,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'lightgray',
   },
 });
 

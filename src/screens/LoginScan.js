@@ -4,7 +4,7 @@ import NavigationButton from '../components/NavigationButton';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import DatePickerInput from '../components/DatePickerInput';
 
-const Login = ({ navigation }) => {
+const LoginScan = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  inputContainer: {
+  inputContainer: { 
     justifyContent: 'center',
     alignItems: 'center',
     flex: 2,
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default LoginScan;

@@ -3,23 +3,18 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-nativ
 import DatePicker from 'react-native-date-picker';
 
 const DatePickerInput = () => {
-  const [date, setDate] = useState(null);
   const [open, setOpen] = useState(false);
-
+  const [date, setDate] = useState(null);
+  const [selection, setSelection] = useState();
   const [confirmDate, setConfirmDate] = useState(null);
-  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(true);
 
   const handleDateSelection = () => {
     setOpen(true);
   };
 
-  const handleConfirmDateSelection = () => {
-    setOpen(true);
-    setConfirmVisible(true);
-  };
-
   const handleDateChange = (selectedDate) => {
-    if (confirmVisible) {
+    if (selection == 2) {
       setConfirmDate(selectedDate);
     } else {
       setDate(selectedDate);
@@ -29,7 +24,7 @@ const DatePickerInput = () => {
 
   return (
     <View>
-      <TouchableOpacity onPress={handleDateSelection}>
+      <TouchableOpacity onPress={() => {handleDateSelection(); setSelection(1)}}>
         <TextInput
           style={styles.textInput}
           placeholder="Select Date"
@@ -38,10 +33,10 @@ const DatePickerInput = () => {
           secureTextEntry={confirmVisible}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleConfirmDateSelection}>
+      <TouchableOpacity onPress={() => {handleDateSelection(); setSelection(2)}}>
         <TextInput
           style={styles.textInput}
-          placeholder="Confirm Date"
+          placeholder="Select Date"
           value={confirmDate ? confirmDate.toDateString() : ''}
           editable={false}
           secureTextEntry={confirmVisible}

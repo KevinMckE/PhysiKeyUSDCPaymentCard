@@ -4,7 +4,7 @@ import NavigationButton from '../components/NavigationButton';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import DatePickerInput from '../components/DatePickerInput';
 
-const LoginScan = ({ navigation }) => {
+const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -37,7 +37,7 @@ const LoginScan = ({ navigation }) => {
     <View style={styles.container}>
 
       <View style={styles.topContainer}>
-        <Text style={styles.headingText}>Scan your card and input Date Passcode.</Text>
+        <Text style={styles.headingText}>Scan your card then input Date Passcode.</Text>
       </View>
 
       <View style={styles.imageContainer}>
@@ -69,6 +69,7 @@ const LoginScan = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
             <DatePickerInput onEnter={handleDateSelect} onClose={() => setModalVisible(false)} />
             <NavigationButton navigation={navigation} text='Close' type='secondary' target='Landing' size='large' />
             <NavigationButton navigation={navigation} text='Enter' type='secondary' target='Landing' size='large' />
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  inputContainer: { 
+  inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 2,
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 18,
+    marginBottom: 25,
     color: '#000000',
     fontWeight: 'bold',
   },
@@ -130,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScan;
+export default Login;

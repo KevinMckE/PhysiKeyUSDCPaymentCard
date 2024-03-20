@@ -3,8 +3,7 @@ import { ImageBackground } from 'react-native';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
-import LoginDate from '../screens/LoginDate';
-import LoginScan from '../screens/LoginScan';
+import Login from '../screens/Login';
 import CreateNewCard from '../screens/CreateNewCard';
 //import ConceptApp from '../screens/old/ConceptApp';
 
@@ -28,16 +27,8 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="LoginDate"
-            component={LoginDate}
-            options={{
-              title: 'Access Assets',
-
-            }}
-          />
-          <Stack.Screen
-            name="LoginScan"
-            component={LoginScan}
+            name="Login"
+            component={Login}
             options={{
               title: 'Access Assets',
 

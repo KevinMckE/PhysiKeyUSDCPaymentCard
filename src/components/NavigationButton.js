@@ -3,7 +3,11 @@ import { Button } from 'react-native-paper';
 
 const NavigationButton = ({ navigation, text, type, target, size }) => {
   const handlePress = () => {
+    if(target != null) {
     navigation.navigate(target);
+    } else {
+      // do nothing
+    }
   };
 
   return (

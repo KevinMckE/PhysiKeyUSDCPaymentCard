@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 
 const DatePickerInput = () => {
@@ -26,6 +27,7 @@ const DatePickerInput = () => {
     <View>
       <TouchableOpacity onPress={() => {handleDateSelection(); setSelection(1)}}>
         <TextInput
+          mode="outlined"
           style={styles.textInput}
           placeholder="Select Date"
           value={date ? date.toDateString() : ''}
@@ -35,8 +37,9 @@ const DatePickerInput = () => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => {handleDateSelection(); setSelection(2)}}>
         <TextInput
+          mode="outlined"
           style={styles.textInput}
-          placeholder="Select Date"
+          placeholder="Confirm Date"
           value={confirmDate ? confirmDate.toDateString() : ''}
           editable={false}
           secureTextEntry={confirmVisible}
@@ -64,11 +67,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 250,
     height: 40,
-    borderRadius: 50,
-    borderColor: '#333333',
     backgroundColor: '#ffffff',
-    borderWidth: 1,
-    paddingLeft: 10,
+   
   },
   toggleButton: {
     marginTop: 10,

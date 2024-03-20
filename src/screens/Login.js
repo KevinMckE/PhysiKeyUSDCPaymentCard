@@ -58,7 +58,7 @@ const Login = ({ navigation }) => {
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
         <NavigationButton navigation={navigation} text='Continue' type='primary' target='CreateNewCard' size='large' />
       </View>
-      
+        
       <Modal
         animationType="slide"
         transparent={true}
@@ -71,8 +71,8 @@ const Login = ({ navigation }) => {
           <View style={styles.modalContent}>
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
             <DatePickerInput onEnter={handleDateSelect} onClose={() => setModalVisible(false)} />
-            <NavigationButton navigation={navigation} text='Close' type='secondary' target='Landing' size='large' />
-            <NavigationButton navigation={navigation} text='Enter' type='secondary' target='Landing' size='large' />
+            <NavigationButton navigation={navigation} text='Close' type='secondary' target={null} size='small' />
+            <NavigationButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
           </View>
         </View>
       </Modal>

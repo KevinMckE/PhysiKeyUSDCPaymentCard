@@ -1,0 +1,121 @@
+////////// FOR REFERENCE ////////////
+var publicKey = '';
+var encryptedPrivateKey = '';
+var oneTimeEncryptionPW = '';
+const ec = new EC('secp256k1');
+let finalDataChain = ''; // append all inputValues to this variable
+var tempDataChain = '';
+var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+var web3 = new Web3(Web3.givenProvider);
+////////// FOR REFERENCE ////////////
+
+
+const argonHash = (dataChain, salt) => {
+    const argonResult = await argon2(
+        dataChain,
+        salt,
+        {
+          iterations:5,
+          memory: 65536,
+          parallelism: 2,
+          mode: 'argon2id'
+        }
+      ); 
+
+}
+// the date and Tag ID will be available
+const kdfHash = (tag, date) => {
+    let salt = // get salt
+    tempChain = tag + date;
+    finalChain += kdf.compute(tempChain, salt).toString();
+    return finalChain
+}
+
+const readSerial = async () => {
+    try{
+      await NfcManager.requestTechnology(NfcTech.NfcA);
+      const tag = await NfcManager.getTag();
+      // LOG
+      console.log(tag.id);
+      return tag.id
+
+    } catch (ex) {
+        console.log(ex);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+}
+      tempDataChain += tag.id;
+      tempDataChain += account;
+
+
+
+              const innerHash = web3.utils.keccak256(finalDataChain);
+              var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+              oneTimeEncryptionPW = web3.utils.randomHex(32);
+              encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+              var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+              publicKey = decryptedAccount.address;
+
+              setInputTagValues(encryptedPrivateKey);
+              console.warn(encryptedPrivateKey);
+              console.warn(oneTimeEncryptionPW);
+              console.warn(publicKey);
+              
+
+              // reset all values containing sensitive data to null / baseline:
+              decryptedAccount = {};
+              privateKey = '';
+              finalDataChain = ''; //clear finalDataChain
+              tempDataChain = '';  
+
+                      setInputTextValues('');
+                      setInputTagValues('');
+                      const data = { publicKey, oneTimeEncryptionPW, encryptedPrivateKey };
+                      navigation.navigate('Concept App Account Display', { data });
+
+   
+
+    hideScanModal();
+
+  }
+
+
+  if (inputCheck === finalDataChain){
+
+    showKeyStatusModal();
+
+    console.warn('temp data chain before argon: ' + tempDataChain);
+    const argonResult = await argon2(
+      tempDataChain,
+      salt,
+      {
+        iterations:5,
+        memory: 65536,
+        parallelism: 2,
+        mode: 'argon2id'
+      }
+    ); 
+    console.warn(argonResult);
+    finalDataChain = argonResult.rawHash;
+
+    const innerHash = web3.utils.keccak256(finalDataChain);
+    var privateKey = web3.utils.keccak256(innerHash + finalDataChain);
+
+    oneTimeEncryptionPW = web3.utils.randomHex(32);
+    encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();;
+    var decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+    publicKey = decryptedAccount.address;
+
+    setInputTagValues(encryptedPrivateKey);
+    console.warn(encryptedPrivateKey);
+    console.warn(oneTimeEncryptionPW);
+
+    // reset all values containing sensitive data to null / baseline:
+    decryptedAccount = {};
+    privateKey = '';
+    finalDataChain = ''; //clear finalDataChain
+    tempDataChain = '';
+    inputCheck = '';

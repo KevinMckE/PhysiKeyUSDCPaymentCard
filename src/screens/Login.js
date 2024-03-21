@@ -7,7 +7,8 @@ import { readSerial } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState();
+  const [confirmDate, setConfirmDate] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +17,7 @@ const Login = ({ navigation }) => {
         if (tagID) {
           setModalVisible(true);
         }
-        console.warn(tagID);
+        //console.warn(tagID);
       } catch (error) {
         console.log(error);
       }
@@ -25,10 +26,16 @@ const Login = ({ navigation }) => {
     fetchData();
   }, []);
 
-
-  const handleInputDate = (newDate) => {
+  const handleDateChange = (newDate, newConfirmDate) => {
     setDate(newDate);
+    setConfirmDate(newConfirmDate);
   };
+
+  const confirmDates = () => {
+    console.warn('DATE:', date);
+    console.warn('CONFIRM DATE:', confirmDate);
+    //setModalVisible(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -67,10 +74,10 @@ const Login = ({ navigation }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
-            <DatePickerInput onDateChange={handleInputDate} onClose={() => setModalVisible(false)} />
+            <DatePickerInput onDateChange={handleDateChange} onClose={() => setModalVisible(false)} />
             <View style={styles.inlineButton}>
               <ModalButton navigation={navigation} text='Close' type='secondary' target={null} size='small' onPress={() => setModalVisible(false)} />
-              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
+              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' onPress={confirmDates}/>
             </View>
           </View>
         </View>

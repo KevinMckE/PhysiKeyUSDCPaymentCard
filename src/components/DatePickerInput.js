@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 
-const DatePickerInput = ({ onDateChange, onClose }) => {
+const DatePickerInput = ({ onDateChange }) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState(null);
   const [selection, setSelection] = useState();
@@ -14,10 +14,6 @@ const DatePickerInput = ({ onDateChange, onClose }) => {
     setOpen(true);
   };
 
-  const handleInputDate = (selectedDate) => {
-    handleInputDate(selectedDate); 
-  };
-
   const handleDateChange = (selectedDate) => {
     if (selection == 2) {
       setConfirmDate(selectedDate);
@@ -25,6 +21,7 @@ const DatePickerInput = ({ onDateChange, onClose }) => {
       setDate(selectedDate);
     }
     setOpen(false);
+    onDateChange(date, confirmDate);
   };
 
   return (

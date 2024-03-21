@@ -1,29 +1,51 @@
 ////////// FOR REFERENCE ////////////
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+import CryptoJS from 'crypto-js';
 
 ////////// FOR REFERENCE ////////////
-
+import Web3 from 'web3';
+var web3 = new Web3(Web3.givenProvider);
+var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 
 export const readSerial = async () => {
-    try {
-      await NfcManager.requestTechnology(NfcTech.NfcA);
-      const tag = await NfcManager.getTag();
-      return tag.id
-    } catch (error) {
-      console.log(error);
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  };
+  try {
+    await NfcManager.requestTechnology(NfcTech.NfcA);
+    const tag = await NfcManager.getTag();
+    return tag.id
+  } catch (error) {
+    console.log(error);
+  } finally {
+    NfcManager.cancelTechnologyRequest();
+  }
+};
 
-  export const closeSerial = async () => {
-    try {
-      await NfcManager.cancelTechnologyRequest();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const closeSerial = async () => {
+  try {
+    await NfcManager.cancelTechnologyRequest();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
+export const testLogin = (tag, date) => {
+  let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+  let tempChain = tag;
+  tempChain += date;
+  let finalChain = kdf.compute(tempChain, salt).toString();
+  tempChain = finalChain;
+
+  const innerHash = web3.utils.keccak256(finalChain);
+  let privateKey = web3.utils.keccak256(innerHash + finalChain);
+
+  let oneTimeEncryptionPW = web3.utils.randomHex(32);
+  let encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
+  let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+  let publicKey = decryptedAccount.address;
+
+  console.warn(encryptedPrivateKey);
+  console.warn(oneTimeEncryptionPW);
+  console.warn(publicKey);
+};
 
 
 /***
@@ -65,13 +87,9 @@ export const argonHash = (dataChain, salt) => {
       ); 
 
 }
+
+
 // the date and Tag ID will be available
-export const kdfHash = (tag, date) => {
-    let salt = // get salt
-    tempChain = tag + date;
-    finalChain += kdf.compute(tempChain, salt).toString();
-    return finalChain
-}
 
       tempDataChain += tag.id;
       tempDataChain += account;

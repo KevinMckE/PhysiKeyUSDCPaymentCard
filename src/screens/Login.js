@@ -3,10 +3,11 @@ import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-nat
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
-import { readSerial } from '../components/HelperFunctions';
+import { readSerial, testLogin } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [tagID, setTagID] = useState('');
   const [date, setDate] = useState();
   const [confirmDate, setConfirmDate] = useState();
 
@@ -15,6 +16,7 @@ const Login = ({ navigation }) => {
       try {
         let tagID = await readSerial();
         if (tagID) {
+          setTagID(tagID);
           setModalVisible(true);
         }
         //console.warn(tagID);
@@ -32,8 +34,13 @@ const Login = ({ navigation }) => {
   };
 
   const confirmDates = () => {
-    console.warn('DATE:', date);
-    console.warn('CONFIRM DATE:', confirmDate);
+    if (date && confirmDate) {
+      // are they  the same?
+      
+    }
+    testLogin(tagID, date);
+    //console.warn('DATE:', date);
+    //console.warn('CONFIRM DATE:', confirmDate);
     //setModalVisible(false);
   }
 

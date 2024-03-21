@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import CreateNewCard from '../screens/CreateNewCard';
+import Account from '../screens/Account';
 //import ConceptApp from '../screens/old/ConceptApp';
 
 
@@ -18,7 +19,7 @@ const AppNavigator = () => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <NavigationContainer theme={navTheme}>
-        <Stack.Navigator initialRouteName="Landing">
+        <Stack.Navigator initialRouteName="Account">
           <Stack.Screen
             name="Landing"
             component={Landing}
@@ -39,6 +40,13 @@ const AppNavigator = () => {
             component={CreateNewCard}
             options={{
               title: 'Setup New Access (1/3)',
+            }}
+          />
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={{
+              title: 'account',
             }}
           />
         </Stack.Navigator>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
-import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
 import { readSerial } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [date, setDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,10 +26,8 @@ const Login = ({ navigation }) => {
   }, []);
 
 
-  const handleDateSelect = (date, confirmDate) => {
-    // You can perform any logic with the selected date here
-    setSelectedDate(date);
-    setModalVisible(false);
+  const handleInputDate = (newDate) => {
+    setDate(newDate);
   };
 
   return (
@@ -69,10 +67,10 @@ const Login = ({ navigation }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
-            <DatePickerInput onEnter={handleDateSelect} onClose={() => setModalVisible(false)} />
+            <DatePickerInput onDateChange={handleInputDate} onClose={() => setModalVisible(false)} />
             <View style={styles.inlineButton}>
-              <NavigationButton navigation={navigation} text='Close' type='secondary' target={null} size='small' />
-              <NavigationButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
+              <ModalButton navigation={navigation} text='Close' type='secondary' target={null} size='small' onPress={() => setModalVisible(false)} />
+              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
             </View>
           </View>
         </View>

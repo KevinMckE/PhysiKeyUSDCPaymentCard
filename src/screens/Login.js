@@ -3,29 +3,28 @@ import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-nat
 import NavigationButton from '../components/NavigationButton';
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import DatePickerInput from '../components/DatePickerInput';
+import { readSerial } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
-    readSerial();
+    const fetchData = async () => {
+      try {
+        let tagID = await readSerial();
+        if (tagID) {
+          setModalVisible(true);
+        }
+        console.warn(tagID);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const readSerial = async () => {
-    try {
-      await NfcManager.requestTechnology(NfcTech.NfcA);
-      const tag = await NfcManager.getTag();
-      console.warn(tag.id);
-      console.warn(tag);
-
-      setModalVisible(true); 
-    } catch (ex) {
-      console.error(ex);
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-  };
 
   const handleDateSelect = (date, confirmDate) => {
     // You can perform any logic with the selected date here
@@ -58,7 +57,7 @@ const Login = ({ navigation }) => {
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
         <NavigationButton navigation={navigation} text='Continue' type='primary' target='CreateNewCard' size='large' />
       </View>
-        
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -71,8 +70,10 @@ const Login = ({ navigation }) => {
           <View style={styles.modalContent}>
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
             <DatePickerInput onEnter={handleDateSelect} onClose={() => setModalVisible(false)} />
-            <NavigationButton navigation={navigation} text='Close' type='secondary' target={null} size='small' />
-            <NavigationButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
+            <View style={styles.inlineButton}>
+              <NavigationButton navigation={navigation} text='Close' type='secondary' target={null} size='small' />
+              <NavigationButton navigation={navigation} text='Enter' type='primary' target={null} size='small' />
+            </View>
           </View>
         </View>
       </Modal>
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
   },
   modalContent: {
     backgroundColor: '#fff',
@@ -130,6 +132,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
+  inlineButton: {
+    flexDirection: 'row',
+    width: 100,
+    justifyContent: 'center',
+    gap: 10,
+  }
 });
 
 export default Login;

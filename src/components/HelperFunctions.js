@@ -1,5 +1,33 @@
 ////////// FOR REFERENCE ////////////
-var publicKey = '';
+import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+
+////////// FOR REFERENCE ////////////
+
+
+export const readSerial = async () => {
+    try {
+      await NfcManager.requestTechnology(NfcTech.NfcA);
+      const tag = await NfcManager.getTag();
+      return tag.id
+    } catch (error) {
+      console.log(error);
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+  };
+
+  export const closeSerial = async () => {
+    try {
+      await NfcManager.cancelTechnologyRequest();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
+/***
+ * var publicKey = '';
 var encryptedPrivateKey = '';
 var oneTimeEncryptionPW = '';
 const ec = new EC('secp256k1');
@@ -8,10 +36,23 @@ var tempDataChain = '';
 var salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 var web3 = new Web3(Web3.givenProvider);
-////////// FOR REFERENCE ////////////
+const writeNdef = async () => {
+    let scheme = '';
+    const nfcInput = Ndef.uriRecord(`${scheme}${tagValue}`);
+    const bytes = Ndef.encodeMessage([nfcInput]);
+    //console.warn(bytes);
 
+    try {
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      await NfcManager.ndefHandler.writeNdefMessage(bytes);
+    } catch (ex) {
+      // bypass
+    } finally {
+      NfcManager.cancelTechnologyRequest();
+    }
+  }
 
-const argonHash = (dataChain, salt) => {
+export const argonHash = (dataChain, salt) => {
     const argonResult = await argon2(
         dataChain,
         salt,
@@ -25,27 +66,13 @@ const argonHash = (dataChain, salt) => {
 
 }
 // the date and Tag ID will be available
-const kdfHash = (tag, date) => {
+export const kdfHash = (tag, date) => {
     let salt = // get salt
     tempChain = tag + date;
     finalChain += kdf.compute(tempChain, salt).toString();
     return finalChain
 }
 
-const readSerial = async () => {
-    try{
-      await NfcManager.requestTechnology(NfcTech.NfcA);
-      const tag = await NfcManager.getTag();
-      // LOG
-      console.log(tag.id);
-      return tag.id
-
-    } catch (ex) {
-        console.log(ex);
-    } finally {
-      NfcManager.cancelTechnologyRequest();
-    }
-}
       tempDataChain += tag.id;
       tempDataChain += account;
 
@@ -119,3 +146,4 @@ const readSerial = async () => {
     finalDataChain = ''; //clear finalDataChain
     tempDataChain = '';
     inputCheck = '';
+ */

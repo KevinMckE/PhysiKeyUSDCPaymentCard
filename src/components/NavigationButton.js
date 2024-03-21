@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { Button } from 'react-native-paper';
+import { closeSerial } from './HelperFunctions';
 
 const NavigationButton = ({ navigation, text, type, target, size }) => {
-  const handlePress = () => {
+  const handlePress = async () => {
+    try {
+      await closeSerial();
+    } catch (error) {
+      console.warn(error);
+    }
     if(target != null) {
     navigation.navigate(target);
-    } else {
-      // do nothing
-    }
+    } 
   };
 
   return (

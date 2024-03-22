@@ -10,6 +10,7 @@ const Login = ({ navigation }) => {
   const [tagID, setTagID] = useState('');
   const [date, setDate] = useState(null);
   const [confirmDate, setConfirmDate] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,24 +29,19 @@ const Login = ({ navigation }) => {
     fetchData();
   }, []);
 
-  const handleDateChange = (newDate, newConfirmDate) => {
-    setDate(newDate);
-    setConfirmDate(newConfirmDate);
-  };
-
   const confirmDates = () => {
-    console.warn('DATE:', date);
-    console.warn('CONFIRM DATE:', confirmDate);
     if (date && confirmDate) {
-
-      setModalVisible(false);
-      setModalVisible(false);
-
+      if (date.getTime() === confirmDate.getTime()) {
+        // Proceed with the operation
+        // testLogin(tagID, date);
+        setModalVisible(false);
+      } else {
+        setErrorMessage('The dates do not match.');
+      }
+    } else {
+      setErrorMessage('Please complete the form.');
     }
-    //testLogin(tagID, date);
-
-
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -94,6 +90,9 @@ const Login = ({ navigation }) => {
               date={confirmDate}  // Pass confirmDate state as prop
               setDate={setConfirmDate}  // Pass setConfirmDate function as prop
             />
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ) : null}
             <View style={styles.inlineButton}>
               <ModalButton navigation={navigation} text='Close' type='secondary' target={null} size='small' onPress={() => setModalVisible(false)} />
               <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' onPress={confirmDates} />
@@ -161,7 +160,11 @@ const styles = StyleSheet.create({
     width: 100,
     justifyContent: 'center',
     gap: 10,
-  }
+  },
+  errorMessage: {
+    color: 'red',
+    marginTop: 10,
+  },
 });
 
 export default Login;

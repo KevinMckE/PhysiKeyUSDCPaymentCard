@@ -18,11 +18,7 @@ const Account = ({ navigation }) => {
   ];
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/blob_background.png')}
-        style={styles.backgroundImage}
-        resizeMode="contain"
-      />
+
       <CurrencyCard
         title="Balance"
         subtitle="YEAH"

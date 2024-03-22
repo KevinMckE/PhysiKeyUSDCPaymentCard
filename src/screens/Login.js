@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-nat
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
-import { readSerial, testLogin } from '../components/HelperFunctions';
+import { readSerial, accountLogin } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,9 +32,9 @@ const Login = ({ navigation }) => {
   const confirmDates = () => {
     if (date && confirmDate) {
       if (date.getTime() === confirmDate.getTime()) {
-        // Proceed with the operation
-        // testLogin(tagID, date);
+        setErrorMessage('');
         setModalVisible(false);
+        accountLogin(tagID, date);
       } else {
         setErrorMessage('The dates do not match.');
       }
@@ -74,7 +74,7 @@ const Login = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(false);
         }}
       >
         <View style={styles.modalContainer}>

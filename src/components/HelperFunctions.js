@@ -2,7 +2,7 @@ import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-var web3 = new Web3(Web3.givenProvider);
+var web3 = new Web3('https://sepolia.optimism.io');
 var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 
 export const readSerial = async () => {
@@ -54,6 +54,7 @@ export const accountLogin = async (tag, date) => {
   console.warn(encryptedPrivateKey);
   console.warn(oneTimeEncryptionPW);
   console.warn(publicKey);
+  return publicKey;
 };
 
 const writeNdef = async () => {
@@ -70,5 +71,16 @@ const writeNdef = async () => {
   } finally {
     NfcManager.cancelTechnologyRequest();
   }
-}
+};
+
+export const getOptimismBalance = async (address) => {
+  try {
+    const balance = await web3.eth.getBalance(address);
+    const balanceInEth = web3.utils.fromWei(balance, 'ether')
+    return balanceInEth;
+  } catch (error) {
+    console.warn(error);
+    return null;
+  }
+};
 

@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 import { Card } from 'react-native-paper';
+import { getOptimismBalance } from '../components/HelperFunctions';
 import CurrencyCard from '../components/CurrencyCard';
 import HorizontalImageGallery from '../components/HorizontalScrollGallery';
 import NavigationButton from '../components/NavigationButton';
 
 const Account = ({ navigation }) => {
+  const [balance, setBalance] = useState('false');
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const address = '0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4'; 
+        const balance = await getOptimismBalance(address);
+        setBalance(balance);
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+    fetchBalance();
+  }, []);
 
   const images = [
     require('../assets/optimism_logo.png'),
@@ -21,7 +36,7 @@ const Account = ({ navigation }) => {
 
       <CurrencyCard
         title="Balance"
-        subtitle="YEAH"
+        subtitle={balance}
         imageSource={require('../assets/optimism_logo.png')}
       />
       <Text style={styles.headingText}>Your NFT Collection</Text>
@@ -30,7 +45,7 @@ const Account = ({ navigation }) => {
       <Text style={styles.headingText}>About Us</Text>
 
       <Card style={styles.card}>
-        <Text style={styles.paragraphText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+        <Text style={styles.paragraphText}>Anywhere Blockchain is building simple, safe, and more affordable key management tools for the future of finance, media, and governance. Our mobile application simplifies data ownership for users of Web 3 technology, using NFC chips to regenerate complex signing keys and passwords for the end user without storing them on remotely exploitable databases. This will have applications in the future of digital identity, social media, and blockchain-based computer transactions.</Text>
       </Card>
     </View>
   );

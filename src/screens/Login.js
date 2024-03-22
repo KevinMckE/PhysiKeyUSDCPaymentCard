@@ -9,6 +9,7 @@ const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [date, setDate] = useState(null);
+  const [publicKey, setPublicKey] = useState(null);
   const [confirmDate, setConfirmDate] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -34,7 +35,8 @@ const Login = ({ navigation }) => {
       if (date.getTime() === confirmDate.getTime()) {
         setErrorMessage('');
         setModalVisible(false);
-        accountLogin(tagID, date);
+        let publicKey = accountLogin(tagID, date);
+        setPublicKey(publicKey);
       } else {
         setErrorMessage('The dates do not match.');
       }
@@ -82,13 +84,13 @@ const Login = ({ navigation }) => {
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
             <DatePickerInput
               text='Select Date'
-              date={date}  // Pass date state as prop
-              setDate={setDate}  // Pass setDate function as prop
+              date={date}  
+              setDate={setDate}  
             />
             <DatePickerInput
               text='Confirm Date'
-              date={confirmDate}  // Pass confirmDate state as prop
-              setDate={setConfirmDate}  // Pass setConfirmDate function as prop
+              date={confirmDate}  
+              setDate={setConfirmDate} 
             />
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>

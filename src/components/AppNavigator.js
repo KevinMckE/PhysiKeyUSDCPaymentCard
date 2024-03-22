@@ -46,7 +46,7 @@ const AppNavigator = () => {
             name="Account"
             component={Account}
             options={{
-              title: 'account',
+              title: 'Your Assets',
             }}
           />
         </Stack.Navigator>

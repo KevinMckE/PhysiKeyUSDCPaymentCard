@@ -3,46 +3,46 @@ import { View, Image, StyleSheet, Text, ImageBackground, Modal, Button } from 'r
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
-import { readSerial, accountLogin, checkNdef } from '../components/HelperFunctions';
+import { readTag, accountLogin, readNdef } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
+  const [newCard, setNewCard] = useState(false);
   const [date, setDate] = useState(null);
   const [publicKey, setPublicKey] = useState(null);
   const [confirmDate, setConfirmDate] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
 
-const changeGifSource = () => {
-  const newSource =
-    gifSource === require('../assets/tap_image.png')
-      ? require('../assets/tap_animation.gif')
-      : require('../assets/tap_image.png');
-  setGifSource(newSource);
-};
-
   const fetchTag = async () => {
     try {
-      let tag = await readSerial();
-      console.warn('WHOLE TAG:', tag);
-      console.warn('NDEF:', tag).ndefMessage;
-      let payload = tag
-      tagID = tag.id;
-      if (tagID) {
-        setTagID(tagID);
-
-        //setModalVisible(true);
+      let tag = await readTag();
+      newTagID = tag.id;
+      ndefPayload = tag.ndefMessage[0].payload;
+      if (ndefPayload.length === 0) {
+        setNewCard(true);
       }
-      //console.warn(tagID);
+      if (newTagID) {
+        setTagID(newTagID);
+        setModalVisible(true);
+      }
     } catch (error) {
       console.log(error);
     }
+    changeGifSource();
+  };
+
+  const changeGifSource = () => {
+    const newSource =
+      gifSource === require('../assets/tap_image.png')
+        ? require('../assets/tap_animation.gif')
+        : require('../assets/tap_image.png');
+    setGifSource(newSource);
   };
 
   const handleScanCardPress = () => {
-    console.warn('button pressed')
-    changeGifSource(); 
+    changeGifSource();
     fetchTag();
   };
 
@@ -84,9 +84,7 @@ const changeGifSource = () => {
 
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
-        <NavigationButton navigation={navigation} text='Scan Card' type='primary' target={null} size='large' onPress={handleScanCardPress}/>
-        <Button title='test' onPress={handleScanCardPress}/>
-
+        <ModalButton text='Scan Card' type='primary' size='large' onPress={handleScanCardPress} />
       </View>
 
       <Modal
@@ -114,8 +112,8 @@ const changeGifSource = () => {
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
             <View style={styles.inlineButton}>
-              <ModalButton navigation={navigation} text='Close' type='secondary' target={null} size='small' onPress={() => setModalVisible(false)} />
-              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' onPress={confirmDates} />
+              <ModalButton text='Close' type='secondary' size='small' onPress={() => setModalVisible(false)} />
+              <ModalButton text='Enter' type='primary' size='small' onPress={confirmDates} />
             </View>
           </View>
         </View>

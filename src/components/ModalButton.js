@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from 'react-native-paper';
 import { closeSerial } from './HelperFunctions';
 
-const NavigationButton = ({ navigation, text, type, target, size, onPress }) => {
+const ModalButton = ({ text, type, size, onPress }) => {
   return (
     <Button
       mode={type === 'primary' ? 'contained' : 'outlined'}
@@ -16,4 +16,4 @@ const NavigationButton = ({ navigation, text, type, target, size, onPress }) => 
   );
 };
 
-export default NavigationButton;
+export default ModalButton;

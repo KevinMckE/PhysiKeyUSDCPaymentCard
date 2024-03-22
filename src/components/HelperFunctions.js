@@ -5,32 +5,16 @@ import Web3 from 'web3';
 var web3 = new Web3('https://sepolia.optimism.io');
 var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 
-export const readSerial = async () => {
+export const readTag = async () => {
   try {
     await NfcManager.requestTechnology(NfcTech.NfcA);
-    const tag = await NfcManager.getTag();
-    let tagID = tag.id
-    return tagID
+    let tag = await NfcManager.getTag();
+    tag = tag;
+    return tag
   } catch (error) {
     console.warn(error);
-  } 
-};
-
-export const readNdef = async () => {
-  try {
-    await NfcManager.start();
-    NfcManager.setEventListener(NfcTech.Ndef, async (tag) => {
-      let ndefData = null;
-      try {
-        ndefData = await NfcManager.readNdef(tag);
-        return ndefData;
-      } catch (error) {
-        console.warn(error);
-      }
-    });
-    NfcManager.requestTechnology(NfcTech.Ndef);
-  } catch (error) {
-    console.warn(error);
+  } finally {
+    NfcManager.cancelTechnologyRequest();
   }
 };
 

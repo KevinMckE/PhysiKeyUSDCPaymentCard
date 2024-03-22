@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
 import CurrencyCard from '../components/CurrencyCard';
+import HorizontalImageGallery from '../components/HorizontalScrollGallery';
 
 const Account = ({ navigation }) => {
+
+  const images = [
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+    require('../assets/optimism_logo.png'),
+  ];
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>Welcome...</Text>
@@ -11,6 +22,7 @@ const Account = ({ navigation }) => {
         subtitle="YEAH"
         imageSource={require('../assets/optimism_logo.png')}
       />
+      <HorizontalImageGallery images={images} />
 
     </View>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Image } from 'react-native';
+import { ScrollView, StyleSheet, Image, Navigation } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
+import NavigationButton from './NavigationButton';
 
 const HorizontalImageGallery = ({ images }) => {
   return (
@@ -17,7 +18,6 @@ const HorizontalImageGallery = ({ images }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 10,
   },
   card: {
     width: 135, 

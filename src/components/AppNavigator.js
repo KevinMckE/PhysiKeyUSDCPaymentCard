@@ -19,7 +19,7 @@ const AppNavigator = () => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <NavigationContainer theme={navTheme}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Landing">
           <Stack.Screen
             name="Landing"
             component={Landing}

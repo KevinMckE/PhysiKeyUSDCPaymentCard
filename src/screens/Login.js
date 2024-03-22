@@ -8,8 +8,8 @@ import { readSerial, testLogin } from '../components/HelperFunctions';
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
-  const [date, setDate] = useState();
-  const [confirmDate, setConfirmDate] = useState();
+  const [date, setDate] = useState(null);
+  const [confirmDate, setConfirmDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,14 +34,17 @@ const Login = ({ navigation }) => {
   };
 
   const confirmDates = () => {
+    console.warn('DATE:', date);
+    console.warn('CONFIRM DATE:', confirmDate);
     if (date && confirmDate) {
-      // are they  the same?
-      
+
+      setModalVisible(false);
+      setModalVisible(false);
+
     }
-    testLogin(tagID, date);
-    //console.warn('DATE:', date);
-    //console.warn('CONFIRM DATE:', confirmDate);
-    //setModalVisible(false);
+    //testLogin(tagID, date);
+
+
   }
 
   return (
@@ -81,10 +84,19 @@ const Login = ({ navigation }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
-            <DatePickerInput onDateChange={handleDateChange} onClose={() => setModalVisible(false)} />
+            <DatePickerInput
+              text='Select Date'
+              date={date}  // Pass date state as prop
+              setDate={setDate}  // Pass setDate function as prop
+            />
+            <DatePickerInput
+              text='Confirm Date'
+              date={confirmDate}  // Pass confirmDate state as prop
+              setDate={setConfirmDate}  // Pass setConfirmDate function as prop
+            />
             <View style={styles.inlineButton}>
               <ModalButton navigation={navigation} text='Close' type='secondary' target={null} size='small' onPress={() => setModalVisible(false)} />
-              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' onPress={confirmDates}/>
+              <ModalButton navigation={navigation} text='Enter' type='primary' target={null} size='small' onPress={confirmDates} />
             </View>
           </View>
         </View>

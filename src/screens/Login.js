@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
+import { View, Image, StyleSheet, Text, ImageBackground, Modal, Button } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
@@ -12,10 +12,15 @@ const Login = ({ navigation }) => {
   const [publicKey, setPublicKey] = useState(null);
   const [confirmDate, setConfirmDate] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
 
-  useEffect(() => {
-    fetchTag();
-  }, []);
+const changeGifSource = () => {
+  const newSource =
+    gifSource === require('../assets/tap_image.png')
+      ? require('../assets/tap_animation.gif')
+      : require('../assets/tap_image.png');
+  setGifSource(newSource);
+};
 
   const fetchTag = async () => {
     try {
@@ -33,6 +38,12 @@ const Login = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleScanCardPress = () => {
+    console.warn('button pressed')
+    changeGifSource(); 
+    fetchTag();
   };
 
   const confirmDates = () => {
@@ -64,7 +75,7 @@ const Login = ({ navigation }) => {
           resizeMode="contain"
         >
           <Image
-            source={require('../assets/tap_animation.gif')}
+            source={gifSource}
             style={styles.centeredImage}
             resizeMode="cover"
           />
@@ -73,7 +84,9 @@ const Login = ({ navigation }) => {
 
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
-        <NavigationButton navigation={navigation} text='Scan Again' type='primary' target={null} size='large' onPress={confirmDates}/>
+        <NavigationButton navigation={navigation} text='Scan Card' type='primary' target={null} size='large' onPress={handleScanCardPress}/>
+        <Button title='test' onPress={handleScanCardPress}/>
+
       </View>
 
       <Modal

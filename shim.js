@@ -14,7 +14,7 @@ if (typeof process === 'undefined') {
 process.browser = false
 if (typeof Buffer === 'undefined') global.Buffer = require('buffer').Buffer
 
-// global.location = global.location || { port: 80 }
+if (typeof location === 'undefined') global.location = { port: 80, protocol: 'https:' }
 const isDev = typeof __DEV__ === 'boolean' && __DEV__
 process.env['NODE_ENV'] = isDev ? 'development' : 'production'
 if (typeof localStorage !== 'undefined') {
@@ -23,4 +23,4 @@ if (typeof localStorage !== 'undefined') {
 
 // If using the crypto shim, uncomment the following line to ensure
 // crypto is loaded first, so it can populate global.crypto
-require('crypto');
+require('crypto')

@@ -1,4 +1,4 @@
-import './shimeth.js';
+import './global.js'
 import './shim.js';
 import {AppRegistry} from 'react-native';
 import App from './App';

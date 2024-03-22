@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Image, Navigation } from 'react-native';
-import { Card, Paragraph } from 'react-native-paper';
-import NavigationButton from './NavigationButton';
+import { Card } from 'react-native-paper';
 
 const HorizontalImageGallery = ({ images }) => {
   return (

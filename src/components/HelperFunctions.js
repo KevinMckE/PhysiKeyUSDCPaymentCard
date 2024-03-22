@@ -4,7 +4,7 @@ import CryptoJS from 'crypto-js';
 
 ////////// FOR REFERENCE ////////////
 import Web3 from 'web3';
-///var web3 = new Web3(Web3.givenProvider);
+var web3 = new Web3(Web3.givenProvider);
 var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
 
 export const readSerial = async () => {
@@ -27,7 +27,7 @@ export const closeSerial = async () => {
   }
 };
 
-/** 
+
 export const testLogin = (tag, date) => {
   let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
   let tempChain = tag;
@@ -48,7 +48,7 @@ export const testLogin = (tag, date) => {
   console.warn(publicKey);
 };
 
-*/
+
 /***
  * var publicKey = '';
 var encryptedPrivateKey = '';

@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-nat
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import DatePickerInput from '../components/DatePickerInput';
-import { readSerial, accountLogin } from '../components/HelperFunctions';
+import { readSerial, accountLogin, checkNdef } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,28 +14,33 @@ const Login = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let tagID = await readSerial();
-        if (tagID) {
-          setTagID(tagID);
-          setModalVisible(true);
-        }
-        //console.warn(tagID);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
+    fetchTag();
   }, []);
+
+  const fetchTag = async () => {
+    try {
+      let tag = await readSerial();
+      console.warn('WHOLE TAG:', tag);
+      console.warn('NDEF:', tag).ndefMessage;
+      let payload = tag
+      tagID = tag.id;
+      if (tagID) {
+        setTagID(tagID);
+
+        //setModalVisible(true);
+      }
+      //console.warn(tagID);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const confirmDates = () => {
     if (date && confirmDate) {
       if (date.getTime() === confirmDate.getTime()) {
         setErrorMessage('');
         setModalVisible(false);
-        let publicKey = accountLogin(tagID, date);
+        //let publicKey = accountLogin(tagID, date);
         setPublicKey(publicKey);
       } else {
         setErrorMessage('The dates do not match.');
@@ -68,7 +73,7 @@ const Login = ({ navigation }) => {
 
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
-        <NavigationButton navigation={navigation} text='Continue' type='primary' target='CreateNewCard' size='large' />
+        <NavigationButton navigation={navigation} text='Scan Again' type='primary' target={null} size='large' onPress={confirmDates}/>
       </View>
 
       <Modal
@@ -84,13 +89,13 @@ const Login = ({ navigation }) => {
             <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
             <DatePickerInput
               text='Select Date'
-              date={date}  
-              setDate={setDate}  
+              date={date}
+              setDate={setDate}
             />
             <DatePickerInput
               text='Confirm Date'
-              date={confirmDate}  
-              setDate={setConfirmDate} 
+              date={confirmDate}
+              setDate={setConfirmDate}
             />
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>

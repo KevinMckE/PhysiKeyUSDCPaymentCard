@@ -9,11 +9,28 @@ export const readSerial = async () => {
   try {
     await NfcManager.requestTechnology(NfcTech.NfcA);
     const tag = await NfcManager.getTag();
-    return tag.id
+    let tagID = tag.id
+    return tagID
   } catch (error) {
-    console.log(error);
-  } finally {
-    NfcManager.cancelTechnologyRequest();
+    console.warn(error);
+  } 
+};
+
+export const readNdef = async () => {
+  try {
+    await NfcManager.start();
+    NfcManager.setEventListener(NfcTech.Ndef, async (tag) => {
+      let ndefData = null;
+      try {
+        ndefData = await NfcManager.readNdef(tag);
+        return ndefData;
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+    NfcManager.requestTechnology(NfcTech.Ndef);
+  } catch (error) {
+    console.warn(error);
   }
 };
 
@@ -24,7 +41,8 @@ export const closeSerial = async () => {
     console.log(error);
   }
 };
-const writeNdef = async () => {
+
+export const writeNdef = async () => {
   try {
     await NfcManager.start();
     await NfcManager.requestTechnology(NfcTech.Ndef);
@@ -36,28 +54,6 @@ const writeNdef = async () => {
     await NfcManager.stop();
   } catch (error) {
     console.error('Error writing NDEF message:', error);
-  }
-};
-
-const checkNdef = async () => {
-  try {
-    await NfcManager.start();
-    await NfcManager.requestTechnology(NfcTech.Ndef);
-    const tag = await NfcManager.getTag();
-    const ndefData = await NfcManager.getNdefMessage();
-    if (ndefData) {
-      console.warn('NDEF message found on the tag:', ndefData);
-      return true; 
-    } else {
-      console.warn('No NDEF message found on the tag.');
-      return false; 
-    }
-  } catch (error) {
-    console.warn('Error checking NDEF message:', error);
-    return false; 
-  } finally {
-    await NfcManager.closeTechnology();
-    await NfcManager.stop();
   }
 };
 
@@ -86,6 +82,49 @@ export const getOptimismWalletActivity = async (address) => {
     return null;
   }
 };
+
+const transferOptimism = async (fromAddress, toAddress, amount, privateKey) => {
+  try {
+    // Validate the addresses
+    if (!web3.utils.isAddress(fromAddress) || !web3.utils.isAddress(toAddress)) {
+      throw new Error('Invalid address format.');
+    }
+
+    // Validate the amount
+    if (isNaN(amount) || amount <= 0) {
+      throw new Error('Invalid amount.');
+    }
+
+    // Validate the private key
+    if (!privateKey || privateKey.length !== 64) {
+      throw new Error('Invalid private key.');
+    }
+
+    // Create the transaction object
+    const txObject = {
+      from: fromAddress,
+      to: toAddress,
+      value: web3.utils.toWei(amount.toString(), 'ether'),
+      gas: 21000, // Gas limit
+      gasPrice: await web3.eth.getGasPrice(), // Get gas price from the network
+    };
+
+    // Sign the transaction
+    const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+
+    // Send the signed transaction
+    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+
+    console.log('Transaction hash:', receipt.transactionHash);
+    console.log('Transaction successful!');
+  } catch (error) {
+    console.error('Error transferring Optimism:', error.message);
+  }
+};
+
+// Example usage:
+// Replace the addresses and private key with your own
+// transferOptimism('0xSenderAddress', '0xRecipientAddress', 1, 'PrivateKey');
 
 
 

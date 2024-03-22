@@ -67,6 +67,7 @@ export const getOptimismWalletActivity = async (address) => {
   }
 };
 
+// CHAT GPT GENERATED NOT TESTED ***************
 const transferOptimism = async (fromAddress, toAddress, amount, privateKey) => {
   try {
     // Validate the addresses
@@ -109,9 +110,6 @@ const transferOptimism = async (fromAddress, toAddress, amount, privateKey) => {
 // Example usage:
 // Replace the addresses and private key with your own
 // transferOptimism('0xSenderAddress', '0xRecipientAddress', 1, 'PrivateKey');
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////

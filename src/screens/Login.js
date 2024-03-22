@@ -7,6 +7,7 @@ import { readTag, accountLogin, readNdef } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [newCard, setNewCard] = useState(false);
   const [date, setDate] = useState(null);
@@ -51,8 +52,11 @@ const Login = ({ navigation }) => {
       if (date.getTime() === confirmDate.getTime()) {
         setErrorMessage('');
         setModalVisible(false);
-        //let publicKey = accountLogin(tagID, date);
-        setPublicKey(publicKey);
+        if (newCard) {
+          setSecondModalVisible(true);
+        } else {
+          accountLogin(tagID, date);
+        }
       } else {
         setErrorMessage('The dates do not match.');
       }
@@ -114,6 +118,25 @@ const Login = ({ navigation }) => {
             <View style={styles.inlineButton}>
               <ModalButton text='Close' type='secondary' size='small' onPress={() => setModalVisible(false)} />
               <ModalButton text='Enter' type='primary' size='small' onPress={confirmDates} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={secondModalVisible}
+        onRequestClose={() => {
+          setSecondModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.headingText}>New Card?</Text>
+            <Text style={styles.errorMessage}>It looks like you may not have created a new secure passcode.  Would you like to do that now? Your assets will be automatically transferred.</Text>
+            <View style={styles.inlineButton}>
+              <NavigationButton navigation={navigation} text='No' type='secondary' target='Account' size='small' />
+              <NavigationButton navigation={navigation} text='Yes' type='primary' target='CreateNewCard' size='small' />
             </View>
           </View>
         </View>
@@ -181,7 +204,7 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: 'red',
-    marginTop: 10,
+    margin: 10,
   },
 });
 

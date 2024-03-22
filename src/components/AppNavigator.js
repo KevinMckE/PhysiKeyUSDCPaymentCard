@@ -6,8 +6,6 @@ import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import CreateNewCard from '../screens/CreateNewCard';
 import Account from '../screens/Account';
-//import ConceptApp from '../screens/old/ConceptApp';
-
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -19,7 +17,7 @@ const AppNavigator = () => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <NavigationContainer theme={navTheme}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Landing">
           <Stack.Screen
             name="Landing"
             component={Landing}

@@ -24,7 +24,78 @@ export const closeSerial = async () => {
     console.log(error);
   }
 };
+const writeNdef = async () => {
+  try {
+    await NfcManager.start();
+    await NfcManager.requestTechnology(NfcTech.Ndef);
+    const bytes = Ndef.encodeMessage([Ndef.textRecord(dataToWrite)]);
+    const tag = await NfcManager.getTag();
+    await NfcManager.writeNdefMessage(bytes);
+    console.warn('NDEF message written successfully:', dataToWrite);
+    await NfcManager.closeTechnology();
+    await NfcManager.stop();
+  } catch (error) {
+    console.error('Error writing NDEF message:', error);
+  }
+};
 
+const checkNdef = async () => {
+  try {
+    await NfcManager.start();
+    await NfcManager.requestTechnology(NfcTech.Ndef);
+    const tag = await NfcManager.getTag();
+    const ndefData = await NfcManager.getNdefMessage();
+    if (ndefData) {
+      console.warn('NDEF message found on the tag:', ndefData);
+      return true; 
+    } else {
+      console.warn('No NDEF message found on the tag.');
+      return false; 
+    }
+  } catch (error) {
+    console.warn('Error checking NDEF message:', error);
+    return false; 
+  } finally {
+    await NfcManager.closeTechnology();
+    await NfcManager.stop();
+  }
+};
+
+export const getOptimismBalance = async (address) => {
+  try {
+    const balance = await web3.eth.getBalance(address);
+    const balanceInEth = web3.utils.fromWei(balance, 'ether')
+    return balanceInEth;
+  } catch (error) {
+    console.warn(error);
+    return null;
+  }
+};
+
+export const getOptimismWalletActivity = async (address) => {
+  try {
+    const transactionCount = await web3.eth.getTransactionCount(address);
+    const transactions = [];
+    for (let i = 0; i < transactionCount; i++) {
+      const transaction = await web3.eth.getTransactionFromBlock('latest', i);
+      transactions.push(transaction);
+    }
+    return transactions;
+  } catch (error) {
+    console.warn(error);
+    return null;
+  }
+};
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+////////// MAIN FUNCTION FOR LOGIN AND ACCOUNT CREATION///////////////
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 export const accountLogin = async (tag, date) => {
   let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
   let tempChain = tag;
@@ -55,47 +126,5 @@ export const accountLogin = async (tag, date) => {
   console.warn(oneTimeEncryptionPW);
   console.warn(publicKey);
   return publicKey;
-};
-
-const writeNdef = async () => {
-  let scheme = '';
-  const nfcInput = Ndef.uriRecord(`${scheme}${tagValue}`);
-  const bytes = Ndef.encodeMessage([nfcInput]);
-  //console.warn(bytes);
-
-  try {
-    await NfcManager.requestTechnology(NfcTech.Ndef);
-    await NfcManager.ndefHandler.writeNdefMessage(bytes);
-  } catch (ex) {
-    // bypass
-  } finally {
-    NfcManager.cancelTechnologyRequest();
-  }
-};
-
-export const getOptimismBalance = async (address) => {
-  try {
-    const balance = await web3.eth.getBalance(address);
-    const balanceInEth = web3.utils.fromWei(balance, 'ether')
-    return balanceInEth;
-  } catch (error) {
-    console.warn(error);
-    return null;
-  }
-};
-
-export const getOptimismWalletActivity = async (address) => {
-  try {
-    const transactionCount = await web3.eth.getTransactionCount(address);
-    const transactions = [];
-    for (let i = 0; i < transactionCount; i++) {
-      const transaction = await web3.eth.getTransactionFromBlock('latest', i);
-      transactions.push(transaction);
-    }
-    return transactions;
-  } catch (error) {
-    console.warn(error);
-    return null;
-  }
 };
 

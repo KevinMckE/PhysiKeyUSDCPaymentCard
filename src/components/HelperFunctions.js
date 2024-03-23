@@ -1,15 +1,15 @@
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
+import { TatumSDK, Network, Optimism, ApiVersion, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
+import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-var web3 = new Web3('https://sepolia.optimism.io');
-var kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/optimism-testnet/' + Config.TATUM_API_KEY);
 
 export const readTag = async () => {
   try {
     await NfcManager.requestTechnology(NfcTech.NfcA);
     let tag = await NfcManager.getTag();
-    tag = tag;
     return tag
   } catch (error) {
     console.warn(error);
@@ -67,49 +67,25 @@ export const getOptimismWalletActivity = async (address) => {
   }
 };
 
-// CHAT GPT GENERATED NOT TESTED ***************
-const transferOptimism = async (fromAddress, toAddress, amount, privateKey) => {
+export const getAccountNfts = async () => {
   try {
-    // Validate the addresses
-    if (!web3.utils.isAddress(fromAddress) || !web3.utils.isAddress(toAddress)) {
-      throw new Error('Invalid address format.');
+    const tatum = await TatumSDK.init({
+      network: Network.OPTIMISM_TESTNET,
+      version: ApiVersion.V4,
+      apiKey: { v4: '' + Config.TATUM_API_KEY }
+    });
+    const nftsResponse = await tatum.nft.getBalance({
+      addresses: [publicKey],
+    });
+    if (nftsResponse.data == null) {
+    } else {
+      return nftsResponse.data;
     }
-
-    // Validate the amount
-    if (isNaN(amount) || amount <= 0) {
-      throw new Error('Invalid amount.');
-    }
-
-    // Validate the private key
-    if (!privateKey || privateKey.length !== 64) {
-      throw new Error('Invalid private key.');
-    }
-
-    // Create the transaction object
-    const txObject = {
-      from: fromAddress,
-      to: toAddress,
-      value: web3.utils.toWei(amount.toString(), 'ether'),
-      gas: 21000, // Gas limit
-      gasPrice: await web3.eth.getGasPrice(), // Get gas price from the network
-    };
-
-    // Sign the transaction
-    const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
-
-    // Send the signed transaction
-    const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-
-    console.log('Transaction hash:', receipt.transactionHash);
-    console.log('Transaction successful!');
   } catch (error) {
-    console.error('Error transferring Optimism:', error.message);
+    console.warn(error);
   }
 };
 
-// Example usage:
-// Replace the addresses and private key with your own
-// transferOptimism('0xSenderAddress', '0xRecipientAddress', 1, 'PrivateKey');
 
 
 //////////////////////////////////////////////////////////////////////
@@ -118,8 +94,10 @@ const transferOptimism = async (fromAddress, toAddress, amount, privateKey) => {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 export const accountLogin = async (tag, date) => {
+  let kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
   let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
   let tempChain = tag;
+  tempChain = kdf.compute(tempChain, salt).toString();
   tempChain += date;
   let finalChain = kdf.compute(tempChain, salt).toString();
   let tempDataChain = finalChain;

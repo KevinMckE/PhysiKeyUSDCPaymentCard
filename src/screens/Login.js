@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet, Text, ImageBackground, Modal, Button } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
@@ -58,7 +58,7 @@ const Login = ({ navigation }) => {
           accountLogin(tagID, date);
         }
       } else {
-        setErrorMessage('The dates do not match.');
+        setErrorMessage('The passwords do not match.');
       }
     } else {
       setErrorMessage('Please complete the form.');
@@ -69,7 +69,7 @@ const Login = ({ navigation }) => {
     <View style={styles.container}>
 
       <View style={styles.topContainer}>
-        <Text style={styles.headingText}>Scan your card then input Date Passcode.</Text>
+        <Text style={styles.headingText}>Scan your card then input your password.</Text>
       </View>
 
       <View style={styles.imageContainer}>

@@ -13,7 +13,7 @@ const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background
 const AppNavigator = () => {
   return (
     <ImageBackground
-      source={require('../assets/background_grid.png')}
+      source={require('../assets/tech_pattern.jpg')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <NavigationContainer theme={navTheme}>

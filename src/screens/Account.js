@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, ScrollView } from 'react-native';
 import { Card } from 'react-native-paper';
-import { getOptimismBalance, getOptimismWalletActivity } from '../components/HelperFunctions';
+import { getOptimismBalance } from '../components/HelperFunctions';
 import CurrencyCard from '../components/CurrencyCard';
 import HorizontalImageGallery from '../components/HorizontalScrollGallery';
 import NavigationButton from '../components/NavigationButton';
@@ -18,6 +18,7 @@ const Account = ({ navigation }) => {
     require('../assets/optimism_logo.png'),
   ]);
 
+  const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   useEffect(() => {
     const fetchBalance = async () => {
       try {

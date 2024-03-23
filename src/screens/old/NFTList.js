@@ -35,7 +35,7 @@ const NFTList = (props) => {
 
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const halfWindowsWidth = Dimensions.get('window').width / 2;
-  const web3Instance = new Web3('https://api.tatum.io/v3/blockchain/node/ethereum-sepolia/' + Config.TATUM_API_KEY);
+  const web3Instance = new Web3('https://api.tatum.io/v3/blockchain/node/optimism-testnet/' + Config.TATUM_API_KEY);
 
 
   const viewNFTs = async () => {

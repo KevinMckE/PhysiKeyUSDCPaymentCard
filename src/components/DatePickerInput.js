@@ -1,32 +1,26 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import DatePicker from 'react-native-date-picker';
 
-const DatePickerInput = ({ text, date, setDate }) => {
-  const [open, setOpen] = useState(false);
+const DatePickerInput = ({ text }) => {
+  const [inputText, setInputText] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(true);
+
+  const handleInputChange = (text) => {
+    setInputText(text); // Update the inputText state when the text changes
+  };
 
   return (
     <View>
-      <TouchableOpacity onPress={() => setOpen(true)}>
         <TextInput
-          mode="outlined"
-          style={styles.textInput}
-          placeholder={text}
-          value={date ? date.toDateString() : ''}
-          editable={false}
-          secureTextEntry={confirmVisible}
-        />
-      </TouchableOpacity>
-      <DatePicker
-        modal
-        mode="date"
-        open={open}
-        date={date || new Date()}
-        onConfirm={(selectedDate) => { setOpen(false); setDate(selectedDate) }}
-        onCancel={() => setOpen(false)}
+        mode="outlined"
+        style={styles.textInput}
+        placeholder={text}
+        value={inputText}
+        onChangeText={handleInputChange}
+        secureTextEntry={confirmVisible}
       />
+ 
       <TouchableOpacity
         style={styles.toggleButton}
         onPress={() => setConfirmVisible(!confirmVisible)}>

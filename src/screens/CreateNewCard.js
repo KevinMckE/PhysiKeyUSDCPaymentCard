@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
-import DatePickerInput from '../components/DatePickerInput';
+import DatePickerInput from '../components/PasswordInput';
 
 const Login = ({ navigation }) => {
   return (

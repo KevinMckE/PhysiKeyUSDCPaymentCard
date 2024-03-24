@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
 import { Card } from 'react-native-paper';
-import { getOptimismBalance } from '../components/HelperFunctions';
+import { getOptimismBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
 import CurrencyCard from '../components/CurrencyCard';
 import HorizontalImageGallery from '../components/HorizontalScrollGallery';
 import NavigationButton from '../components/NavigationButton';
 
-const Account = ({ navigation }) => {
+const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
-  const [images, setImages] = useState([
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-    require('../assets/optimism_logo.png'),
-  ]);
+  const [nfts, setNfts] = useState([]);
+  const [imageUris, setImageUris] = useState([]);
 
+  const { publicKey } = route.params; 
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
+ 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const address = '0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4';
-        const balance = await getOptimismBalance(address);
+        let balance = await getOptimismBalance(publicKey);
+        if (balance === '0.') {
+          balance = '0.0';
+        }
         setBalance(balance);
       } catch (error) {
         console.warn(error);
@@ -32,22 +29,51 @@ const Account = ({ navigation }) => {
     fetchBalance();
   }, []);
 
+  /**
+  useEffect(() => {
+    const fetchNfts = async () => {
+      try {
+        const nftList = await getAccountNfts(testKey);
+        setNfts(nftList);
+  
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+    fetchNfts();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchImageUris = async () => {
+      const uris = await Promise.all(
+        nfts.map(async (item) => {
+          const uri = await getImageUri(item);
+          return uri;
+        })
+      );
+      setImageUris(uris);
+    };
+    fetchImageUris();
+  }, [nfts]);
+ */
   return (
     <ScrollView style={styles.container}>
       <View style={styles.balanceContainer}>
         <CurrencyCard
-          title="Balance"
+          title="Optimism Balance"
+          pub={truncatedKey}
           subtitle={balance}
           imageSource={require('../assets/optimism_logo.png')}
         />
       </View>
       <View style={styles.nftContainer}>
-        {images.length === 0 ? (
+        {nfts.length === 0 ? (
           <Text style={styles.errorText}>Oops! You do not have any NFTs in this wallet.</Text>
         ) : (
           <>
             <Text style={styles.headingText}>Your NFT Collection</Text>
-            <HorizontalImageGallery images={images} />
+            <HorizontalImageGallery nfts={nfts} />
             <NavigationButton navigation={navigation} text='View All' type='primary' target='NftCollection' size='large' />
           </>
         )}
@@ -96,6 +122,10 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#ffffff',
   },
+  errorText: {
+    margin: 10,
+    height: 50,
+  }
 });
 
 export default Account;

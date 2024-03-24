@@ -4,8 +4,8 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
-import CreateNewCard from '../screens/CreateNewCard';
 import Account from '../screens/Account';
+import NftCollection from '../screens/NftCollection';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -34,17 +34,17 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="CreateNewCard"
-            component={CreateNewCard}
-            options={{
-              title: 'Setup New Access (1/3)',
-            }}
-          />
-          <Stack.Screen
             name="Account"
             component={Account}
             options={{
               title: 'Your Assets',
+            }}
+          />
+          <Stack.Screen
+            name="NftCollection"
+            component={NftCollection}
+            options={{
+              title: 'Your NFT Collection',
             }}
           />
         </Stack.Navigator>

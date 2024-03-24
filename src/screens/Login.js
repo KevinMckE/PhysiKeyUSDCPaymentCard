@@ -1,35 +1,38 @@
-import React, { useState } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground, Modal, Button } from 'react-native';
+import React, { useState, Suspense, useEffect } from 'react';
+import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
-import DatePickerInput from '../components/DatePickerInput';
-import { readTag, accountLogin, readNdef } from '../components/HelperFunctions';
+import PasswordInput from '../components/PasswordInput';
+import { readTag, accountLogin } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
-  const [newCard, setNewCard] = useState(false);
-  const [date, setDate] = useState(null);
-  const [publicKey, setPublicKey] = useState(null);
-  const [confirmDate, setConfirmDate] = useState(null);
+  //const [newCard, setNewCard] = useState(false);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
+  const { navigate } = useNavigation();
 
   const fetchTag = async () => {
     try {
       let tag = await readTag();
       newTagID = tag.id;
       ndefPayload = tag.ndefMessage[0].payload;
+      /**
       if (ndefPayload.length === 0) {
         setNewCard(true);
       }
+       */
       if (newTagID) {
         setTagID(newTagID);
         setModalVisible(true);
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
     changeGifSource();
   };
@@ -47,15 +50,22 @@ const Login = ({ navigation }) => {
     fetchTag();
   };
 
-  const confirmDates = () => {
-    if (date && confirmDate) {
-      if (date.getTime() === confirmDate.getTime()) {
+  const confirmPasswords = async () => {
+    console.warn(password);
+    if (password && confirmPassword) {
+      if (password === confirmPassword) {
         setErrorMessage('');
         setModalVisible(false);
-        if (newCard) {
-          setSecondModalVisible(true);
-        } else {
-          accountLogin(tagID, date);
+        try {
+          let key = await accountLogin(tagID, password);
+          console.warn(key);
+          if (key) {
+            navigate('Account', { publicKey: key });
+          } else {
+            //console.error('Key is not defined.');
+          }
+        } catch (error) {
+          //console.error('Error logging in:', error);
         }
       } else {
         setErrorMessage('The passwords do not match.');
@@ -64,12 +74,11 @@ const Login = ({ navigation }) => {
       setErrorMessage('Please complete the form.');
     }
   };
-
   return (
     <View style={styles.container}>
 
       <View style={styles.topContainer}>
-        <Text style={styles.headingText}>Scan your card then input your password.</Text>
+        <Text style={styles.headingText}>Scan your card and input your password.</Text>
       </View>
 
       <View style={styles.imageContainer}>
@@ -78,11 +87,14 @@ const Login = ({ navigation }) => {
           style={styles.backgroundImage}
           resizeMode="contain"
         >
-          <Image
-            source={gifSource}
-            style={styles.centeredImage}
-            resizeMode="cover"
-          />
+          <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
+            <Image
+              source={gifSource}
+              style={styles.centeredImage}
+              fadeDuration={0}
+              resizeMode="cover"
+            />
+          </Suspense>
         </ImageBackground>
       </View>
 
@@ -101,23 +113,26 @@ const Login = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.headingText}>Entering a new or random date will create a new wallet.</Text>
-            <DatePickerInput
-              text='Select Date'
-              date={date}
-              setDate={setDate}
+            <Text style={styles.headingText}>Entering a new or random password create a new wallet.</Text>
+            <PasswordInput
+              text='Enter Password'
+              password={password}
+              setPassword={setPassword}
             />
-            <DatePickerInput
-              text='Confirm Date'
-              date={confirmDate}
-              setDate={setConfirmDate}
+            <PasswordInput
+              text='Confirm Password'
+              password={confirmPassword}
+              setPassword={setConfirmPassword}
             />
             {errorMessage ? (
               <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
             <View style={styles.inlineButton}>
-              <ModalButton text='Close' type='secondary' size='small' onPress={() => setModalVisible(false)} />
-              <ModalButton text='Enter' type='primary' size='small' onPress={confirmDates} />
+              <ModalButton text='Close' type='secondary' size='small' onPress={() => {
+                setModalVisible(false);
+                changeGifSource(); 
+              }} />
+              <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
             </View>
           </View>
         </View>

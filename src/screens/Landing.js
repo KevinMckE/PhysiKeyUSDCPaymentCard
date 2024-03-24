@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Video from 'react-native-video';
 import NavigationButton from '../components/NavigationButton';
-import CardAnimation from '../assets/card_animation.mp4';
 
 const Landing = ({ navigation }) => {
 
@@ -17,11 +16,12 @@ const Landing = ({ navigation }) => {
           source={require('../assets/blob_background.png')}
           style={styles.backgroundImage}
         />
-        <Video
-          source={CardAnimation}
-          resizeMode="cover"
-          style={styles.video}
+
+        <Image
+          source={require('../assets/card_animation.gif')}
+          style={styles.centeredImage}
         />
+
       </View>
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Scan Card' type='primary' target='Login' size='large' />
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   centeredImage: {
-    width: '150%',
-    height: '150%'
+    width: '85%',
+    height: '85%'
   },
   bottomContainer: {
     flex: 1,
@@ -62,10 +62,6 @@ const styles = StyleSheet.create({
   paragraphText: {
     color: '#000000',
     fontSize: 18,
-  },
-  video: {
-    height: 300, // Increase the height
-    width: 300, // Increase the width
   }
 });
 

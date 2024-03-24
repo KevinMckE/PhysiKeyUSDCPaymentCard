@@ -1,10 +1,9 @@
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import { TatumSDK, Network, Optimism, ApiVersion, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';
-import Config from 'react-native-config';
+import { TatumSDK, Network, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://api.tatum.io/v3/blockchain/node/optimism-testnet/' + Config.TATUM_API_KEY);
+const web3 = new Web3('https://sepolia.optimism.io');
 
 export const readTag = async () => {
   try {
@@ -12,7 +11,7 @@ export const readTag = async () => {
     let tag = await NfcManager.getTag();
     return tag
   } catch (error) {
-    console.warn(error);
+    //console.warn(error);
   } finally {
     NfcManager.cancelTechnologyRequest();
   }
@@ -22,7 +21,7 @@ export const closeSerial = async () => {
   try {
     await NfcManager.cancelTechnologyRequest();
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 
@@ -33,21 +32,33 @@ export const writeNdef = async () => {
     const bytes = Ndef.encodeMessage([Ndef.textRecord(dataToWrite)]);
     const tag = await NfcManager.getTag();
     await NfcManager.writeNdefMessage(bytes);
-    console.warn('NDEF message written successfully:', dataToWrite);
+    //console.warn('NDEF message written successfully:', dataToWrite);
     await NfcManager.closeTechnology();
     await NfcManager.stop();
   } catch (error) {
-    console.error('Error writing NDEF message:', error);
+    //console.error('Error writing NDEF message:', error);
   }
 };
 
 export const getOptimismBalance = async (address) => {
   try {
     const balance = await web3.eth.getBalance(address);
-    const balanceInEth = web3.utils.fromWei(balance, 'ether')
+    const balanceInEth = web3.utils.fromWei(balance, 'ether');
     return balanceInEth;
   } catch (error) {
     console.warn(error);
+    return null;
+  }
+};
+
+export const getPolygonBalance = async (address) => {
+  try {
+    const checksumAddress = web3.utils.toChecksumAddress('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
+    const balance = await web3.eth.getBalance(checksumAddress);
+    const balanceInEther = web3.utils.fromWei(balance, 'ether');
+    return balanceInEther;
+  } catch (error) {
+    //console.error('Error getting Polygon balance:', error);
     return null;
   }
 };
@@ -62,12 +73,12 @@ export const getOptimismWalletActivity = async (address) => {
     }
     return transactions;
   } catch (error) {
-    console.warn(error);
+    //console.warn(error);
     return null;
   }
 };
 
-export const getAccountNfts = async () => {
+export const getAccountNfts = async (publicKey) => {
   try {
     const tatum = await TatumSDK.init({
       network: Network.OPTIMISM_TESTNET,
@@ -82,7 +93,26 @@ export const getAccountNfts = async () => {
       return nftsResponse.data;
     }
   } catch (error) {
-    console.warn(error);
+    //console.warn(error);
+  }
+};
+
+export const getImageUri = async (item) => {
+  const originalUrl = item.metadataURI;
+  if (originalUrl.startsWith('https://')) {
+    const response = await fetch(originalUrl);
+    const responseBodyText = await response.text();
+    const responseData = JSON.parse(responseBodyText);
+    const uri = responseData.image;
+    return uri;
+  } else {
+    const convertedUrl = originalUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    const response = await fetch(convertedUrl);
+    const responseBodyText = await response.text();
+    const responseData = JSON.parse(responseBodyText);
+    const uri = responseData.image;
+    const convertedUri = uri.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    return convertedUri;
   }
 };
 
@@ -121,9 +151,9 @@ export const accountLogin = async (tag, date) => {
   let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
   let publicKey = decryptedAccount.address;
 
-  console.warn(encryptedPrivateKey);
-  console.warn(oneTimeEncryptionPW);
-  console.warn(publicKey);
+  //console.warn(encryptedPrivateKey);
+  //console.warn(oneTimeEncryptionPW);
+  //console.warn(publicKey);
   return publicKey;
 };
 

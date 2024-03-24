@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://sepolia.optimism.io');
+const web3 = new Web3('https://1rpc.io/sepolia');
 
 // tatum fetch polyfill
 import { fetch as fetchPolyfill } from 'whatwg-fetch'
@@ -72,7 +72,8 @@ export const getEthBalance = async (address) => {
   try {
     const balanceWei = await web3.eth.getBalance(address);
     const balanceEth = web3.utils.fromWei(balanceWei, 'ether');
-    return balanceEth
+    const roundedBalanceEth = Math.round(balanceEth * 100) / 100;
+    return roundedBalanceEth
     //console.log('Ether Balance:', balanceEth);
   } catch (error) {
     //console.error('Error getting balance:', error);

@@ -1,9 +1,14 @@
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import { TatumSDK, Network, Ethereum, Polygon, ResponseDto, NftAddressBalance, NftTokenDetail } from '@tatumio/tatum';import Config from 'react-native-config';
+import { TatumSDK, Network } from '@tatumio/tatum';
+import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://sepolia.optimism.io');
+const web3 = new Web3('https://rpc-mumbai.maticvigil.com/');
+
+// tatum fetch polyfill
+import { fetch as fetchPolyfill } from 'whatwg-fetch'
+global.fetch = fetchPolyfill
 
 export const readTag = async () => {
   try {
@@ -79,15 +84,17 @@ export const getOptimismWalletActivity = async (address) => {
 };
 
 export const getAccountNfts = async (publicKey) => {
+ 
   try {
+
     const tatum = await TatumSDK.init({
-      network: Network.OPTIMISM_TESTNET,
-      version: ApiVersion.V4,
-      apiKey: { v4: '' + Config.TATUM_API_KEY }
+      network: Network.POLYGON_MUMBAI,
     });
+ 
     const nftsResponse = await tatum.nft.getBalance({
       addresses: [publicKey],
     });
+  
     if (nftsResponse.data == null) {
     } else {
       return nftsResponse.data;

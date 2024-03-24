@@ -1,43 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card } from 'react-native-paper';
 import { getOptimismBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
 import CurrencyCard from '../components/CurrencyCard';
-import HorizontalImageGallery from '../components/HorizontalScrollGallery';
-import NavigationButton from '../components/NavigationButton';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
   const [nfts, setNfts] = useState([]);
   const [imageUris, setImageUris] = useState([]);
-
-  const { publicKey } = route.params; 
+  const [loading, setLoading] = useState(true);
+  const { publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
- 
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        let balance = await getOptimismBalance(publicKey);
-        if (balance === '0.') {
-          balance = '0.0';
-        }
-        setBalance(balance);
-      } catch (error) {
-        //console.warn(error);
-      }
-    };
-    fetchBalance();
-  }, []);
+  const halfWindowsWidth = Dimensions.get('window').width / 2;
 
-  
+  /**
+   useEffect(() => {
+     const fetchBalance = async () => {
+       try {
+         let balance = await getOptimismBalance(publicKey);
+         if (balance === '0.') {
+           balance = '0.0';
+         }
+         setBalance(balance);
+       } catch (error) {
+         //console.warn(error);
+       }
+     };
+     fetchBalance();
+   }, []);
+ 
+    */
   useEffect(() => {
     const fetchNfts = async () => {
       try {
-        const nftList = await getAccountNfts(publicKey);
+        const nftList = await getAccountNfts('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
         setNfts(nftList);
-  
       } catch (error) {
-        console.warn(error);
+        //console.warn(error);
       }
     };
     fetchNfts();
@@ -46,16 +45,31 @@ const Account = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchImageUris = async () => {
-      const uris = await Promise.all(
-        nfts.map(async (item) => {
-          const uri = await getImageUri(item);
-          return uri;
-        })
-      );
-      setImageUris(uris);
+      if (nfts.length > 0) {
+        const uris = await Promise.all(
+          nfts.map(async (item) => {
+            const uri = await getImageUri(item);
+            return uri;
+          })
+        );
+        setImageUris(uris);
+        setLoading(false);
+      }
     };
     fetchImageUris();
   }, [nfts]);
+
+  const renderNFTCard = ({ item, index }) => (
+    <TouchableOpacity onPress={() => openDetailsScreen(item, imageUris[index])}>
+      <Card mode='contained' >
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width }} />
+        ) : (
+          <Card.Cover source={{ uri: imageUris[index] }} style={{ width: halfWindowsWidth, height: halfWindowsWidth }} />
+        )}
+      </Card>
+    </TouchableOpacity>
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -68,15 +82,13 @@ const Account = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.nftContainer}>
-        {nfts.length === 0 ? (
-          <Text style={styles.errorText}>Oops! You do not have any NFTs in this wallet.</Text>
-        ) : (
-          <>
-            <Text style={styles.headingText}>Your NFT Collection</Text>
-            <HorizontalImageGallery nfts={nfts} />
-            <NavigationButton navigation={navigation} text='View All' type='primary' target='NftCollection' size='large' />
-          </>
-        )}
+      <FlatList
+          horizontal
+          data={nfts}
+          renderItem={renderNFTCard}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ gap: 15 }}
+        />
       </View>
       <View style={styles.aboutContainer}>
         <Text style={styles.headingText}>About Us</Text>
@@ -92,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
- 
+
   },
   balanceContainer: {
     flex: 1,

@@ -11,7 +11,7 @@ const Account = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const { publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
-  const halfWindowsWidth = Dimensions.get('window').width / 2;
+  const thirdWindowsWidth = Dimensions.get('window').width / 3;
 
   /**
    useEffect(() => {
@@ -59,13 +59,17 @@ const Account = ({ navigation, route }) => {
     fetchImageUris();
   }, [nfts]);
 
+  const openDetailsScreen = (nft, imageUri) => {
+    navigation.navigate('NftDetails', { publicKey, selectedNFT: nft, imageUri });
+  };
+
   const renderNFTCard = ({ item, index }) => (
     <TouchableOpacity onPress={() => openDetailsScreen(item, imageUris[index])}>
       <Card mode='contained' >
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width }} />
+          <ActivityIndicator size="large" color="#0000ff" style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: thirdWindowsWidth, height: thirdWindowsWidth }} />
         ) : (
-          <Card.Cover source={{ uri: imageUris[index] }} style={{ width: halfWindowsWidth, height: halfWindowsWidth }} />
+          <Card.Cover source={{ uri: imageUris[index] }} style={{ width: thirdWindowsWidth, height: thirdWindowsWidth }} />
         )}
       </Card>
     </TouchableOpacity>
@@ -82,6 +86,7 @@ const Account = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.nftContainer}>
+      <Text style={styles.headingText}>Your NFT Collection</Text>
       <FlatList
           horizontal
           data={nfts}
@@ -111,6 +116,7 @@ const styles = StyleSheet.create({
   },
   nftContainer: {
     flex: 2,
+    padding: 10
   },
   aboutContainer: {
     flext: 1,

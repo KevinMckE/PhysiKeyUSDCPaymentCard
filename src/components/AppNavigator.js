@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import Account from '../screens/Account';
-import NftCollection from '../screens/NftCollection';
+import NftDetails from '../screens/NftDetails';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -41,10 +41,10 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="NftCollection"
-            component={NftCollection}
+            name="NftDetails"
+            component={NftDetails}
             options={{
-              title: 'Your NFT Collection',
+              title: 'NFT Details',
             }}
           />
         </Stack.Navigator>

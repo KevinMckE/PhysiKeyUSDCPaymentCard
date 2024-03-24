@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://rpc-mumbai.maticvigil.com/');
+const web3 = new Web3('https://sepolia.optimism.io');
 
 // tatum fetch polyfill
 import { fetch as fetchPolyfill } from 'whatwg-fetch'
@@ -84,13 +84,10 @@ export const getOptimismWalletActivity = async (address) => {
 };
 
 export const getAccountNfts = async (publicKey) => {
- 
   try {
-
     const tatum = await TatumSDK.init({
-      network: Network.POLYGON_MUMBAI,
+      network: Network.ETHEREUM_SEPOLIA,
     });
- 
     const nftsResponse = await tatum.nft.getBalance({
       addresses: [publicKey],
     });

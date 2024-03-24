@@ -23,17 +23,17 @@ const Account = ({ navigation, route }) => {
         }
         setBalance(balance);
       } catch (error) {
-        console.warn(error);
+        //console.warn(error);
       }
     };
     fetchBalance();
   }, []);
 
-  /**
+  
   useEffect(() => {
     const fetchNfts = async () => {
       try {
-        const nftList = await getAccountNfts(testKey);
+        const nftList = await getAccountNfts(publicKey);
         setNfts(nftList);
   
       } catch (error) {
@@ -56,7 +56,7 @@ const Account = ({ navigation, route }) => {
     };
     fetchImageUris();
   }, [nfts]);
- */
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.balanceContainer}>
@@ -113,10 +113,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 18,
     margin: 10,
-  },
-  backgroundImage: {
-    transform: [{ rotate: '-45deg' }],
-    position: 'absolute'
   },
   card: {
     margin: 10,

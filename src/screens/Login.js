@@ -1,5 +1,5 @@
-import React, { useState, Suspense, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ImageBackground, Modal } from 'react-native';
+import React, { useState, Suspense } from 'react';
+import { View, Image, StyleSheet, Text, Modal, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
@@ -9,6 +9,7 @@ import { readTag, accountLogin } from '../components/HelperFunctions';
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModalVisible, setSecondModalVisible] = useState(false);
+  const [scanModal, setScanModal] = useState(false);
   const [tagID, setTagID] = useState('');
   //const [newCard, setNewCard] = useState(false);
   const [password, setPassword] = useState(null);
@@ -30,6 +31,7 @@ const Login = ({ navigation }) => {
       if (newTagID) {
         setTagID(newTagID);
         setModalVisible(true);
+        setScanModal(false);
       }
     } catch (error) {
       //console.log(error);
@@ -47,6 +49,7 @@ const Login = ({ navigation }) => {
 
   const handleScanCardPress = () => {
     changeGifSource();
+    setScanModal(true);
     fetchTag();
   };
 
@@ -55,7 +58,7 @@ const Login = ({ navigation }) => {
       if (password === confirmPassword) {
         setErrorMessage('');
         setModalVisible(false);
-        changeGifSource(); 
+        changeGifSource();
         try {
           let key = await accountLogin(tagID, password);
           if (key) {
@@ -86,19 +89,19 @@ const Login = ({ navigation }) => {
           style={styles.backgroundImage}
           resizeMode="contain"
         />
-          <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
-            <Image
-              source={gifSource}
-              style={styles.centeredImage}
-              fadeDuration={0}
-              resizeMode="cover"
-            />
-          </Suspense>
+        <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
+          <Image
+            source={gifSource}
+            style={styles.centeredImage}
+            fadeDuration={0}
+            resizeMode="cover"
+          />
+        </Suspense>
       </View>
 
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
-        <ModalButton text='Scan Card' type='primary' size='large' onPress={handleScanCardPress} />
+        <ModalButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
       </View>
 
       <Modal
@@ -128,14 +131,38 @@ const Login = ({ navigation }) => {
             <View style={styles.inlineButton}>
               <ModalButton text='Close' type='secondary' size='small' onPress={() => {
                 setModalVisible(false);
-                changeGifSource(); 
+                changeGifSource();
               }} />
               <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
             </View>
           </View>
         </View>
       </Modal>
-      
+
+      {Platform.OS === 'android' && ( // Render modal only on Android
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={scanModal}
+          onRequestClose={() => setScanModal(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.bottomThirdContainer}>
+              <Text style={styles.headingText}>Ready to Scan</Text>
+              <Image
+                source={require('../assets/nfc_icon.png')}
+                resizeMode="contain"
+                scanModalImage
+                style={styles.scanModalImage}
+              />
+              <Text>Hold your device near the NFC tag.</Text>
+              <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); changeGifSource(); }} />
+
+            </View>
+          </View>
+        </Modal>
+      )}
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -218,6 +245,20 @@ const styles = StyleSheet.create({
     color: 'red',
     margin: 10,
   },
+  bottomThirdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    alignItems: 'center',
+    padding: 20,
+  },
+  scanModalImage: {
+    height: 150,
+    marginBottom: 10,
+  }
 });
 
 export default Login;

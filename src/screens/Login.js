@@ -51,14 +51,13 @@ const Login = ({ navigation }) => {
   };
 
   const confirmPasswords = async () => {
-    console.warn(password);
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
         setModalVisible(false);
+        changeGifSource(); 
         try {
           let key = await accountLogin(tagID, password);
-          console.warn(key);
           if (key) {
             navigate('Account', { publicKey: key });
           } else {
@@ -82,11 +81,11 @@ const Login = ({ navigation }) => {
       </View>
 
       <View style={styles.imageContainer}>
-        <ImageBackground
+        <Image
           source={require('../assets/blob_background.png')}
           style={styles.backgroundImage}
           resizeMode="contain"
-        >
+        />
           <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
             <Image
               source={gifSource}
@@ -95,7 +94,6 @@ const Login = ({ navigation }) => {
               resizeMode="cover"
             />
           </Suspense>
-        </ImageBackground>
       </View>
 
       <View style={styles.bottomContainer}>
@@ -137,6 +135,7 @@ const Login = ({ navigation }) => {
           </View>
         </View>
       </Modal>
+      
       <Modal
         animationType="slide"
         transparent={true}
@@ -167,28 +166,26 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   topContainer: {
-    flex: 1,
+    flex: 0.5,
     padding: 30,
   },
   imageContainer: {
     alignItems: 'center',
-    flex: 2,
+    flex: 3,
   },
   backgroundImage: {
-    flex: 1,
-    aspectRatio: 1,
+    position: 'absolute',
+    top: 20,
+    width: 300,
+    height: 300,
+    opacity: 0.3,
   },
   centeredImage: {
     width: '100%',
-    height: '100%',
-  },
-  inputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 2,
+    height: '100%'
   },
   bottomContainer: {
-    flex: 2,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
   },

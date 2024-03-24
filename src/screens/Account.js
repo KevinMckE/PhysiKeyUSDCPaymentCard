@@ -17,7 +17,7 @@ const Account = ({ navigation, route }) => {
    useEffect(() => {
      const fetchBalance = async () => {
        try {
-         let balance = await getEthBalance('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
+         let balance = await getEthBalance(publicKey);
          if (balance === '0.') {
            balance = '0.0';
          }
@@ -32,7 +32,7 @@ const Account = ({ navigation, route }) => {
   useEffect(() => {
     const fetchNfts = async () => {
       try {
-        const nftList = await getAccountNfts('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
+        const nftList = await getAccountNfts(publicKey);
         setNfts(nftList);
       } catch (error) {
         //console.warn(error);
@@ -78,10 +78,10 @@ const Account = ({ navigation, route }) => {
     <ScrollView style={styles.container}>
       <View style={styles.balanceContainer}>
         <CurrencyCard
-          title="Optimism Balance"
+          title="Ethereum Balance"
           pub={truncatedKey}
           subtitle={balance}
-          imageSource={require('../assets/optimism_logo.png')}
+          imageSource={require('../assets/eth_logo.png')}
         />
       </View>
       <View style={styles.nftContainer}>

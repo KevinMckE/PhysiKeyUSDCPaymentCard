@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Card } from 'react-native-paper';
-import { getOptimismBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
+import { getEthBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
 import CurrencyCard from '../components/CurrencyCard';
 
 const Account = ({ navigation, route }) => {
@@ -13,11 +13,11 @@ const Account = ({ navigation, route }) => {
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
 
-  /**
+ 
    useEffect(() => {
      const fetchBalance = async () => {
        try {
-         let balance = await getOptimismBalance(publicKey);
+         let balance = await getEthBalance('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
          if (balance === '0.') {
            balance = '0.0';
          }
@@ -29,7 +29,6 @@ const Account = ({ navigation, route }) => {
      fetchBalance();
    }, []);
  
-    */
   useEffect(() => {
     const fetchNfts = async () => {
       try {
@@ -87,6 +86,10 @@ const Account = ({ navigation, route }) => {
       </View>
       <View style={styles.nftContainer}>
       <Text style={styles.headingText}>Your NFT Collection</Text>
+      {nfts.length === 0 ? (
+          <Text style={styles.errorText}>Oops! You do not have any NFTs in this wallet.</Text>
+        ) : (
+          <>
       <FlatList
           horizontal
           data={nfts}
@@ -94,6 +97,8 @@ const Account = ({ navigation, route }) => {
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ gap: 15 }}
         />
+        </>
+        )}
       </View>
       <View style={styles.aboutContainer}>
         <Text style={styles.headingText}>About Us</Text>

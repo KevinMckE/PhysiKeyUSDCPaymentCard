@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import Video from 'react-native-video';
+import { View, Image, StyleSheet, Text, TouchableOpacity, Linking } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 
 const Landing = ({ navigation }) => {
@@ -26,7 +25,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Access Card' type='primary' target='Login' size='large' />
         <Text style={styles.paragraphText}>Don't have a card?</Text>
-        <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Reach out to us here.</Text></TouchableOpacity></Text>
+        <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Reach us here.</Text></TouchableOpacity></Text>
       </View>
     </View>
   );

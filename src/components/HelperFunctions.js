@@ -58,13 +58,24 @@ export const getOptimismBalance = async (address) => {
 
 export const getPolygonBalance = async (address) => {
   try {
-    const checksumAddress = web3.utils.toChecksumAddress('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
+    const checksumAddress = web3.utils.toChecksumAddress(address);
     const balance = await web3.eth.getBalance(checksumAddress);
     const balanceInEther = web3.utils.fromWei(balance, 'ether');
     return balanceInEther;
   } catch (error) {
     //console.error('Error getting Polygon balance:', error);
     return null;
+  }
+};
+
+export const getEthBalance = async (address) => {
+  try {
+    const balanceWei = await web3.eth.getBalance(address);
+    const balanceEth = web3.utils.fromWei(balanceWei, 'ether');
+    return balanceEth
+    //console.log('Ether Balance:', balanceEth);
+  } catch (error) {
+    //console.error('Error getting balance:', error);
   }
 };
 
@@ -91,7 +102,7 @@ export const getAccountNfts = async (publicKey) => {
     const nftsResponse = await tatum.nft.getBalance({
       addresses: [publicKey],
     });
-  
+
     if (nftsResponse.data == null) {
     } else {
       return nftsResponse.data;

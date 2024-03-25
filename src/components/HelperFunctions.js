@@ -99,6 +99,7 @@ export const getAccountNfts = async (publicKey) => {
   try {
     const tatum = await TatumSDK.init({
       network: Network.ETHEREUM_SEPOLIA,
+      apiKey: {v4: Config.TATUM_API_KEY,}
     });
     const nftsResponse = await tatum.nft.getBalance({
       addresses: [publicKey],

@@ -10,6 +10,7 @@ const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
+  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   //const [newCard, setNewCard] = useState(false);
   const [password, setPassword] = useState(null);
@@ -22,7 +23,7 @@ const Login = ({ navigation }) => {
     try {
       let tag = await readTag();
       newTagID = tag.id;
-      ndefPayload = tag.ndefMessage[0].payload;
+      //ndefPayload = tag.ndefMessage[0].payload; // THIS CAUSES BUG IF THE TAG HAS NEVER HAD AN NDEF PAYLOAD
       /**
       if (ndefPayload.length === 0) {
         setNewCard(true);
@@ -57,12 +58,14 @@ const Login = ({ navigation }) => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
+        setStatusModalVisible(true);
         setModalVisible(false);
         changeGifSource();
         try {
           let key = await accountLogin(tagID, password);
           if (key) {
             navigate('Account', { publicKey: key });
+            setStatusModalVisible(false);
           } else {
             //console.error('Key is not defined.');
           }
@@ -105,7 +108,6 @@ const Login = ({ navigation }) => {
       </View>
 
       <Modal
-        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -114,7 +116,7 @@ const Login = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.headingText}>Entering a new or random password create a new wallet.</Text>
+            <Text style={styles.headingText}>Each new password creates a new account when used with your card. We cannot recover your passwords for you.</Text>
             <PasswordInput
               text='Enter Password'
               password={password}
@@ -134,6 +136,26 @@ const Login = ({ navigation }) => {
                 changeGifSource();
               }} />
               <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      
+      <Modal
+        transparent={true}
+        visible={statusModalVisible}
+        onRequestClose={() => {
+          setStatusModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.headingText}>Logging in...</Text>
+            <View style={styles.inlineButton}>
+              <ModalButton text='Close' type='secondary' size='small' onPress={() => {
+                setStatusModalVisible(false);
+                changeGifSource();
+              }} />
             </View>
           </View>
         </View>

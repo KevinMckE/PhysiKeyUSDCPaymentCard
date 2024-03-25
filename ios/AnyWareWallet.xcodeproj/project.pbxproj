@@ -493,7 +493,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AnyWareWallet/AnyWareWallet.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T39L345669;
+				DEVELOPMENT_TEAM = DN4FLFNCVL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AnyWareWallet/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = anywarewallet;
@@ -508,7 +508,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kevinecke.anywarewallet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anywhereaccess.iocard;
 				PRODUCT_NAME = AnyWareWallet;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

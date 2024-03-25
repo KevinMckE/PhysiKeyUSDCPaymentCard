@@ -101,6 +101,7 @@ const Account = ({ navigation, route }) => {
         )}
       </View>
       <View style={styles.aboutContainer}>
+      <Text style={styles.errorText} selectable>{publicKey}</Text>
         <Text style={styles.headingText}>About Us</Text>
         <Card style={styles.card}>
           <Text style={styles.paragraphText}>Anywhere Blockchain is building simple, safe, and more affordable key management tools for the future of finance, media, and governance. Our mobile application simplifies data ownership for users of Web 3 technology, using NFC chips to regenerate complex signing keys and passwords for the end user without storing them on remotely exploitable databases. This will have applications in the future of digital identity, social media, and blockchain-based computer transactions.</Text>

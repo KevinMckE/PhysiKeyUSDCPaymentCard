@@ -12,7 +12,7 @@ const Landing = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Image
-          source={require('../assets/blob_background.png')}
+          source={require('../assets/blob_background_black.png')}
           style={styles.backgroundImage}
         />
 
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     position: 'absolute',
-    opacity: 0.3,
+    opacity: 1,
   },
   centeredImage: {
     width: '85%',

@@ -88,7 +88,7 @@ const Login = ({ navigation }) => {
 
       <View style={styles.imageContainer}>
         <Image
-          source={require('../assets/blob_background.png')}
+          source={require('../assets/blob_background_black.png')}
           style={styles.backgroundImage}
           resizeMode="contain"
         />
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     top: 20,
     width: 300,
     height: 300,
-    opacity: 0.3,
+    opacity: 1,
   },
   centeredImage: {
     width: '100%',

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* AnyWareWalletTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* AnyWareWalletTests.m */; };
 		0A33301B2A65DDD900C7EA29 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 0A33301A2A65DDD900C7EA29 /* main.jsbundle */; };
+		0AA3A38F2BB23FFB006553DC /* Logo for app.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA3A38E2BB23FFB006553DC /* Logo for app.png */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -33,6 +34,7 @@
 		00E356F21AD99517003FC87E /* AnyWareWalletTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnyWareWalletTests.m; sourceTree = "<group>"; };
 		0A33301A2A65DDD900C7EA29 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		0A9F89D72A1590260040A4C1 /* AnyWareWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AnyWareWallet.entitlements; path = AnyWareWallet/AnyWareWallet.entitlements; sourceTree = "<group>"; };
+		0AA3A38E2BB23FFB006553DC /* Logo for app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Logo for app.png"; path = "../../Desktop/AnyWare Wallet/Mo Design Work/New logos/png/Logo for app.png"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* AnyWareWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnyWareWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = AnyWareWallet/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = AnyWareWallet/AppDelegate.mm; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				0AA3A38E2BB23FFB006553DC /* Logo for app.png */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -247,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AA3A38F2BB23FFB006553DC /* Logo for app.png in Resources */,
 				0A33301B2A65DDD900C7EA29 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -496,13 +500,13 @@
 				DEVELOPMENT_TEAM = DN4FLFNCVL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AnyWareWallet/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = anywarewallet;
+				INFOPLIST_KEY_CFBundleDisplayName = "IO Card";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -524,21 +528,21 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = AnyWareWallet/AnyWareWallet.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T39L345669;
+				DEVELOPMENT_TEAM = DN4FLFNCVL;
 				INFOPLIST_FILE = AnyWareWallet/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = anywarewallet;
+				INFOPLIST_KEY_CFBundleDisplayName = "IO Card";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.kevinecke.anywarewallet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anywhereaccess.iocard;
 				PRODUCT_NAME = AnyWareWallet;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -614,10 +618,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -687,10 +688,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

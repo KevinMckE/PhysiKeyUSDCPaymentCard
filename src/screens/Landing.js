@@ -25,7 +25,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.bottomContainer}>
         <NavigationButton navigation={navigation} text='Access Card' type='primary' target='Login' size='large' />
         <Text style={styles.paragraphText}>Don't have a card?</Text>
-        <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Reach us here.</Text></TouchableOpacity></Text>
+        <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Get one here.</Text></TouchableOpacity></Text>
       </View>
     </View>
   );

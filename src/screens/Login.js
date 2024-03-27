@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import PasswordInput from '../components/PasswordInput';
-import { readTag, accountLogin } from '../components/HelperFunctions';
+import { readTag, accountLogin, scanSerialForKey } from '../components/HelperFunctions';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,16 +21,17 @@ const Login = ({ navigation }) => {
 
   const fetchTag = async () => {
     try {
-      let tag = await readTag();
-      newTagID = tag.id;
+      let tag = await scanSerialForKey();
+      //newTagID = tag; //doing the kdf on the serial in the helperfunction
       //ndefPayload = tag.ndefMessage[0].payload; // THIS CAUSES BUG IF THE TAG HAS NEVER HAD AN NDEF PAYLOAD
       /**
       if (ndefPayload.length === 0) {
         setNewCard(true);
       }
        */
-      if (newTagID) {
-        setTagID(newTagID);
+      if (tag) {
+        setTagID(tag);
+        //console.warn(tag);
         setModalVisible(true);
         setScanModal(false);
       }

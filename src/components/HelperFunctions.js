@@ -10,6 +10,10 @@ const web3 = new Web3('https://1rpc.io/sepolia');
 import { fetch as fetchPolyfill } from 'whatwg-fetch'
 global.fetch = fetchPolyfill
 
+// KDF Function and salt
+let kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
+let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
+
 export const readTag = async () => {
   try {
     await NfcManager.requestTechnology(NfcTech.NfcA);
@@ -21,6 +25,26 @@ export const readTag = async () => {
     NfcManager.cancelTechnologyRequest();
   }
 };
+
+//I think it's better to compute the kdf at the moment of reading, so we aren't ever storing the raw values
+export const scanSerialForKey = async () => {
+  try {
+    await NfcManager.requestTechnology(NfcTech.NfcA);
+    let tag = await NfcManager.getTag();
+    let serialKey = kdf.compute(tag.id, salt).toString();
+    return serialKey;
+  } catch (error) {
+    //console.warn(error);
+  } finally {
+    NfcManager.cancelTechnologyRequest();
+  }
+};
+
+export const concatPasswordWithSerialKey = async (serialKey, password) => {
+  let tempDataChain = serialKey+password;
+  
+  return 
+}
 
 export const closeSerial = async () => {
   try {
@@ -140,20 +164,15 @@ export const getImageUri = async (item) => {
 ////////// MAIN FUNCTION FOR LOGIN AND ACCOUNT CREATION///////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-export const accountLogin = async (tag, date) => {
-  let kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
-  let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
-  let tempChain = tag;
-  tempChain = kdf.compute(tempChain, salt).toString();
-  tempChain += date;
-  let finalChain = kdf.compute(tempChain, salt).toString();
-  let tempDataChain = finalChain;
+export const accountLogin = async (tag, password) => {
+  let tempDataChain = tag + password;
+  //console.warn(tempDataChain);
   const argonResult = await argon2(
     tempDataChain,
     salt,
     {
-      iterations: 5,
-      memory: 65536,
+      iterations: 4,
+      memory: 32768,
       parallelism: 2,
       mode: 'argon2id'
     }

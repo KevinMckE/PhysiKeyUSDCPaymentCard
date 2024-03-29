@@ -86,7 +86,7 @@ const Account = ({ navigation, route }) => {
       </View>
       <View style={styles.nftContainer}>
       <Text style={styles.headingText}>Your NFT Collection</Text>
-      {nfts.length === 0 ? (
+      {!nfts || typeof nfts =='undefined' ? (
           <Text style={styles.errorText}>Oops! You do not have any NFTs in this wallet.</Text>
         ) : (
           <>

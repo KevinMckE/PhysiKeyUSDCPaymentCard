@@ -9,7 +9,7 @@ const Account = ({ navigation, route }) => {
   const [nfts, setNfts] = useState([]);
   const [imageUris, setImageUris] = useState([]);
   const [loading, setLoading] = useState(true);
-  const publicKey = '0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4'
+  const publicKey = '0xaF1F12460b8c0e42e248372389122c69c55a1f60'
   //const { publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;

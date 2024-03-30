@@ -164,25 +164,20 @@ export const getAccountNfts = async (publicKey) => {
 }
  */
 
-export const getAccountNfts = async (publicKey) => {
+// will work with ERC721Enumerable
+export const getAccountNfts = async (publicKey, contractAddress) => {
   try {
-    const contract = new web3.eth.Contract(contractABI, 'D74887A41762580d5B4f7BabCc083EC7351Ee03b'); // Replace with ERC721 contract address
+    const contract = new web3.eth.Contract(contractABI, contractAddress); // Replace with ERC721 contract address
     const nfts = [];
-    const balance = await contract.methods.balanceOf(publicKey).call();
+    const balance = await contract.methods.balanceOf(publicKey).call();    
 
-    // Assuming you have a mapping in your contract to track NFT ownership
-    // Retrieve all tokens owned by the wallet address and iterate over them
     for (let i = 0; i < balance; i++) {
-      const tokenId = i; // Assuming the token IDs start from 0 and increment by 1
-      
-      // Get additional information about the NFT using your contract's methods
+      const tokenId = await contract.methods.tokenOfOwnerByIndex(publicKey, i).call();
       const nftInfo = await contract.methods.getNFTInfo(tokenId).call(); // Example method
-      
-      // Push the NFT information to the array
       nfts.push(nftInfo);
-    }
+  }
 
-    return nfts;
+  return nfts;
 } catch (error) {
   console.error('Error fetching NFTs:', error);
   throw error;

@@ -22,7 +22,8 @@ const AppNavigator = () => {
             name="Landing"
             component={Landing}
             options={{
-              headerShown: false
+              headerShown: false,
+              detachPreviousScreen: false
             }}
           />
           <Stack.Screen
@@ -30,7 +31,7 @@ const AppNavigator = () => {
             component={Login}
             options={{
               title: 'Access Assets',
-
+              detachPreviousScreen: false
             }}
           />
           <Stack.Screen
@@ -38,6 +39,7 @@ const AppNavigator = () => {
             component={Account}
             options={{
               title: 'Your Assets',
+              detachPreviousScreen: false
             }}
           />
           <Stack.Screen
@@ -45,6 +47,7 @@ const AppNavigator = () => {
             component={NftDetails}
             options={{
               title: 'NFT Details',
+              detachPreviousScreen: false
             }}
           />
         </Stack.Navigator>

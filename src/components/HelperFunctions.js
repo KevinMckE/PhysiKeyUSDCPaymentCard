@@ -4,6 +4,7 @@ import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
+const contractABI = require('../ABI/test.json');
 const web3 = new Web3('https://1rpc.io/sepolia');
 
 // tatum fetch polyfill
@@ -41,9 +42,9 @@ export const scanSerialForKey = async () => {
 };
 
 export const concatPasswordWithSerialKey = async (serialKey, password) => {
-  let tempDataChain = serialKey+password;
-  
-  return 
+  let tempDataChain = serialKey + password;
+
+  return
 }
 
 export const closeSerial = async () => {
@@ -96,7 +97,7 @@ export const getEthBalance = async (address) => {
   try {
     const balanceWei = await web3.eth.getBalance(address);
     const balanceEth = web3.utils.fromWei(balanceWei, 'ether');
-    const roundedBalanceEth = Math.round(balanceEth * 100) / 100;
+    const roundedBalanceEth = Math.round(balanceEth * 100) / 100; // handle the smaller balances
     return roundedBalanceEth
     //console.log('Ether Balance:', balanceEth);
   } catch (error) {
@@ -119,6 +120,7 @@ export const getOptimismWalletActivity = async (address) => {
   }
 };
 
+/**
 export const getAccountNfts = async (publicKey) => {
   try {
     const tatum = await TatumSDK.init({
@@ -137,6 +139,56 @@ export const getAccountNfts = async (publicKey) => {
     //console.warn(error);
   }
 };
+
+
+
+
+export const getAccountNfts = async (publicKey) => {
+  console.log('test')
+  const chain = 'ethereum-sepolia';
+  const address = publicKey;
+  const resp = await fetch(
+    `https://api.tatum.io/v3/nft/collection/${chain}/${address}`,
+    {
+      method: 'GET',
+      headers: {
+        'x-api-key': Config.TATUM_API_KEY
+      }
+    }
+  );
+
+  const data = await resp.text();
+
+  console.log(data);
+  return data;
+}
+ */
+
+export const getAccountNfts = async (publicKey) => {
+  try {
+    const contract = new web3.eth.Contract(contractABI, 'D74887A41762580d5B4f7BabCc083EC7351Ee03b'); // Replace with ERC721 contract address
+    const nfts = [];
+    const balance = await contract.methods.balanceOf(publicKey).call();
+
+    // Assuming you have a mapping in your contract to track NFT ownership
+    // Retrieve all tokens owned by the wallet address and iterate over them
+    for (let i = 0; i < balance; i++) {
+      const tokenId = i; // Assuming the token IDs start from 0 and increment by 1
+      
+      // Get additional information about the NFT using your contract's methods
+      const nftInfo = await contract.methods.getNFTInfo(tokenId).call(); // Example method
+      
+      // Push the NFT information to the array
+      nfts.push(nftInfo);
+    }
+
+    return nfts;
+} catch (error) {
+  console.error('Error fetching NFTs:', error);
+  throw error;
+}
+}
+
 
 export const getImageUri = async (item) => {
   const originalUrl = item.metadataURI;

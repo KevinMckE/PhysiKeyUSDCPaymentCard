@@ -9,7 +9,8 @@ const Account = ({ navigation, route }) => {
   const [nfts, setNfts] = useState([]);
   const [imageUris, setImageUris] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { publicKey } = route.params;
+  const publicKey = '0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4'
+  //const { publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
 
@@ -86,7 +87,7 @@ const Account = ({ navigation, route }) => {
       </View>
       <View style={styles.nftContainer}>
       <Text style={styles.headingText}>Your NFT Collection</Text>
-      {nfts.length === 0 ? (
+      {!nfts || typeof nfts =='undefined' ? (
           <Text style={styles.errorText}>Oops! You do not have any NFTs in this wallet.</Text>
         ) : (
           <>

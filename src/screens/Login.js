@@ -1,5 +1,6 @@
 import React, { useState, Suspense } from 'react';
 import { View, Image, StyleSheet, Text, Modal, Platform } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
@@ -104,8 +105,8 @@ const Login = ({ navigation }) => {
       </View>
 
       <View style={styles.bottomContainer}>
-        <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
         <ModalButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+        <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
       </View>
 
       <Modal
@@ -151,6 +152,8 @@ const Login = ({ navigation }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+  
+        <ActivityIndicator animating={true}  />
             <Text style={styles.headingText}>Logging in...</Text>
             <View style={styles.inlineButton}>
               <ModalButton text='Close' type='secondary' size='small' onPress={() => {
@@ -180,7 +183,6 @@ const Login = ({ navigation }) => {
               />
               <Text>Hold your device near the NFC tag.</Text>
               <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); changeGifSource(); }} />
-
             </View>
           </View>
         </Modal>

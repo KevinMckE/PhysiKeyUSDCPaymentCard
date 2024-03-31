@@ -2,14 +2,13 @@ import React from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 
-const CurrencyCard = ({ title, pub, subtitle, imageSource }) => {
+const CurrencyCard = ({ title, subtitle, imageSource }) => {
   return (
     <Card style={styles.card} mode="elevated">
       <Card.Content style={styles.content}>
         <Image source={imageSource} style={styles.image} />
         <View>
           <Title>{title}</Title>
-          <Text>Public Key: {pub}</Text>
           <Text style={styles.amountText}>{subtitle} ETH</Text>
         </View>
       </Card.Content>

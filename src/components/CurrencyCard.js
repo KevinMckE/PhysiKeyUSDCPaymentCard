@@ -9,7 +9,7 @@ const CurrencyCard = ({ title, subtitle, imageSource }) => {
         <Image source={imageSource} style={styles.image} />
         <View>
           <Title>{title}</Title>
-          <Text style={styles.amountText}>{subtitle} ETH</Text>
+          <Text style={styles.amountText}>{subtitle} OP</Text>
         </View>
       </Card.Content>
     </Card>

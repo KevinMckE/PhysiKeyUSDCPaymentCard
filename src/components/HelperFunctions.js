@@ -1,15 +1,10 @@
 import NfcManager, { Ndef, NfcTech } from 'react-native-nfc-manager';
-import { TatumSDK, Network } from '@tatumio/tatum';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 const contractABI = require('../ABI/test.json');
-const web3 = new Web3('https://1rpc.io/sepolia');
-
-// tatum fetch polyfill
-import { fetch as fetchPolyfill } from 'whatwg-fetch'
-global.fetch = fetchPolyfill
+const web3 = new Web3('https://sepolia.optimism.io');
 
 // KDF Function and salt
 let kdf = CryptoJS.algo.PBKDF2.create({ keySize: 8, hasher: CryptoJS.algo.SHA256, iterations: 1024 });
@@ -167,13 +162,13 @@ export const getAccountNfts = async (publicKey) => {
 // will work with ERC721Enumerable
 export const getAccountNfts = async (publicKey, contractAddress) => {
   try {
-    const contract = new web3.eth.Contract(contractABI, contractAddress); // Replace with ERC721 contract address
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
     const nfts = [];
     const balance = await contract.methods.balanceOf(publicKey).call();    
 
     for (let i = 0; i < balance; i++) {
       const tokenId = await contract.methods.tokenOfOwnerByIndex(publicKey, i).call();
-      const nftInfo = await contract.methods.getNFTInfo(tokenId).call(); // Example method
+      const nftInfo = await contract.methods.getNFTInfo(tokenId).call(); 
       nfts.push(nftInfo);
   }
 

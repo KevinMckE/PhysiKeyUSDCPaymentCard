@@ -52,7 +52,7 @@ const AppNavigator = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </ImageBackground>
+    </ImageBackground> 
   );
 };
 

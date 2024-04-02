@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpac
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Card } from 'react-native-paper';
 import { getEthBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
+import ModalButton from '../components/ModalButton';
 import CurrencyCard from '../components/CurrencyCard';
 
 const Account = ({ navigation, route }) => {
@@ -96,10 +97,12 @@ const handleCopyToClipboard = () => {
           </Card>
         </TouchableOpacity>
         <CurrencyCard
-          title="Ethereum Balance"
+          title="Optimism Balance"
           subtitle={balance}
-          imageSource={require('../assets/eth_logo.png')}
+          imageSource={require('../assets/optimism_logo.png')}
         />
+        <ModalButton text='Transfer' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+
       </View>
       <View style={styles.nftContainer}>
         <Text style={styles.headingText}>Your NFT Collection</Text>
@@ -161,7 +164,6 @@ const styles = StyleSheet.create({
   keyContent: {
     flexDirection: 'row', 
     alignItems: 'center', 
-    alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
   },

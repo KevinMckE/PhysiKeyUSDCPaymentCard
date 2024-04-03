@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, ImageBackground, Modal, Image } from 'react-native';
+import { View, StyleSheet, Text, ImageBackground, Modal, Image, ScrollView } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import { TextInput } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
@@ -17,8 +17,8 @@ const Transfer = ({ navigation, route }) => {
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  //const { publicKey } = route.params;
-
+  const { publicKey } = route.params;
+  console.log(publicKey);
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
@@ -40,32 +40,15 @@ const Transfer = ({ navigation, route }) => {
 
   const signAndSend = () => {
     setScanModal(true);
+    //  signAndSend(tagID, password, amount, recipient);
     fetchTag();
   };
 
-  const confirmPasswords = async (test) => {
+  const confirmPasswords = async () => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
         setModalVisible(false);
-        if (test==='') {
-        try {
-          let key = await accountLogin(tagID, password);
-          if (key) {
-            setRecipientKey(key);
-          } else {
-            //console.error('Key is not defined.');
-          }
-        } catch (error) {
-          //console.error('Error logging in:', error);
-        }
-      } else {
-        try {
-          signAndSend(tagID, password, amount, recipientKey);
-        } catch (error) {
-          //console.error('Error logging in:', error);
-        }
-      }
       } else {
         setErrorMessage('The passwords do not match.');
       }
@@ -75,6 +58,7 @@ const Transfer = ({ navigation, route }) => {
   };
 
   return (
+    <ScrollView>
     <ImageBackground
       source={require('../assets/tech_pattern.jpg')}
       style={{ flex: 1, width: '100%', height: '100%' }}
@@ -167,6 +151,7 @@ const Transfer = ({ navigation, route }) => {
           </Modal>
         )}
     </ImageBackground>
+    </ScrollView>
   );
 }
 
@@ -175,6 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     height: '100%',
+    gap: 40
   },
   topContainer: {
     flex: 1,

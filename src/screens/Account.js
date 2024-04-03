@@ -11,11 +11,12 @@ const Account = ({ navigation, route }) => {
   const [nfts, setNfts] = useState([]);
   const [imageUris, setImageUris] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { publicKey } = route.params;
+  const [publicKey, setPublicKey] = useState('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4')
+  //const { publicKey } = route.params;
   const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
-
+  
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -84,7 +85,7 @@ const Account = ({ navigation, route }) => {
   );
 
   const handleTransferPress = () => {
-    navigation.navigate('Transfer', { publicKey: publicKey }); 
+    navigation.navigate('Transfer', { publicKey }); 
   };
 
   return (

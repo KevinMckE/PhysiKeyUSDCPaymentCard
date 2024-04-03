@@ -201,6 +201,7 @@ export const getImageUri = async (item) => {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 ////////// MAIN FUNCTION FOR LOGIN AND ACCOUNT CREATION///////////////
+////////// MAIN FUNCTION FOR SIGNING TRANSACTIONS      ///////////////
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 export const accountLogin = async (tag, password) => {
@@ -234,7 +235,7 @@ export const accountLogin = async (tag, password) => {
 
 
 //eventually check the pub keys are same
-export const signAndSend = async (tag, password, amount, recipient) => {
+export const signAndSend = async (tag, password, amount, recipient, sender) => {
   let tempDataChain = tag + password;
   const argonResult = await argon2(
     tempDataChain,
@@ -255,30 +256,34 @@ export const signAndSend = async (tag, password, amount, recipient) => {
   let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
   let publicKey = decryptedAccount.address;
 
-  const recipientAddress = web3.utils.toChecksumAddress(web3.utils.pubToAddress(recipient).toString('hex'));
-  const gasPrice = await web3.eth.getGasPrice();
-
-  // Estimate gas for the transaction
-  const gas = await web3.eth.estimateGas({
-    to: recipientAddress,
-    value: amount
-  });
-
-  // Get the current nonce for the sender
-  const nonce = await web3.eth.getTransactionCount(publicKey);
-  const txObject = {
-          from: publicKey,
-          to: recipientAddress,
-          value: amount,
-          gas,
-          gasPrice,
-          nonce
-      };
-
-  const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
-  const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  console.log(txReceipt)
-  return txReceipt;
+  if (sender === publicKey) {
+    const recipientAddress = web3.utils.toChecksumAddress(web3.utils.pubToAddress(recipient).toString('hex'));
+    const gasPrice = await web3.eth.getGasPrice();
+  
+    // Estimate gas for the transaction
+    const gas = await web3.eth.estimateGas({
+      to: recipientAddress,
+      value: amount
+    });
+  
+    // Get the current nonce for the sender
+    const nonce = await web3.eth.getTransactionCount(publicKey);
+    const txObject = {
+            from: publicKey,
+            to: recipientAddress,
+            value: amount,
+            gas,
+            gasPrice,
+            nonce
+        };
+  
+    const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+    const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    console.log(txReceipt)
+    return txReceipt;
+  } else {
+    // don't send, the public keys are different
+  }
 };
 
 

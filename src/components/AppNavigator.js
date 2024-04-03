@@ -37,17 +37,17 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="NftDetails"
-            component={NftDetails}
-            options={{
-              title: 'NFT Details',
-            }}
-          />
-          <Stack.Screen
             name="Transfer"
             component={Transfer}
             options={{
               title: 'Transfer OP',
+            }}
+          />
+          <Stack.Screen
+            name="NftDetails"
+            component={NftDetails}
+            options={{
+              title: 'NFT Details',
             }}
           />
         </Stack.Navigator>

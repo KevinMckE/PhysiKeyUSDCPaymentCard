@@ -4,11 +4,6 @@ import { closeSerial } from './HelperFunctions';
 
 const NavigationButton = ({ navigation, text, type, target, size }) => {
   const handlePress = async () => {
-    try {
-      await closeSerial();
-    } catch (error) {
-      console.warn(error);
-    }
     if(target != null) {
     navigation.navigate(target);
     } 

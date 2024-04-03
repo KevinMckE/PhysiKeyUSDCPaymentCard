@@ -1,35 +1,27 @@
-import React, { useState, Suspense } from 'react';
-import { View, Image, StyleSheet, Text, Modal, Platform, ImageBackground } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, ImageBackground, Modal, Image } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
-import ModalButton from '../components/ModalButton';
+import { TextInput } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
-import { readTag, accountLogin, scanSerialForKey } from '../components/HelperFunctions';
+import ModalButton from '../components/ModalButton';
+import { readTag, accountLogin, scanSerialForKey, signAndSend } from '../components/HelperFunctions';
 
-const Login = ({ navigation }) => {
+const Transfer = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModalVisible, setSecondModalVisible] = useState(false);
-  const [scanModal, setScanModal] = useState(false);
-  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
-  //const [newCard, setNewCard] = useState(false);
+  const [scanModal, setScanModal] = useState(false);
+  const [recipientKey, setRecipientKey] = useState('');
+  const [amount, setAmount] = useState('');
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
-  const { navigate } = useNavigation();
+
+  //const { publicKey } = route.params;
 
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
-      //newTagID = tag; //doing the kdf on the serial in the helperfunction
-      //ndefPayload = tag.ndefMessage[0].payload; // THIS CAUSES BUG IF THE TAG HAS NEVER HAD AN NDEF PAYLOAD
-      /**
-      if (ndefPayload.length === 0) {
-        setNewCard(true);
-      }
-       */
       if (tag) {
         setTagID(tag);
         //console.warn(tag);
@@ -39,35 +31,28 @@ const Login = ({ navigation }) => {
     } catch (error) {
       //console.log(error);
     }
-    changeGifSource();
-  };
-
-  const changeGifSource = () => {
-    const newSource =
-      gifSource === require('../assets/tap_image.png')
-        ? require('../assets/tap_animation.gif')
-        : require('../assets/tap_image.png');
-    setGifSource(newSource);
   };
 
   const handleScanCardPress = () => {
-    changeGifSource();
     setScanModal(true);
     fetchTag();
   };
 
-  const confirmPasswords = async () => {
+  const signAndSend = () => {
+    setScanModal(true);
+    fetchTag();
+  };
+
+  const confirmPasswords = async (test) => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
-        setStatusModalVisible(true);
         setModalVisible(false);
-        changeGifSource();
+        if (test==='') {
         try {
           let key = await accountLogin(tagID, password);
           if (key) {
-            navigate('Account', { publicKey: key });
-            setStatusModalVisible(false);
+            setRecipientKey(key);
           } else {
             //console.error('Key is not defined.');
           }
@@ -75,45 +60,60 @@ const Login = ({ navigation }) => {
           //console.error('Error logging in:', error);
         }
       } else {
+        try {
+          signAndSend(tagID, password, amount, recipientKey);
+        } catch (error) {
+          //console.error('Error logging in:', error);
+        }
+      }
+      } else {
         setErrorMessage('The passwords do not match.');
       }
     } else {
       setErrorMessage('Please complete the form.');
     }
   };
-  
+
   return (
     <ImageBackground
       source={require('../assets/tech_pattern.jpg')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <View style={styles.container}>
+
         <View style={styles.topContainer}>
-          <Text style={styles.headingText}>Scan your card and input your password.</Text>
+          <Text style={styles.headingText}>Follow the prompts to transfer Optimism to another wallet.</Text>
         </View>
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('../assets/blob_background_black.png')}
-            style={styles.backgroundImage}
-            resizeMode="contain"
+        <View style={styles.inputContainer}>
+          <Text style={styles.paragraphText}>Input or scan card to fill recipient address.</Text>
+          <TextInput
+            mode="outlined"
+            style={styles.textInput}
+            placeholder="Recipient..."
+            value={recipientKey}
+            onChangeText={recipientKey => setRecipientKey(recipientKey)}
           />
-          <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
-            <Image
-              source={gifSource}
-              style={styles.centeredImage}
-              fadeDuration={0}
-              resizeMode="cover"
-            />
-          </Suspense>
+          <ModalButton text='Scan Card' type='secondary' size='large' onPress={() => { handleScanCardPress(); }} />
+
+          <Text style={styles.paragraphText}>How much would you like to send?</Text>
+          <TextInput
+            mode="outlined"
+            style={styles.textInput}
+            placeholder="Amount..."
+            value={amount}
+            onChangeText={amount => setAmount(amount)}
+            keyboardType="numeric"
+          />
         </View>
 
         <View style={styles.bottomContainer}>
-          <ModalButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-          <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
+        <ModalButton text='Sign and Send' type='primary' size='large' onPress={() => { signAndSend(); }} />
+          <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Account' size='large' />
         </View>
+      </View>
 
-        <Modal
+      <Modal
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -122,7 +122,7 @@ const Login = ({ navigation }) => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.headingText}>Each new password creates a new account when used with your card. We cannot recover your passwords for you.</Text>
+              <Text style={styles.headingText}>Enter your password.</Text>
               <PasswordInput
                 text='Enter Password'
                 password={password}
@@ -137,33 +137,8 @@ const Login = ({ navigation }) => {
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
               ) : null}
               <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => {
-                  setModalVisible(false);
-                  changeGifSource();
-                }} />
+                <ModalButton text='Close' type='secondary' size='small' onPress={() => {setModalVisible(false);}} />
                 <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
-              </View>
-            </View>
-          </View>
-        </Modal>
-
-        <Modal
-          transparent={true}
-          visible={statusModalVisible}
-          onRequestClose={() => {
-            setStatusModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-
-              <ActivityIndicator animating={true} />
-              <Text style={styles.headingText}>Logging in...</Text>
-              <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => {
-                  setStatusModalVisible(false);
-                  changeGifSource();
-                }} />
               </View>
             </View>
           </View>
@@ -186,32 +161,11 @@ const Login = ({ navigation }) => {
                   style={styles.scanModalImage}
                 />
                 <Text>Hold your device near the NFC tag.</Text>
-                <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); changeGifSource(); }} />
+                <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); }} />
               </View>
             </View>
           </Modal>
         )}
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={secondModalVisible}
-          onRequestClose={() => {
-            setSecondModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.headingText}>New Card?</Text>
-              <Text style={styles.errorMessage}>It looks like you may not have created a new secure passcode.  Would you like to do that now? Your assets will be automatically transferred.</Text>
-              <View style={styles.inlineButton}>
-                <NavigationButton navigation={navigation} text='No' type='secondary' target='Account' size='small' />
-                <NavigationButton navigation={navigation} text='Yes' type='primary' target='CreateNewCard' size='small' />
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
     </ImageBackground>
   );
 }
@@ -223,13 +177,38 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   topContainer: {
-    flex: 0.5,
+    flex: 1,
     padding: 30,
   },
-  imageContainer: {
+  inputContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    flex: 3,
+    flex: 2,
+    width: '100%',
   },
+  bottomContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headingText: {
+    fontSize: 18,
+    color: '#000000',
+    fontWeight: 'bold',
+  },
+  paragraphText: {
+    color: '#000000',
+    fontSize: 18,
+    margin: 10,
+  },
+  textInput: {
+    marginTop: 10,
+    width: 250,
+    height: 40,
+    backgroundColor: '#ffffff',
+  },
+
+
   backgroundImage: {
     position: 'absolute',
     top: 20,
@@ -291,4 +270,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+export default Transfer;

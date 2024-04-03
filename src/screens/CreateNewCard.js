@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import NavigationButton from '../components/NavigationButton';
 import DatePickerInput from '../components/PasswordInput';
 
-const Login = ({ navigation }) => {
+const CreateNewCard = ({ navigation }) => {
   return (
     <View style={styles.container}>
 
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default CreateNewCard;

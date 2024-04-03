@@ -3,8 +3,8 @@ import { View, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpac
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Card } from 'react-native-paper';
 import { getEthBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
-import ModalButton from '../components/ModalButton';
 import CurrencyCard from '../components/CurrencyCard';
+import ModalButton from '../components/ModalButton';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
@@ -15,7 +15,6 @@ const Account = ({ navigation, route }) => {
   const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
-
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -63,9 +62,11 @@ const Account = ({ navigation, route }) => {
  }, [nfts]);
 */
 
-const handleCopyToClipboard = () => {
-  Clipboard.setString(publicKey);
-};
+  const handleCopyToClipboard = () => {
+    Clipboard.setString(publicKey);
+  };
+  
+
   const openDetailsScreen = (nft, imageUri) => {
     navigation.navigate('NftDetails', { publicKey, selectedNFT: nft, imageUri });
   };
@@ -81,6 +82,10 @@ const handleCopyToClipboard = () => {
       </Card>
     </TouchableOpacity>
   );
+
+  const handleTransferPress = () => {
+    navigation.navigate('Transfer', { publicKey: publicKey }); 
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -101,8 +106,9 @@ const handleCopyToClipboard = () => {
           subtitle={balance}
           imageSource={require('../assets/optimism_logo.png')}
         />
-        <ModalButton text='Transfer' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-
+        <View style={styles.transferButton}>
+          <ModalButton text='Transfer Optimism' type='primary' size='large' onPress={() => { handleTransferPress(); }} />
+        </View>
       </View>
       <View style={styles.nftContainer}>
         <Text style={styles.headingText}>Your NFT Collection</Text>
@@ -162,8 +168,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   keyContent: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
   },
@@ -171,11 +177,15 @@ const styles = StyleSheet.create({
     margin: 10,
     height: 50,
   },
-
   copyImage: {
     width: 20,
     height: 20,
+  },
+  transferButton: {
+    margin: 10,
+    alignItems: 'center',
   }
+
 });
 
 export default Account;

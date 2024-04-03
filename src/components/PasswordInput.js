@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     width: 250,
     height: 40,
     backgroundColor: '#ffffff',
-   
   },
   toggleButton: {
     marginTop: 10,

@@ -22,7 +22,6 @@ export const readTag = async () => {
   }
 };
 
-//I think it's better to compute the kdf at the moment of reading, so we aren't ever storing the raw values
 export const scanSerialForKey = async () => {
   try {
     await NfcManager.requestTechnology(NfcTech.NfcA);
@@ -35,12 +34,6 @@ export const scanSerialForKey = async () => {
     NfcManager.cancelTechnologyRequest();
   }
 };
-
-export const concatPasswordWithSerialKey = async (serialKey, password) => {
-  let tempDataChain = serialKey + password;
-
-  return
-}
 
 export const closeSerial = async () => {
   try {
@@ -115,46 +108,6 @@ export const getOptimismWalletActivity = async (address) => {
   }
 };
 
-/**
-export const getAccountNfts = async (publicKey) => {
-  try {
-    const tatum = await TatumSDK.init({
-      network: Network.ETHEREUM_SEPOLIA,
-      apiKey: {v4: Config.TATUM_API_KEY,}
-    });
-    const nftsResponse = await tatum.nft.getBalance({
-      addresses: [publicKey],
-    });
-
-    if (nftsResponse.data == null) {
-    } else {
-      return nftsResponse.data;
-    }
-  } catch (error) {
-    //console.warn(error);
-  }
-};
-
-export const getAccountNfts = async (publicKey) => {
-  console.log('test')
-  const chain = 'ethereum-sepolia';
-  const address = publicKey;
-  const resp = await fetch(
-    `https://api.tatum.io/v3/nft/collection/${chain}/${address}`,
-    {
-      method: 'GET',
-      headers: {
-        'x-api-key': Config.TATUM_API_KEY
-      }
-    }
-  );
-
-  const data = await resp.text();
-
-  console.log(data);
-  return data;
-}
- */
 
 // will work with ERC721Enumerable
 export const getAccountNfts = async (publicKey, contractAddress) => {
@@ -279,7 +232,6 @@ export const signAndSend = async (tag, password, amount, recipient, sender) => {
   
     const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
     const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-    console.log(txReceipt)
     return txReceipt;
   } else {
     // don't send, the public keys are different

@@ -8,19 +8,31 @@ import { readTag, accountLogin, scanSerialForKey, signAndSend } from '../compone
 
 const Transfer = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
-  const [gas, setGas] = useState();
+  const [gas, setGas] = useState('');
+  const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
   const [amount, setAmount] = useState('');
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
+  const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const { publicKey } = route.params;
 
+  const handleTransferPress = () => {
+    navigation.navigate('Account', { publicKey }); 
+  };
+
   const handleNextStep = () => {
-    setStep(step + 1);
+    if (recipientKey.length !== 0) {
+      setStep(step + 1);
+      setInputError('');
+    } else {
+      setInputError('Oops! Please enter a recipient..')
+    }
   };
 
   const handlePreviousStep = () => {
@@ -41,6 +53,20 @@ const Transfer = ({ navigation, route }) => {
     }
   };
 
+  const fetchSign = async () => {
+    try {
+      let tag = await scanSerialForKey();
+      if (tag) {
+        setTagID(tag);
+        //console.warn(tag);
+        setSignModal(true);
+        setScanModal(false);
+      }
+    } catch (error) {
+      //console.log(error);
+    }
+  };
+
   const handleScanCardPress = () => {
     setScanModal(true);
     fetchTag();
@@ -48,15 +74,33 @@ const Transfer = ({ navigation, route }) => {
 
   const signAndSend = () => {
     setScanModal(true);
-    //  signAndSend(tagID, password, amount, recipient);
-    fetchTag();
-  };
+    fetchSign();
+  }
 
   const confirmPasswords = async () => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
         setModalVisible(false);
+        let recipientKey = await accountLogin(tagID, password);
+        setRecipientKey(recipientKey);
+      } else {
+        setErrorMessage('The passwords do not match.');
+      }
+    } else {
+      setErrorMessage('Please complete the form.');
+    }
+  };
+
+  const confirmSign = async () => {
+    if (password && confirmPassword) {
+      if (password === confirmPassword) {
+        setErrorMessage('');
+        setSignModal(false);
+        let receipt = await signAndSend(tagID, password, amount, recipientKey, publicKey);
+        setReceipt(receipt);
+        console.log(receipt);
+        navigation.navigate('Account', { publicKey });
       } else {
         setErrorMessage('The passwords do not match.');
       }
@@ -84,7 +128,7 @@ const Transfer = ({ navigation, route }) => {
       case 1:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.paragraphText}>How much? (2/3)</Text>
+            <Text style={styles.paragraphText}>How much would you like to send? (2/3)</Text>
             <TextInput
               mode="outlined"
               style={styles.textInput}
@@ -100,9 +144,37 @@ const Transfer = ({ navigation, route }) => {
           <View style={styles.inputContainer}>
             <Text style={styles.paragraphText}>Confirm Details (3/3)</Text>
             <Text style={styles.paragraphText}>{publicKey}</Text>
-            <Text style={styles.paragraphText}>Sending {amount} OP to...</Text>
+            <Text style={styles.paragraphText}>Sending {amount} OP to:</Text>
             <Text style={styles.paragraphText}>{recipientKey}</Text>
             <Text style={styles.paragraphText}>Estimated gas {gas} OP</Text>
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const renderButtons = () => {
+    switch (step) {
+      case 0:
+        return (
+          <View style={styles.bottomContainer}>
+            <ModalButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <ModalButton text='Go Back' type='secondary' size='large' onPress={() => { handleTransferPress(); }} />
+          </View>
+        );
+      case 1:
+        return (
+          <View style={styles.bottomContainer}>
+            <ModalButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <ModalButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
+          </View>
+        );
+      case 2:
+        return (
+          <View style={styles.bottomContainer}>
+            <ModalButton text='Sign and Send' type='primary' size='large'  onPress={() => { signAndSend(); }} />
+            <ModalButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
           </View>
         );
       default:
@@ -116,85 +188,117 @@ const Transfer = ({ navigation, route }) => {
       source={require('../assets/tech_pattern.jpg')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
-      <View style={styles.container}>
-        <View style={styles.container}>
-          <View style={styles.topContainer}>
-            <Text style={styles.headingText}>Follow the prompts to transfer Optimism to another wallet.</Text>
-          </View>
 
-          <View style={styles.inputContainer}>
-            <Image
-              source={require('../assets/blob_background_blue.png')}
-              style={styles.backgroundImageSecondary}
-              resizeMode="contain"
-            />
-            <Image
-              source={require('../assets/blob_background_black.png')}
-              style={styles.backgroundImage}
-              resizeMode="contain"
-            />
-            {renderStep()}
-          </View>
-          <View style={styles.bottomContainer}>
-            <ModalButton text='Continue' type='primary' target='Account' size='large' onPress={handleNextStep} />
-            <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Account' size='large' />
-          </View>
+      <View style={styles.container}>
+        <View style={styles.topContainer}>
+          <Text style={styles.headingText}>Follow the prompts to transfer Optimism to another wallet.</Text>
         </View>
 
+        <View style={styles.inputContainer}>
+          <Image
+            source={require('../assets/blob_background_blue.png')}
+            style={styles.backgroundImageSecondary}
+            resizeMode="contain"
+          />
+          <Image
+            source={require('../assets/blob_background_black.png')}
+            style={styles.backgroundImage}
+            resizeMode="contain"
+          />
+          {renderStep()}
+          {inputError ? (
+                <Text style={styles.errorMessage}>{inputError}</Text>
+              ) : null}
+        </View>
+        <View style={styles.bottomContainer}>
+          {renderButtons()}
+        </View>
+      </View>
+
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.headingText}>Enter your password.</Text>
+            <PasswordInput
+              text='Enter Password'
+              password={password}
+              setPassword={setPassword}
+            />
+            <PasswordInput
+              text='Confirm Password'
+              password={confirmPassword}
+              setPassword={setConfirmPassword}
+            />
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ) : null}
+            <View style={styles.inlineButton}>
+              <ModalButton text='Close' type='secondary' size='small' onPress={() => { setModalVisible(false); }} />
+              <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        transparent={true}
+        visible={signModal}
+        onRequestClose={() => {
+          setSignModal(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.headingText}>Enter your password. This step will sign the and send the transaction.</Text>
+            <PasswordInput
+              text='Enter Password'
+              password={password}
+              setPassword={setPassword}
+            />
+            <PasswordInput
+              text='Confirm Password'
+              password={confirmPassword}
+              setPassword={setConfirmPassword}
+            />
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ) : null}
+            <View style={styles.inlineButton}>
+              <ModalButton text='Close' type='secondary' size='small' onPress={() => { setSignModal(false); }} />
+              <ModalButton text='Enter' type='primary' size='small' onPress={confirmSign} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {Platform.OS === 'android' && ( // Render modal only on Android
         <Modal
+          animationType="fade"
           transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
-          }}
+          visible={scanModal}
+          onRequestClose={() => setScanModal(false)}
         >
           <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.headingText}>Enter your password.</Text>
-              <PasswordInput
-                text='Enter Password'
-                password={password}
-                setPassword={setPassword}
+            <View style={styles.bottomThirdContainer}>
+              <Text style={styles.headingText}>Ready to Scan</Text>
+              <Image
+                source={require('../assets/nfc_icon.png')}
+                resizeMode="contain"
+                scanModalImage
+                style={styles.scanModalImage}
               />
-              <PasswordInput
-                text='Confirm Password'
-                password={confirmPassword}
-                setPassword={setConfirmPassword}
-              />
-              {errorMessage ? (
-                <Text style={styles.errorMessage}>{errorMessage}</Text>
-              ) : null}
-              <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => { setModalVisible(false); }} />
-                <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
-              </View>
+              <Text>Hold your device near the NFC tag.</Text>
+              <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); }} />
             </View>
           </View>
         </Modal>
-
-        {Platform.OS === 'android' && ( // Render modal only on Android
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={scanModal}
-            onRequestClose={() => setScanModal(false)}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.bottomThirdContainer}>
-                <Text style={styles.headingText}>Ready to Scan</Text>
-                <Image
-                  source={require('../assets/nfc_icon.png')}
-                  resizeMode="contain"
-                  scanModalImage
-                  style={styles.scanModalImage}
-                />
-                <Text>Hold your device near the NFC tag.</Text>
-                <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); }} />
-              </View>
-            </View>
-          </Modal>
-        )}
-      </View>
+      )}
     </ImageBackground>
   );
 }
@@ -294,7 +398,7 @@ const styles = StyleSheet.create({
     width: 475,
     height: 475,
     opacity: 1,
-    transform: [{rotate: '-5deg'}]
+    transform: [{ rotate: '-5deg' }]
   },
   backgroundImageSecondary: {
     position: 'absolute',

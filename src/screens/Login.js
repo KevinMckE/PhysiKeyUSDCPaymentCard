@@ -11,7 +11,6 @@ const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   //const [newCard, setNewCard] = useState(false);
   const [password, setPassword] = useState(null);
@@ -60,14 +59,12 @@ const Login = ({ navigation }) => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         setErrorMessage('');
-        setStatusModalVisible(true);
         setModalVisible(false);
         changeGifSource();
         try {
           let key = await accountLogin(tagID, password);
           if (key) {
             navigate('Account', { publicKey: key });
-            setStatusModalVisible(false);
           } else {
             //console.error('Key is not defined.');
           }
@@ -81,7 +78,7 @@ const Login = ({ navigation }) => {
       setErrorMessage('Please complete the form.');
     }
   };
-  
+
   return (
     <ImageBackground
       source={require('../assets/tech_pattern.jpg')}
@@ -93,6 +90,11 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.imageContainer}>
+          <Image
+            source={require('../assets/blob_background_blue.png')}
+            style={styles.backgroundImageSecondary}
+            resizeMode="contain"
+          />
           <Image
             source={require('../assets/blob_background_black.png')}
             style={styles.backgroundImage}
@@ -147,27 +149,6 @@ const Login = ({ navigation }) => {
           </View>
         </Modal>
 
-        <Modal
-          transparent={true}
-          visible={statusModalVisible}
-          onRequestClose={() => {
-            setStatusModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-
-              <ActivityIndicator animating={true} />
-              <Text style={styles.headingText}>Logging in...</Text>
-              <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => {
-                  setStatusModalVisible(false);
-                  changeGifSource();
-                }} />
-              </View>
-            </View>
-          </View>
-        </Modal>
 
         {Platform.OS === 'android' && ( // Render modal only on Android
           <Modal
@@ -235,6 +216,13 @@ const styles = StyleSheet.create({
     top: 20,
     width: 300,
     height: 300,
+    opacity: 1,
+  },
+  backgroundImageSecondary: {
+    position: 'absolute',
+    top: 10,
+    width: 335,
+    height: 335,
     opacity: 1,
   },
   centeredImage: {

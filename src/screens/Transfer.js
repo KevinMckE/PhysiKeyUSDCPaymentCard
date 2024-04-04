@@ -7,8 +7,9 @@ import ModalButton from '../components/ModalButton';
 import { readTag, accountLogin, scanSerialForKey, signAndSend } from '../components/HelperFunctions';
 
 const Transfer = ({ navigation, route }) => {
+  const [step, setStep] = useState(0);
+  const [gas, setGas] = useState();
   const [modalVisible, setModalVisible] = useState(false);
-  const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
@@ -16,9 +17,16 @@ const Transfer = ({ navigation, route }) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-
   const { publicKey } = route.params;
-  console.log(publicKey);
+
+  const handleNextStep = () => {
+    setStep(step + 1);
+  };
+
+  const handlePreviousStep = () => {
+    setStep(step - 1);
+  };
+
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
@@ -57,47 +65,83 @@ const Transfer = ({ navigation, route }) => {
     }
   };
 
+  const renderStep = () => {
+    switch (step) {
+      case 0:
+        return (
+          <View style={styles.inputContainer}>
+            <Text style={styles.paragraphText}>Input or scan card for recipient address. (1/3) </Text>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              placeholder="Recipient address..."
+              value={recipientKey}
+              onChangeText={recipientKey => setRecipientKey(recipientKey)}
+            />
+            <ModalButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+          </View>
+        );
+      case 1:
+        return (
+          <View style={styles.inputContainer}>
+            <Text style={styles.paragraphText}>How much? (2/3)</Text>
+            <TextInput
+              mode="outlined"
+              style={styles.textInput}
+              placeholder="Amount..."
+              value={amount}
+              onChangeText={amount => setAmount(amount)}
+              keyboardType="numeric"
+            />
+          </View>
+        );
+      case 2:
+        return (
+          <View style={styles.inputContainer}>
+            <Text style={styles.paragraphText}>Confirm Details (3/3)</Text>
+            <Text style={styles.paragraphText}>{publicKey}</Text>
+            <Text style={styles.paragraphText}>Sending {amount} OP to...</Text>
+            <Text style={styles.paragraphText}>{recipientKey}</Text>
+            <Text style={styles.paragraphText}>Estimated gas {gas} OP</Text>
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <ScrollView>
+
     <ImageBackground
       source={require('../assets/tech_pattern.jpg')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <View style={styles.container}>
+        <View style={styles.container}>
+          <View style={styles.topContainer}>
+            <Text style={styles.headingText}>Follow the prompts to transfer Optimism to another wallet.</Text>
+          </View>
 
-        <View style={styles.topContainer}>
-          <Text style={styles.headingText}>Follow the prompts to transfer Optimism to another wallet.</Text>
+          <View style={styles.inputContainer}>
+            <Image
+              source={require('../assets/blob_background_blue.png')}
+              style={styles.backgroundImageSecondary}
+              resizeMode="contain"
+            />
+            <Image
+              source={require('../assets/blob_background_black.png')}
+              style={styles.backgroundImage}
+              resizeMode="contain"
+            />
+            {renderStep()}
+          </View>
+          <View style={styles.bottomContainer}>
+            <ModalButton text='Continue' type='primary' target='Account' size='large' onPress={handleNextStep} />
+            <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Account' size='large' />
+          </View>
         </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.paragraphText}>Input or scan card to fill recipient address.</Text>
-          <TextInput
-            mode="outlined"
-            style={styles.textInput}
-            placeholder="Recipient..."
-            value={recipientKey}
-            onChangeText={recipientKey => setRecipientKey(recipientKey)}
-          />
-          <ModalButton text='Scan Card' type='secondary' size='large' onPress={() => { handleScanCardPress(); }} />
-
-          <Text style={styles.paragraphText}>How much would you like to send?</Text>
-          <TextInput
-            mode="outlined"
-            style={styles.textInput}
-            placeholder="Amount..."
-            value={amount}
-            onChangeText={amount => setAmount(amount)}
-            keyboardType="numeric"
-          />
-        </View>
-
-        <View style={styles.bottomContainer}>
-        <ModalButton text='Sign and Send' type='primary' size='large' onPress={() => { signAndSend(); }} />
-          <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Account' size='large' />
-        </View>
-      </View>
-
-      <Modal
+        <Modal
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -121,7 +165,7 @@ const Transfer = ({ navigation, route }) => {
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
               ) : null}
               <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => {setModalVisible(false);}} />
+                <ModalButton text='Close' type='secondary' size='small' onPress={() => { setModalVisible(false); }} />
                 <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
               </View>
             </View>
@@ -150,8 +194,8 @@ const Transfer = ({ navigation, route }) => {
             </View>
           </Modal>
         )}
+      </View>
     </ImageBackground>
-    </ScrollView>
   );
 }
 
@@ -159,8 +203,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    height: '100%',
-    gap: 40
+
   },
   topContainer: {
     flex: 1,
@@ -171,9 +214,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 2,
     width: '100%',
+    padding: 30,
   },
   bottomContainer: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -183,24 +227,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   paragraphText: {
-    color: '#000000',
+    color: '#fff',
     fontSize: 18,
-    margin: 10,
+    padding: 10,
   },
   textInput: {
     marginTop: 10,
     width: 250,
     height: 40,
     backgroundColor: '#ffffff',
-  },
-
-
-  backgroundImage: {
-    position: 'absolute',
-    top: 20,
-    width: 300,
-    height: 300,
-    opacity: 1,
   },
   centeredImage: {
     width: '100%',
@@ -253,7 +288,19 @@ const styles = StyleSheet.create({
   scanModalImage: {
     height: 150,
     marginBottom: 10,
-  }
+  },
+  backgroundImage: {
+    position: 'absolute',
+    width: 400,
+    height: 400,
+    opacity: 1,
+  },
+  backgroundImageSecondary: {
+    position: 'absolute',
+    width: 420,
+    height: 420,
+    opacity: 1,
+  },
 });
 
 export default Transfer;

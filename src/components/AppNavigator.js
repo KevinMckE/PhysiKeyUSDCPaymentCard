@@ -14,7 +14,7 @@ const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background
 const AppNavigator = () => {
   return (
       <NavigationContainer theme={navTheme}>
-        <Stack.Navigator initialRouteName="Transfer">
+        <Stack.Navigator initialRouteName="Landing">
           <Stack.Screen
             name="Landing"
             component={Landing}
@@ -26,7 +26,7 @@ const AppNavigator = () => {
             name="Login"
             component={Login}
             options={{
-              title: 'Access Assets',
+              title: 'Scan Card',
             }}
           />
           <Stack.Screen

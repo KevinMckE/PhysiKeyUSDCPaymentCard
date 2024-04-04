@@ -16,7 +16,7 @@ const Account = ({ navigation, route }) => {
   const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
-  
+
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   aboutContainer: {
-    flext: 1,
+    flex: 1,
   },
   headingText: {
     fontSize: 18,

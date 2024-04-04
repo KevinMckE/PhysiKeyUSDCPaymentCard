@@ -40,7 +40,7 @@ const AppNavigator = () => {
             name="Transfer"
             component={Transfer}
             options={{
-              title: 'Transfer OP',
+              title: 'Transfer',
             }}
           />
           <Stack.Screen

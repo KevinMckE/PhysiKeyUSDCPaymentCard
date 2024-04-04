@@ -291,14 +291,15 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     position: 'absolute',
-    width: 400,
-    height: 400,
+    width: 475,
+    height: 475,
     opacity: 1,
+    transform: [{rotate: '-5deg'}]
   },
   backgroundImageSecondary: {
     position: 'absolute',
-    width: 420,
-    height: 420,
+    width: 500,
+    height: 500,
     opacity: 1,
   },
 });

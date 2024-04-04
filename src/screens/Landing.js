@@ -15,7 +15,7 @@ const Landing = ({ navigation }) => {
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
-        <Image
+          <Image
             source={require('../assets/blob_background_blue.png')}
             style={styles.backgroundImageSecondary}
           />
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: 650,
     opacity: 1,
+    transform: [{rotate: '-5deg'}]
   },
   backgroundImageSecondary: {
     position: 'absolute',

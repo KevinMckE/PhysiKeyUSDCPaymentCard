@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     opacity: 1,
+    transform: [{rotate: '-5deg'}]
   },
   backgroundImageSecondary: {
     position: 'absolute',

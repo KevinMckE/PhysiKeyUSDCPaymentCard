@@ -69,6 +69,31 @@ const styles = StyleSheet.create({
     width: 250,
     margin: 10,
   },
+  textMargin: {
+    margin: 10,
+  },
+  card: {
+    margin: 10,
+    backgroundColor: '#ffffff',
+  },
+  keyContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  errorText: {
+    margin: 10,
+    height: 50,
+  },
+  copyImage: {
+    width: 20,
+    height: 20,
+  },
+  transferButton: {
+    margin: 10,
+    alignItems: 'center',
+  }
 });
 
 export default styles;

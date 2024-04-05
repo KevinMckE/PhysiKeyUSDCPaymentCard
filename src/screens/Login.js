@@ -1,23 +1,24 @@
 import React, { useState, Suspense } from 'react';
 import { View, Image, StyleSheet, Text, Modal, Platform, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import NavigationButton from '../components/NavigationButton';
-import ModalButton from '../components/ModalButton';
+import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
+import AndroidScanModal from '../components/AndroidScanModal';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
-import { accountLogin } from '../functions/accountLogin';
+import { accountLogin } from '../functions/accountFunctions';
+import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [secondModalVisible, setSecondModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [tagID, setTagID] = useState('');
-  //const [newCard, setNewCard] = useState(false);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
-  const { navigate } = useNavigation();
+
+  const closeModal = () => {
+    setScanModal(false);
+  };
 
   const fetchTag = async () => {
     try {
@@ -103,8 +104,8 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.bottomContainer}>
-          <ModalButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-          <NavigationButton navigation={navigation} text='Go Back' type='secondary' target='Landing' size='large' />
+          <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+          <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
         </View>
 
         <Modal
@@ -116,7 +117,9 @@ const Login = ({ navigation }) => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.headingText}>Each new password creates a new account when used with your card. We cannot recover your passwords for you.</Text>
+              <Text style={styles.headingText}>Each new password creates a new account when used with your card. {"\n"} {"\n"}
+                We cannot recover passwords for you.
+              </Text>
               <PasswordInput
                 text='Enter Password'
                 password={password}
@@ -131,11 +134,8 @@ const Login = ({ navigation }) => {
                 <Text style={styles.errorMessage}>{errorMessage}</Text>
               ) : null}
               <View style={styles.inlineButton}>
-                <ModalButton text='Close' type='secondary' size='small' onPress={() => {
-                  setModalVisible(false);
-                  changeGifSource();
-                }} />
-                <ModalButton text='Enter' type='primary' size='small' onPress={confirmPasswords} />
+                <CustomButton text='Close' type='secondary' size='small' onPress={() => { setModalVisible(false); changeGifSource(); }} />
+                <CustomButton text='Enter' type='primary' size='small' onPress={() => { confirmPasswords(); }} />
               </View>
             </View>
           </View>
@@ -143,133 +143,15 @@ const Login = ({ navigation }) => {
 
 
         {Platform.OS === 'android' && ( // Render modal only on Android
-          <Modal
-            animationType="fade"
-            transparent={true}
+          <AndroidScanModal
             visible={scanModal}
-            onRequestClose={() => setScanModal(false)}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.bottomThirdContainer}>
-                <Text style={styles.headingText}>Ready to Scan</Text>
-                <Image
-                  source={require('../assets/nfc_icon.png')}
-                  resizeMode="contain"
-                  scanModalImage
-                  style={styles.scanModalImage}
-                />
-                <Text>Hold your device near the NFC tag.</Text>
-                <ModalButton text='Cancel' type='secondary' size='large' onPress={() => { setScanModal(false); changeGifSource(); }} />
-              </View>
-            </View>
-          </Modal>
+            closeModal={closeModal}
+            changeGifSource={changeGifSource}
+          />
         )}
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={secondModalVisible}
-          onRequestClose={() => {
-            setSecondModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.headingText}>New Card?</Text>
-              <Text style={styles.errorMessage}>It looks like you may not have created a new secure passcode.  Would you like to do that now? Your assets will be automatically transferred.</Text>
-              <View style={styles.inlineButton}>
-                <NavigationButton navigation={navigation} text='No' type='secondary' target='Account' size='small' />
-                <NavigationButton navigation={navigation} text='Yes' type='primary' target='CreateNewCard' size='small' />
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    height: '100%',
-  },
-  topContainer: {
-    flex: 0.5,
-    padding: 30,
-  },
-  imageContainer: {
-    alignItems: 'center',
-    flex: 3,
-  },
-  backgroundImage: {
-    position: 'absolute',
-    top: 20,
-    width: 300,
-    height: 300,
-    opacity: 1,
-    transform: [{rotate: '-5deg'}]
-  },
-  backgroundImageSecondary: {
-    position: 'absolute',
-    top: 10,
-    width: 335,
-    height: 335,
-    opacity: 1,
-  },
-  centeredImage: {
-    width: '100%',
-    height: '100%'
-  },
-  bottomContainer: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headingText: {
-    fontSize: 18,
-    marginBottom: 25,
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  inlineButton: {
-    flexDirection: 'row',
-    width: 100,
-    justifyContent: 'center',
-    gap: 10,
-  },
-  errorMessage: {
-    color: 'red',
-    margin: 10,
-  },
-  bottomThirdContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    alignItems: 'center',
-    padding: 20,
-  },
-  scanModalImage: {
-    height: 150,
-    marginBottom: 10,
-  }
-});
 
 export default Login;

@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, ImageBackground, Modal, Image, ScrollView } fro
 import { TextInput } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import ModalButton from '../components/ModalButton';
-import { accountLogin } from '../functions/accountLogin';
+import { accountLogin } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 
 const Transfer = ({ navigation, route }) => {

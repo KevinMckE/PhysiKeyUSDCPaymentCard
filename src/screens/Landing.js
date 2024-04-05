@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Image, TouchableOpacity, Linking, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
-import NavigationButton from '../components/NavigationButton';
+import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
@@ -16,22 +16,22 @@ const Landing = ({ navigation }) => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <View style={styles.container}>
-        <View style={styles.topContainer}>
+        <View style={styles.landingTopContainer}>
           <Image
             source={require('../assets/blob_background_blue.png')}
-            style={styles.backgroundImageSecondary}
+            style={styles.landingBackgroundImageSecondary}
           />
           <Image
             source={require('../assets/blob_background_black.png')}
-            style={styles.backgroundImage}
+            style={styles.landingBackgroundImage}
           />
           <Image
             source={require('../assets/card_animation.gif')}
             style={styles.centeredImage}
           />
-        </View>
-        <View style={styles.bottomContainer}>
-          <NavigationButton navigation={navigation} text='Access Card' type='primary' target='Login' size='large' />
+        </View>    
+        <View style={styles.landingBottomContainer}>
+          <CustomButton text='Access Assets' type='primary' size='large' onPress={() => {navigation.navigate('Login');}} />
           <Text variant="bodyLarge">Don't have a card?</Text>
           <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Get one here</Text></TouchableOpacity></Text>
         </View>

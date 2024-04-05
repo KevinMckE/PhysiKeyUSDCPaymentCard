@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal, View, Text, Image } from 'react-native';
+import { Modal, View, Image, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
-import styles from '../styles/common';
 
 const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
   return (
@@ -13,14 +13,14 @@ const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.bottomThirdContainer}>
-          <Text style={styles.headingText}>Ready to Scan</Text>
+          <Text variant='titleLarge' style={styles.text}>Ready to Scan</Text>
           <Image
             source={require('../assets/nfc_icon.png')}
             resizeMode="contain"
             scanModalImage
             style={styles.scanModalImage}
           />
-          <Text>Hold your device near the NFC tag.</Text>
+          <Text variant='titleMedium'>Hold your device near the NFC tag.</Text>
           <CustomButton
             text='Cancel'
             type='secondary'
@@ -37,3 +37,30 @@ const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
 }
 
 export default AndroidScanModal;
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
+  },
+  text: {
+    margin: 10,
+  },
+  bottomThirdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    alignItems: 'center',
+    padding: 20,
+  },
+  scanModalImage: {
+    height: 150,
+    marginBottom: 10,
+  },
+});

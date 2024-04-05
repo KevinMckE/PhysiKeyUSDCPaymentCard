@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 3,
   },
   topContainer: {
-    flex: 0.5,
+    flex: 1,
     padding: 30,
   },
   bottomContainer: {
@@ -65,65 +65,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 18,
   },
-  paragraphText: {
-    color: '#000000',
-    fontSize: 18,
-  },
   button: {
     width: 250,
     margin: 10,
-  },
-  headingText: {
-    fontSize: 18,
-    marginBottom: 25,
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  inlineButton: {
-    flexDirection: 'row',
-    width: 100,
-    justifyContent: 'center',
-    gap: 10,
-  },
-  errorMessage: {
-    color: 'red',
-    margin: 10,
-  },
-  bottomThirdContainer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    alignItems: 'center',
-    padding: 20,
-  },
-  scanModalImage: {
-    height: 150,
-    marginBottom: 10,
-  },
-  textInput: {
-    marginTop: 10,
-    width: 250,
-    height: 40,
-    backgroundColor: '#ffffff',
-  },
-  toggleButton: {
-    marginTop: 10,
   },
 });
 

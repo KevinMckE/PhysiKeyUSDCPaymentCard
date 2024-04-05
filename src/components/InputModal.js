@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Modal, View, Text } from 'react-native';
+import { Modal, View, StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
-import styles from '../styles/common';
 
 const InputModal = ({ visible, closeModal, handlePasswords }) => {
   const [password, setPassword] = useState(null);
@@ -29,7 +29,7 @@ const InputModal = ({ visible, closeModal, handlePasswords }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.headingText}>Each new password creates a new account when used with your card. {"\n"} {"\n"}
+          <Text style={styles.text} variant='titleMedium'>Each new password creates a new account when used with your card. {"\n"} {"\n"}
             We cannot recover passwords for you.
           </Text>
           <PasswordInput
@@ -56,3 +56,33 @@ const InputModal = ({ visible, closeModal, handlePasswords }) => {
 }
 
 export default InputModal;
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  inlineButton: {
+    flexDirection: 'row',
+    marginTop: 15,
+    width: 100,
+    justifyContent: 'center',
+    gap: 5,
+  },
+  text: {
+    margin: 10,
+  },
+  errorMessage: {
+    color: 'red',
+    margin: 10,
+  },
+});

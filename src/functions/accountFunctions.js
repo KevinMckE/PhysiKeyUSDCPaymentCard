@@ -28,7 +28,7 @@ export const accountLogin = async (tag, password) => {
   console.log('encryptedPrivateKey: ', encryptedPrivateKey);
   console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
   console.log('publicKey: ', publicKey);
-  return { publickKey: publicKey, privateKey: privateKey };
+  return { publicKey: publicKey, privateKey: privateKey };
 };
 
 

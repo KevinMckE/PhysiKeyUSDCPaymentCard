@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from 'react';
-import { View, Image, StyleSheet, Text, Modal, Platform, ImageBackground } from 'react-native';
+import { View, Image , Platform, ImageBackground } from 'react-native';
+import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
-import PasswordInput from '../components/PasswordInput';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
@@ -49,33 +49,20 @@ const Login = ({ navigation }) => {
   const handlePasswords = async (password, confirmPassword) => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
-      } else {
-      }
-    } else {
-    }
-  };
-
-  const confirmPasswords = async () => {
-    if (password && confirmPassword) {
-      if (password === confirmPassword) {
-        setErrorMessage('');
         setModalVisible(false);
         changeGifSource();
         try {
-          let key = await accountLogin(tagID, password);
-          if (key) {
-            navigate('Account', { publicKey: key });
+          let { publicKey } = await accountLogin(tagID, password);
+          console.log(publicKey)
+          if (publicKey) {
+            navigation.navigate('Account', { publicKey: publicKey });
           } else {
             console.error('Cannot complete confirmPasswords. Key is not defined.');
           }
         } catch (error) {
           console.error('Cannot complete confirmPasswords: ', error);
         }
-      } else {
-        setErrorMessage('The passwords do not match.');
       }
-    } else {
-      setErrorMessage('Please complete the form.');
     }
   };
 
@@ -86,7 +73,7 @@ const Login = ({ navigation }) => {
     >
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={styles.headingText}>Scan your card and input your password.</Text>
+          <Text variant='titleLarge'>Scan your card and input your password.</Text>
         </View>
 
         <View style={styles.imageContainer}>
@@ -118,7 +105,7 @@ const Login = ({ navigation }) => {
         <InputModal
           visible={modalVisible}
           closeModal={() => setModalVisible(false)}
-          handlePasswords={handlePasswords} 
+          handlePasswords={handlePasswords}
         />
 
         {Platform.OS === 'android' && ( // Render modal only on Android

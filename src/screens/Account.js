@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Card } from 'react-native-paper';
-import { getEthBalance, getAccountNfts, getImageUri } from '../components/HelperFunctions';
+import { getOptimismBalance } from '../functions/getOptimismBalance';
 import CurrencyCard from '../components/CurrencyCard';
 import ModalButton from '../components/ModalButton';
 
@@ -11,63 +11,30 @@ const Account = ({ navigation, route }) => {
   const [nfts, setNfts] = useState([]);
   const [imageUris, setImageUris] = useState([]);
   const [loading, setLoading] = useState(true);
-  //const [publicKey, setPublicKey] = useState('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4')
   const { publicKey } = route.params;
   const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const thirdWindowsWidth = Dimensions.get('window').width / 3;
-
+  console.log(publicKey)
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        let balance = await getEthBalance(publicKey);
+        let balance = await getOptimismBalance(publicKey);
         if (balance === '0.') {
           balance = '0.0';
         }
         setBalance(balance);
       } catch (error) {
-        //console.warn(error);
+        console.log('Cannot complete fetchBalance: ', error);
       }
     };
     fetchBalance();
   }, []);
 
-  /**
- useEffect(() => {
-   const fetchNfts = async () => {
-     try {
-       const nftList = await getAccountNfts(publicKey, contractAddress);
-       setNfts(nftList);
-     } catch (error) {
-       //console.warn(error);
-     }
-   };
-   fetchNfts();
- }, []);
-
-
- useEffect(() => {
-   const fetchImageUris = async () => {
-     if (nfts.length > 0) {
-       const uris = await Promise.all(
-         nfts.map(async (item) => {
-           const uri = await getImageUri(item);
-           return uri;
-         })
-       );
-       setImageUris(uris);
-       setLoading(false);
-     }
-   };
-   fetchImageUris();
- }, [nfts]);
-*/
-
   const handleCopyToClipboard = () => {
     Clipboard.setString(publicKey);
   };
   
-
   const openDetailsScreen = (nft, imageUri) => {
     navigation.navigate('NftDetails', { publicKey, selectedNFT: nft, imageUri });
   };

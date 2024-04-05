@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Button } from 'react-native-paper';
-import { closeSerial } from './HelperFunctions';
 
 const ModalButton = ({ text, type, size, onPress }) => {
   return (

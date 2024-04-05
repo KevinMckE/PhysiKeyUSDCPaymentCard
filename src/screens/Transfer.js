@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, ImageBackground, Modal, Image, ScrollView } from 'react-native';
-import NavigationButton from '../components/NavigationButton';
 import { TextInput } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import ModalButton from '../components/ModalButton';
-import { readTag, accountLogin, scanSerialForKey, signAndSend } from '../components/HelperFunctions';
+import { accountLogin } from '../functions/accountLogin';
+import { scanSerialForKey } from '../functions/scanSerialForKey';
 
 const Transfer = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
@@ -100,7 +100,7 @@ const Transfer = ({ navigation, route }) => {
         let receipt = await signAndSend(tagID, password, amount, recipientKey, publicKey);
         setReceipt(receipt);
         console.log(receipt);
-        navigation.navigate('Account', { publicKey });
+        //navigation.navigate('Account', { publicKey });
       } else {
         setErrorMessage('The passwords do not match.');
       }

@@ -1,11 +1,11 @@
 import React, { useState, Suspense } from 'react';
 import { View, Image, StyleSheet, Text, Modal, Platform, ImageBackground } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import NavigationButton from '../components/NavigationButton';
 import ModalButton from '../components/ModalButton';
 import PasswordInput from '../components/PasswordInput';
-import { readTag, accountLogin, scanSerialForKey } from '../components/HelperFunctions';
+import { scanSerialForKey } from '../functions/scanSerialForKey';
+import { accountLogin } from '../functions/accountLogin';
 
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,21 +22,13 @@ const Login = ({ navigation }) => {
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
-      //newTagID = tag; //doing the kdf on the serial in the helperfunction
-      //ndefPayload = tag.ndefMessage[0].payload; // THIS CAUSES BUG IF THE TAG HAS NEVER HAD AN NDEF PAYLOAD
-      /**
-      if (ndefPayload.length === 0) {
-        setNewCard(true);
-      }
-       */
       if (tag) {
         setTagID(tag);
-        //console.warn(tag);
         setModalVisible(true);
         setScanModal(false);
       }
     } catch (error) {
-      //console.log(error);
+      console.log('Cannot complete fetchTag: ', error);
     }
     changeGifSource();
   };
@@ -66,10 +58,10 @@ const Login = ({ navigation }) => {
           if (key) {
             navigate('Account', { publicKey: key });
           } else {
-            //console.error('Key is not defined.');
+            console.error('Cannot complete confirmPasswords. Key is not defined.');
           }
         } catch (error) {
-          //console.error('Error logging in:', error);
+          console.error('Cannot complete confirmPasswords: ', error);
         }
       } else {
         setErrorMessage('The passwords do not match.');

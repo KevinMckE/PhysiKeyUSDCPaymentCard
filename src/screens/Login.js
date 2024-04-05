@@ -2,6 +2,7 @@ import React, { useState, Suspense } from 'react';
 import { View, Image, StyleSheet, Text, Modal, Platform, ImageBackground } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
+import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { accountLogin } from '../functions/accountFunctions';
@@ -11,12 +12,9 @@ const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [tagID, setTagID] = useState('');
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
-  const [errorMessage, setErrorMessage] = useState('');
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
 
-  const closeModal = () => {
+  const closeScanModal = () => {
     setScanModal(false);
   };
 
@@ -46,6 +44,15 @@ const Login = ({ navigation }) => {
     changeGifSource();
     setScanModal(true);
     fetchTag();
+  };
+
+  const handlePasswords = async (password, confirmPassword) => {
+    if (password && confirmPassword) {
+      if (password === confirmPassword) {
+      } else {
+      }
+    } else {
+    }
   };
 
   const confirmPasswords = async () => {
@@ -108,44 +115,16 @@ const Login = ({ navigation }) => {
           <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
         </View>
 
-        <Modal
-          transparent={true}
+        <InputModal
           visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(false);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.headingText}>Each new password creates a new account when used with your card. {"\n"} {"\n"}
-                We cannot recover passwords for you.
-              </Text>
-              <PasswordInput
-                text='Enter Password'
-                password={password}
-                setPassword={setPassword}
-              />
-              <PasswordInput
-                text='Confirm Password'
-                password={confirmPassword}
-                setPassword={setConfirmPassword}
-              />
-              {errorMessage ? (
-                <Text style={styles.errorMessage}>{errorMessage}</Text>
-              ) : null}
-              <View style={styles.inlineButton}>
-                <CustomButton text='Close' type='secondary' size='small' onPress={() => { setModalVisible(false); changeGifSource(); }} />
-                <CustomButton text='Enter' type='primary' size='small' onPress={() => { confirmPasswords(); }} />
-              </View>
-            </View>
-          </View>
-        </Modal>
-
+          closeModal={() => setModalVisible(false)}
+          handlePasswords={handlePasswords} 
+        />
 
         {Platform.OS === 'android' && ( // Render modal only on Android
           <AndroidScanModal
             visible={scanModal}
-            closeModal={closeModal}
+            closeScanModal={closeScanModal}
             changeGifSource={changeGifSource}
           />
         )}

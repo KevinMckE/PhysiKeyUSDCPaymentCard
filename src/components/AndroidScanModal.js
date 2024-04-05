@@ -3,13 +3,13 @@ import { Modal, View, Text, Image } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
-const AndroidScanModal = ({ visible, closeModal, changeGifSource }) => {
+const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
   return (
     <Modal
       animationType="fade"
       transparent={true}
       visible={visible}
-      onRequestClose={closeModal}
+      onRequestClose={closeScanModal}
     >
       <View style={styles.modalContainer}>
         <View style={styles.bottomThirdContainer}>
@@ -24,9 +24,9 @@ const AndroidScanModal = ({ visible, closeModal, changeGifSource }) => {
           <CustomButton
             text='Cancel'
             type='secondary'
-            size='large'
+            size='small'
             onPress={() => { 
-              closeModal(); 
+              closeScanModal(); 
               changeGifSource();
             }}
           />

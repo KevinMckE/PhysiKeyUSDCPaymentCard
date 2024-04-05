@@ -115,7 +115,16 @@ const styles = StyleSheet.create({
   scanModalImage: {
     height: 150,
     marginBottom: 10,
-  }
+  },
+  textInput: {
+    marginTop: 10,
+    width: 250,
+    height: 40,
+    backgroundColor: '#ffffff',
+  },
+  toggleButton: {
+    marginTop: 10,
+  },
 });
 
 export default styles;

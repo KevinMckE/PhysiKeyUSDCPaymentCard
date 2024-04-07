@@ -31,27 +31,28 @@ export const accountLogin = async (tag, password) => {
   return { publicKey: publicKey, privateKey: privateKey };
 };
 
+export const signAndSend = async (tag, password, amount, recipient, gas, sender) => {
+  console.log('sign/send ran');
+  console.log(sender);
 
-//// *** WIP
-export const signAndSend = async (tag, password, amount, recipient, sender, gas) => {
-  try {
-    let { publicKey, privateKey } = await accountLogin(tag, password);
-    const recipientAddress = web3.utils.toChecksumAddress(web3.utils.pubToAddress(recipient).toString('hex'));
-    const gasPrice = await web3.eth.getGasPrice();
-    const nonce = await web3.eth.getTransactionCount(publicKey);
-    const txObject = {
-      from: publicKey,
-      to: recipientAddress,
-      value: amount,
-      gas,
-      gasPrice,
-      nonce
-    };
-
-    const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
-    const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-    return txReceipt;
-  } catch (error) {
-    console.error('Cannot complete signAndSend: ', error);
-  }
+  let { publicKey, privateKey } = await accountLogin(tag, password);
+  const gasLimit = web3.utils.toHex(21000); // Example gas limit
+  const gasPrice = web3.utils.toWei('100', 'gwei'); // Example gas price in wei (100 gwei)
+  //const addressBuffer = web3.utils.keccak256(recipient); // Keccak-256 hash of the public key
+  //const address = '0x' + addressBuffer.slice(-20).toString('hex'); // Take the last 20 bytes and convert to hex
+  //const recipientAddress = web3.utils.toChecksumAddress(address); // Convert to checksum address
+  const nonce = await web3.eth.getTransactionCount(publicKey);
+  const amountInWei = web3.utils.toWei(amount, 'ether'); // Convert amount to wei
+  const txObject = {
+    from: publicKey,
+    to: recipient,
+    value: amountInWei,
+    gas: gasLimit,
+    gasPrice: gasPrice,
+    nonce: nonce
+  };
+  const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
+  const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+  console.log(txReceipt)
+  return txReceipt;
 };

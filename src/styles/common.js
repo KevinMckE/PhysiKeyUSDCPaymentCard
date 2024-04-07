@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   imageContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 3,
   },
@@ -84,7 +85,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     margin: 10,
+    padding: 10,
     height: 50,
+    color: 'red',
   },
   copyImage: {
     width: 20,
@@ -93,7 +96,19 @@ const styles = StyleSheet.create({
   transferButton: {
     margin: 10,
     alignItems: 'center',
-  }
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 2,
+    padding: 10
+  },
+  textInput: {
+    marginTop: 10,
+    width: 300,
+    height: 60,
+    backgroundColor: '#ffffff',
+  },
 });
 
 export default styles;

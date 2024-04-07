@@ -4,7 +4,7 @@ import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 
-const InputModal = ({ visible, closeModal, handlePasswords }) => {
+const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,9 +29,7 @@ const InputModal = ({ visible, closeModal, handlePasswords }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.text} variant='titleMedium'>Each new password creates a new account when used with your card. {"\n"} {"\n"}
-            We cannot recover passwords for you.
-          </Text>
+          <Text style={styles.text} variant='titleMedium'>{title}</Text>
           <PasswordInput
             text='Enter Password'
             password={password}
@@ -67,7 +65,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#fff',
-    padding: 20,
+    width: '100%',
+    padding: 30,
     borderRadius: 10,
     alignItems: 'center',
   },

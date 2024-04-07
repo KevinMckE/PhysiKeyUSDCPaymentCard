@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text } from 'react-native-paper';
-import { Card, Title } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 
 const CurrencyCard = ({ title, subtitle, imageSource }) => {
   return (
@@ -10,7 +10,7 @@ const CurrencyCard = ({ title, subtitle, imageSource }) => {
         <Image source={imageSource} style={styles.image} />
         <View>
           <Text variant='titleLarge'>{title}</Text>
-          <Text style={styles.amountText}>{subtitle} OP</Text>
+          <Text style={styles.amountText}>{subtitle} ETH</Text>
         </View>
       </Card.Content>
     </Card>

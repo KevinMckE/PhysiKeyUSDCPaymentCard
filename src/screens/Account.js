@@ -36,7 +36,6 @@ const Account = ({ navigation, route }) => {
     Clipboard.setString(publicKey);
   };
 
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.balanceContainer}>

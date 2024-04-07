@@ -53,14 +53,13 @@ const Login = ({ navigation }) => {
         changeGifSource();
         try {
           let { publicKey } = await accountLogin(tagID, password);
-          console.log(publicKey)
           if (publicKey) {
             navigation.navigate('Account', { publicKey: publicKey });
           } else {
-            console.error('Cannot complete confirmPasswords. Key is not defined.');
+            console.error('Cannot complete handlePasswords. Key is not defined.');
           }
         } catch (error) {
-          console.error('Cannot complete confirmPasswords: ', error);
+          console.error('Cannot complete handlePasswords: ', error);
         }
       }
     }
@@ -106,6 +105,7 @@ const Login = ({ navigation }) => {
           visible={modalVisible}
           closeModal={() => setModalVisible(false)}
           handlePasswords={handlePasswords}
+          title={`Each new password creates a new account when used with your card. \n\nWe cannot recover passwords for you.`}
         />
 
         {Platform.OS === 'android' && ( // Render modal only on Android

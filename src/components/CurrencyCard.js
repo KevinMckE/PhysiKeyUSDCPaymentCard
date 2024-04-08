@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Text } from 'react-native-paper';
-import { Card } from 'react-native-paper';
+import { Text, Card } from 'react-native-paper';
 
 const CurrencyCard = ({ title, subtitle, imageSource }) => {
   return (

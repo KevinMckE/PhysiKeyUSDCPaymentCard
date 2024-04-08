@@ -101,10 +101,10 @@ const Transfer = ({ navigation, route }) => {
       try {
         const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
         setGas(gasEstimate);
-        setErrorMessage(''); // Clear any previous error message
+        inputError(''); // Clear any previous error message
       } catch (error) {
         console.error('Cannot complete fetchGasEstimate: ', error);
-        setErrorMessage('Error fetching gas estimate: ' + error.message); // Set the error message
+        inputError('Error fetching gas estimate: ' + error.message); // Set the error message
         setGas('0.0'); // Reset gas to default value in case of error
       }
     };

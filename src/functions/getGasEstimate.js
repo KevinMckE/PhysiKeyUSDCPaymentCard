@@ -13,6 +13,6 @@ export const getGasEstimate = async (sender, receiver, amount) => {
     const gasInEth = web3.utils.fromWei((gasEstimate * gasPrice).toString(), 'ether');
     return gasInEth;
   } catch (error) {
-    console.error('Error fetching gas estimate: ', error);
+    throw error;
   }
 };

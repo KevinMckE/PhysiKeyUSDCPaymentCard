@@ -5,7 +5,8 @@ export const getOptimismBalance = async (address) => {
   try {
     const balance = await web3.eth.getBalance(address);
     const balanceInEth = web3.utils.fromWei(balance, 'ether');
-    return balanceInEth;
+    const gasInEthRounded = parseFloat(balanceInEth).toFixed(6);
+    return gasInEthRounded;
   } catch (error) {
     console.log('Cannot complete getOptimismBalance: ', error);
     return null;

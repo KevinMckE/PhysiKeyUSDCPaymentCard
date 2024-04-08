@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { View, Image , Platform, ImageBackground } from 'react-native';
+import { View, Image, Platform, ImageBackground, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -13,6 +13,7 @@ const Login = ({ navigation }) => {
   const [scanModal, setScanModal] = useState(false);
   const [tagID, setTagID] = useState('');
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
+  const [loading, setLoading] = useState(false);
 
   const closeScanModal = () => {
     setScanModal(false);
@@ -47,18 +48,21 @@ const Login = ({ navigation }) => {
   };
 
   const handlePasswords = async (password) => {
-        setModalVisible(false);
-        changeGifSource();
-        try {
-          let { publicKey } = await accountLogin(tagID, password);
-          if (publicKey) {
-            navigation.navigate('Account', { publicKey: publicKey });
-          } else {
-            console.error('Cannot complete handlePasswords. Key is not defined.');
-          }
-        } catch (error) {
-          console.error('Cannot complete handlePasswords: ', error);
-        }
+    setModalVisible(false);
+    changeGifSource();
+    setLoading(true);
+    try {
+      let { publicKey } = await accountLogin(tagID, password);
+      if (publicKey) {
+        navigation.navigate('Account', { publicKey: publicKey });
+      } else {
+        console.error('Cannot complete handlePasswords. Key is not defined.');
+      }
+    } catch (error) {
+      console.error('Cannot complete handlePasswords: ', error);
+    } finally {
+      setLoading(false); // Stop the loading spinner after completion
+    }
   };
 
   return (
@@ -67,6 +71,11 @@ const Login = ({ navigation }) => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <View style={styles.container}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <View style={styles.topContainer}>
           <Text variant='titleLarge'>Scan your card and input your password.</Text>
         </View>

@@ -4,8 +4,10 @@ import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
+import CustomSnackbar from '../components/CustomSnackbar';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { accountLogin } from '../functions/accountFunctions';
+import { cancelNfc } from '../functions/cancelNfcRequest';
 import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
@@ -15,7 +17,12 @@ const Login = ({ navigation }) => {
   const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
   const [loading, setLoading] = useState(false);
 
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
+  const [isSuccess, setSuccess] = useState(false);
+
   const closeScanModal = () => {
+    cancelNfc();
     setScanModal(false);
   };
 
@@ -48,6 +55,7 @@ const Login = ({ navigation }) => {
   };
 
   const handlePasswords = async (password) => {
+    handleSnackbar(true, 'Attemping login...');
     setModalVisible(false);
     changeGifSource();
     setLoading(true);
@@ -57,12 +65,20 @@ const Login = ({ navigation }) => {
         navigation.navigate('Account', { publicKey: publicKey });
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
+        handleSnackbar(false, 'Cannot complete handlePasswords. Key is not defined.');
       }
     } catch (error) {
       console.error('Cannot complete handlePasswords: ', error);
+      handleSnackbar(false, `There was an issue: ${error}`);
     } finally {
-      setLoading(false); // Stop the loading spinner after completion
+      setLoading(false);
     }
+  };
+
+  const handleSnackbar = (success, text) => {
+    setSuccess(success);
+    setSnackbarText(text);
+    setSnackbarVisible(true);
   };
 
   return (
@@ -105,6 +121,14 @@ const Login = ({ navigation }) => {
           <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
           <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
         </View>
+
+        <CustomSnackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={3000}
+          text={snackbarText}
+          isSuccess={isSuccess}
+        />
 
         <InputModal
           visible={modalVisible}

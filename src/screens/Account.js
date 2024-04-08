@@ -4,21 +4,27 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { Text, Card } from 'react-native-paper';
 import { getOptimismBalance } from '../functions/getOptimismBalance';
 import CurrencyCard from '../components/CurrencyCard';
+import CustomSnackbar from '../components/CustomSnackbar';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
   const [nfts, setNfts] = useState([]);
-  const [imageUris, setImageUris] = useState([]);
-  const [loading, setLoading] = useState(true);
+  //const [imageUris, setImageUris] = useState([]);
+  //const [loading, setLoading] = useState(true);
   const { publicKey } = route.params;
-  const contractAddress = ''; // hard code contract address
+  //const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
-  const thirdWindowsWidth = Dimensions.get('window').width / 3;
+  //const thirdWindowsWidth = Dimensions.get('window').width / 3;
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
+  const [isSuccess, setSuccess] = useState(false);
  
   useEffect(() => {
     const fetchBalance = async () => {
+      handleSnackbar(true, 'Hello!');
       try {
         let balance = await getOptimismBalance(publicKey);
         if (balance === '0.') {
@@ -34,6 +40,12 @@ const Account = ({ navigation, route }) => {
 
   const handleCopyToClipboard = () => {
     Clipboard.setString(publicKey);
+  };
+
+  const handleSnackbar = (success, text) => {
+    setSuccess(success);
+    setSnackbarText(text);
+    setSnackbarVisible(true);
   };
 
   return (
@@ -79,6 +91,14 @@ const Account = ({ navigation, route }) => {
         <Text variant='titleLarge' style={styles.textMargin}>About Us</Text>
         <Text variant='bodyMedium' style={styles.textMargin}>Anywhere Blockchain is building simple, safe, and more affordable key management tools for the future of finance, media, and governance. Our mobile application simplifies data ownership for users of Web 3 technology, using NFC chips to regenerate complex signing keys and passwords for the end user without storing them on remotely exploitable databases. This will have applications in the future of digital identity, social media, and blockchain-based computer transactions.</Text>
       </Card>
+
+      <CustomSnackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={3000}
+          text={snackbarText}
+          isSuccess={isSuccess}
+        />
     </ScrollView>
   );
 }

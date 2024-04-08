@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import { accountLogin, signAndSend } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { getGasEstimate } from '../functions/getGasEstimate';
+import { cancelNfc } from '../functions/cancelNfcRequest';
 import styles from '../styles/common';
 
 const Transfer = ({ navigation, route }) => {
@@ -57,6 +58,7 @@ const Transfer = ({ navigation, route }) => {
   };
 
   const closeScanModal = () => {
+    cancelNfc();
     setScanModal(false);
   };
 

@@ -11,9 +11,9 @@ const CustomSnackbar = ({ visible, onDismiss, duration, text, isSuccess }) => {
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {isSuccess ? (
-          <Icon source="check-circle" color="#ffffff" size={30} />
+          <Icon icon="check-circle" color="#ffffff" size={30} />
         ) : (
-          <Icon source="alert" color="#ffffff" size={30} />
+          <Icon icon="alert" color="#ffffff" size={30} />
         )}
         <Text style={{ color: '#ffffff', marginLeft: 10 }}>{text}</Text>
       </View>

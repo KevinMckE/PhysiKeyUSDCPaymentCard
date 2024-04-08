@@ -20,8 +20,6 @@ const Transfer = ({ navigation, route }) => {
   const [scanModal, setScanModal] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
   const [amount, setAmount] = useState('');
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const { publicKey } = route.params;
@@ -102,12 +100,12 @@ const Transfer = ({ navigation, route }) => {
     const fetchGasEstimate = async () => {
       try {
         const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
-        setGas(gasEstimate);
-        inputError(''); // Clear any previous error message
+        setGas(gasEstimate.toString() + 'n');
+        setInputError(''); 
       } catch (error) {
         console.error('Cannot complete fetchGasEstimate: ', error);
-        inputError('Error fetching gas estimate: ' + error.message); // Set the error message
-        setGas('0.0'); // Reset gas to default value in case of error
+        setInputError('Error fetching gas estimate: ' + error.message); 
+        setGas('0.0'); 
       }
     };
 

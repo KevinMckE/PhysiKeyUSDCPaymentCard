@@ -36,7 +36,12 @@ const Account = ({ navigation, route }) => {
       }
     };
     fetchBalance();
-  }, []);
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchBalance();
+    });
+    return unsubscribe;
+  }, [navigation, publicKey]);
 
   const handleCopyToClipboard = () => {
     Clipboard.setString(publicKey);

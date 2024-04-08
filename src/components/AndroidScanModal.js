@@ -4,6 +4,7 @@ import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 
 const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
+  
   const handleChangeGifSource = () => {
     if (typeof changeGifSource === 'function') {
       changeGifSource();

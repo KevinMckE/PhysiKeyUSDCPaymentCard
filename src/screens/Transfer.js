@@ -46,11 +46,11 @@ const Transfer = ({ navigation, route }) => {
         }
         break;
       case 1:
-        if (parseFloat(amount) > 0) {
+        if (parseFloat(amount) > 0 && gas !== null) {
           setStep(step + 1);
           setInputError('');
         } else {
-          setInputError('Oops! Please enter an amount greater than 0.');
+          setInputError('Oops! Please enter a valid number.')
         }
         break;
       default:
@@ -105,14 +105,17 @@ const Transfer = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchGasEstimate = async () => {
+      if (parseFloat(amount) ==  0) {
+        setInputError('Oops! Set a valid amount.');
+      }
       try {
         const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
         setGas(gasEstimate.toString() + 'n');
         setInputError('');
       } catch (error) {
+        setGas(null)
         console.error('Cannot complete fetchGasEstimate: ', error);
-        setInputError('Error fetching gas estimate: ' + error.message);
-        setGas('0.0');
+        setInputError('Error fetching gas estimate: ' + error.message); 
       }
     };
 

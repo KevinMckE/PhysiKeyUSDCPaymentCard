@@ -4,15 +4,21 @@ import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 
-const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
+const InputModal = ({ visible, closeModal, handlePasswords, title, changeGifSource }) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const handleChangeGifSource = () => {
+    if (typeof changeGifSource === 'function') {
+      changeGifSource();
+    }
+  };
+
   const handleConfirmPasswords = () => {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
-        handlePasswords(password, confirmPassword);
+        handlePasswords(password);
       } else {
         setErrorMessage('The passwords do not match.');
       }
@@ -44,7 +50,7 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
             <Text style={styles.errorMessage}>{errorMessage}</Text>
           ) : null}
           <View style={styles.inlineButton}>
-            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); changeGifSource(); }} />
+            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); handleChangeGifSource(); }} />
             <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
           </View>
         </View>

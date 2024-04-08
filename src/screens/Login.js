@@ -46,9 +46,7 @@ const Login = ({ navigation }) => {
     fetchTag();
   };
 
-  const handlePasswords = async (password, confirmPassword) => {
-    if (password && confirmPassword) {
-      if (password === confirmPassword) {
+  const handlePasswords = async (password) => {
         setModalVisible(false);
         changeGifSource();
         try {
@@ -61,8 +59,6 @@ const Login = ({ navigation }) => {
         } catch (error) {
           console.error('Cannot complete handlePasswords: ', error);
         }
-      }
-    }
   };
 
   return (
@@ -106,6 +102,7 @@ const Login = ({ navigation }) => {
           closeModal={() => setModalVisible(false)}
           handlePasswords={handlePasswords}
           title={`Each new password creates a new account when used with your card. \n\nWe cannot recover passwords for you.`}
+          changeGifSource={changeGifSource}
         />
 
         {Platform.OS === 'android' && ( // Render modal only on Android

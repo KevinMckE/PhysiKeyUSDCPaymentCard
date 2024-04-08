@@ -30,11 +30,25 @@ const Transfer = ({ navigation, route }) => {
   };
 
   const handleNextStep = () => {
-    if (recipientKey.length !== 0) {
-      setStep(step + 1);
-      setInputError('');
-    } else {
-      setInputError('Oops! Please enter a recipient..')
+    switch (step) {
+      case 0:
+        if (recipientKey.trim() !== '') {
+          setStep(step + 1);
+          setInputError('');
+        } else {
+          setInputError('Oops! Please enter a recipient.');
+        }
+        break;
+      case 1:
+        if (parseFloat(amount) > 0) {
+          setStep(step + 1);
+          setInputError('');
+        } else {
+          setInputError('Oops! Please enter an amount greater than 0.');
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -86,19 +100,19 @@ const Transfer = ({ navigation, route }) => {
     const fetchGasEstimate = async () => {
       try {
         const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
-        console.log(gasEstimate)
         setGas(gasEstimate);
+        setErrorMessage(''); // Clear any previous error message
       } catch (error) {
         console.error('Cannot complete fetchGasEstimate: ', error);
+        setErrorMessage('Error fetching gas estimate: ' + error.message); // Set the error message
+        setGas('0.0'); // Reset gas to default value in case of error
       }
     };
 
     if (amount && publicKey && recipientKey) {
       fetchGasEstimate();
-    } else {
-      setGas('0.0');
     }
-  }, [amount, publicKey, recipientKey]);;
+  }, [amount, publicKey, recipientKey]);
 
   const handlePasswords = async (password) => {
     setErrorMessage('');
@@ -126,7 +140,7 @@ const Transfer = ({ navigation, route }) => {
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
     }
-   
+
   };
 
   const renderStep = () => {
@@ -157,6 +171,9 @@ const Transfer = ({ navigation, route }) => {
               onChangeText={amount => setAmount(amount)}
               keyboardType="numeric"
             />
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
           </View>
         );
       case 2:
@@ -187,7 +204,7 @@ const Transfer = ({ navigation, route }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => {handlePreviousStep(); }} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); }} />
           </View>
         );
       case 2:
@@ -227,12 +244,14 @@ const Transfer = ({ navigation, route }) => {
         closeModal={() => setModalVisible(false)}
         handlePasswords={handlePasswords}
         title='Enter the recipients password.'
+        changeGifSource={null}
       />
       <InputModal
         visible={signModal}
         closeModal={() => setSignModal(false)}
         handlePasswords={confirmSign}
         title='Enter your password to confirm and send this transaction.'
+        changeGifSource={null}
       />
       {Platform.OS === 'android' && ( // Render modal only on Android
         <AndroidScanModal

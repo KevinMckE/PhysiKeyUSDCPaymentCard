@@ -4,6 +4,12 @@ import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 
 const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
+  const handleChangeGifSource = () => {
+    if (typeof changeGifSource === 'function') {
+      changeGifSource();
+    }
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -21,13 +27,7 @@ const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
             style={styles.scanModalImage}
           />
           <Text variant='titleMedium'>Hold your device near the NFC tag.</Text>
-          <CustomButton
-            text='Cancel'
-            type='secondary'
-            size='small'
-            onPress={() => { 
-              closeScanModal(); 
-              changeGifSource();
+          <CustomButton text='Cancel' type='secondary' size='small' onPress={() => { closeScanModal(); handleChangeGifSource();
             }}
           />
         </View>

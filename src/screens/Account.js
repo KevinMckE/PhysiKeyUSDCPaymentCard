@@ -68,12 +68,12 @@ const Account = ({ navigation, route }) => {
           </Card>
         </TouchableOpacity>
         <CurrencyCard
-          title="Optimism Balance"
+          title="Balance"
           subtitle={balance}
           imageSource={require('../assets/optimism_logo.png')}
         />
         <View style={styles.transferButton}>
-          <CustomButton text='Transfer Optimism' type='primary' size='large' onPress={() => { navigation.navigate('Transfer', { publicKey }); }} />
+          <CustomButton text='Transfer Ether' type='primary' size='large' onPress={() => { navigation.navigate('Transfer', { publicKey }); }} />
         </View>
       </View>
       <View style={styles.nftContainer}>

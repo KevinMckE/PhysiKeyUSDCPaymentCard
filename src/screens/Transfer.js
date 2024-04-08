@@ -32,7 +32,7 @@ const Transfer = ({ navigation, route }) => {
   const { publicKey } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Account', { publicKey });
+    navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
 
   const handleNextStep = () => {
@@ -154,8 +154,7 @@ const Transfer = ({ navigation, route }) => {
       handleSnackbar(true, '(2/2) Retrieving the receipt...');
       let receipt = await signAndSend(tagID, password, amount, recipientKey, gas, publicKey);
       setReceipt(receipt);
-      handleSnackbar(true, 'Success!');
-      navigation.navigate('Account', { publicKey });
+      navigation.navigate('Account', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
       handleSnackbar(false, `There was an issue: ${error}`);

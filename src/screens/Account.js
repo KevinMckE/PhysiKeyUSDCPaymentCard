@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { useIsFocused } from '@react-navigation/native'; // Import useIsFocused
 import { Text, Card } from 'react-native-paper';
 import { getOptimismBalance } from '../functions/getOptimismBalance';
 import CurrencyCard from '../components/CurrencyCard';
@@ -13,7 +14,7 @@ const Account = ({ navigation, route }) => {
   const [nfts, setNfts] = useState([]);
   //const [imageUris, setImageUris] = useState([]);
   //const [loading, setLoading] = useState(true);
-  const { publicKey } = route.params;
+  const { publicKey, snackbarMessage } = route.params;
   //const contractAddress = ''; // hard code contract address
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   //const thirdWindowsWidth = Dimensions.get('window').width / 3;
@@ -22,26 +23,34 @@ const Account = ({ navigation, route }) => {
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
  
+  const isFocused = useIsFocused(); // Get focused state using useIsFocused hook
+
   useEffect(() => {
+    let isMounted = true; // Track component mount state
+
     const fetchBalance = async () => {
-      handleSnackbar(true, 'Hello!');
+      handleSnackbar(true, snackbarMessage);
       try {
-        let balance = await getOptimismBalance(publicKey);
-        if (balance === '0.') {
-          balance = '0.0';
+        let fetchedBalance = await getOptimismBalance(publicKey);
+        if (fetchedBalance === '0.') {
+          fetchedBalance = '0.0';
         }
-        setBalance(balance);
+        if (isMounted && isFocused) {
+          setBalance(fetchedBalance);
+        }
       } catch (error) {
         console.log('Cannot complete fetchBalance: ', error);
       }
     };
-    fetchBalance();
 
-    const unsubscribe = navigation.addListener('focus', () => {
+    if (isFocused) {
       fetchBalance();
-    });
-    return unsubscribe;
-  }, [navigation, publicKey]);
+    }
+
+    return () => {
+      isMounted = false; // Cleanup on component unmount
+    };
+  }, [publicKey, snackbarMessage, isFocused]);
 
   const handleCopyToClipboard = () => {
     Clipboard.setString(publicKey);

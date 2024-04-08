@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
     try {
       let { publicKey } = await accountLogin(tagID, password);
       if (publicKey) {
-        navigation.navigate('Account', { publicKey: publicKey });
+        navigation.navigate('Account', { publicKey: publicKey, snackbarMessage: 'Succesfully logged in!' });
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
         handleSnackbar(false, 'Cannot complete handlePasswords. Key is not defined.');

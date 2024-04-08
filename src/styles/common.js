@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   errorText: {
     margin: 10,
     padding: 10,
-    height: 50,
+
     color: 'red',
   },
   copyImage: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 2,
-    padding: 10
+    padding: 10,
   },
   textInput: {
     marginTop: 10,

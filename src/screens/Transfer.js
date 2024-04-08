@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, ImageBackground } from 'react-native';
+import { View, ImageBackground, ActivityIndicator } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+import CustomSnackbar from '../components/CustomSnackbar';
 import { accountLogin, signAndSend } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { getGasEstimate } from '../functions/getGasEstimate';
@@ -13,6 +14,7 @@ import styles from '../styles/common';
 const Transfer = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
   const [gas, setGas] = useState('');
+  const [loading, setLoading] = useState(false);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [signModal, setSignModal] = useState(false);
@@ -22,6 +24,11 @@ const Transfer = ({ navigation, route }) => {
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarText, setSnackbarText] = useState('');
+  const [isSuccess, setSuccess] = useState(false);
+
   const { publicKey } = route.params;
 
   const handleTransferPress = () => {
@@ -101,11 +108,11 @@ const Transfer = ({ navigation, route }) => {
       try {
         const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
         setGas(gasEstimate.toString() + 'n');
-        setInputError(''); 
+        setInputError('');
       } catch (error) {
         console.error('Cannot complete fetchGasEstimate: ', error);
-        setInputError('Error fetching gas estimate: ' + error.message); 
-        setGas('0.0'); 
+        setInputError('Error fetching gas estimate: ' + error.message);
+        setGas('0.0');
       }
     };
 
@@ -129,18 +136,29 @@ const Transfer = ({ navigation, route }) => {
     }
   };
 
+  const handleSnackbar = (success, text) => {
+    setSuccess(success);
+    setSnackbarText(text);
+    setSnackbarVisible(true);
+  };
+
   const confirmSign = async (password) => {
+    handleSnackbar(true, '(1/2) Beginning the transfer...');
     setErrorMessage('');
     setSignModal(false);
-    console.log(tagID, password, amount, recipientKey, gas);
+    setLoading(true);
     try {
+      handleSnackbar(true, '(2/2) Retrieving the receipt...');
       let receipt = await signAndSend(tagID, password, amount, recipientKey, gas, publicKey);
       setReceipt(receipt);
+      handleSnackbar(true, 'Success!');
       navigation.navigate('Account', { publicKey });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
+      handleSnackbar(false, `There was an issue: ${error}`);
+    } finally {
+      setLoading(false);
     }
-
   };
 
   const renderStep = () => {
@@ -204,7 +222,7 @@ const Transfer = ({ navigation, route }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); }} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
       case 2:
@@ -226,6 +244,11 @@ const Transfer = ({ navigation, route }) => {
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
       <View style={styles.container}>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
         <View style={styles.topContainer}>
           <Text variant='titleLarge'>Follow the prompts to transfer ETH to another wallet.</Text>
         </View>
@@ -239,6 +262,15 @@ const Transfer = ({ navigation, route }) => {
           {renderButtons()}
         </View>
       </View>
+
+      <CustomSnackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        text={snackbarText}
+        isSuccess={isSuccess}
+      />
+
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
@@ -246,6 +278,7 @@ const Transfer = ({ navigation, route }) => {
         title='Enter the recipients password.'
         changeGifSource={null}
       />
+
       <InputModal
         visible={signModal}
         closeModal={() => setSignModal(false)}
@@ -253,6 +286,7 @@ const Transfer = ({ navigation, route }) => {
         title='Enter your password to confirm and send this transaction.'
         changeGifSource={null}
       />
+
       {Platform.OS === 'android' && ( // Render modal only on Android
         <AndroidScanModal
           visible={scanModal}

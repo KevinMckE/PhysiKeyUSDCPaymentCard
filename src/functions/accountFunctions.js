@@ -28,28 +28,30 @@ export const accountLogin = async (tag, password) => {
   console.log('encryptedPrivateKey: ', encryptedPrivateKey);
   console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
   console.log('publicKey: ', publicKey);
-  return { publicKey: publicKey, privateKey: privateKey };
+  return { publicKey: publicKey, encryptedPrivateKey: encryptedPrivateKey, oneTimeEncryptionPW: oneTimeEncryptionPW };
 };
 
 export const signAndSend = async (tag, password, amount, recipient, gas, sender) => {
-  console.log('sign/send ran');
-  console.log(sender);
-
-  let { publicKey, privateKey } = await accountLogin(tag, password);
-  const gasLimit = web3.utils.toHex(21000); // Example gas limit
-  const gasPrice = web3.utils.toWei('100', 'gwei'); // Example gas price in wei (100 gwei)
-  const nonce = await web3.eth.getTransactionCount(publicKey);
-  const amountInWei = web3.utils.toWei(amount, 'ether'); // Convert amount to wei
-  const txObject = {
-    from: publicKey,
-    to: recipient,
-    value: amountInWei,
-    gas: gasLimit,
-    gasPrice: gasPrice,
-    nonce: nonce
-  };
-  const signedTx = await web3.eth.accounts.signTransaction(txObject, privateKey);
-  const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  console.log(txReceipt)
-  return txReceipt;
+  let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);
+  web3.eth.getTransactionCount(publicKey, (err, txCount) => {
+    txObject = {
+      "nonce": web3.utils.toHex(txCount),
+      "from": web3.utils.toHex(publicKey),
+      "to": web3.utils.toHex(recipient),
+      "value": web3.utils.toHex(web3.utils.toWei(amount, 'ether')),
+      "gasLimit": web3.utils.toHex(21000),
+      "gasPrice": web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
+    }
+    try {
+      web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8), (err, signedTransaction) => {
+        web3.eth.sendSignedTransaction(signedTransaction.rawTransaction, (err, txHash) => {
+          console.warn('txHash: ', txHash);
+        })
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  })
 };
+
+

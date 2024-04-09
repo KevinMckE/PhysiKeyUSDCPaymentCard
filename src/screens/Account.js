@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import { View, ScrollView, Dimensions, FlatList, TouchableOpacity, ActivityIndicator, Image, ImageBackground } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native'; // Import useIsFocused
 import { Text, Card } from 'react-native-paper';
@@ -22,7 +22,7 @@ const Account = ({ navigation, route }) => {
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
- 
+
   const isFocused = useIsFocused(); // Get focused state using useIsFocused hook
 
   useEffect(() => {
@@ -63,57 +63,62 @@ const Account = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.balanceContainer}>
-        <TouchableOpacity onPress={handleCopyToClipboard}>
-          <Card style={styles.card}>
-            <View style={styles.keyContent}>
-              <Text variant='titleLarge'>{truncatedKey}</Text>
-              <Image
-                source={require('../assets/copy_icon.png')}
-                style={styles.copyImage}
-              />
-            </View>
-          </Card>
-        </TouchableOpacity>
-        <CurrencyCard
-          title="Balance"
-          subtitle={balance}
-          imageSource={require('../assets/optimism_logo.png')}
-        />
-        <View style={styles.transferButton}>
-          <CustomButton text='Transfer Ether' type='primary' size='large' onPress={() => { navigation.navigate('Transfer', { publicKey }); }} />
+    <ImageBackground
+      source={require('../assets/tech_pattern.jpg')}
+      style={{ flex: 1, width: '100%', height: '100%' }}
+    >
+      <ScrollView style={styles.container}>
+        <View style={styles.balanceContainer}>
+          <TouchableOpacity onPress={handleCopyToClipboard}>
+            <Card style={styles.card}>
+              <View style={styles.keyContent}>
+                <Text variant='titleLarge'>{truncatedKey}</Text>
+                <Image
+                  source={require('../assets/copy_icon.png')}
+                  style={styles.copyImage}
+                />
+              </View>
+            </Card>
+          </TouchableOpacity>
+          <CurrencyCard
+            title="Balance"
+            subtitle={balance}
+            imageSource={require('../assets/optimism_logo.png')}
+          />
+          <View style={styles.transferButton}>
+            <CustomButton text='Transfer Ether' type='primary' size='large' onPress={() => { navigation.navigate('Transfer', { publicKey }); }} />
+          </View>
         </View>
-      </View>
-      <View style={styles.nftContainer}>
-        <Text variant='titleLarge' style={styles.textMargin}>Your NFT Collection</Text>
-        {nfts.length === 0 ? (
-          <Text variant='bodyMedium' style={styles.textMargin}>Oops! Sorry this is under construction.</Text>
-        ) : (
-          <>
-            <FlatList
-              horizontal
-              data={nfts}
-              renderItem={renderNFTCard}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ gap: 15 }}
-            />
-          </>
-        )}
-      </View>
-      <Card style={styles.card}>
-        <Text variant='titleLarge' style={styles.textMargin}>About Us</Text>
-        <Text variant='bodyMedium' style={styles.textMargin}>Anywhere Blockchain is building simple, safe, and more affordable key management tools for the future of finance, media, and governance. Our mobile application simplifies data ownership for users of Web 3 technology, using NFC chips to regenerate complex signing keys and passwords for the end user without storing them on remotely exploitable databases. This will have applications in the future of digital identity, social media, and blockchain-based computer transactions.</Text>
-      </Card>
+        <View style={styles.nftContainer}>
+          <Text variant='titleLarge' style={styles.textMargin}>Your NFT Collection</Text>
+          {nfts.length === 0 ? (
+            <Text variant='bodyMedium' style={styles.textMargin}>Oops! Sorry this is under construction.</Text>
+          ) : (
+            <>
+              <FlatList
+                horizontal
+                data={nfts}
+                renderItem={renderNFTCard}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ gap: 15 }}
+              />
+            </>
+          )}
+        </View>
+        <Card style={styles.card}>
+          <Text variant='titleLarge' style={styles.textMargin}>About Us</Text>
+          <Text variant='bodyMedium' style={styles.textMargin}>Anywhere Blockchain is building simple, safe, and more affordable key management tools for the future of finance, media, and governance. Our mobile application simplifies data ownership for users of Web 3 technology, using NFC chips to regenerate complex signing keys and passwords for the end user without storing them on remotely exploitable databases. This will have applications in the future of digital identity, social media, and blockchain-based computer transactions.</Text>
+        </Card>
 
-      <CustomSnackbar
+        <CustomSnackbar
           visible={snackbarVisible}
           onDismiss={() => setSnackbarVisible(false)}
           duration={3000}
           text={snackbarText}
           isSuccess={isSuccess}
         />
-    </ScrollView>
+      </ScrollView>
+    </ImageBackground>
   );
 }
 

@@ -24,7 +24,6 @@ const Transfer = ({ navigation, route }) => {
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
@@ -189,7 +188,6 @@ const Transfer = ({ navigation, route }) => {
               placeholder="Amount..."
               value={amount}
               onChangeText={amount => setAmount(amount)}
-              keyboardType="numeric"
             />
             {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>

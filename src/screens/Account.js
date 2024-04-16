@@ -84,7 +84,8 @@ const Account = ({ navigation, route }) => {
             imageSource={require('../assets/optimism_logo.png')}
           />
           <View style={styles.transferButton}>
-            <CustomButton text='Transfer Ether' type='primary' size='large' onPress={() => { navigation.navigate('Transfer', { publicKey }); }} />
+            <CustomButton text='Pay' type='primary' size='large' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
+            <CustomButton text='Request' type='primary' size='large' onPress={() => { navigation.navigate('Request', { publicKey }); }} />
           </View>
         </View>
         <View style={styles.nftContainer}>

@@ -11,7 +11,7 @@ import { getGasEstimate } from '../functions/getGasEstimate';
 import { cancelNfc } from '../functions/cancelNfcRequest';
 import styles from '../styles/common';
 
-const Transfer = ({ navigation, route }) => {
+const Request = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
   const [gas, setGas] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,6 @@ const Transfer = ({ navigation, route }) => {
   const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
-  const [recipientKey, setRecipientKey] = useState('');
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,7 +28,7 @@ const Transfer = ({ navigation, route }) => {
   const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey } = route.params;
-
+  const recipientKey = publicKey;
   const handleTransferPress = () => {
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
@@ -123,21 +122,6 @@ const Transfer = ({ navigation, route }) => {
     }
   }, [amount, publicKey, recipientKey]);
 
-  const handlePasswords = async (password) => {
-    setErrorMessage('');
-    setModalVisible(false);
-    try {
-      let { publicKey } = await accountLogin(tagID, password);
-      if (publicKey) {
-        setRecipientKey(publicKey);
-      } else {
-        console.error('Cannot complete handlePasswords. Key is not defined.');
-      }
-    } catch (error) {
-      console.error('Cannot complete handlePasswords: ', error);
-    }
-  };
-
   const handleSnackbar = (success, text) => {
     setSuccess(success);
     setSnackbarText(text);
@@ -167,21 +151,7 @@ const Transfer = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>Input or scan card for recipient address. (1/3) </Text>
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              placeholder="Recipient address..."
-              value={recipientKey}
-              onChangeText={recipientKey => setRecipientKey(recipientKey)}
-            />
-            <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-          </View>
-        );
-      case 1:
-        return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>How much would you like to send? (2/3)</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>How much are you requesting?</Text>
             <TextInput
               mode="outlined"
               style={styles.textInput}
@@ -194,10 +164,10 @@ const Transfer = ({ navigation, route }) => {
             ) : null}
           </View>
         );
-      case 2:
+      case 1:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleLarge'>Confirm Details (3/3)</Text>
+            <Text style={styles.textMargin} variant='titleLarge'>Confirm Details</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
             <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
@@ -214,22 +184,15 @@ const Transfer = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Review' type='primary' size='large' onPress={handleNextStep} />
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handleTransferPress(); }} />
           </View>
         );
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Sign' type='primary' size='large' onPress={handleNextStep} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
-          </View>
-        );
-      case 2:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Sign and Send' type='primary' size='large' onPress={() => { handSignAndSend(); }} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
           </View>
         );
       default:
@@ -250,7 +213,7 @@ const Transfer = ({ navigation, route }) => {
           </View>
         )}
         <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to transfer ETH to another wallet.</Text>
+          <Text variant='titleLarge'>Input request amount and tap the request button.</Text>
         </View>
         <View style={styles.inputContainer}>
           {renderStep()}
@@ -272,14 +235,6 @@ const Transfer = ({ navigation, route }) => {
       />
 
       <InputModal
-        visible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-        handlePasswords={handlePasswords}
-        title='Enter the recipients password.'
-        changeGifSource={null}
-      />
-
-      <InputModal
         visible={signModal}
         closeModal={() => setSignModal(false)}
         handlePasswords={confirmSign}
@@ -298,4 +253,4 @@ const Transfer = ({ navigation, route }) => {
   );
 }
 
-export default Transfer;
+export default Request;

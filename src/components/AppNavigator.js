@@ -6,7 +6,8 @@ import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import Account from '../screens/Account';
 import NftDetails from '../screens/NftDetails';
-import Transfer from '../screens/Transfer';
+import Pay from '../screens/Pay';
+import Request from '../screens/Request';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -37,10 +38,17 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="Transfer"
-            component={Transfer}
+            name="Pay"
+            component={Pay}
             options={{
-              title: 'Transfer',
+              title: 'Pay',
+            }}
+          />
+          <Stack.Screen
+            name="Request"
+            component={Request}
+            options={{
+              title: 'Request',
             }}
           />
           <Stack.Screen

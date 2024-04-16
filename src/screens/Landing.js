@@ -18,11 +18,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.landingTopContainer}>
           <Image
-            source={require('../assets/blob_background_blue.png')}
-            style={styles.landingBackgroundImageSecondary}
-          />
-          <Image
-            source={require('../assets/blob_background_black.png')}
+            source={require('../assets/blob_background_gradient.png')}
             style={styles.landingBackgroundImage}
           />
           <Image

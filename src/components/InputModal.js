@@ -4,16 +4,10 @@ import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 
-const InputModal = ({ visible, closeModal, handlePasswords, title, changeGifSource }) => {
+const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const handleChangeGifSource = () => {
-    if (typeof changeGifSource === 'function') {
-      changeGifSource();
-    }
-  };
 
   const handleConfirmPasswords = () => {
     if (password && confirmPassword) {

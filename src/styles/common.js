@@ -15,13 +15,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     height: 650,
     opacity: 1,
-    transform: [{rotate: '-3deg'}]
-  },
-  landingBackgroundImageSecondary: {
-    position: 'absolute',
-    width: '100%',
-    height: 680,
-    opacity: 1,
   },
   landingBottomContainer: {
     flex: 1,
@@ -44,10 +37,15 @@ const styles = StyleSheet.create({
     opacity: 1,
   },
   centeredImage: {
-    width: '100%',
-    height: '100%'
+    width: '80%',
+    height: '80%'
   },
   imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 3,
+  },
+  listContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 3,

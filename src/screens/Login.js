@@ -5,9 +5,11 @@ import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomSnackbar from '../components/CustomSnackbar';
+import AccountList from '../components/AccountList';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { accountLogin } from '../functions/accountFunctions';
 import { cancelNfc } from '../functions/cancelNfcRequest';
+import { storeData, getData } from '../functions/asyncStorage';
 import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
@@ -37,19 +39,9 @@ const Login = ({ navigation }) => {
     } catch (error) {
       console.log('Cannot complete fetchTag: ', error);
     }
-    changeGifSource();
-  };
-
-  const changeGifSource = () => {
-    const newSource =
-      gifSource === require('../assets/tap_image.png')
-        ? require('../assets/tap_animation.gif')
-        : require('../assets/tap_image.png');
-    setGifSource(newSource);
   };
 
   const handleScanCardPress = () => {
-    changeGifSource();
     setScanModal(true);
     fetchTag();
   };
@@ -93,28 +85,11 @@ const Login = ({ navigation }) => {
           </View>
         )}
         <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Scan your card and input your password.</Text>
+          <Text variant='titleLarge'>Select or Add Account</Text>
         </View>
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('../assets/blob_background_blue.png')}
-            style={styles.backgroundImageSecondary}
-            resizeMode="contain"
-          />
-          <Image
-            source={require('../assets/blob_background_black.png')}
-            style={styles.backgroundImage}
-            resizeMode="contain"
-          />
-          <Suspense fallback={<Image source={require('../assets/tap_image.png')} style={styles.centeredImage} resizeMode="cover" />}>
-            <Image
-              source={gifSource}
-              style={styles.centeredImage}
-              fadeDuration={0}
-              resizeMode="cover"
-            />
-          </Suspense>
+        <View style={styles.listContainer}>
+          <AccountList />
         </View>
 
         <View style={styles.bottomContainer}>
@@ -135,14 +110,12 @@ const Login = ({ navigation }) => {
           closeModal={() => setModalVisible(false)}
           handlePasswords={handlePasswords}
           title={`Each new password creates a new account when used with your card. \n\nWe cannot recover passwords for you.`}
-          changeGifSource={changeGifSource}
         />
 
         {Platform.OS === 'android' && ( // Render modal only on Android
           <AndroidScanModal
             visible={scanModal}
             closeScanModal={closeScanModal}
-            changeGifSource={changeGifSource}
           />
         )}
       </View>

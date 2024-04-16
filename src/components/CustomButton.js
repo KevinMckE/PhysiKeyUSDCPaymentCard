@@ -28,31 +28,3 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- *  scanBtn: {
-    width: 300,
-    height: 50,
-    marginBottom: 100,
-    borderRadius:15, 
-    borderColor:'gray',
-    color: 'black',
-    borderWidth: 1,
-    color: 'white',
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bigBtn: {
-    width: 250,
-    height: 70,
-    marginBottom: 15,
-    borderRadius:15, 
-    borderColor:'gray',
-    color: 'white',
-    borderWidth: 1,
-    color: 'black',
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
- */

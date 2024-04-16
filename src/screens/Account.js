@@ -42,11 +42,9 @@ const Account = ({ navigation, route }) => {
         console.log('Cannot complete fetchBalance: ', error);
       }
     };
-
     if (isFocused) {
       fetchBalance();
     }
-
     return () => {
       isMounted = false; // Cleanup on component unmount
     };

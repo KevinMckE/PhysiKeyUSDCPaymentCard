@@ -3,13 +3,7 @@ import { Modal, View, Image, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 
-const AndroidScanModal = ({ visible, closeScanModal, changeGifSource }) => {
-  
-  const handleChangeGifSource = () => {
-    if (typeof changeGifSource === 'function') {
-      changeGifSource();
-    }
-  };
+const AndroidScanModal = ({ visible, closeScanModal }) => {
 
   return (
     <Modal

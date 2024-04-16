@@ -24,7 +24,7 @@ export const accountLogin = async (tag, password) => {
   let encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
   let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
   let publicKey = decryptedAccount.address;
-
+  
   console.log('encryptedPrivateKey: ', encryptedPrivateKey);
   console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
   console.log('publicKey: ', publicKey);

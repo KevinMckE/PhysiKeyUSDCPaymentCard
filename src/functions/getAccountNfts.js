@@ -17,7 +17,7 @@ export const getAccountNfts = async (publicKey, contractAddress) => {
     console.error('Cannot complete getAccountNfts: ', error);
     throw error;
   }
-}
+};
 
 export const getImageUri = async (item) => {
   const originalUrl = item.metadataURI;

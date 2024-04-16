@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Platform, ImageBackground, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
@@ -16,18 +16,30 @@ const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [tagID, setTagID] = useState('');
-  const [gifSource, setGifSource] = useState(require('../assets/tap_image.png'));
   const [loading, setLoading] = useState(false);
-
+  const [dataList, setDatalist] = useState([]);
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getData();
+        console.log(data);
+        setDatalist(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    
+    fetchData();
+  }, []);
   const closeScanModal = () => {
     cancelNfc();
     setScanModal(false);
   };
-
+  
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
@@ -49,10 +61,10 @@ const Login = ({ navigation }) => {
   const handlePasswords = async (password) => {
     handleSnackbar(true, 'Attemping login...');
     setModalVisible(false);
-    changeGifSource();
     setLoading(true);
     try {
       let { publicKey } = await accountLogin(tagID, password);
+      storeData(publicKey);
       if (publicKey) {
         navigation.navigate('Account', { publicKey: publicKey, snackbarMessage: 'Succesfully logged in!' });
       } else {
@@ -89,11 +101,11 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.listContainer}>
-          <AccountList />
+        <AccountList data={dataList} />
         </View>
 
         <View style={styles.bottomContainer}>
-          <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+          <CustomButton text='Add Account' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
           <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
         </View>
 

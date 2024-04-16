@@ -84,7 +84,6 @@ const styles = StyleSheet.create({
   errorText: {
     margin: 10,
     padding: 10,
-
     color: 'red',
   },
   copyImage: {

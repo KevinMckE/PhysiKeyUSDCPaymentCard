@@ -44,7 +44,7 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
             <Text style={styles.errorMessage}>{errorMessage}</Text>
           ) : null}
           <View style={styles.inlineButton}>
-            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); handleChangeGifSource(); }} />
+            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
             <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
           </View>
         </View>

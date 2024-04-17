@@ -40,7 +40,7 @@ const AccountList = ({ data, navigation, setData }) => {
               onPress={() => navigation.navigate('Account', { publicKey: item.value })}
             >
               <Card style={styles.card}>
-                <List.Item title={`${item.key}: ${item.value.slice(0, 7)}...${item.value.slice(-5)}`} style={styles.text} />
+                <List.Item title={`${item.key}: ${item.value.slice(0, 7)}...${item.value.slice(-5)}`} />
               </Card>
             </Pressable>
           </Swipeable>

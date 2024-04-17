@@ -17,7 +17,9 @@ const Request = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [senderKey, setSenderKey] = useState('');
   const [signModal, setSignModal] = useState(false);
+  const [senderPassword, setSenderPassword] = useState('');
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
@@ -30,32 +32,12 @@ const Request = ({ navigation, route }) => {
   const { publicKey } = route.params;
   const recipientKey = publicKey;
 
-
   const handleTransferPress = () => {
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
 
   const handleNextStep = () => {
-    switch (step) {
-      case 0:
-        if (recipientKey.trim() !== '') {
-          setStep(step + 1);
-          setInputError('');
-        } else {
-          setInputError('Oops! Please enter a recipient.');
-        }
-        break;
-      case 1:
-        if (parseFloat(amount) > 0 && gas !== null) {
-          setStep(step + 1);
-          setInputError('');
-        } else {
-          setInputError('Oops! Please enter a valid number.')
-        }
-        break;
-      default:
-        break;
-    }
+    setStep(step + 1);
   };
 
   const handlePreviousStep = () => {
@@ -68,6 +50,7 @@ const Request = ({ navigation, route }) => {
   };
 
   const fetchTag = async () => {
+    console.log('fetching tag')
     try {
       let tag = await scanSerialForKey();
       if (tag) {
@@ -80,32 +63,14 @@ const Request = ({ navigation, route }) => {
     }
   };
 
-  const fetchSign = async () => {
-    try {
-      let tag = await scanSerialForKey();
-      if (tag) {
-        setTagID(tag);
-        setSignModal(true);
-        setScanModal(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleScanCardPress = () => {
     setScanModal(true);
     fetchTag();
   };
 
-  const handSignAndSend = () => {
-    setScanModal(true);
-    fetchSign();
-  };
-
   useEffect(() => {
     const fetchGasEstimate = async () => {
-      if (parseFloat(amount) ==  0) {
+      if (parseFloat(amount) == 0) {
         setInputError('Oops! Set a valid amount.');
       }
       try {
@@ -115,7 +80,7 @@ const Request = ({ navigation, route }) => {
       } catch (error) {
         setGas(null)
         console.error('Cannot complete fetchGasEstimate: ', error);
-        setInputError('Error fetching gas estimate: ' + error.message); 
+        setInputError('Error fetching gas estimate: ' + error.message);
       }
     };
 
@@ -130,14 +95,31 @@ const Request = ({ navigation, route }) => {
     setSnackbarVisible(true);
   };
 
-  const confirmSign = async (password) => {
+  const handlePasswords = async (password) => {
+    setErrorMessage('');
+    setModalVisible(false);
+    try {
+      let { publicKey } = await accountLogin(tagID, password);
+      if (publicKey) {
+        setSenderKey(publicKey);
+        setSenderPassword(password);
+        handleNextStep();
+      } else {
+        console.error('Cannot complete handlePasswords. Key is not defined.');
+      }
+    } catch (error) {
+      console.error('Cannot complete handlePasswords: ', error);
+    }
+  };
+
+  const confirmSign = async () => {
     handleSnackbar(true, '(1/2) Beginning the transfer...');
     setErrorMessage('');
     setSignModal(false);
     setLoading(true);
     try {
       handleSnackbar(true, '(2/2) Retrieving the receipt...');
-      let receipt = await signAndSend(tagID, password, amount, recipientKey, gas, publicKey);
+      let receipt = await signAndSend(tagID, senderPassword, amount, publicKey, gas, senderKey);
       setReceipt(receipt);
       navigation.navigate('Account', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
     } catch (error) {
@@ -156,6 +138,7 @@ const Request = ({ navigation, route }) => {
             <Text style={styles.textMargin} variant='titleMedium'>How much are you requesting?</Text>
             <TextInput
               mode="outlined"
+              autoFocus={true}
               style={styles.textInput}
               placeholder="Amount..."
               value={amount}
@@ -172,9 +155,9 @@ const Request = ({ navigation, route }) => {
         return (
           <View style={styles.inputContainer}>
             <Text style={styles.textMargin} variant='titleLarge'>Confirm Details</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>{senderKey}</Text>
             <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
             <Text style={styles.textMargin} variant='titleLarge'>Estimated gas {gas} ETH</Text>
           </View>
         );
@@ -188,14 +171,14 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Scan' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handleTransferPress(); }} />
+            <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Confirm' type='primary' size='large' onPress={() => { confirmSign(); }} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
@@ -239,10 +222,10 @@ const Request = ({ navigation, route }) => {
       />
 
       <InputModal
-        visible={signModal}
-        closeModal={() => setSignModal(false)}
-        handlePasswords={confirmSign}
-        title='Enter your password to confirm and send this transaction.'
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        handlePasswords={handlePasswords}
+        title='Enter your password.'
       />
 
       {Platform.OS === 'android' && ( // Render modal only on Android

@@ -1,53 +1,39 @@
-import React, { useState, useMemo } from 'react';
-import { StyleSheet, ScrollView, View, Text, Animated, PanResponder } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, ScrollView, Text, Animated, Pressable } from 'react-native';
 import { List, Card } from 'react-native-paper';
+import { Swipeable } from 'react-native-gesture-handler';
 
 const AccountList = ({ data }) => {
   const [pan] = useState(new Animated.ValueXY());
 
-  const panResponder = useMemo(() =>
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        if (gestureState.dx < 0) { // Only allow panning to the left (negative x direction)
-          Animated.event([null, { dx: pan.x }], { useNativeDriver: false })(evt, gestureState);
-        }
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        const threshold = -75; 
-        if (gestureState.dx < threshold) {
-          Animated.spring(pan, {
-            toValue: { x: -150, y: 0 }, 
-            useNativeDriver: false,
-          }).start();
-        } else {
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
-            useNativeDriver: false,
-          }).start();
-        }
-      },
-    }), [pan]);
+  const renderRightActions = () => (
+    <Pressable
+      onPress={() => console.log('Delete item')}
+      style={styles.rightAction}
+    >
+              <Card style={styles.removeButton}>
+                <Text style={styles.text}>Remove</Text>
+              </Card>
+    </Pressable>
+  );
 
   return (
     <ScrollView style={styles.container}>
       <List.Section>
         {data.map((item, index) => (
-          <Animated.View
+          <Swipeable
             key={index}
-            style={{
-              ...styles.cardContainer,
-              transform: [{ translateX: pan.x }],
-            }}
-            {...panResponder.panHandlers}
+            renderRightActions={renderRightActions}
           >
-            <Card style={styles.card}>
-              <List.Item title={item.value} style={styles.text} />
-            </Card>
-            <Card style={styles.removeButton}>
-              <Text style={styles.text}>Remove</Text>
-            </Card>
-          </Animated.View>
+            <Pressable
+              style={styles.cardContainer}
+              onPress={() => console.log('Navigate to item')}
+            >
+              <Card style={styles.card}>
+                <List.Item title={item.value} style={styles.text} />
+              </Card>
+            </Pressable>
+          </Swipeable>
         ))}
       </List.Section>
     </ScrollView>
@@ -71,19 +57,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     flex: 5,
   },
+  rightAction: {
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    borderRadius: 15,
+  },
+  rightActionText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   removeButton: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
     backgroundColor: '#de0a26',
-    position: 'absolute',
-    right: -125, // Adjust this value to change the position of the remove button
-    top: 0,
-    bottom: 0,
-    padding: 10,
-  },
-  text: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    flexDirection: 'row',
+    margin: 3,
+    gap: 10,
+    width: '95%',
   },
 });

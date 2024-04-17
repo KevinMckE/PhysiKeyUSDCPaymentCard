@@ -101,7 +101,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.listContainer}>
-        <AccountList data={dataList} />
+        <AccountList data={dataList} setData={setDatalist} />
         </View>
 
         <View style={styles.bottomContainer}>

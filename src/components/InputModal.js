@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet } from 'react-native';
+import { Modal, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
@@ -23,32 +23,33 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
 
   return (
     <Modal
+      avoidKeyboard
       transparent={true}
       visible={visible}
       onRequestClose={closeModal}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.text} variant='titleMedium'>{title}</Text>
-          <PasswordInput
-            text='Enter Password'
-            password={password}
-            setPassword={setPassword}
-          />
-          <PasswordInput
-            text='Confirm Password'
-            password={confirmPassword}
-            setPassword={setConfirmPassword}
-          />
-          {errorMessage ? (
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          ) : null}
-          <View style={styles.inlineButton}>
-            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
-            <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.text} variant='titleMedium'>{title}</Text>
+            <PasswordInput
+              text='Enter Password'
+              password={password}
+              setPassword={setPassword}
+            />
+            <PasswordInput
+              text='Confirm Password'
+              password={confirmPassword}
+              setPassword={setConfirmPassword}
+            />
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ) : null}
+            <View style={styles.inlineButton}>
+              <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
+              <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
+            </View>
           </View>
         </View>
-      </View>
     </Modal>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet } from 'react-native';
+import { Modal, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
@@ -18,27 +18,28 @@ const SaveAccount = ({ visible, closeModal, handleName, title }) => {
 
   return (
     <Modal
+      avoidKeyboard
       transparent={true}
       visible={visible}
       onRequestClose={closeModal}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.text} variant='titleMedium'>{title}</Text>
-          <PasswordInput
-            text='Name'
-            password={label}
-            setPassword={setLabel}
-          />
-          {errorMessage ? (
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          ) : null}
-          <View style={styles.inlineButton}>
-            <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
-            <CustomButton text='Enter' type='primary' size='small' onPress={handleLabel} />
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.text} variant='titleMedium'>{title}</Text>
+            <PasswordInput
+              text='Name'
+              password={label}
+              setPassword={setLabel}
+            />
+            {errorMessage ? (
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
+            ) : null}
+            <View style={styles.inlineButton}>
+              <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
+              <CustomButton text='Enter' type='primary' size='small' onPress={handleLabel} />
+            </View>
           </View>
         </View>
-      </View>
     </Modal>
   );
 }

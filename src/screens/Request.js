@@ -29,6 +29,7 @@ const Request = ({ navigation, route }) => {
 
   const { publicKey } = route.params;
   const recipientKey = publicKey;
+  
   const handleTransferPress = () => {
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
@@ -191,7 +192,7 @@ const Request = ({ navigation, route }) => {
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Sign' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Platform, ImageBackground, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -25,7 +26,7 @@ const Login = ({ navigation }) => {
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getData();
@@ -36,8 +37,8 @@ const Login = ({ navigation }) => {
     };
 
     fetchData();
-  }, []);
-
+  });
+  
   const closeScanModal = () => {
     cancelNfc();
     setScanModal(false);

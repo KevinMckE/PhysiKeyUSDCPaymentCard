@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, ImageBackground, ActivityIndicator } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import InputModal from '../components/InputModal';
@@ -29,7 +29,8 @@ const Request = ({ navigation, route }) => {
 
   const { publicKey } = route.params;
   const recipientKey = publicKey;
-  
+
+
   const handleTransferPress = () => {
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
@@ -159,6 +160,8 @@ const Request = ({ navigation, route }) => {
               placeholder="Amount..."
               value={amount}
               onChangeText={amount => setAmount(amount)}
+              returnKeyType={'done'}
+              keyboardType={'numeric'}
             />
             {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>
@@ -185,7 +188,7 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Review' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Scan' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handleTransferPress(); }} />
           </View>
         );
@@ -240,14 +243,12 @@ const Request = ({ navigation, route }) => {
         closeModal={() => setSignModal(false)}
         handlePasswords={confirmSign}
         title='Enter your password to confirm and send this transaction.'
-        changeGifSource={null}
       />
 
       {Platform.OS === 'android' && ( // Render modal only on Android
         <AndroidScanModal
           visible={scanModal}
           closeScanModal={closeScanModal}
-          changeGifSource={null}
         />
       )}
     </ImageBackground>

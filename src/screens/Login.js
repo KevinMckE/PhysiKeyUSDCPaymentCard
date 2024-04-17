@@ -32,14 +32,14 @@ const Login = ({ navigation }) => {
         console.error('Error fetching data:', error);
       }
     };
-    
+
     fetchData();
   }, []);
   const closeScanModal = () => {
     cancelNfc();
     setScanModal(false);
   };
-  
+
   const fetchTag = async () => {
     try {
       let tag = await scanSerialForKey();
@@ -101,7 +101,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.listContainer}>
-        <AccountList data={dataList} setData={setDatalist} />
+          <AccountList data={dataList} navigation={navigation} setData={setDatalist} />
         </View>
 
         <View style={styles.bottomContainer}>

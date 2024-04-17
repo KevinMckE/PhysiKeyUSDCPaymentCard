@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { StyleSheet, ScrollView, Text, Animated, Pressable } from 'react-native';
+import React from 'react';
+import { StyleSheet, ScrollView, Text, Pressable } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
+import { removeItemFromAsyncStorage, getData } from '../functions/asyncStorage';
 
-const AccountList = ({ data }) => {
-  const [pan] = useState(new Animated.ValueXY());
+const AccountList = ({ data, navigation, setData }) => {
 
-  const renderRightActions = () => (
+  const renderRightActions = (item) => (
     <Pressable
-      onPress={() => console.log('Delete item')}
+      onPress={() => handleRemoveItem(item)}
       style={styles.rightAction}
     >
-              <Card style={styles.removeButton}>
-                <Text style={styles.text}>Remove</Text>
-              </Card>
+      <Card style={styles.removeButton}>
+        <Text style={styles.text}>Remove</Text>
+      </Card>
     </Pressable>
   );
+
+  const handleRemoveItem = async (item) => {
+    try {
+      await removeItemFromAsyncStorage(item.key);
+      const updatedData = await getData(); 
+      setData(updatedData); 
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -23,14 +33,14 @@ const AccountList = ({ data }) => {
         {data.map((item, index) => (
           <Swipeable
             key={index}
-            renderRightActions={renderRightActions}
+            renderRightActions={() => renderRightActions(item)} 
           >
             <Pressable
               style={styles.cardContainer}
-              onPress={() => console.log('Navigate to item')}
+              onPress={() => navigation.navigate('Account', { publicKey: item.value })}
             >
               <Card style={styles.card}>
-                <List.Item title={item.value} style={styles.text} />
+                <List.Item title={`${item.key}: ${item.value.slice(0, 7)}...${item.value.slice(-5)}`} style={styles.text} />
               </Card>
             </Pressable>
           </Swipeable>
@@ -70,6 +80,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
+    color: '#fff',
     fontWeight: 'bold',
   },
   removeButton: {

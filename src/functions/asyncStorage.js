@@ -19,3 +19,12 @@ export const getData = async () => {
     return [];
   }
 };
+
+export const removeItemFromAsyncStorage = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+    console.log('Item removed from AsyncStorage:', key);
+  } catch (error) {
+    console.error('Error removing item from AsyncStorage:', error);
+  }
+};

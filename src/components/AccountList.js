@@ -1,30 +1,58 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { StyleSheet, ScrollView, View, Text, Animated, PanResponder } from 'react-native';
 import { List, Card } from 'react-native-paper';
 
-const AccountList = ({ data }) => (
-  
-  data.length === 0 ? (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>Oops! You do not have any saved accounts. Add an account to continue.</Text>
-    </View>
-  ) : (
+const AccountList = ({ data }) => {
+  const [pan] = useState(new Animated.ValueXY());
+
+  const panResponder = useMemo(() =>
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        if (gestureState.dx < 0) { // Only allow panning to the left (negative x direction)
+          Animated.event([null, { dx: pan.x }], { useNativeDriver: false })(evt, gestureState);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        const threshold = -75; 
+        if (gestureState.dx < threshold) {
+          Animated.spring(pan, {
+            toValue: { x: -150, y: 0 }, 
+            useNativeDriver: false,
+          }).start();
+        } else {
+          Animated.spring(pan, {
+            toValue: { x: 0, y: 0 },
+            useNativeDriver: false,
+          }).start();
+        }
+      },
+    }), [pan]);
+
+  return (
     <ScrollView style={styles.container}>
       <List.Section>
         {data.map((item, index) => (
-          <View key={index} style={styles.cardContainer}>
+          <Animated.View
+            key={index}
+            style={{
+              ...styles.cardContainer,
+              transform: [{ translateX: pan.x }],
+            }}
+            {...panResponder.panHandlers}
+          >
             <Card style={styles.card}>
-              <List.Item title={data[0].value} style={styles.text} />
+              <List.Item title={item.value} style={styles.text} />
             </Card>
             <Card style={styles.removeButton}>
-              <Text style={styles.text}>X</Text>
+              <Text style={styles.text}>Remove</Text>
             </Card>
-          </View>
+          </Animated.View>
         ))}
       </List.Section>
     </ScrollView>
-  )
-);
+  );
+};
 
 export default AccountList;
 
@@ -33,16 +61,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     width: '100%',
     height: '100%',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  emptyText: {
-    fontSize: 20,
-    textAlign: 'center',
   },
   cardContainer: {
     flexDirection: 'row',
@@ -58,9 +76,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     backgroundColor: '#de0a26',
+    position: 'absolute',
+    right: -125, // Adjust this value to change the position of the remove button
+    top: 0,
+    bottom: 0,
+    padding: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });

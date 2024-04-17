@@ -4,20 +4,15 @@ import { Text } from 'react-native-paper';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 
-const SaveAccount = ({ visible, closeModal, handlePasswords, title }) => {
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
+const SaveAccount = ({ visible, closeModal, handleName, title }) => {
+  const [label, setLabel] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleConfirmPasswords = () => {
-    if (password && confirmPassword) {
-      if (password === confirmPassword) {
-        handlePasswords(password);
-      } else {
-        setErrorMessage('The passwords do not match.');
-      }
+  const handleLabel = () => {
+    if (label) {
+      handleName(label);
     } else {
-      setErrorMessage('Please complete the form.');
+      setErrorMessage('Please name this account.');
     }
   };
 
@@ -31,21 +26,16 @@ const SaveAccount = ({ visible, closeModal, handlePasswords, title }) => {
         <View style={styles.modalContent}>
           <Text style={styles.text} variant='titleMedium'>{title}</Text>
           <PasswordInput
-            text='Enter Password'
-            password={password}
-            setPassword={setPassword}
-          />
-          <PasswordInput
-            text='Confirm Password'
-            password={confirmPassword}
-            setPassword={setConfirmPassword}
+            text='Name'
+            password={label}
+            setPassword={setLabel}
           />
           {errorMessage ? (
             <Text style={styles.errorMessage}>{errorMessage}</Text>
           ) : null}
           <View style={styles.inlineButton}>
             <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
-            <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
+            <CustomButton text='Enter' type='primary' size='small' onPress={handleLabel} />
           </View>
         </View>
       </View>

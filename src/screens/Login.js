@@ -4,6 +4,7 @@ import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
+import SaveAccount from '../components/SaveAccountModal';
 import CustomSnackbar from '../components/CustomSnackbar';
 import AccountList from '../components/AccountList';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
@@ -15,6 +16,8 @@ import styles from '../styles/common';
 const Login = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
+  const [saveModal, setSaveModal] = useState(false);
+  const [publicKey, setPublicKey] = useState('');
   const [tagID, setTagID] = useState('');
   const [loading, setLoading] = useState(false);
   const [dataList, setDatalist] = useState([]);
@@ -26,7 +29,6 @@ const Login = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const data = await getData();
-        console.log(data);
         setDatalist(data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -35,6 +37,7 @@ const Login = ({ navigation }) => {
 
     fetchData();
   }, []);
+
   const closeScanModal = () => {
     cancelNfc();
     setScanModal(false);
@@ -64,9 +67,9 @@ const Login = ({ navigation }) => {
     setLoading(true);
     try {
       let { publicKey } = await accountLogin(tagID, password);
-      storeData(publicKey);
+      setPublicKey(publicKey);
       if (publicKey) {
-        navigation.navigate('Account', { publicKey: publicKey, snackbarMessage: 'Succesfully logged in!' });
+        setSaveModal(true);
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
         handleSnackbar(false, 'Cannot complete handlePasswords. Key is not defined.');
@@ -77,6 +80,11 @@ const Login = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleName = (label) => {
+    storeData(label, publicKey);
+    navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
 
   const handleSnackbar = (success, text) => {
@@ -101,7 +109,11 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={styles.listContainer}>
-          <AccountList data={dataList} navigation={navigation} setData={setDatalist} />
+          {dataList.length > 0 ? (
+            <AccountList data={dataList} navigation={navigation} setData={setDatalist} />
+          ) : (
+            <Text style={styles.emptyText}>Oops! You don't have any saved accounts. Please add an account to continue.</Text>
+          )}
         </View>
 
         <View style={styles.bottomContainer}>
@@ -122,6 +134,13 @@ const Login = ({ navigation }) => {
           closeModal={() => setModalVisible(false)}
           handlePasswords={handlePasswords}
           title={`Each new password creates a new account when used with your card. \n\nWe cannot recover passwords for you.`}
+        />
+
+        <SaveAccount
+          visible={saveModal}
+          closeModal={() => setSaveModal(false)}
+          handleName={handleName}
+          title={`Please name this account.`}
         />
 
         {Platform.OS === 'android' && ( // Render modal only on Android

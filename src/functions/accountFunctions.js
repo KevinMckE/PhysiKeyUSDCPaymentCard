@@ -37,10 +37,11 @@ export const signTransaction = async (tag, password, amount, recipient) => {
 
     // Check sender's balance
     const balance = await web3.eth.getBalance(publicKey);
-    const balanceInWei = web3.utils.toBN(balance);
-    const amountInWei = web3.utils.toWei(amount, 'ether');
+    const balanceInEth = web3.utils.fromWei(balance, 'ether');
+    const amountInWei = web3.utils.toWei(amount, 'ether'); // Convert amount to wei
+    const gasInEthRounded = parseFloat(balanceInEth).toFixed(6);
 
-    if (balanceInWei.lt(amountInWei)) {
+    if (gasInEthRounded < amount) {
       throw new Error("Insufficient funds to send the transaction.");
     }
 

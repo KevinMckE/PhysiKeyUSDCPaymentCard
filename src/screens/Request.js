@@ -5,7 +5,7 @@ import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import CustomSnackbar from '../components/CustomSnackbar';
-import { accountLogin, signAndSend } from '../functions/accountFunctions';
+import { accountLogin, signAndSend, signTransaction, sendSignedTransaction } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { getGasEstimate } from '../functions/getGasEstimate';
 import { cancelNfc } from '../functions/cancelNfcRequest';
@@ -146,7 +146,6 @@ const Request = ({ navigation, route }) => {
         return (
           <View style={styles.inputContainer}>
             <Text style={styles.textMargin} variant='titleLarge'>Confirm Details</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{senderKey}</Text>
             <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
             <Text style={styles.textMargin} variant='titleLarge'>Estimated gas {gas} ETH</Text>

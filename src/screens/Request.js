@@ -15,6 +15,7 @@ const Request = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
   const [gas, setGas] = useState('');
   const [loading, setLoading] = useState(false);
+  const [signedTransaction, setSignedTransaction] = useState(null);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [signModal, setSignModal] = useState(false);
@@ -71,21 +72,11 @@ const Request = ({ navigation, route }) => {
       if (parseFloat(amount) == 0) {
         setInputError('Oops! Set a valid amount.');
       }
-      try {
-        const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
-        setGas(gasEstimate.toString() + 'n');
-        setInputError('');
-      } catch (error) {
-        setGas(null)
-        console.error('Cannot complete fetchGasEstimate: ', error);
-        setInputError('Error fetching gas estimate: ' + error.message);
-      }
     };
-
-    if (amount && publicKey && recipientKey) {
+    if (amount) {
       fetchGasEstimate();
     }
-  }, [amount, publicKey, recipientKey]);
+  }, [amount]);
 
   const handleSnackbar = (success, text) => {
     setSuccess(success);
@@ -97,9 +88,12 @@ const Request = ({ navigation, route }) => {
     setErrorMessage('');
     setModalVisible(false);
     try {
-      let { publicKey } = await accountLogin(tagID, password);
-      if (publicKey) {
-        const signedTx = await signTransaction("yourTag", "yourPassword", "0.1", "recipientAddress");
+      let signedTx = await signTransaction(tagID, password, amount, recipientKey);
+      const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
+      setGas(gasEstimate.toString() + 'n');
+
+      setSignedTransaction(signedTx);
+      if (signedTx) {
         handleNextStep();
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
@@ -116,7 +110,7 @@ const Request = ({ navigation, route }) => {
     setLoading(true);
     try {
       handleSnackbar(true, '(2/2) Retrieving the receipt...');
-      let receipt = await signAndSend(tagID, senderPassword, amount, publicKey, gas, senderKey);
+      let receipt = await sendSignedTransaction(signedTransaction);
       setReceipt(receipt);
       navigation.navigate('Account', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
     } catch (error) {
@@ -126,28 +120,6 @@ const Request = ({ navigation, route }) => {
       setLoading(false);
     }
   };
-  // Example usage
-  async function exampleUsage() {
-    try {
-      // Step 1: Sign the transaction and store the signed transaction object
-      const signedTx = await signTransaction("yourTag", "yourPassword", "0.1", "recipientAddress");
-
-      // Step 2: Store the signed transaction object somewhere, like in a variable or a database
-      // For simplicity, let's assume we're storing it in a variable
-      const storedSignedTx = signedTx;
-
-      // Later when you're ready to send the transaction
-
-      // Step 3: Retrieve the stored signed transaction object
-      // For this example, we'll use the storedSignedTx variable
-
-      // Step 4: Send the signed transaction
-      const txReceipt = await sendSignedTransaction(storedSignedTx);
-      console.log("Transaction sent. Receipt:", txReceipt);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
 
   const renderStep = () => {
     switch (step) {

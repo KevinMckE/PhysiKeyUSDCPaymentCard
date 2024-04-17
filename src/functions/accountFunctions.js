@@ -31,6 +31,43 @@ export const accountLogin = async (tag, password) => {
   return { publicKey: publicKey, encryptedPrivateKey: encryptedPrivateKey, oneTimeEncryptionPW: oneTimeEncryptionPW };
 };
 
+export const signTransaction = async (tag, password, amount, recipient) => {
+  try {
+    let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);
+
+    // Check sender's balance
+    const balance = await web3.eth.getBalance(publicKey);
+    const balanceInWei = web3.utils.toBN(balance);
+    const amountInWei = web3.utils.toWei(amount, 'ether');
+
+    if (balanceInWei.lt(amountInWei)) {
+      throw new Error("Insufficient funds to send the transaction.");
+    }
+
+    // Sufficient funds, proceed to sign the transaction
+    const gasLimit = web3.utils.toHex(21000); // Example gas limit
+    const gasPrice = web3.utils.toWei('100', 'gwei'); // Example gas price in wei (100 gwei)
+    const nonce = await web3.eth.getTransactionCount(publicKey);
+    const txObject = {
+      from: publicKey,
+      to: recipient,
+      value: amountInWei,
+      gas: gasLimit,
+      gasPrice: gasPrice,
+      nonce: nonce
+    };
+    const signedTx = await web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
+    return signedTx.rawTransaction; // Return the signed transaction object
+  } catch (error) {
+    throw error; // Propagate error if any
+  }
+};
+
+export const sendSignedTransaction = async (signedTx) => {
+  const txReceipt = await web3.eth.sendSignedTransaction(signedTx);
+  console.log(txReceipt);
+  return txReceipt;
+};
 
 export const signAndSend = async (tag, password, amount, recipient, gas, sender) => {
   let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);

@@ -17,9 +17,7 @@ const Request = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [senderKey, setSenderKey] = useState('');
   const [signModal, setSignModal] = useState(false);
-  const [senderPassword, setSenderPassword] = useState('');
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
@@ -101,8 +99,7 @@ const Request = ({ navigation, route }) => {
     try {
       let { publicKey } = await accountLogin(tagID, password);
       if (publicKey) {
-        setSenderKey(publicKey);
-        setSenderPassword(password);
+        const signedTx = await signTransaction("yourTag", "yourPassword", "0.1", "recipientAddress");
         handleNextStep();
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
@@ -129,6 +126,28 @@ const Request = ({ navigation, route }) => {
       setLoading(false);
     }
   };
+  // Example usage
+  async function exampleUsage() {
+    try {
+      // Step 1: Sign the transaction and store the signed transaction object
+      const signedTx = await signTransaction("yourTag", "yourPassword", "0.1", "recipientAddress");
+
+      // Step 2: Store the signed transaction object somewhere, like in a variable or a database
+      // For simplicity, let's assume we're storing it in a variable
+      const storedSignedTx = signedTx;
+
+      // Later when you're ready to send the transaction
+
+      // Step 3: Retrieve the stored signed transaction object
+      // For this example, we'll use the storedSignedTx variable
+
+      // Step 4: Send the signed transaction
+      const txReceipt = await sendSignedTransaction(storedSignedTx);
+      console.log("Transaction sent. Receipt:", txReceipt);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   const renderStep = () => {
     switch (step) {

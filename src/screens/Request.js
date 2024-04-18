@@ -18,6 +18,7 @@ const Request = ({ navigation, route }) => {
   const [signedTransaction, setSignedTransaction] = useState(null);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [recipientKey, setRecipientKey] = useState('');
   const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
@@ -29,7 +30,10 @@ const Request = ({ navigation, route }) => {
   const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey } = route.params;
-  const recipientKey = publicKey;
+
+  useEffect(() => {
+    setRecipientKey(publicKey)
+  }, []);
 
   const handleTransferPress = () => {
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
@@ -91,6 +95,7 @@ const Request = ({ navigation, route }) => {
     setModalVisible(false);
     //setLoading(true);
     try {
+      let { publicKey } = await accountLogin(tagID, password);
       let signedTx = await signTransaction(tagID, password, amount, recipientKey);
       const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
       setGas(gasEstimate.toString() + 'n');

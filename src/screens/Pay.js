@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ImageBackground, ActivityIndicator } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
@@ -97,7 +97,7 @@ const Pay = ({ navigation, route }) => {
     fetchTag();
   };
 
-  const handSignAndSend = () => {
+  const handleSignAndSend = () => {
     setScanModal(true);
     fetchSign();
   };
@@ -233,7 +233,7 @@ const Pay = ({ navigation, route }) => {
       case 2:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Sign and Send' type='primary' size='large' onPress={() => { handSignAndSend(); }} />
+            <CustomButton text='Sign and Send' type='primary' size='large' onPress={() => { handleSignAndSend(); }} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
           </View>
         );

@@ -89,7 +89,7 @@ const Request = ({ navigation, route }) => {
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
-    setLoading(true);
+    //setLoading(true);
     try {
       let signedTx = await signTransaction(tagID, password, amount, recipientKey);
       const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);

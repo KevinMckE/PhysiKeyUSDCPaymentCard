@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Text, Pressable } from 'react-native';
+import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
 import { removeItemFromAsyncStorage, getData } from '../functions/asyncStorage';
@@ -11,42 +11,47 @@ const AccountList = ({ data, navigation, setData }) => {
       onPress={() => handleRemoveItem(item)}
       style={styles.rightAction}
     >
-      <Card style={styles.removeButton}>
+      <View style={styles.removeButton}>
         <Text style={styles.text}>Remove</Text>
-      </Card>
+      </View>
     </Pressable>
   );
 
   const handleRemoveItem = async (item) => {
     try {
       await removeItemFromAsyncStorage(item.key);
-      const updatedData = await getData(); 
-      setData(updatedData); 
+      const updatedData = await getData();
+      setData(updatedData);
     } catch (error) {
       console.error('Error removing item:', error);
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <List.Section>
-        {data.map((item, index) => (
-          <Swipeable
-            key={index}
-            renderRightActions={() => renderRightActions(item)} 
-          >
-            <Pressable
-              style={styles.cardContainer}
-              onPress={() => navigation.navigate('Account', { publicKey: item.value })}
+    <Card style={styles.card}>
+      <ScrollView style={styles.container}>
+        <List.Section>
+          {data.map((item, index) => (
+            <Swipeable
+              key={index}
+              renderRightActions={() => renderRightActions(item)}
             >
-              <Card style={styles.card}>
-                <List.Item title={`${item.key}: ${item.value.slice(0, 7)}...${item.value.slice(-5)}`} />
-              </Card>
-            </Pressable>
-          </Swipeable>
-        ))}
-      </List.Section>
-    </ScrollView>
+              <Pressable
+                onPress={() => navigation.navigate('Account', { publicKey: item.value, snackbarMessage: 'Successfully logged in!' })}
+              >
+                <View style={styles.listItem}>
+                  <List.Item
+                    title={`${item.key}`}
+                    description={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`}
+                  />
+                  <Image source={require('../assets/drag_handle.png')} style={styles.icon} />
+                </View>
+              </Pressable>
+            </Swipeable>
+          ))}
+        </List.Section>
+      </ScrollView>
+    </Card>
   );
 };
 
@@ -58,17 +63,23 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  cardContainer: {
+  listItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     margin: 3,
     gap: 10,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#7da1ff',
   },
   card: {
     backgroundColor: '#ffffff',
     flex: 5,
+    width: '90%',
   },
   rightAction: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
@@ -92,5 +103,10 @@ const styles = StyleSheet.create({
     margin: 3,
     gap: 10,
     width: '95%',
+    borderRadius: 15
   },
+  icon: {
+    width: 40,
+    height: 40,
+  }
 });

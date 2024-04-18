@@ -13,6 +13,7 @@ const PasswordInput = ({ text, value, setPassword  }) => {
     <View>
         <TextInput
         mode="outlined"
+        returnKeyType="done"
         style={styles.textInput}
         placeholder={text}
         value={value}

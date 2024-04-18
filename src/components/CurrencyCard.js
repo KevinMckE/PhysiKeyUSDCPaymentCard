@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text, Card } from 'react-native-paper';
+import CustomButton from '../components/CustomButton';
 
-const CurrencyCard = ({ title, subtitle, imageSource }) => {
+const CurrencyCard = ({ title, subtitle, imageSource, navigation, publicKey }) => {
   return (
     <Card style={styles.card} mode="elevated">
       <Card.Content style={styles.content}>
@@ -12,6 +13,10 @@ const CurrencyCard = ({ title, subtitle, imageSource }) => {
           <Text style={styles.amountText}>{subtitle} ETH</Text>
         </View>
       </Card.Content>
+      <View style={styles.actions}>
+        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
+        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { publicKey }); }} />
+      </View>
     </Card>
   );
 };
@@ -33,6 +38,13 @@ const styles = StyleSheet.create({
   },
   amountText: {
     fontSize: 30,
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
   }
 });
 

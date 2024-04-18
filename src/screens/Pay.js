@@ -31,7 +31,7 @@ const Pay = ({ navigation, route }) => {
   const { publicKey } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
+    navigation.navigate('Account', { publicKey, snackbarMessage: 'Returned to account, no actions taken.' });
   };
 
   const handleNextStep = () => {
@@ -174,8 +174,9 @@ const Pay = ({ navigation, route }) => {
               placeholder="Recipient address..."
               value={recipientKey}
               onChangeText={recipientKey => setRecipientKey(recipientKey)}
+              returnKeyType={'done'}
             />
-            <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            <CustomButton text='Scan Card to Input' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
           </View>
         );
       case 1:
@@ -188,6 +189,8 @@ const Pay = ({ navigation, route }) => {
               placeholder="Amount..."
               value={amount}
               onChangeText={amount => setAmount(amount)}
+              returnKeyType={'done'}
+              keyboardType={'numeric'}
             />
             {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>
@@ -197,11 +200,13 @@ const Pay = ({ navigation, route }) => {
       case 2:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleLarge'>Confirm Details (3/3)</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
-            <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
-            <Text style={styles.textMargin} variant='titleLarge'>Estimated gas {gas} ETH</Text>
+            <Card style={styles.confirmCard}>
+              <Text style={styles.textMargin} variant='titleLarge'>Confirm Details (3/3)</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+              <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
+              <Text style={styles.textMargin} variant='titleLarge'>Estimated gas {gas} ETH</Text>
+            </Card>
           </View>
         );
       default:

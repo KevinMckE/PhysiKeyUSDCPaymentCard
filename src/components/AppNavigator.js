@@ -27,28 +27,28 @@ const AppNavigator = () => {
             name="Login"
             component={Login}
             options={{
-              title: 'Scan Card',
+              title: 'Login',
             }}
           />
           <Stack.Screen
             name="Account"
             component={Account}
             options={{
-              title: 'Your Assets',
+              title: 'Your Account',
             }}
           />
           <Stack.Screen
             name="Pay"
             component={Pay}
             options={{
-              title: 'Pay',
+              title: 'Send ETH',
             }}
           />
           <Stack.Screen
             name="Request"
             component={Request}
             options={{
-              title: 'Request',
+              title: 'Request ETH',
             }}
           />
           <Stack.Screen

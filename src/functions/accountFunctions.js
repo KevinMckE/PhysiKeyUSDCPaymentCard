@@ -38,7 +38,7 @@ export const signTransaction = async (tag, password, amount, recipient) => {
     // Check sender's balance
     const balance = await web3.eth.getBalance(publicKey);
     const balanceInEth = web3.utils.fromWei(balance, 'ether');
-    const amountInWei = web3.utils.toWei(amount, 'ether'); // Convert amount to wei
+    const amountInWei = web3.utils.toWei(amount, 'ether'); 
     const gasInEthRounded = parseFloat(balanceInEth).toFixed(6);
 
     if (gasInEthRounded < amount) {
@@ -58,9 +58,9 @@ export const signTransaction = async (tag, password, amount, recipient) => {
       nonce: nonce
     };
     const signedTx = await web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-    return signedTx.rawTransaction; // Return the signed transaction object
+    return signedTx.rawTransaction; 
   } catch (error) {
-    throw error; // Propagate error if any
+    throw error; 
   }
 };
 
@@ -72,10 +72,10 @@ export const sendSignedTransaction = async (signedTx) => {
 
 export const signAndSend = async (tag, password, amount, recipient, gas, sender) => {
   let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);
-  const gasLimit = web3.utils.toHex(21000); // Example gas limit
-  const gasPrice = web3.utils.toWei('100', 'gwei'); // Example gas price in wei (100 gwei)
+  const gasLimit = web3.utils.toHex(21000); 
+  const gasPrice = web3.utils.toWei('100', 'gwei'); 
   const nonce = await web3.eth.getTransactionCount(publicKey);
-  const amountInWei = web3.utils.toWei(amount, 'ether'); // Convert amount to wei
+  const amountInWei = web3.utils.toWei(amount, 'ether');
   const txObject = {
     from: publicKey,
     to: recipient,

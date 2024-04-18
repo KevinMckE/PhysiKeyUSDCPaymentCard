@@ -38,7 +38,7 @@ const Login = ({ navigation }) => {
 
     fetchData();
   });
-  
+
   const closeScanModal = () => {
     cancelNfc();
     setScanModal(false);
@@ -85,6 +85,7 @@ const Login = ({ navigation }) => {
 
   const handleName = (label) => {
     storeData(label, publicKey);
+    setSaveModal(false);
     navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
 
@@ -113,7 +114,18 @@ const Login = ({ navigation }) => {
           {dataList.length > 0 ? (
             <AccountList data={dataList} navigation={navigation} setData={setDatalist} />
           ) : (
-            <Text style={styles.emptyText}>Oops! You don't have any saved accounts. Please add an account to continue.</Text>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../assets/blob_background_gradient.png')}
+                style={styles.backgroundImageSecondary}
+                resizeMode="contain"
+              />
+              <Image
+                source={require('../assets/tap_animation.gif')}
+                style={styles.centeredImage}
+                resizeMode="cover"
+              />
+            </View>
           )}
         </View>
 

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     opacity: 1,
-    transform: [{rotate: '-5deg'}]
+    
   },
   backgroundImageSecondary: {
     position: 'absolute',
@@ -35,10 +35,12 @@ const styles = StyleSheet.create({
     width: 335,
     height: 335,
     opacity: 1,
+    transform: [{rotate: '-180deg'}]
   },
   centeredImage: {
-    width: '80%',
-    height: '80%'
+    position: 'absolute',
+    width: '100%',
+    height: '100%'
   },
   imageContainer: {
     justifyContent: 'center',
@@ -117,6 +119,10 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 999, 
+  },
+  confirmCard: {
+    backgroundColor: '#ffffff',
+    width: '100%',
   },
 });
 

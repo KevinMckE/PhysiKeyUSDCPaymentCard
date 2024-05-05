@@ -19,6 +19,7 @@ const PasswordInput = ({ text, value, setPassword  }) => {
         value={value}
         onChangeText={handleInputChange}
         secureTextEntry={confirmVisible}
+        autoCapitalize='none'
       />
  
       <TouchableOpacity

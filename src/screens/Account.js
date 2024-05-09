@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, TouchableOpacity, Image, ImageBackground, Pressable } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Image, ImageBackground, Pressable,StyleSheet } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
@@ -7,6 +7,7 @@ import { getOptimismBalance } from '../functions/getOptimismBalance';
 import CurrencyCard from '../components/CurrencyCard';
 import CustomSnackbar from '../components/CustomSnackbar';
 import styles from '../styles/common';
+import { useMoonPaySdk } from '@moonpay/react-native-moonpay-sdk';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
@@ -18,6 +19,16 @@ const Account = ({ navigation, route }) => {
 
   const isFocused = useIsFocused(); 
 
+  const { MoonPayWebViewComponent } = useMoonPaySdk({
+    sdkConfig: {
+      flow: 'buy',
+      environment: 'sandbox',
+      params: {
+        apiKey: 'pk_test_PWF6upCocpUN03Fj5VyYwq0cMvjRBQh',
+      },
+    },
+  });
+  
   useEffect(() => {
     let isMounted = true; 
     const fetchBalance = async () => {
@@ -85,8 +96,18 @@ const Account = ({ navigation, route }) => {
           text={snackbarText}
           isSuccess={isSuccess}
         />
+        <MoonPayWebViewComponent style={test.test} />
     </ImageBackground>
   );
 }
+
+const test = StyleSheet.create({
+  test: {
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    color: '#000'
+  }
+});
 
 export default Account;

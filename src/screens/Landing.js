@@ -18,11 +18,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.landingTopContainer}>
           <Image
-            source={require('../assets/blob_background_gradient.png')}
-            style={styles.landingBackgroundImage}
-          />
-          <Image
-            source={require('../assets/card_animation.gif')}
+            source={require('../assets/regen_card.png')}
             style={styles.centeredImage}
           />
         </View>    

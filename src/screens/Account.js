@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, TouchableOpacity, Image, ImageBackground, Pressable } from 'react-native';
+import { View, Image, ImageBackground, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
 import { getOptimismBalance } from '../functions/getOptimismBalance';
 import CurrencyCard from '../components/CurrencyCard';
 import CustomSnackbar from '../components/CustomSnackbar';
+import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const Account = ({ navigation, route }) => {
@@ -77,7 +78,8 @@ const Account = ({ navigation, route }) => {
             publicKey={publicKey}
           />
         </View>
-
+        <CustomButton text='Buy' type='secondary' size='large' onPress={() => { navigation.navigate('Buy'); }} />
+        <CustomButton text='Sell' type='secondary' size='large' onPress={() => { navigation.navigate('Sell'); }} />
         <CustomSnackbar
           visible={snackbarVisible}
           onDismiss={() => setSnackbarVisible(false)}

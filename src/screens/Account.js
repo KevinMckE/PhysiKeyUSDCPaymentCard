@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, ImageBackground, Pressable } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
@@ -11,16 +11,16 @@ import styles from '../styles/common';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
-  const { publicKey, snackbarMessage } = route.params;
+  const { label, publicKey, snackbarMessage } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const isFocused = useIsFocused(); 
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
     const fetchBalance = async () => {
       handleSnackbar(true, snackbarMessage);
       try {
@@ -54,40 +54,38 @@ const Account = ({ navigation, route }) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/tech_pattern.jpg')}
-      style={{ flex: 1, width: '100%', height: '100%' }}
-    >
-        <View style={styles.balanceContainer}>
-          <Pressable onPress={handleCopyToClipboard}>
-            <Card style={styles.card}>
-              <View style={styles.keyContent}>
-                <Text variant='titleLarge'>{truncatedKey}</Text>
-                <Image
-                  source={require('../assets/copy_icon.png')}
-                  style={styles.copyImage}
-                />
-              </View>
-            </Card>
-          </Pressable>
-          <CurrencyCard
-            title="Balance"
-            subtitle={balance}
-            imageSource={require('../assets/optimism_logo.png')}
-            navigation={navigation}
-            publicKey={publicKey}
-          />
-        </View>
-        <CustomButton text='Buy' type='secondary' size='large' onPress={() => { navigation.navigate('Buy'); }} />
-        <CustomButton text='Sell' type='secondary' size='large' onPress={() => { navigation.navigate('Sell'); }} />
-        <CustomSnackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          duration={3000}
-          text={snackbarText}
-          isSuccess={isSuccess}
+    <>
+      <View style={styles.balanceContainer}>
+        <Pressable onPress={handleCopyToClipboard}>
+          <Card style={styles.card}>
+            <View style={styles.keyContent}>
+              <Text variant='titleLarge'>{label}</Text>
+              <Text variant='titleLarge'>{truncatedKey}</Text>
+              <Image
+                source={require('../assets/copy_icon.png')}
+                style={styles.copyImage}
+              />
+            </View>
+          </Card>
+        </Pressable>
+        <CurrencyCard
+          title="Balance"
+          subtitle={balance}
+          imageSource={require('../assets/optimism_logo.png')}
+          navigation={navigation}
+          publicKey={publicKey}
         />
-    </ImageBackground>
+      </View>
+      <CustomButton text='Buy' type='secondary' size='large' onPress={() => { navigation.navigate('Buy'); }} />
+      <CustomButton text='Sell' type='secondary' size='large' onPress={() => { navigation.navigate('Sell'); }} />
+      <CustomSnackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        duration={3000}
+        text={snackbarText}
+        isSuccess={isSuccess}
+      />
+    </>
   );
 }
 

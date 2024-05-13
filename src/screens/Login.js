@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, Platform, ImageBackground, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, Platform, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
@@ -84,9 +84,10 @@ const Login = ({ navigation }) => {
   };
 
   const handleName = (label) => {
+    console.log(label)
     storeData(label, publicKey);
     setSaveModal(false);
-    navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
+    navigation.navigate('Account', { label, publicKey, snackbarMessage: 'Succesfully logged in!' });
   };
 
   const handleSnackbar = (success, text) => {
@@ -96,10 +97,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/tech_pattern.jpg')}
-      style={{ flex: 1, width: '100%', height: '100%' }}
-    >
+    <>
       <View style={styles.container}>
         {loading && (
           <View style={styles.loadingContainer}>
@@ -163,7 +161,7 @@ const Login = ({ navigation }) => {
           />
         )}
       </View>
-    </ImageBackground>
+    </>
   );
 }
 

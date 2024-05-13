@@ -37,7 +37,7 @@ const AccountList = ({ data, navigation, setData }) => {
               renderRightActions={() => renderRightActions(item)}
             >
               <Pressable
-                onPress={() => navigation.navigate('Account', { publicKey: item.value, snackbarMessage: 'Successfully logged in!' })}
+                onPress={() => navigation.navigate('Account', { label: item.key, publicKey: item.value, snackbarMessage: 'Successfully logged in!' })}
               >
                 <View style={styles.listItem}>
                   <List.Item

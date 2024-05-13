@@ -1,4 +1,4 @@
-package com.anywarewallet;
+package com.regencard;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

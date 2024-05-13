@@ -8,6 +8,7 @@ import CurrencyCard from '../components/CurrencyCard';
 import CustomSnackbar from '../components/CustomSnackbar';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
+import { trigger } from 'react-native-haptic-feedback';
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
@@ -18,6 +19,11 @@ const Account = ({ navigation, route }) => {
   const [isSuccess, setSuccess] = useState(false);
 
   const isFocused = useIsFocused();
+
+  const options = {
+    enableVibrateFallback: true,
+    ignoreAndroidSystemSettings: false,
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -44,6 +50,7 @@ const Account = ({ navigation, route }) => {
   }, [publicKey, snackbarMessage, isFocused]);
 
   const handleCopyToClipboard = () => {
+    trigger("impactLight", options);
     Clipboard.setString(publicKey);
   };
 

@@ -8,6 +8,8 @@ import Account from '../screens/Account';
 import NftDetails from '../screens/NftDetails';
 import Pay from '../screens/Pay';
 import Request from '../screens/Request';
+import Buy from '../screens/Buy';
+import Sell from '../screens/Sell';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -56,6 +58,20 @@ const AppNavigator = () => {
             component={NftDetails}
             options={{
               title: 'NFT Details',
+            }}
+          />
+          <Stack.Screen
+            name="Buy"
+            component={Buy}
+            options={{
+              title: 'Buy',
+            }}
+          />
+          <Stack.Screen
+            name="Sell"
+            component={Sell}
+            options={{
+              title: 'Sell',
             }}
           />
         </Stack.Navigator>

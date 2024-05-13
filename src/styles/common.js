@@ -124,6 +124,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: '100%',
   },
+  MoonPay: {
+    width: '100%',
+    height: '100%',
+  }
 });
 
 export default styles;

@@ -4,7 +4,6 @@ import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
-import CustomSnackbar from '../components/CustomSnackbar';
 import { accountLogin, signAndSend } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { getGasEstimate } from '../functions/getGasEstimate';
@@ -24,14 +23,12 @@ const Pay = ({ navigation, route }) => {
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Account', { publicKey, snackbarMessage: 'Returned to account, no actions taken.' });
+    navigation.navigate('Account', { publicKey });
   };
 
   const handleNextStep = () => {
@@ -138,25 +135,16 @@ const Pay = ({ navigation, route }) => {
     }
   };
 
-  const handleSnackbar = (success, text) => {
-    setSuccess(success);
-    setSnackbarText(text);
-    setSnackbarVisible(true);
-  };
-
   const confirmSign = async (password) => {
-    handleSnackbar(true, '(1/2) Beginning the transfer...');
     setErrorMessage('');
     setSignModal(false);
     setLoading(true);
     try {
-      handleSnackbar(true, '(2/2) Retrieving the receipt...');
       let receipt = await signAndSend(tagID, password, amount, recipientKey, gas, publicKey);
       setReceipt(receipt);
-      navigation.navigate('Account', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
+      navigation.navigate('Account', { publicKey });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
-      handleSnackbar(false, `There was an issue: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -267,14 +255,6 @@ const Pay = ({ navigation, route }) => {
           {renderButtons()}
         </View>
       </View>
-
-      <CustomSnackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={3000}
-        text={snackbarText}
-        isSuccess={isSuccess}
-      />
 
       <InputModal
         visible={modalVisible}

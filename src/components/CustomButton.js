@@ -8,9 +8,9 @@ const CustomButton = ({ text, type, size, onPress }) => {
       mode={type === 'primary' ? 'contained' : 'outlined'}
       onPress={onPress}
       style={[styles.button, [{ marginVertical: 10, }, size === 'small' ? { width: 150 } : { width: 250 }]]} 
-      buttonColor={type === 'primary' ? '#000000' : '#ffffff'}
+      buttonColor={type === 'primary' ? '#184211' : '#ffffff'}
       labelStyle={size === 'small' ? { fontSize: 16 } : { fontSize: 18 }}
-      textColor={type === 'primary' ? '#ffffff' : '#304271'}
+      textColor={type === 'primary' ? '#ffffff' : '#184211'}
     >
       {text}
     </Button>
@@ -22,7 +22,7 @@ export default CustomButton;
 const styles = StyleSheet.create({
   button: {
     borderRadius:15, 
-    borderColor:'#304271',
+    borderColor:'#184211',
     borderWidth: 1,
     color: '#ffffff',
   },

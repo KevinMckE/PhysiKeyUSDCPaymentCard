@@ -17,6 +17,7 @@
     "@moonpay/react-native-moonpay-sdk": "^0.8.0",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-clipboard/clipboard": "^1.13.2",
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "@tatumio/tatum": "^4.2.18",

@@ -4,7 +4,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
-import Account from '../screens/Account';
+import Home from '../screens/Home';
 import NftDetails from '../screens/NftDetails';
 import Pay from '../screens/Pay';
 import Request from '../screens/Request';
@@ -33,8 +33,8 @@ const AppNavigator = () => {
             }}
           />
           <Stack.Screen
-            name="Account"
-            component={Account}
+            name="Home"
+            component={Home}
             options={{
               title: 'Your Account',
             }}

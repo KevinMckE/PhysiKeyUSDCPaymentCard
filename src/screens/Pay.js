@@ -28,7 +28,7 @@ const Pay = ({ navigation, route }) => {
   const { publicKey } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Account', { publicKey });
+    navigation.navigate('Home', { publicKey });
   };
 
   const handleNextStep = () => {

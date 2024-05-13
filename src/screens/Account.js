@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Pressable } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
@@ -9,13 +8,11 @@ import CurrencyCard from '../components/CurrencyCard';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 import { trigger } from 'react-native-haptic-feedback';
-const Tab = createBottomTabNavigator();
 
 const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
   const { label, publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
-  const [isSuccess, setSuccess] = useState(false);
 
   const isFocused = useIsFocused();
 
@@ -72,10 +69,6 @@ const Account = ({ navigation, route }) => {
       </View>
       <CustomButton text='Buy' type='secondary' size='large' onPress={() => { navigation.navigate('Buy'); }} />
       <CustomButton text='Sell' type='secondary' size='large' onPress={() => { navigation.navigate('Sell'); }} />
-      <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
-    </Tab.Navigator>
     </>
   );
 }

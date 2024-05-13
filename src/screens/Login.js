@@ -21,7 +21,6 @@ const Login = ({ navigation }) => {
   const [tagID, setTagID] = useState('');
   const [loading, setLoading] = useState(false);
   const [dataList, setDatalist] = useState([]);
-  const [isSuccess, setSuccess] = useState(false);
 
   useFocusEffect(() => {
     const fetchData = async () => {
@@ -80,7 +79,7 @@ const Login = ({ navigation }) => {
   const handleName = (label) => {
     storeData(label, publicKey);
     setSaveModal(false);
-    navigation.navigate('Account', { label, publicKey });
+    navigation.navigate('Home', { label, publicKey });
   };
 
   return (

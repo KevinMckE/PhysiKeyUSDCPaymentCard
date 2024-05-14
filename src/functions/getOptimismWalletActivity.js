@@ -16,8 +16,15 @@ export const getOptimismWalletActivity = async () => {
       throw new Error(`API error: ${data.message}`);
     }
 
-    // Assuming the response structure contains a list of transactions
-    const transactions = data.result;
+    // Extract relevant information from transactions
+    const transactions = data.result.map(transaction => {
+      const { hash, input, timeStamp, value } = transaction;
+      const method = input !== '0x' ? 'IN' : 'OUT'; // Assuming non-empty input represents an incoming transaction
+      const age = new Date(parseInt(timeStamp) * 1000); // Convert timestamp to Date object
+      const formattedValue = parseFloat(value) / 1e18; // Convert wei to ETH
+      return { hash, method, age, value: formattedValue };
+    });
+
     console.log(transactions);
     return transactions;
   } catch (error) {

@@ -8,9 +8,9 @@ const CustomButton = ({ text, type, size, onPress }) => {
       mode={type === 'primary' ? 'contained' : 'outlined'}
       onPress={onPress}
       style={[styles.button, [{ marginVertical: 10, }, size === 'small' ? { width: 150 } : { width: 250 }]]} 
-      buttonColor={type === 'primary' ? '#184211' : '#ffffff'}
+      buttonColor={type === 'primary' ? '#000000' : '#ffffff'}
       labelStyle={size === 'small' ? { fontSize: 16 } : { fontSize: 18 }}
-      textColor={type === 'primary' ? '#ffffff' : '#184211'}
+      textColor={type === 'primary' ? '#ffffff' : '#000000'}
     >
       {text}
     </Button>

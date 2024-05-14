@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     opacity: 1,
-    
+
   },
   backgroundImageSecondary: {
     position: 'absolute',
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: 335,
     height: 335,
     opacity: 1,
-    transform: [{rotate: '-180deg'}]
+    transform: [{ rotate: '-180deg' }]
   },
   centeredImage: {
     position: 'absolute',
@@ -112,13 +112,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 1.0)', 
+    backgroundColor: 'rgba(255, 255, 255, 1.0)',
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 999, 
+    zIndex: 999,
   },
   confirmCard: {
     backgroundColor: '#ffffff',
@@ -127,7 +127,27 @@ const styles = StyleSheet.create({
   MoonPay: {
     width: '100%',
     height: '100%',
-  }
+  },
+  mainButtons: {
+    position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'center', 
+    gap: 10,
+    bottom: 0,
+    left: 0,
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderTopWidth: 2,
+    borderTopColor: 'rgba(23, 23, 23, 0.1)',
+  },
+  tabBarIcon: {
+    width: 24, 
+    height: 24,
+    resizeMode: 'contain', 
+  },
+  inactiveTabIcon: {
+    tintColor: '#808080', 
+  },
 });
 
 export default styles;

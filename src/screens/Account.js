@@ -69,8 +69,10 @@ const Account = ({ navigation, route }) => {
           publicKey={publicKey}
         />
       </View>
-      <CustomButton text='Buy' type='secondary' size='large' onPress={() => { navigation.navigate('Buy'); }} />
-      <CustomButton text='Sell' type='secondary' size='large' onPress={() => { navigation.navigate('Sell'); }} />
+      <View style={styles.mainButtons}>
+        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
+        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { publicKey }); }} />
+      </View>
     </>
   );
 }

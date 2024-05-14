@@ -6,7 +6,6 @@ import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import SaveAccount from '../components/SaveAccountModal';
-import CustomSnackbar from '../components/CustomSnackbar';
 import AccountList from '../components/AccountList';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { accountLogin } from '../functions/accountFunctions';
@@ -22,9 +21,6 @@ const Login = ({ navigation }) => {
   const [tagID, setTagID] = useState('');
   const [loading, setLoading] = useState(false);
   const [dataList, setDatalist] = useState([]);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarText, setSnackbarText] = useState('');
-  const [isSuccess, setSuccess] = useState(false);
 
   useFocusEffect(() => {
     const fetchData = async () => {
@@ -63,7 +59,6 @@ const Login = ({ navigation }) => {
   };
 
   const handlePasswords = async (password) => {
-    handleSnackbar(true, 'Attemping login...');
     setModalVisible(false);
     setLoading(true);
     try {
@@ -73,27 +68,18 @@ const Login = ({ navigation }) => {
         setSaveModal(true);
       } else {
         console.error('Cannot complete handlePasswords. Key is not defined.');
-        handleSnackbar(false, 'Cannot complete handlePasswords. Key is not defined.');
       }
     } catch (error) {
       console.error('Cannot complete handlePasswords: ', error);
-      handleSnackbar(false, `There was an issue: ${error}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleName = (label) => {
-    console.log(label)
     storeData(label, publicKey);
     setSaveModal(false);
-    navigation.navigate('Account', { label, publicKey, snackbarMessage: 'Succesfully logged in!' });
-  };
-
-  const handleSnackbar = (success, text) => {
-    setSuccess(success);
-    setSnackbarText(text);
-    setSnackbarVisible(true);
+    navigation.navigate('Home', { label, publicKey });
   };
 
   return (
@@ -131,14 +117,6 @@ const Login = ({ navigation }) => {
           <CustomButton text='Add Account' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
           <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
         </View>
-
-        <CustomSnackbar
-          visible={snackbarVisible}
-          onDismiss={() => setSnackbarVisible(false)}
-          duration={3000}
-          text={snackbarText}
-          isSuccess={isSuccess}
-        />
 
         <InputModal
           visible={modalVisible}

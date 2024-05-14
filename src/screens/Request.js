@@ -121,7 +121,7 @@ const Request = ({ navigation, route }) => {
       handleSnackbar(true, '(2/2) Retrieving the receipt...');
       let receipt = await sendSignedTransaction(signedTransaction);
       setReceipt(receipt);
-      navigation.navigate('Account', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
+      navigation.navigate('Home', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
       handleSnackbar(false, `There was an issue: ${error}`);

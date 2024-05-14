@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import account from '../screens/Account';
@@ -11,7 +11,7 @@ const Home = ({ route }) => {
   return (
     <>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={account} initialParams={{ label, publicKey }} />
+        <Tab.Screen name="Account" component={account} initialParams={{ label, publicKey }} />
         <Tab.Screen name="Settings" component={buy} />
       </Tab.Navigator>
     </>

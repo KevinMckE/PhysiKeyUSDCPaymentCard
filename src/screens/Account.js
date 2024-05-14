@@ -4,6 +4,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
 import { getOptimismBalance } from '../functions/getOptimismBalance';
+import { getOptimismWalletActivity } from '../functions/getOptimismWalletActivity';
 import CurrencyCard from '../components/CurrencyCard';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
@@ -17,6 +18,7 @@ const Account = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    getOptimismWalletActivity();
     let isMounted = true;
     const fetchBalance = async () => {
       try {

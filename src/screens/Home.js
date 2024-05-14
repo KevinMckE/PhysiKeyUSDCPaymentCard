@@ -12,13 +12,14 @@ const Home = ({ route }) => {
   return (
     <>
       <Tab.Navigator
+        theme={{colors: {secondaryContainer: '#7FA324'}}} // <---- Here
         initialRouteName="Home"
         activeColor="#000000"
         inactiveColor="#808080"
         barStyle={{ backgroundColor: '#ffffff' }}
       >
         <Tab.Screen
-          name="Home"
+          name="Account"
           component={account}
           initialParams={{ label, publicKey }}
           options={{

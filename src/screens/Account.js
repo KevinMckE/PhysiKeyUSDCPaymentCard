@@ -4,6 +4,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
 import { getOptimismBalance } from '../functions/getOptimismBalance';
+import { getBaseUSDCActivity } from '../functions/getBaseUSDCActivity';
+import { getUSDCBalance } from '../functions/getBaseUSDC';
 import { getOptimismWalletActivity } from '../functions/getOptimismWalletActivity';
 import CurrencyCard from '../components/CurrencyCard';
 import CustomButton from '../components/CustomButton';
@@ -22,7 +24,9 @@ const Account = ({ navigation, route }) => {
     let isMounted = true;
     const fetchBalance = async () => {
       try {
-        let fetchedBalance = await getOptimismBalance(publicKey);
+        getBaseUSDCActivity();
+        let fetchedBalance = await getUSDCBalance('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
+        console.log(fetchedBalance)
         if (fetchedBalance === '0.') {
           fetchedBalance = '0.0';
         }

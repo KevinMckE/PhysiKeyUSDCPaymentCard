@@ -68,7 +68,7 @@ const Account = ({ navigation, route }) => {
         <CurrencyCard
           title="Balance"
           subtitle={balance}
-          imageSource={require('../assets/optimism_logo.png')}
+          imageSource={require('../assets/usdc_logo.png')}
           navigation={navigation}
           publicKey={publicKey}
         />

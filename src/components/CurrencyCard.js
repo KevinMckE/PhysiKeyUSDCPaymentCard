@@ -10,13 +10,9 @@ const CurrencyCard = ({ title, subtitle, imageSource, navigation, publicKey }) =
         <Image source={imageSource} style={styles.image} />
         <View>
           <Text variant='titleLarge'>{title}</Text>
-          <Text style={styles.amountText}>{subtitle} ETH</Text>
+          <Text style={styles.amountText}>{subtitle} USDC</Text>
         </View>
       </Card.Content>
-      <View style={styles.actions}>
-        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
-        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { publicKey }); }} />
-      </View>
     </Card>
   );
 };

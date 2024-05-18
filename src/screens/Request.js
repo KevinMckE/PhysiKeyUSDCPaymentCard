@@ -172,7 +172,7 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Scan to Pay' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            <CustomButton text="Scan Payer's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Account', { publicKey, snackbarMessage: 'Returned to account, no actions taken.' }); }} />
           </View>
         );

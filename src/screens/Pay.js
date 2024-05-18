@@ -164,7 +164,8 @@ const Pay = ({ navigation, route }) => {
               onChangeText={recipientKey => setRecipientKey(recipientKey)}
               returnKeyType={'done'}
             />
-            <CustomButton text='Scan Card to Input' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            <Text style={styles.textMargin} variant='titleMedium'>or</Text>
+            <CustomButton text="Scan Recipient's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
           </View>
         );
       case 1:

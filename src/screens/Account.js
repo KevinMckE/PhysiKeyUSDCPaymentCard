@@ -3,10 +3,8 @@ import { View, Image, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
-import { getOptimismBalance } from '../functions/getOptimismBalance';
 import { getBaseUSDCActivity } from '../functions/getBaseUSDCActivity';
 import { getUSDCBalance } from '../functions/getBaseUSDC';
-import { getOptimismWalletActivity } from '../functions/getOptimismWalletActivity';
 import CurrencyCard from '../components/CurrencyCard';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
@@ -16,15 +14,13 @@ const Account = ({ navigation, route }) => {
   const [balance, setBalance] = useState('');
   const { label, publicKey } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getOptimismWalletActivity();
     let isMounted = true;
     const fetchBalance = async () => {
       try {
-        getBaseUSDCActivity();
+        getBaseUSDCActivity('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
         let fetchedBalance = await getUSDCBalance('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
         console.log(fetchedBalance)
         if (fetchedBalance === '0.') {

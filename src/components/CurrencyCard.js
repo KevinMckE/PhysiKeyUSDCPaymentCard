@@ -10,7 +10,7 @@ const CurrencyCard = ({ title, subtitle, imageSource, navigation, publicKey }) =
         <Image source={imageSource} style={styles.image} />
         <View>
           <Text variant='titleLarge'>{title}</Text>
-          <Text style={styles.amountText}>{subtitle} ETH</Text>
+          <Text style={styles.amountText}>{subtitle} USDC</Text>
         </View>
       </Card.Content>
     </Card>

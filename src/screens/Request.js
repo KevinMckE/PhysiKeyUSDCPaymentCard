@@ -4,8 +4,7 @@ import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
-import CustomSnackbar from '../components/CustomSnackbar';
-import { accountLogin, signAndSend, signTransaction, sendSignedTransaction } from '../functions/accountFunctions';
+import { signTransaction, sendSignedTransaction } from '../functions/accountFunctions';
 import { scanSerialForKey } from '../functions/scanSerialForKey';
 import { getGasEstimate } from '../functions/getGasEstimate';
 import { cancelNfc } from '../functions/cancelNfcRequest';
@@ -25,8 +24,6 @@ const Request = ({ navigation, route }) => {
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarText, setSnackbarText] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey } = route.params;
@@ -34,10 +31,6 @@ const Request = ({ navigation, route }) => {
   useEffect(() => {
     setRecipientKey(publicKey)
   }, []);
-
-  const handleTransferPress = () => {
-    navigation.navigate('Account', { publicKey, snackbarMessage: 'Succesfully logged in!' });
-  };
 
   const handleNextStep = () => {
     setStep(step + 1);
@@ -84,20 +77,14 @@ const Request = ({ navigation, route }) => {
     }
   }, [amount]);
 
-  const handleSnackbar = (success, text) => {
-    setSuccess(success);
-    setSnackbarText(text);
-    setSnackbarVisible(true);
-  };
 
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
     //setLoading(true);
     try {
-      let { publicKey } = await accountLogin(tagID, password);
       let signedTx = await signTransaction(tagID, password, amount, recipientKey);
-      const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
+      const gasEstimate = await getGasEstimate();
       setGas(gasEstimate.toString() + 'n');
       setSignedTransaction(signedTx);
       if (signedTx) {
@@ -113,18 +100,15 @@ const Request = ({ navigation, route }) => {
   };
 
   const confirmSign = async () => {
-    handleSnackbar(true, '(1/2) Beginning the transfer...');
     setErrorMessage('');
     setSignModal(false);
     setLoading(true);
     try {
-      handleSnackbar(true, '(2/2) Retrieving the receipt...');
       let receipt = await sendSignedTransaction(signedTransaction);
       setReceipt(receipt);
-      navigation.navigate('Home', { publicKey, snackbarMessage: 'Successfully transfered Ether!' });
+      navigation.navigate('Home', publicKey);
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
-      handleSnackbar(false, `There was an issue: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -173,7 +157,7 @@ const Request = ({ navigation, route }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text="Scan Payer's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Account', { publicKey, snackbarMessage: 'Returned to account, no actions taken.' }); }} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Account', publicKey) }}/>
           </View>
         );
       case 1:
@@ -213,14 +197,6 @@ const Request = ({ navigation, route }) => {
           {renderButtons()}
         </View>
       </View>
-
-      <CustomSnackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={3000}
-        text={snackbarText}
-        isSuccess={isSuccess}
-      />
 
       <InputModal
         visible={modalVisible}

@@ -78,8 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   keyContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
     padding: 10,
   },

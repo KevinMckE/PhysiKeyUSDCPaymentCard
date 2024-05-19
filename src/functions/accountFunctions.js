@@ -1,7 +1,10 @@
 import CryptoJS from 'crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://sepolia.optimism.io');
+const web3 = new Web3('https://sepolia.base.org');
+const usdcABI = [{constant: true, inputs: [{ name: '_owner', type: 'address' }], name: 'balanceOf', outputs: [{ name: 'balance', type: 'uint256' }], type: 'function',},]
+const usdcAddress = process.env.BASE_USDC_CONTRACT; 
+const contract = new web3.eth.Contract(usdcABI, usdcAddress);
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 
 export const accountLogin = async (tag, password) => {
@@ -89,3 +92,7 @@ export const signAndSend = async (tag, password, amount, recipient, gas, sender)
   console.log(txReceipt)
   return txReceipt;
 };
+
+
+
+

@@ -17,12 +17,12 @@ const Account = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    console.log(publicKey)
     let isMounted = true;
     const fetchBalance = async () => {
       try {
-        getBaseUSDCActivity('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
-        let fetchedBalance = await getUSDCBalance('0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4');
-        console.log(fetchedBalance)
+        getBaseUSDCActivity(publicKey);
+        let fetchedBalance = await getUSDCBalance(publicKey);
         if (fetchedBalance === '0.') {
           fetchedBalance = '0.0';
         }

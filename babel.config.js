@@ -1,6 +1,6 @@
 module.exports = (api) => {
   const babelEnv = api.env();
-  const plugins = [['module:react-native-dotenv']];
+  const plugins = [];
   if (babelEnv !== 'development') {
     plugins.push(['transform-remove-console']);
   }

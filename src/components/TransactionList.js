@@ -1,30 +1,12 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
+import { StyleSheet, ScrollView, Text, Pressable, View, Image, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
-import { Swipeable } from 'react-native-gesture-handler';
-import { getData } from '../functions/asyncStorage';
 
-const TransactionList = ({ data, navigation, setData }) => {
+const TransactionList = ({ data }) => {
 
-  const renderRightActions = (item) => (
-    <Pressable
-      onPress={() => handleRemoveItem(item)}
-      style={styles.rightAction}
-    >
-      <View style={styles.removeButton}>
-        <Text style={styles.text}>Remove</Text>
-      </View>
-    </Pressable>
-  );
-
-  const handleRemoveItem = async (item) => {
-    try {
-      await removeItemFromAsyncStorage(item.key);
-      const updatedData = await getData();
-      setData(updatedData);
-    } catch (error) {
-      console.error('Error removing item:', error);
-    }
+  const openFullDetails = (hash) => {
+    const url = `https://sepolia.basescan.org/tx/${hash}`; // Replace this with your desired URL
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
   return (
@@ -32,29 +14,24 @@ const TransactionList = ({ data, navigation, setData }) => {
       <ScrollView style={styles.container}>
         <List.Section>
           {data.map((item, index) => (
-            <Swipeable
-              key={index}
-              renderRightActions={() => renderRightActions(item)}
-            >
               <Pressable
-                onPress={() => navigation.navigate('Home', { label: item.key, publicKey: item.value })}
+                onPress={() => openFullDetails(item.hash)}
               >
                 <View style={styles.listItem}>
                   <List.Item
-                    title={`${item.key}`}
-                    description={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`}
+                    title={`${item.age}`}
+                    description={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
                   />
-                  <Image source={require('../assets/drag_handle.png')} style={styles.icon} />
+                  <Text>{item.method}</Text>
+                  <Text>{item.value}</Text>
                 </View>
               </Pressable>
-            </Swipeable>
           ))}
         </List.Section>
       </ScrollView>
     </Card>
   );
 };
-
 export default TransactionList;
 
 const styles = StyleSheet.create({
@@ -94,19 +71,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-  removeButton: {
+  addButton: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    backgroundColor: '#de0a26',
+    backgroundColor: '#ffffff',
     flexDirection: 'row',
     margin: 3,
     gap: 10,
     width: '95%',
     borderRadius: 15
   },
-  icon: {
-    width: 40,
-    height: 40,
-  }
 });

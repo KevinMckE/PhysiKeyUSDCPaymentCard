@@ -65,7 +65,7 @@ const Home = ({ route }) => {
             tabBarLabel: 'Settings',
             tabBarIcon: ({ focused }) => (
               <Image
-                source={require('../assets/icons/settings.png')}
+                source={require('../assets/icons/user_setting.png')}
                 style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
               />
             )

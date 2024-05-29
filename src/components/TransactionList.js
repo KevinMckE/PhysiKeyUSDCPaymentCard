@@ -44,42 +44,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 3,
     gap: 10,
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: '#7da1ff',
+    borderBottomColor: '#000',
   },
   card: {
     backgroundColor: '#ffffff',
     flex: 5,
     width: '90%',
   },
-  rightAction: {
-    backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    borderRadius: 15,
-  },
-  rightActionText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   text: {
     fontSize: 18,
     color: '#fff',
     fontWeight: 'bold',
-  },
-  addButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    backgroundColor: '#ffffff',
-    flexDirection: 'row',
-    margin: 3,
-    gap: 10,
-    width: '95%',
-    borderRadius: 15
-  },
+  }
 });

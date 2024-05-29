@@ -16,7 +16,7 @@ const AndroidScanModal = ({ visible, closeScanModal }) => {
         <View style={styles.bottomThirdContainer}>
           <Text variant='titleLarge' style={styles.text}>Ready to Scan</Text>
           <Image
-            source={require('../assets/nfc_icon.png')}
+            source={require('../assets/icons/nfc_icon.png')}
             resizeMode="contain"
             scanModalImage
             style={styles.scanModalImage}

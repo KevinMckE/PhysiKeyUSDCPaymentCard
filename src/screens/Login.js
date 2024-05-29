@@ -104,11 +104,6 @@ const Login = ({ navigation }) => {
                 style={styles.backgroundImageSecondary}
                 resizeMode="contain"
               />
-              <Image
-                source={require('../assets/tap_animation.gif')}
-                style={styles.centeredImage}
-                resizeMode="cover"
-              />
             </View>
           )}
         </View>

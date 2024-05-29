@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
@@ -232,11 +232,7 @@ const Pay = ({ navigation, route }) => {
   };
 
   return (
-
-    <ImageBackground
-      source={require('../assets/tech_pattern.jpg')}
-      style={{ flex: 1, width: '100%', height: '100%' }}
-    >
+    <>
       <View style={styles.container}>
         {loading && (
           <View style={styles.loadingContainer}>
@@ -280,7 +276,7 @@ const Pay = ({ navigation, route }) => {
           changeGifSource={null}
         />
       )}
-    </ImageBackground>
+    </>
   );
 }
 

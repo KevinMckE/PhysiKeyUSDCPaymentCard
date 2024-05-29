@@ -6,7 +6,7 @@ import { Text, Card } from 'react-native-paper';
 import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
 import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 import CurrencyCard from '../components/CurrencyCard';
-import TransactionList from '../components/TransactionList';
+import RecentTransactionList from '../components/RecentTransactionList';
 import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 import { trigger } from 'react-native-haptic-feedback';
@@ -59,7 +59,7 @@ const Account = ({ navigation, route }) => {
               <Text variant='titleLarge'>{label}</Text>
               <Text variant='titleLarge'>{truncatedKey}</Text>
               <Image
-                source={require('../assets/copy_icon.png')}
+                source={require('../assets/icons/copy_icon.png')}
                 style={styles.copyImage}
               />
             </View>
@@ -68,14 +68,14 @@ const Account = ({ navigation, route }) => {
         <CurrencyCard
           title="Balance"
           subtitle={balance}
-          imageSource={require('../assets/usdc_logo.png')}
+          imageSource={require('../assets/logos/usdc_logo.png')}
           navigation={navigation}
           publicKey={publicKey}
         />
       </View>
       <Text>Recent Activity</Text>
       <Text>View All</Text>
-      <TransactionList data={activity}  />
+      <RecentTransactionList data={activity}  />
 
       <View style={styles.mainButtons}>
         <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />

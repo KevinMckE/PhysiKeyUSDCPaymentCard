@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
-import { removeItemFromAsyncStorage, getData } from '../functions/asyncStorage';
+import { removeItemFromAsyncStorage, getData } from '../functions/core/asyncStorage';
 
 const AccountList = ({ data, navigation, setData }) => {
 

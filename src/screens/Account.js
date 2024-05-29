@@ -3,8 +3,8 @@ import { View, Image, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { Text, Card } from 'react-native-paper';
-import { getBaseUSDCActivity } from '../functions/getBaseUSDCActivity';
-import { getUSDCBalance } from '../functions/getBaseUSDC';
+import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
+import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 import CurrencyCard from '../components/CurrencyCard';
 import TransactionList from '../components/TransactionList';
 import CustomButton from '../components/CustomButton';
@@ -52,7 +52,7 @@ const Account = ({ navigation, route }) => {
 
   return (
     <>
-      <View style={styles.balanceContainer}>
+      <View>
         <Pressable onPress={handleCopyToClipboard}>
           <Card style={styles.card}>
             <View style={styles.keyContent}>

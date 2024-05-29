@@ -4,10 +4,10 @@ import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
-import { accountLogin, signAndSend } from '../functions/accountFunctions';
-import { scanSerialForKey } from '../functions/scanSerialForKey';
-import { getGasEstimate } from '../functions/getGasEstimate';
-import { cancelNfc } from '../functions/cancelNfcRequest';
+import { accountLogin, signAndSend } from '../functions/core/accountFunctions';
+import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { getGasEstimate } from '../functions/optimism/getGasEstimate';
+import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
 const Pay = ({ navigation, route }) => {

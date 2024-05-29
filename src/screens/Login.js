@@ -7,10 +7,10 @@ import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import SaveAccount from '../components/SaveAccountModal';
 import AccountList from '../components/AccountList';
-import { scanSerialForKey } from '../functions/scanSerialForKey';
-import { accountLogin } from '../functions/accountFunctions';
-import { cancelNfc } from '../functions/cancelNfcRequest';
-import { storeData, getData } from '../functions/asyncStorage';
+import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { accountLogin } from '../functions/core/accountFunctions';
+import { cancelNfc } from '../functions/core/cancelNfcRequest';
+import { storeData, getData } from '../functions/core/asyncStorage';
 import styles from '../styles/common';
 
 const Login = ({ navigation }) => {

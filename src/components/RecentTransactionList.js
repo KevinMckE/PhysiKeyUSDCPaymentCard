@@ -9,39 +9,44 @@ const TransactionList = ({ data }) => {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
-  const numBlankItems = Math.max(0, 4 - data.length);
+  const numBlankItems = Math.max(0, 3 - data.length);
   const blankItems = Array(numBlankItems).fill(null);
 
   return (
-    <Card style={styles.card}>
-      <ScrollView>
-        <List.Section>
-          {/* Iterate over the first 4 items in the data array */}
-          {data.slice(0, 4).map((item, index) => (
-            <Pressable
-              onPress={() => openFullDetails(item.hash)}
-              key={index}
-            >
-              <View style={styles.listItem}>
-                <List.Item
-                  title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
-                  description={`${item.age}`}
-                />
-                <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
-                  {item.method === 'IN' ? '+' : '-'}{Math.round(Number(item.value) * Math.pow(10, 18))}
-                </Text>
+    <>
+      <View style={styles.textContainer}>
+        <Text>Recent Activity</Text>
+        <Text onPress={() => { console.log('navigate')}}>{`View all >`}</Text>
+      </View>
+      <Card style={styles.card}>
+        <ScrollView>
+          <List.Section>
+            {data.slice(0, 3).map((item, index) => (
+              <Pressable
+                onPress={() => openFullDetails(item.hash)}
+                key={index}
+              >
+                <View style={[styles.listItem, index === 2 && styles.lastItem]}>
+                  <List.Item
+                    title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
+                    description={`${item.age}`}
+                  />
+                  <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
+                    {item.method === 'IN' ? '+' : '-'}{Math.round(Number(item.value) * Math.pow(10, 18))}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+            {/* Render blank list items if needed */}
+            {blankItems.map((_, index) => (
+              <View style={styles.listItem} key={`blank_${index}`}>
+                <List.Item title="..." description="..." />
               </View>
-            </Pressable>
-          ))}
-          {/* Render blank list items if needed */}
-          {blankItems.map((_, index) => (
-            <View style={styles.listItem} key={`blank_${index}`}>
-              <List.Item title="..." description="..." />
-            </View>
-          ))}
-        </List.Section>
-      </ScrollView>
-    </Card>
+            ))}
+          </List.Section>
+        </ScrollView>
+      </Card>
+    </>
   );
 };
 export default TransactionList;
@@ -60,6 +65,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000000',
     borderBottomWidth: 1,
   },
+  lastItem: {
+    borderBottomWidth: 0,
+  },
   card: {
     margin: 10,
     backgroundColor: '#ffffff',
@@ -69,6 +77,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     paddingRight: 20,
     color: '#000000',
+  },
+  textContainer: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 10,
+    marginRight: 10,
+    justifyContent: 'space-between',
   },
   greenText: {
     color: 'green',

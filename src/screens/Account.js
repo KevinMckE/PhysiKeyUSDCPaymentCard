@@ -52,31 +52,26 @@ const Account = ({ navigation, route }) => {
 
   return (
     <>
-      <View>
-        <Pressable onPress={handleCopyToClipboard}>
-          <Card style={styles.card}>
-            <View style={styles.keyContent}>
-              <Text variant='titleLarge'>{label}</Text>
-              <Text variant='titleLarge'>{truncatedKey}</Text>
-              <Image
-                source={require('../assets/icons/copy_icon.png')}
-                style={styles.copyImage}
-              />
-            </View>
-          </Card>
-        </Pressable>
-        <CurrencyCard
-          title="Balance"
-          subtitle={balance}
-          imageSource={require('../assets/logos/usdc_logo.png')}
-          navigation={navigation}
-          publicKey={publicKey}
-        />
-      </View>
-      <Text>Recent Activity</Text>
-      <Text>View All</Text>
-      <RecentTransactionList data={activity}  />
-
+      <Pressable onPress={handleCopyToClipboard}>
+        <Card style={styles.card}>
+          <View style={styles.keyContent}>
+            <Text variant='titleLarge'>{label}</Text>
+            <Text variant='titleLarge'>{truncatedKey}</Text>
+            <Image
+              source={require('../assets/icons/copy_icon.png')}
+              style={styles.copyImage}
+            />
+          </View>
+        </Card>
+      </Pressable>
+      <CurrencyCard
+        title="Balance"
+        subtitle={balance}
+        imageSource={require('../assets/logos/usdc_logo.png')}
+        navigation={navigation}
+        publicKey={publicKey}
+      />
+      <RecentTransactionList data={activity} />
       <View style={styles.mainButtons}>
         <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
         <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { publicKey }); }} />

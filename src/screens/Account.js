@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Pressable } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { Text, Card } from 'react-native-paper';
+import { Text, Card, List } from 'react-native-paper';
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
 import CustomButton from '../components/CustomButton';
@@ -19,15 +19,18 @@ const Account = ({ navigation, route }) => {
 
   return (
     <>
-    <View style={styles.textContainer}>
+      <View style={styles.textContainer}>
         <Text>Account Details</Text>
         <Text onPress={() => { navigation.navigate('History', { navigation, data }) }}>{`View All >`}</Text>
       </View>
       <Pressable onPress={handleCopyToClipboard}>
         <Card style={styles.card}>
           <View style={styles.keyContent}>
-            <Text variant='titleLarge'>{label}</Text>
-            <Text variant='titleLarge'>{truncatedKey}</Text>
+            <List.Item
+              title={label}
+              description={truncatedKey}
+            />
+
             <Image
               source={require('../assets/icons/copy_icon.png')}
               style={styles.copyImage}
@@ -44,7 +47,7 @@ const Account = ({ navigation, route }) => {
       />
       <View style={styles.textContainer}>
         <Text>Recent Activity</Text>
-        <Text onPress={() => { navigation.navigate('History' )}}>{`View all >`}</Text>
+        <Text onPress={() => { navigation.navigate('History') }}>{`View all >`}</Text>
       </View>
       <RecentTransactionList
         navigation={navigation}

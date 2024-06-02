@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   keyContent: {
+    flexDirection: 'row',
+
     justifyContent: 'space-between',
     padding: 10,
   },
@@ -87,8 +89,8 @@ const styles = StyleSheet.create({
     color: 'red',
   },
   copyImage: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
   },
   transferButton: {
     margin: 10,

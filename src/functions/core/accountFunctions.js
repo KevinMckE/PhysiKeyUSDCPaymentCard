@@ -73,7 +73,7 @@ export const sendSignedTransaction = async (signedTx) => {
   return txReceipt;
 };
 
-export const signAndSend = async (tag, password, amount, recipient, gas, sender) => {
+export const signAndSend = async (tag, password, amount, recipient) => {
   let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);
   const gasLimit = web3.utils.toHex(21000); 
   const gasPrice = web3.utils.toWei('100', 'gwei'); 

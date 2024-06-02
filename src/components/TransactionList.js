@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
 
-const TransactionList = ({ data }) => {
+const TransactionList = ({ navigation, data, limit }) => {
 
   const openFullDetails = (hash) => {
     const url = `https://sepolia.basescan.org/tx/${hash}`;
@@ -16,12 +16,12 @@ const TransactionList = ({ data }) => {
     <>
       <View style={styles.textContainer}>
         <Text>Recent Activity</Text>
-        <Text onPress={() => { console.log('navigate')}}>{`View all >`}</Text>
+        <Text onPress={() => { navigation.navigate('History', { navigation, data })}}>{`View all >`}</Text>
       </View>
       <Card style={styles.card}>
         <ScrollView>
           <List.Section>
-            {data.slice(0, 3).map((item, index) => (
+            {data.slice(0, limit).map((item, index) => (
               <Pressable
                 onPress={() => openFullDetails(item.hash)}
                 key={index}

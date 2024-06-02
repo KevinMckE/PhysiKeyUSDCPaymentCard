@@ -1,15 +1,11 @@
 import React from 'react';
-import { ImageBackground } from 'react-native';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import Home from '../screens/Home';
-import NftDetails from '../screens/NftDetails';
 import Pay from '../screens/Pay';
 import Request from '../screens/Request';
-import Buy from '../screens/Buy';
-import Sell from '../screens/Sell';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -53,27 +49,7 @@ const AppNavigator = () => {
               title: 'Request ETH',
             }}
           />
-          <Stack.Screen
-            name="NftDetails"
-            component={NftDetails}
-            options={{
-              title: 'NFT Details',
-            }}
-          />
-          <Stack.Screen
-            name="Buy"
-            component={Buy}
-            options={{
-              title: 'Buy',
-            }}
-          />
-          <Stack.Screen
-            name="Sell"
-            component={Sell}
-            options={{
-              title: 'Sell',
-            }}
-          />
+
         </Stack.Navigator>
       </NavigationContainer>
   );

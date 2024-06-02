@@ -38,14 +38,6 @@ export const groupDataByMonth = (data) => {
   }, {});
 };
 
-export const formatDataByMonth = (data) => {
-  const groupedData = groupDataByMonth(data);
-  const formattedData = [];
-  for (const monthYear in groupedData) {
-    formattedData.push({ monthYear, data: groupedData[monthYear] });
-  }
-  return formattedData;
-};
 
 export const groupDataByDay = (data) => {
   return data.reduce((acc, item) => {
@@ -62,13 +54,22 @@ export const groupDataByDay = (data) => {
   }, {});
 };
 
+export const formatDataByMonth = (data) => {
+  const groupedData = groupDataByMonth(data);
+  const formattedData = [];
+  for (const monthYear in groupedData) {
+    formattedData.push({ monthYear, data: groupedData[monthYear] });
+  }
+  return formattedData.reverse(); // Reverse the order of the array
+};
+
 export const formatDataByDay = (data) => {
   const groupedData = groupDataByDay(data);
   const formattedData = [];
   for (const dayMonthYear in groupedData) {
     formattedData.push({ dayMonthYear, data: groupedData[dayMonthYear] });
   }
-  return formattedData;
+  return formattedData.reverse(); // Reverse the order of the array
 };
 
 /** 

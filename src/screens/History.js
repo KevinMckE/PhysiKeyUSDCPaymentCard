@@ -6,7 +6,7 @@ import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSD
 
 const Tab = createMaterialTopTabNavigator();
 
-const TransactionListComponent = ({ formattedData, limit }) => {
+const MonthListComponent = ({ formattedData, limit }) => {
   return (
     <View>
       {formattedData.map((monthData, index) => (
@@ -19,6 +19,20 @@ const TransactionListComponent = ({ formattedData, limit }) => {
   );
 };
 
+const DayListComponent = ({ formattedData, limit }) => {
+  return (
+    <View>
+      {formattedData.map((dayData, index) => (
+        <View key={index}>
+          <Text>{dayData.dayMonthYear}</Text>
+          <TransactionList data={dayData.data} limit={limit} />
+        </View>
+      ))}
+    </View>
+  );
+};
+
+
 const History = ({ route }) => {
   const { activity } = route.params;
   const [dayData, setDayData] = useState([]);
@@ -27,6 +41,9 @@ const History = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       const day = await Promise.resolve(formatDataByDay(activity));
+      console.log(day
+
+      )
       const month = await Promise.resolve(formatDataByMonth(activity));
       setDayData(day);
       setMonthData(month);
@@ -39,11 +56,11 @@ const History = ({ route }) => {
     <Tab.Navigator>
       <Tab.Screen
         name="Month"
-        component={() => <TransactionListComponent formattedData={monthData} limit={1000} />}
+        component={() => <MonthListComponent formattedData={monthData} limit={1000} />}
       />
       <Tab.Screen
         name="Day"
-        component={() => <TransactionListComponent formattedData={dayData} limit={1000} />}
+        component={() => <DayListComponent formattedData={dayData} limit={1000} />}
       />
     </Tab.Navigator>
   </View>

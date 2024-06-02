@@ -60,7 +60,7 @@ export const formatDataByMonth = (data) => {
   for (const monthYear in groupedData) {
     formattedData.push({ monthYear, data: groupedData[monthYear] });
   }
-  return formattedData.reverse(); // Reverse the order of the array
+  return formattedData.reverse(); 
 };
 
 export const formatDataByDay = (data) => {
@@ -69,7 +69,7 @@ export const formatDataByDay = (data) => {
   for (const dayMonthYear in groupedData) {
     formattedData.push({ dayMonthYear, data: groupedData[dayMonthYear] });
   }
-  return formattedData.reverse(); // Reverse the order of the array
+  return formattedData.reverse(); 
 };
 
 /** 

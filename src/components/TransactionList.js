@@ -19,7 +19,7 @@ const TransactionList = ({ data, limit }) => {
                 onPress={() => openFullDetails(item.hash)}
                 key={index}
               >
-                <View style={[styles.listItem, index === 2 && styles.lastItem]}>
+                <View style={[styles.listItem, (index === data.length - 1 && styles.lastItem) || (limit === 3 && index === 2 && styles.lastItem)]}>
                   <List.Item
                     title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
                     description={`${item.age}`}
@@ -30,13 +30,14 @@ const TransactionList = ({ data, limit }) => {
                 </View>
               </Pressable>
             ))}
-  
+
           </List.Section>
         </ScrollView>
       </Card>
     </>
   );
 };
+
 export default TransactionList;
 
 const styles = StyleSheet.create({

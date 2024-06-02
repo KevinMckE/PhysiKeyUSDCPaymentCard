@@ -2,22 +2,15 @@ import React from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
 
-const TransactionList = ({ navigation, data, limit }) => {
+const TransactionList = ({ data, limit }) => {
 
   const openFullDetails = (hash) => {
     const url = `https://sepolia.basescan.org/tx/${hash}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
-  const numBlankItems = Math.max(0, 3 - data.length);
-  const blankItems = Array(numBlankItems).fill(null);
-
   return (
     <>
-      <View style={styles.textContainer}>
-        <Text>Recent Activity</Text>
-        <Text onPress={() => { navigation.navigate('History', { navigation, data })}}>{`View all >`}</Text>
-      </View>
       <Card style={styles.card}>
         <ScrollView>
           <List.Section>
@@ -37,12 +30,7 @@ const TransactionList = ({ navigation, data, limit }) => {
                 </View>
               </Pressable>
             ))}
-            {/* Render blank list items if needed */}
-            {blankItems.map((_, index) => (
-              <View style={styles.listItem} key={`blank_${index}`}>
-                <List.Item title="..." description="..." />
-              </View>
-            ))}
+  
           </List.Section>
         </ScrollView>
       </Card>
@@ -77,13 +65,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     paddingRight: 20,
     color: '#000000',
-  },
-  textContainer: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    justifyContent: 'space-between',
   },
   greenText: {
     color: 'green',

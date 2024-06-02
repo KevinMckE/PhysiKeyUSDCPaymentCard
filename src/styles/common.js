@@ -146,6 +146,13 @@ const styles = StyleSheet.create({
   inactiveTabIcon: {
     tintColor: '#808080', 
   },
+  textContainer: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    marginTop: 10,
+    marginRight: 10,
+    justifyContent: 'space-between',
+  },
 });
 
 export default styles;

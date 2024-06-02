@@ -9,7 +9,7 @@ import styles from '../styles/common';
 import { trigger } from 'react-native-haptic-feedback';
 
 const Account = ({ navigation, route }) => {
-  const { label, publicKey, balance, activity } = route.params; // Accessing parameters from route
+  const { label, publicKey, balance, activity } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
 
   const handleCopyToClipboard = () => {
@@ -19,6 +19,10 @@ const Account = ({ navigation, route }) => {
 
   return (
     <>
+    <View style={styles.textContainer}>
+        <Text>Account Details</Text>
+        <Text onPress={() => { navigation.navigate('History', { navigation, data }) }}>{`View All >`}</Text>
+      </View>
       <Pressable onPress={handleCopyToClipboard}>
         <Card style={styles.card}>
           <View style={styles.keyContent}>
@@ -38,9 +42,13 @@ const Account = ({ navigation, route }) => {
         navigation={navigation}
         publicKey={publicKey}
       />
+      <View style={styles.textContainer}>
+        <Text>Recent Activity</Text>
+        <Text onPress={() => { navigation.navigate('History' )}}>{`View all >`}</Text>
+      </View>
       <RecentTransactionList
         navigation={navigation}
-        data={activity} 
+        data={activity}
         limit={3}
       />
       <View style={styles.mainButtons}>

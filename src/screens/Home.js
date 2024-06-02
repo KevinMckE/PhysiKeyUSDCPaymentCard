@@ -14,9 +14,9 @@ const Home = ({ route }) => {
   const { label, publicKey } = route.params;
   const [balance, setBalance] = useState('');
   const [activity, setActivity] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true); 
   const isFocused = useIsFocused();
-
+  
   useEffect(() => {
     let isMounted = true;
     const fetchBalance = async () => {
@@ -44,7 +44,7 @@ const Home = ({ route }) => {
   }, [publicKey, isFocused]);
 
    if (isLoading) {
-    return <Text>OOF</Text>; 
+    return <Text>Loading...</Text>; 
   }
 
   return (

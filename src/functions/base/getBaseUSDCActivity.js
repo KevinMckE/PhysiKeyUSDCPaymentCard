@@ -24,6 +24,53 @@ export const getBaseUSDCActivity = async (walletAddress) => {
   }
 };
 
+export const groupDataByMonth = (data) => {
+  return data.reduce((acc, item) => {
+    const date = new Date(item.age);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const monthYear = `${month}/${year}`;
+    if (!acc[monthYear]) {
+      acc[monthYear] = [];
+    }
+    acc[monthYear].push(item);
+    return acc;
+  }, {});
+};
+
+export const formatDataByMonth = (data) => {
+  const groupedData = groupDataByMonth(data);
+  const formattedData = [];
+  for (const monthYear in groupedData) {
+    formattedData.push({ monthYear, data: groupedData[monthYear] });
+  }
+  return formattedData;
+};
+
+export const groupDataByDay = (data) => {
+  return data.reduce((acc, item) => {
+    const date = new Date(item.age);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const dayMonthYear = `${day}/${month}/${year}`;
+    if (!acc[dayMonthYear]) {
+      acc[dayMonthYear] = [];
+    }
+    acc[dayMonthYear].push(item);
+    return acc;
+  }, {});
+};
+
+export const formatDataByDay = (data) => {
+  const groupedData = groupDataByDay(data);
+  const formattedData = [];
+  for (const dayMonthYear in groupedData) {
+    formattedData.push({ dayMonthYear, data: groupedData[dayMonthYear] });
+  }
+  return formattedData;
+};
+
 /** 
 async function transferUSDC(senderPrivateKey, recipientAddress, amount) {
   try {

@@ -32,7 +32,6 @@ const DayListComponent = ({ formattedData, limit }) => {
   );
 };
 
-
 const History = ({ route }) => {
   const { activity } = route.params;
   const [dayData, setDayData] = useState([]);
@@ -51,21 +50,29 @@ const History = ({ route }) => {
     fetchData();
   }, [activity]);
 
+  const RenderMonthListComponent = () => <MonthListComponent formattedData={monthData} limit={1000} />;
+  const RenderDayListComponent = () => <DayListComponent formattedData={dayData} limit={1000} />;
+
   return (
     <View style={{ flex: 1 }}>
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Month"
-        component={() => <MonthListComponent formattedData={monthData} limit={1000} />}
-      />
-      <Tab.Screen
-        name="Day"
-        component={() => <DayListComponent formattedData={dayData} limit={1000} />}
-      />
-    </Tab.Navigator>
-  </View>
+      <Tab.Navigator
+       tabBarOptions={{
+        indicatorStyle: { backgroundColor: '#7FA324' } 
+      }}
+      >
+        <Tab.Screen
+          name="Month"
+          component={RenderMonthListComponent}
+        />
+        <Tab.Screen
+          name="Day"
+          component={RenderDayListComponent}
+        />
+      </Tab.Navigator>
+    </View>
 
-);};
+  );
+};
 
 export default History;
 

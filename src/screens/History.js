@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import TransactionList from '../components/TransactionList';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
+import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -11,7 +12,7 @@ const MonthListComponent = ({ formattedData, limit }) => {
     <View>
       {formattedData.map((monthData, index) => (
         <View key={index}>
-          <Text>{monthData.monthYear}</Text>
+          <Text style={styles.textContainer}>{monthData.monthYear}</Text>
           <TransactionList data={monthData.data} limit={limit} />
         </View>
       ))}
@@ -24,7 +25,7 @@ const DayListComponent = ({ formattedData, limit }) => {
     <View>
       {formattedData.map((dayData, index) => (
         <View key={index}>
-          <Text>{dayData.dayMonthYear}</Text>
+          <Text style={styles.textContainer}>{dayData.dayMonthYear}</Text>
           <TransactionList data={dayData.data} limit={limit} />
         </View>
       ))}

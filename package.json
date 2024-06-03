@@ -13,6 +13,7 @@
     "postinstallbtc": "rn-nodeify --install stream,buffer,events,assert --hack"
   },
   "dependencies": {
+    "@babel/runtime-corejs2": "^7.24.5",
     "@bitcoinerlab/secp256k1": "^1.0.5",
     "@moonpay/react-native-moonpay-sdk": "^0.8.0",
     "@react-native-async-storage/async-storage": "^1.23.1",
@@ -60,7 +61,6 @@
     "react-native-safe-area-context": "^4.5.3",
     "react-native-screens": "^3.31.1",
     "react-native-swiper": "^1.6.0",
-    "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-native-webview": "^13.10.0",
@@ -75,6 +75,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-runtime": "^7.24.3",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^3.2.0",

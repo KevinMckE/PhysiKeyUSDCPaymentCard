@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
 import { removeItemFromAsyncStorage, getData } from '../functions/core/asyncStorage';
 
 const AccountList = ({ data, navigation, setData }) => {
-  
-  const renderRightActions = (item) => {
+  const swipeableRefs = useRef([]);
+
+  const renderRightActions = (item, index) => {
     return (
       <Pressable
-        onPress={() => handleRemoveItem(item)}
+        onPress={() => handleRemoveItem(item, index)}
         style={[styles.rightAction, { transform: [{ translateX: 0 }] }]}
       >
         <View style={styles.removeButton}>
@@ -19,12 +20,14 @@ const AccountList = ({ data, navigation, setData }) => {
     );
   };
 
-  // Function to handle removing an item
-  const handleRemoveItem = async (item) => {
+  const handleRemoveItem = async (item, index) => {
     try {
       await removeItemFromAsyncStorage(item.key);
       const updatedData = await getData();
       setData(updatedData);
+      if (swipeableRefs.current[index]) {
+        swipeableRefs.current[index].close();
+      }
     } catch (error) {
       console.error('Error removing item:', error);
     }
@@ -38,7 +41,8 @@ const AccountList = ({ data, navigation, setData }) => {
             {data.map((item, index) => (
               <Swipeable
                 key={index}
-                renderRightActions={() => renderRightActions(item)}
+                ref={(ref) => (swipeableRefs.current[index] = ref)}
+                renderRightActions={() => renderRightActions(item, index)}
                 friction={1}
                 tension={50}
                 rightThreshold={10}

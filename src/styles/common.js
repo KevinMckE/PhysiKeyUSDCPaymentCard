@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     marginTop: 10,
-    width: 300,
-    height: 60,
+    width: 250,
+    height: 50,
     backgroundColor: '#ffffff',
   },
   loadingContainer: {
@@ -144,6 +144,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 10,
     justifyContent: 'space-between',
+  },
+  headerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 15, 
+  },
+  headerButtonText: {
+    fontSize: 16, 
+    color: '#000',
+  },
+  headerButtonArrow: {
+    fontSize: 22,
+    color: '#000', 
   },
 });
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Pressable, ImageBackground } from 'react-native';
-//import Clipboard from '@react-native-clipboard/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { Text, Card, List } from 'react-native-paper';
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
@@ -13,11 +13,8 @@ const Account = ({ navigation, route }) => {
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
 
   const handleCopyToClipboard = () => {
-    console.log('test')
-    /** 
     trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
     Clipboard.setString(publicKey);
-    */
   };
 
   return (
@@ -28,7 +25,7 @@ const Account = ({ navigation, route }) => {
       >
         <View style={styles.textContainer}>
           <Text>Account Details</Text>
-          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation, data }) }}>{`View All >`}</Text>
+          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
         </View>
         <Pressable onPress={handleCopyToClipboard}>
           <Card style={styles.card}>

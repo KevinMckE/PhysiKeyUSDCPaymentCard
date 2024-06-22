@@ -13,8 +13,6 @@ import styles from '../styles/common';
 
 const AddAccount = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
-  const [account, setAccount] = useState('');
-  const [publicKey, setPublicKey] = useState('');
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [label, setLabel] = useState('');
@@ -60,8 +58,6 @@ const AddAccount = ({ navigation, route }) => {
   const handleLogin = async (tag, password, name) => {
     try {
       let account = await accountLogin(tag, password);
-      setPublicKey(account.address);
-      setAccount(account);
       await storeData(name, account.address);
       navigation.navigate('Home', { label: name, publicKey: account.address, account });
     } catch (error) {

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Image, Platform } from 'react-native';
+import { View, Image, Platform, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
 //
@@ -56,41 +56,46 @@ const Login = ({ navigation }) => {
 
   return (
     <>
-      {dataList.length > 0 ? (
-        <>
-          <View style={styles.topContainer}>
-            <Text variant='titleLarge'>Select or add Account.</Text>
-          </View>
-          <View style={styles.listContainer}>
-            <AccountList data={dataList} navigation={navigation} setData={setDataList} />
-          </View>
-        </>
-      ) : (
-        <>
-          <View style={styles.topContainer}>
-            <Text variant='titleLarge'>Add an account to continue.</Text>
-          </View>
-          <View style={styles.listContainer}>
-            <Image
-              source={require('../assets/regen_leaf.png')}
-              style={styles.imageContainer}
-              resizeMode="contain"
-            />
-          </View>
-        </>
-      )}
+      <ImageBackground
+        source={require('../assets/regen_card_background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        {dataList.length > 0 ? (
+          <>
+            <View style={styles.topContainer}>
+              <Text variant='titleLarge'>Select or add Account.</Text>
+            </View>
+            <View style={styles.listContainer}>
+              <AccountList data={dataList} navigation={navigation} setData={setDataList} />
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={styles.topContainer}>
+              <Text variant='titleLarge'>Add an account to continue.</Text>
+            </View>
+            <View style={styles.listContainer}>
+              <Image
+                source={require('../assets/regen_leaf.png')}
+                style={styles.imageContainer}
+                resizeMode="contain"
+              />
+            </View>
+          </>
+        )}
 
-      <View style={styles.bottomContainer}>
-        <CustomButton text='Add Account' type='primary' size='large' onPress={handleScanCardPress} />
-        <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
-      </View>
+        <View style={styles.bottomContainer}>
+          <CustomButton text='Add Account' type='primary' size='large' onPress={handleScanCardPress} />
+          <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
+        </View>
 
-      {Platform.OS === 'android' && (
-        <AndroidScanModal
-          visible={scanModal}
-          closeScanModal={closeScanModal}
-        />
-      )}
+        {Platform.OS === 'android' && (
+          <AndroidScanModal
+            visible={scanModal}
+            closeScanModal={closeScanModal}
+          />
+        )}
+      </ImageBackground>
     </>
   );
 };

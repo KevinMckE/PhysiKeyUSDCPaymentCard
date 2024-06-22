@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Pressable } from 'react-native';
+import { View, Image, Pressable, ImageBackground } from 'react-native';
 //import Clipboard from '@react-native-clipboard/clipboard';
 import { Text, Card, List } from 'react-native-paper';
 import CurrencyCard from '../components/CurrencyCard';
@@ -22,44 +22,49 @@ const Account = ({ navigation, route }) => {
 
   return (
     <>
-      <View style={styles.textContainer}>
-        <Text>Account Details</Text>
-        <Text onPress={() => { navigation.navigate('AccountSettings', { navigation, data }) }}>{`View All >`}</Text>
-      </View>
-      <Pressable onPress={handleCopyToClipboard}>
-        <Card style={styles.card}>
-          <View style={styles.keyContent}>
-            <List.Item
-              title={label}
-              description={truncatedKey}
-            />
-            <Image
-              source={require('../assets/icons/copy_icon.png')}
-              style={styles.copyImage}
-            />
-          </View>
-        </Card>
-      </Pressable>
-      <CurrencyCard
-        title="Balance"
-        subtitle={balance}
-        imageSource={require('../assets/logos/usdc_logo.png')}
-        navigation={navigation}
-        publicKey={publicKey}
-      />
-      <View style={styles.textContainer}>
-        <Text>Recent Activity</Text>
-        <Text onPress={() => { navigation.navigate('History') }}>{`View all >`}</Text>
-      </View>
-      <RecentTransactionList
-        navigation={navigation}
-        data={activity}
-        limit={3}
-      />
-      <View style={styles.mainButtons}>
-        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { account }); }} />
-        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { account }); }} />
-      </View>
+      <ImageBackground
+        source={require('../assets/regen_card_background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={styles.textContainer}>
+          <Text>Account Details</Text>
+          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation, data }) }}>{`View All >`}</Text>
+        </View>
+        <Pressable onPress={handleCopyToClipboard}>
+          <Card style={styles.card}>
+            <View style={styles.keyContent}>
+              <List.Item
+                title={label}
+                description={truncatedKey}
+              />
+              <Image
+                source={require('../assets/icons/copy_icon.png')}
+                style={styles.copyImage}
+              />
+            </View>
+          </Card>
+        </Pressable>
+        <CurrencyCard
+          title="Balance"
+          subtitle={balance}
+          imageSource={require('../assets/logos/usdc_logo.png')}
+          navigation={navigation}
+          publicKey={publicKey}
+        />
+        <View style={styles.textContainer}>
+          <Text>Recent Activity</Text>
+          <Text onPress={() => { navigation.navigate('History') }}>{`View all >`}</Text>
+        </View>
+        <RecentTransactionList
+          navigation={navigation}
+          data={activity}
+          limit={3}
+        />
+        <View style={styles.mainButtons}>
+          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { account }); }} />
+          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { account }); }} />
+        </View>
+      </ImageBackground>
     </>
   );
 }

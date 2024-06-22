@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
 
@@ -54,23 +54,29 @@ const History = ({ route }) => {
   const RenderDayListComponent = () => <DayListComponent formattedData={dayData} limit={1000} />;
 
   return (
-    <View style={{ flex: 1 }}>
-      <Tab.Navigator
-       screenOptions={{
-        tabBarIndicatorStyle: { backgroundColor: '#7FA324' } 
-      }}
+    <>
+      <ImageBackground
+        source={require('../assets/regen_card_background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <Tab.Screen
-          name="Month"
-          component={RenderMonthListComponent}
-        />
-        <Tab.Screen
-          name="Day"
-          component={RenderDayListComponent}
-        />
-      </Tab.Navigator>
-    </View>
-
+        <View style={{ flex: 1 }}>
+          <Tab.Navigator
+            screenOptions={{
+              tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
+            }}
+          >
+            <Tab.Screen
+              name="Month"
+              component={RenderMonthListComponent}
+            />
+            <Tab.Screen
+              name="Day"
+              component={RenderDayListComponent}
+            />
+          </Tab.Navigator>
+        </View>
+      </ImageBackground >
+    </>
   );
 };
 

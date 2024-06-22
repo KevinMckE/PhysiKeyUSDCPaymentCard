@@ -104,6 +104,7 @@ const Home = ({ route }) => {
         <Tab.Screen
           name="Fund"
           component={Fund}
+          initialParams={{ publicKey }}
           options={{
             tabBarLabel: 'Fund',
             tabBarIcon: ({ focused }) => (

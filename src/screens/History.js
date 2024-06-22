@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import TransactionList from '../components/TransactionList';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
+
+import TransactionList from '../components/TransactionList';
+
 import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
@@ -55,7 +57,7 @@ const History = ({ route }) => {
     <View style={{ flex: 1 }}>
       <Tab.Navigator
        screenOptions={{
-        indicatorStyle: { backgroundColor: '#7FA324' } 
+        tabBarIndicatorStyle: { backgroundColor: '#7FA324' } 
       }}
       >
         <Tab.Screen

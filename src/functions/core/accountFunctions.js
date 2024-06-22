@@ -137,31 +137,6 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
   }
 };
 
-export const sendSignedTransaction = async (signedTx) => {
-  const txReceipt = await web3.eth.sendSignedTransaction(signedTx);
-  console.log(txReceipt);
-  return txReceipt;
-};
-
-export const signAndSend = async (tag, password, amount, recipient) => {
-  let { publicKey, encryptedPrivateKey, oneTimeEncryptionPW } = await accountLogin(tag, password);
-  const gasLimit = web3.utils.toHex(21000);
-  const gasPrice = web3.utils.toWei('100', 'gwei');
-  const nonce = await web3.eth.getTransactionCount(publicKey);
-  const amountInWei = web3.utils.toWei(amount, 'ether');
-  const txObject = {
-    from: publicKey,
-    to: recipient,
-    value: amountInWei,
-    gas: gasLimit,
-    gasPrice: gasPrice,
-    nonce: nonce
-  };
-  const signedTx = await web3.eth.accounts.signTransaction(txObject, CryptoJS.AES.decrypt(encryptedPrivateKey, oneTimeEncryptionPW).toString(CryptoJS.enc.Utf8));
-  const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-  console.log(txReceipt)
-  return txReceipt;
-};
 
 
 

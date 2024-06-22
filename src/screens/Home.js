@@ -21,7 +21,6 @@ const Home = ({ route }) => {
   const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const isFocused = useIsFocused();
-  console.log(account)
   useEffect(() => {
     let isMounted = true;
     const fetchBalance = async () => {

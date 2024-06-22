@@ -54,7 +54,7 @@ const History = ({ route }) => {
   return (
     <View style={{ flex: 1 }}>
       <Tab.Navigator
-       tabBarOptions={{
+       screenOptions={{
         indicatorStyle: { backgroundColor: '#7FA324' } 
       }}
       >

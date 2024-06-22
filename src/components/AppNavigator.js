@@ -6,7 +6,7 @@ import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
 import Home from '../screens/Home';
-import Pay from '../screens/Pay';
+import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
 import styles from '../styles/common';
@@ -54,8 +54,8 @@ const AppNavigator = () => {
           })}
         />
         <Stack.Screen
-          name="Pay"
-          component={Pay}
+          name="Send"
+          component={Send}
           options={{
             title: 'Send USDC',
           }}

@@ -9,7 +9,7 @@ import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
-const Pay = ({ navigation, route }) => {
+const Send = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
   const [gas, setGas] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,6 +17,7 @@ const Pay = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
+  const [recipTag, setRecipTag] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
   const [amount, setAmount] = useState('');
@@ -24,7 +25,7 @@ const Pay = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { account } = route.params;
+  const { account, publicKey } = route.params;
 
   const handleTransferPress = () => {
     navigation.navigate('Home', { account, publicKey });
@@ -66,7 +67,7 @@ const Pay = ({ navigation, route }) => {
     try {
       let tag = await scanSerialForKey();
       if (tag) {
-        setTagID(tag);
+        setRecipTag(tag);
         setModalVisible(true);
         setScanModal(false);
       }
@@ -98,11 +99,11 @@ const Pay = ({ navigation, route }) => {
     fetchSign();
   };
 
-  const handlePasswords = async (password) => {
+  const handleRecipPassword = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
     try {
-      let account = await accountLogin(tagID, password);
+      let account = await accountLogin(recipTag, password);
       setRecipientKey(account.address);
     } catch (error) {
       console.error('Cannot complete handlePasswords: ', error);
@@ -116,6 +117,7 @@ const Pay = ({ navigation, route }) => {
     try {
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
+      console.log(receipt);
       navigation.navigate('Account', { account });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
@@ -165,7 +167,7 @@ const Pay = ({ navigation, route }) => {
       case 2:
         return (
           <View style={styles.inputContainer}>
-              <Text style={styles.textMargin} variant='titleLarge'>(3/3) Review Details.  The recipient will scan your card to confirm the transaction.</Text>
+              <Text style={styles.textMargin} variant='titleLarge'>(3/3) Review Details.  You will scan your card to confirm the transaction.</Text>
               <Text style={styles.textMargin} variant='titleMedium'>You are is sending {amount} USDC to:</Text>
               <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
               <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is {`0%`}</Text>
@@ -215,7 +217,7 @@ const Pay = ({ navigation, route }) => {
           </View>
         )}
         <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts. </Text>
+          <Text variant='titleLarge'>Follow the prompts to transfer USDC to another wallet.</Text>
         </View>
         <View style={styles.inputContainer}>
           {renderStep()}
@@ -231,7 +233,7 @@ const Pay = ({ navigation, route }) => {
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
-        handlePasswords={handlePasswords}
+        handlePasswords={handleRecipPassword}
         title='Enter the recipients password.'
         changeGifSource={null}
       />
@@ -255,4 +257,4 @@ const Pay = ({ navigation, route }) => {
   );
 }
 
-export default Pay;
+export default Send;

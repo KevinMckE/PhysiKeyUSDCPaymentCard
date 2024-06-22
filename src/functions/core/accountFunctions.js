@@ -63,7 +63,7 @@ export const accountLogin = async (tag, password) => {
     let publicKey = decryptedAccount.address;
     //console.log('encryptedPrivateKey: ', encryptedPrivateKey);
     //console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
-    console.log('EOA publicKey: ', publicKey);
+    //console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
       transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
@@ -83,10 +83,10 @@ export const accountLogin = async (tag, password) => {
 };
 
 export const transferUSDC = async (tag, password, amount, recipient) => {
+  let simpleAccount = await accountLogin(tag, password);
+
   try {
-
-    let simpleAccount = await accountLogin(tag, password);
-
+    const amountInWei = BigInt(amount) * BigInt(10 ** 6);
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,
       transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
@@ -105,14 +105,13 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
     const recipientData = encodeFunctionData({
       abi: abi,
       functionName: 'transfer',
-      args: [recipient, amount],
+      args: [recipient, amountInWei],
     });
 
-    //our wallet, 10 percent fee or whatever we awnt here
     const feeData = encodeFunctionData({
       abi: abi,
       functionName: 'transfer',
-      args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0],
+      args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n],
     });
 
     const txHash = await smartAccountClient.sendTransactions({
@@ -131,8 +130,10 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
         },
       ]
     });
+    console.log(txHash)
     return txHash;
   } catch (error) {
+    console.error('Error during USDC transfer:', error);
     throw error;
   }
 };

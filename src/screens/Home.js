@@ -38,13 +38,9 @@ const Home = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    let isMounted = true;
     if (isFocused) {
       fetchBalance();
     }
-    return () => {
-      isMounted = false;
-    };
   }, [isFocused, navigation]);
 
   if (isLoading) {

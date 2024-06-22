@@ -118,9 +118,11 @@ const Send = ({ navigation, route }) => {
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
       console.log(receipt);
-      navigation.navigate('Account', { account });
+      navigation.navigate('Home', { publicKey, label });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
+      setLoading(false);
+
     } finally {
       setLoading(false);
     }
@@ -143,6 +145,9 @@ const Send = ({ navigation, route }) => {
             />
             <Text style={styles.textMargin} variant='titleMedium'>or</Text>
             <CustomButton text="Scan Recipient's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
           </View>
         );
       case 1:
@@ -172,7 +177,9 @@ const Send = ({ navigation, route }) => {
               <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
               <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is {`0%`}</Text>
               <Text style={styles.textMargin} variant='titleMedium'>Total transaction amount is {amount} USDC</Text>
-        
+              {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
           </View>
         );
       default:

@@ -75,6 +75,7 @@ const Request = ({ navigation, route }) => {
     } catch (error) {
       setErrorMessage(error.message); // Set the error message to state variable
       console.error('Cannot complete handlePasswords: ', error);
+      setLoading(false);
     }
   };
 
@@ -107,6 +108,9 @@ const Request = ({ navigation, route }) => {
             <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
             <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+            {errorMessage ? (
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            ) : null}
           </View>
         );
       default:

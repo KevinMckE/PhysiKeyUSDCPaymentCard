@@ -14,22 +14,28 @@ const TransactionList = ({ data, limit }) => {
       <Card style={styles.card}>
         <ScrollView>
           <List.Section>
-            {data.slice(0, limit).map((item, index) => (
-              <Pressable
-                onPress={() => openFullDetails(item.hash)}
-                key={index}
-              >
-                <View style={[styles.listItem, (index === data.length - 1 && styles.lastItem) || (limit === 3 && index === 2 && styles.lastItem)]}>
-                  <List.Item
-                    title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
-                    description={`${item.age}`}
-                  />
-                  <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
-                    {item.method === 'IN' ? '+' : '-'}{Math.round(Number(item.value) * Math.pow(10, 18))}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
+            {data.length === 0 ? (
+              <View style={styles.placeholder}>
+                <Text style={styles.placeholderText}>Woah, no activity yet!</Text>
+              </View>
+            ) : (
+              data.slice(0, limit).map((item, index) => (
+                <Pressable
+                  onPress={() => openFullDetails(item.hash)}
+                  key={index}
+                >
+                  <View style={[styles.listItem, (index === data.length - 1 && styles.lastItem) || (limit === 3 && index === 2 && styles.lastItem)]}>
+                    <List.Item
+                      title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
+                      description={`${item.age}`}
+                    />
+                    <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
+                      {item.method === 'IN' ? '+' : '-'}{Math.round(Number(item.value) * Math.pow(10, 18))}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))
+            )}
           </List.Section>
         </ScrollView>
       </Card>
@@ -66,5 +72,14 @@ const styles = StyleSheet.create({
   },
   redText: {
     color: 'red',
+  },
+  placeholder: {
+    justifyContent: 'center',
+    margin: 10,
+    height: 50, // Adjust the height as needed
+  },
+  placeholderText: {
+    fontSize: 18,
+    color: '#000000',
   },
 });

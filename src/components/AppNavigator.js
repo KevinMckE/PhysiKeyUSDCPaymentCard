@@ -7,6 +7,7 @@ import AddAccount from '../screens/AddAccount';
 import Home from '../screens/Home';
 import Pay from '../screens/Pay';
 import Request from '../screens/Request';
+import AccountSettings from '../screens/AccountSettings';
 
 const Stack = createStackNavigator();
 const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: 'transparent', }, };
@@ -47,14 +48,21 @@ const AppNavigator = () => {
             name="Pay"
             component={Pay}
             options={{
-              title: 'Send ETH',
+              title: 'Send USDC',
             }}
           />
           <Stack.Screen
             name="Request"
             component={Request}
             options={{
-              title: 'Request ETH',
+              title: 'Request USDC',
+            }}
+          />
+          <Stack.Screen
+            name="AccountSettings"
+            component={AccountSettings}
+            options={{
+              title: 'Account Settings',
             }}
           />
 

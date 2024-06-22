@@ -7,9 +7,9 @@ import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
 import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 //
 import Account from './Account';
-import Buy from './Buy';
+import Fund from './Fund';
 import History from './History';
-
+import Contacts from './Contacts';
 
 import styles from '../styles/common';
 
@@ -75,19 +75,6 @@ const Home = ({ route }) => {
           }}
         />
         <Tab.Screen
-          name="Contacts"
-          component={Buy}
-          options={{
-            tabBarLabel: 'Contacts',
-            tabBarIcon: ({ focused }) => (
-              <Image
-                source={require('../assets/icons/contacts.png')}
-                style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
           name="History"
           component={History}
           initialParams={{ label, publicKey, balance, activity }}
@@ -102,13 +89,26 @@ const Home = ({ route }) => {
           }}
         />
         <Tab.Screen
-          name="Settings"
-          component={Buy}
+          name="Contacts"
+          component={Contacts}
           options={{
-            tabBarLabel: 'Settings',
+            tabBarLabel: 'Contacts',
             tabBarIcon: ({ focused }) => (
               <Image
-                source={require('../assets/icons/user_setting.png')}
+                source={require('../assets/icons/contacts.png')}
+                style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="Fund"
+          component={Fund}
+          options={{
+            tabBarLabel: 'Fund',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/icons/fund.png')}
                 style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
               />
             )

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../styles/common';
 import { useMoonPaySdk } from '@moonpay/react-native-moonpay-sdk';
 
-const Buy = () => {
+const Fund = () => {
   
   const { MoonPayWebViewComponent } = useMoonPaySdk({
     sdkConfig: {
@@ -21,4 +21,4 @@ const Buy = () => {
   );
 }
 
-export default Buy;
+export default Fund;

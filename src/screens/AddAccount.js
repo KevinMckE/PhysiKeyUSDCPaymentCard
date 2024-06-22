@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, KeyboardAvoidingView } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 //
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
@@ -8,7 +8,7 @@ import PasswordInput from '../components/PasswordInput';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { accountLogin } from '../functions/core/accountFunctions';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
-import { storeData, } from '../functions/core/asyncStorage';
+import { storeData } from '../functions/core/asyncStorage';
 import styles from '../styles/common';
 
 const AddAccount = ({ navigation, route }) => {
@@ -17,7 +17,7 @@ const AddAccount = ({ navigation, route }) => {
   const [publicKey, setPublicKey] = useState('');
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
-  const [name, setName] = useState('');
+  const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
 
   const { tag } = route.params;
@@ -25,28 +25,27 @@ const AddAccount = ({ navigation, route }) => {
   const handleNextStep = () => {
     switch (step) {
       case 0:
-        if (password.trim() !== '') {
-          if (password && confirmPassword) {
+        if (password && password.trim() !== '') {
+          if (confirmPassword && confirmPassword.trim() !== '') {
             if (password === confirmPassword) {
               setStep(step + 1);
               setInputError('');
             } else {
-              setErrorMessage('The passwords do not match.');
+              setInputError('The passwords do not match.');
             }
           } else {
-            setErrorMessage('Please complete the form.');
+            setInputError('Please complete the form.');
           }
         } else {
           setInputError('Oops! Please enter a password.');
         }
         break;
       case 1:
-        if (name.trim() !== '') {
+        if (label.trim() !== '') {
           setInputError('');
-          handleLogin(tag, password);
-          handleName(name);
+          handleLogin(tag, password, label);
         } else {
-          setInputError('Oops! Please enter a name.')
+          setInputError('Oops! Please enter a name.');
         }
         break;
       default:
@@ -58,24 +57,16 @@ const AddAccount = ({ navigation, route }) => {
     setStep(step - 1);
   };
 
-  const handleLogin = async (tag, password) => {
+  const handleLogin = async (tag, password, name) => {
     try {
       let account = await accountLogin(tag, password);
-      if (account) {
-        setAccount(account);
-        let address = account.address
-        setPublicKey(address);
-      } else {
-        console.error('Cannot complete accountLogin. Key is not defined.');
-      }
+      setPublicKey(account.address);
+      setAccount(account);
+      await storeData(name, account.address);
+      navigation.navigate('Home', { label: name, publicKey: account.address, account });
     } catch (error) {
-      console.error('Cannot complete handlePasswords: ', error);
+      console.error('Cannot complete handleLogin: ', error);
     }
-  };
-
-  const handleName = (label) => {
-    storeData(label, publicKey);
-    navigation.navigate('Home', { label, publicKey, account });
   };
 
   const renderStep = () => {
@@ -83,7 +74,7 @@ const AddAccount = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(1/2) Enter a password.  Do not share this value.  We Cannot recover passwords for you.</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>(1/2) Enter a password. Do not share this value. We cannot recover passwords for you.</Text>
             <PasswordInput
               text='Enter Password'
               password={password}
@@ -99,11 +90,13 @@ const AddAccount = ({ navigation, route }) => {
       case 1:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(2/2) Name this account.  You can change this name at any time.</Text>
-            <PasswordInput
-              text='Enter Name'
-              password={name}
-              setPassword={setName}
+            <Text style={styles.textMargin} variant='titleMedium'>(2/2) Name this account. You can change this name at any time.</Text>
+            <TextInput
+              label='Enter Name'
+              value={label}
+              style={styles.TextInput}
+              onChangeText={setLabel}
+              mode='outlined'
             />
           </View>
         );
@@ -125,7 +118,7 @@ const AddAccount = ({ navigation, route }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text='Save and Login' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={(handlePreviousStep)} />
+            <CustomButton text='Go Back' type='secondary' size='large' onPress={handlePreviousStep} />
           </View>
         );
       default:
@@ -134,24 +127,20 @@ const AddAccount = ({ navigation, route }) => {
   };
 
   return (
-    <>
-
-      <KeyboardAvoidingView style={styles.container}>
-        <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          {renderStep()}
-          {inputError ? (
-            <Text style={styles.errorText}>{inputError}</Text>
-          ) : null}
-        </View>
-        <View style={styles.bottomContainer}>
-          {renderButtons()}
-        </View>
-      </KeyboardAvoidingView>
-
-    </>
+    <KeyboardAvoidingView style={styles.container}>
+      <View style={styles.topContainer}>
+        <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
+      </View>
+      <View style={styles.inputContainer}>
+        {renderStep()}
+        {inputError ? (
+          <Text style={styles.errorText}>{inputError}</Text>
+        ) : null}
+      </View>
+      <View style={styles.bottomContainer}>
+        {renderButtons()}
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

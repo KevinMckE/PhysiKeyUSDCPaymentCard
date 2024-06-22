@@ -24,7 +24,7 @@ const Account = ({ navigation, route }) => {
     <>
       <View style={styles.textContainer}>
         <Text>Account Details</Text>
-        <Text onPress={() => { navigation.navigate('History', { navigation, data }) }}>{`View All >`}</Text>
+        <Text onPress={() => { navigation.navigate('AccountSettings', { navigation, data }) }}>{`View All >`}</Text>
       </View>
       <Pressable onPress={handleCopyToClipboard}>
         <Card style={styles.card}>

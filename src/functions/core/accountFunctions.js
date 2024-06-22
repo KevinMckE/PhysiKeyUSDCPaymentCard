@@ -42,7 +42,7 @@ export const accountLogin = async (tag, password) => {
     console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
-      transport: http('https://sepolia.base.org'),
+      transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
     });
 
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
@@ -65,14 +65,14 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
 
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,
-      transport: http(RPC_URL),
+      transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
       entryPoint: ENTRYPOINT_ADDRESS_V06,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
       chain: baseSepolia,
-      bundlerTransport: http(RPC_URL),
+      bundlerTransport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
       middleware: {
         sponsorUserOperation: cloudPaymaster.sponsorUserOperation,
       },

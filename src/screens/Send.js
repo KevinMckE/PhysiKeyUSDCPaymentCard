@@ -25,10 +25,10 @@ const Send = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { account, publicKey } = route.params;
+  const { publicKey, label } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Home', { account, publicKey });
+    navigation.navigate('Home', { publicKey, label });
   };
 
   const handleNextStep = () => {
@@ -213,7 +213,7 @@ const Send = ({ navigation, route }) => {
       <View style={styles.container}>
         {loading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#7FA324" />
           </View>
         )}
         <View style={styles.topContainer}>

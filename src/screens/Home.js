@@ -22,35 +22,34 @@ const Home = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const isFocused = useIsFocused();
 
+  const fetchBalance = async () => {
+    try {
+      let fetchedActivity = await getBaseUSDCActivity(publicKey);
+      setActivity(fetchedActivity);
+      let fetchedBalance = await getUSDCBalance(publicKey);
+      if (fetchedBalance === '0.') {
+        fetchedBalance = '0.0';
+      }
+      setBalance(fetchedBalance);
+      setIsLoading(false);
+    } catch (error) {
+      console.log('Cannot complete fetchBalance: ', error);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
-    const fetchBalance = async () => {
-      try {
-        let fetchedActivity = await getBaseUSDCActivity(publicKey);
-        setActivity(fetchedActivity);
-        let fetchedBalance = await getUSDCBalance(publicKey);
-        if (fetchedBalance === '0.') {
-          fetchedBalance = '0.0';
-        }
-        if (isMounted && isFocused) {
-          setBalance(fetchedBalance);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log('Cannot complete fetchBalance: ', error);
-      }
-    };
     if (isFocused) {
       fetchBalance();
     }
     return () => {
       isMounted = false;
     };
-  }, [publicKey, isFocused]);
+  }, [isFocused, navigation]);
 
   if (isLoading) {
     return (
-      <View style={[styles.container, styles.landingBottomContainer]}>
+      <View style={[styles.container, styles.loadingContainer]}>
         <ActivityIndicator size="large" color="#7FA324" />
       </View>
     );
@@ -59,7 +58,7 @@ const Home = ({ route, navigation }) => {
   return (
     <Tab.Navigator
       theme={{ colors: { secondaryContainer: '#7FA324' } }}
-      initialRouteName="Home"
+      initialRouteName="Account"
       activeColor="#000000"
       inactiveColor="#808080"
       barStyle={{ backgroundColor: '#ffffff' }}

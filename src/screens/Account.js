@@ -58,8 +58,8 @@ const Account = ({ navigation, route }) => {
           limit={3}
         />
         <View style={styles.mainButtons}>
-          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send', { account }); }} />
-          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { account }); }} />
+          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send', { publicKey, label }); }} />
+          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', {  publicKey, label }); }} />
         </View>
       </ImageBackground>
     </>

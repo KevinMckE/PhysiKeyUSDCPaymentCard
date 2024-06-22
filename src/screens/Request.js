@@ -26,8 +26,8 @@ const Request = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { publicKey } = route.params;
-  
+  const { publicKey, label } = route.params;
+
   useEffect(() => {
     setRecipientKey(publicKey)
   }, []);
@@ -67,10 +67,11 @@ const Request = ({ navigation, route }) => {
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
+    setLoading(true);
     try {
       let receipt = await transferUSDC(tagID, password, amount, publicKey);
       setReceipt(receipt);
-      navigation.navigate('Home', publicKey);
+      navigation.navigate('Home', { publicKey, label });
     } catch (error) {
       setErrorMessage(error.message); // Set the error message to state variable
       console.error('Cannot complete handlePasswords: ', error);
@@ -82,12 +83,12 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(1/2) How much?</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>(1/2) How much are you requesting?</Text>
             <TextInput
               mode="outlined"
               autoFocus={true}
               style={styles.textInput}
-              theme={{ colors: { primary: 'green' }}}
+              theme={{ colors: { primary: 'green' } }}
               placeholder="Amount"
               value={amount}
               onChangeText={amount => setAmount(amount)}
@@ -102,10 +103,10 @@ const Request = ({ navigation, route }) => {
       case 1:
         return (
           <View style={styles.inputContainer}>
-            <Card style={styles.confirmCard}>
-              <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
-              <Text style={styles.textMargin} variant='titleMedium'>{amount} being paid to {publicKey}</Text>
-            </Card>
+
+            <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
+            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
           </View>
         );
       default:
@@ -118,14 +119,14 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text="Scan Payer's Card" type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Home', publicKey) }}/>
+            <CustomButton text="Review and Pay" type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Home', { publicKey, label }) }} />
           </View>
         );
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Scan card and Send' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            <CustomButton text='Scan Card and Send' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
@@ -139,11 +140,11 @@ const Request = ({ navigation, route }) => {
       <View style={styles.container}>
         {loading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#7FA324" />
           </View>
         )}
         <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Input request and scan card for payment.</Text>
+          <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
         </View>
         <View style={styles.inputContainer}>
           {renderStep()}

@@ -59,23 +59,23 @@ const History = ({ route }) => {
         source={require('../assets/regen_card_background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <View style={{ flex: 1 }}>
-          <Tab.Navigator
-            screenOptions={{
-              tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
-            }}
-          >
-            <Tab.Screen
-              name="Month"
-              component={RenderMonthListComponent}
-            />
-            <Tab.Screen
-              name="Day"
-              component={RenderDayListComponent}
-            />
-          </Tab.Navigator>
-        </View>
-      </ImageBackground >
+      <View style={{ flex: 1 }}>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
+          }}
+        >
+          <Tab.Screen
+            name="Month"
+            component={RenderMonthListComponent}
+          />
+          <Tab.Screen
+            name="Day"
+            component={RenderDayListComponent}
+          />
+        </Tab.Navigator>
+      </View>
+    </ImageBackground >
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Text } from 'react-native';
+import { Image, ActivityIndicator, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { useIsFocused } from '@react-navigation/native';
 import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
@@ -46,7 +46,11 @@ const Home = ({ route, navigation }) => {
   }, [publicKey, isFocused]);
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={[styles.container, styles.landingBottomContainer]}>
+        <ActivityIndicator size="large" color="#7FA324" />
+      </View>
+    );
   }
 
   return (

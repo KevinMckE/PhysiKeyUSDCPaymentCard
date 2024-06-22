@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
-const PasswordInput = ({ text, value, setPassword  }) => {
+const PasswordInput = ({ text, value, setPassword }) => {
   const [confirmVisible, setConfirmVisible] = useState(true);
 
   const handleInputChange = (text) => {
-    setPassword (text);
+    setPassword(text);
   };
 
   return (
     <View>
-        <TextInput
+      <TextInput
         mode="outlined"
-        theme={{ colors: { primary: 'green' }}}
+        theme={{ colors: { primary: 'green' } }}
         returnKeyType="done"
         style={styles.textInput}
         placeholder={text}
@@ -22,7 +22,7 @@ const PasswordInput = ({ text, value, setPassword  }) => {
         secureTextEntry={confirmVisible}
         autoCapitalize='none'
       />
- 
+
       <TouchableOpacity
         style={styles.toggleButton}
         onPress={() => setConfirmVisible(!confirmVisible)}>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   textInput: {
     marginTop: 10,
     width: 250,
-    height: 40,
+    height: 50,
     backgroundColor: '#ffffff',
   },
   toggleButton: {

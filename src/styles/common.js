@@ -71,16 +71,17 @@ const styles = StyleSheet.create({
   },
   keyContent: {
     flexDirection: 'row',
-
     justifyContent: 'space-between',
+    alignItems: 'center', 
     padding: 10,
-  },
-  errorText: {
-    color: 'red',
   },
   copyImage: {
     width: 30,
     height: 30,
+    alignSelf: 'center', 
+  },
+  errorText: {
+    color: 'red',
   },
   transferButton: {
     margin: 10,

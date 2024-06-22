@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Image, Pressable, ImageBackground } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { Text, Card, List } from 'react-native-paper';

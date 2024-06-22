@@ -47,7 +47,7 @@ const AppNavigator = () => {
             headerLeft: () => (
               <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerButton}>
               <Text style={styles.headerButtonArrow}>{'<'}</Text>
-              <Text style={[styles.headerButtonText, { marginLeft: 10, fontWeight: 'bold' }]} onPress={() => navigation.navigate('Landing')}>
+              <Text style={[styles.headerButtonText, { marginLeft: 10, fontWeight: 'bold' }]}>
               Logout
               </Text>
             </TouchableOpacity>),

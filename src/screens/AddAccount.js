@@ -5,9 +5,7 @@ import { Text, TextInput } from 'react-native-paper';
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
 //
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { accountLogin } from '../functions/core/accountFunctions';
-import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { storeData } from '../functions/core/asyncStorage';
 import styles from '../styles/common';
 

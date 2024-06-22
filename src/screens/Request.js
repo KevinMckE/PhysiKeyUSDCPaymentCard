@@ -4,9 +4,8 @@ import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
-import { signTransaction, sendSignedTransaction } from '../functions/core/accountFunctions';
+import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
-import { getGasEstimate } from '../functions/optimism/getGasEstimate';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
@@ -20,6 +19,7 @@ const Request = ({ navigation, route }) => {
   const [recipientKey, setRecipientKey] = useState('');
   const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
+  const [password, setPassword] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
@@ -27,7 +27,7 @@ const Request = ({ navigation, route }) => {
   const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey } = route.params;
-
+  
   useEffect(() => {
     setRecipientKey(publicKey)
   }, []);
@@ -64,53 +64,16 @@ const Request = ({ navigation, route }) => {
     fetchTag();
   };
 
-  useEffect(() => {
-    const fetchGasEstimate = async () => {
-      if (parseFloat(amount) === 0) {
-        setInputError('Oops! Set a valid amount.');
-      } else {
-        setInputError('');
-      }
-    };
-    if (amount) {
-      fetchGasEstimate();
-    }
-  }, [amount]);
-
-
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
-    //setLoading(true);
     try {
-      let signedTx = await signTransaction(tagID, password, amount, recipientKey);
-      const gasEstimate = await getGasEstimate();
-      setGas(gasEstimate.toString() + 'n');
-      setSignedTransaction(signedTx);
-      if (signedTx) {
-        setLoading(false);
-        handleNextStep();
-      } else {
-        console.error('Cannot complete handlePasswords. Key is not defined.');
-      }
-    } catch (error) {
-      setErrorMessage(error.message); // Set the error message to state variable
-      console.error('Cannot complete handlePasswords: ', error);
-    }
-  };
-
-  const confirmSign = async () => {
-    setErrorMessage('');
-    setSignModal(false);
-    setLoading(true);
-    try {
-      let receipt = await sendSignedTransaction(signedTransaction);
+      let receipt = await transferUSDC(tagID, password, amount, publicKey);
       setReceipt(receipt);
       navigation.navigate('Home', publicKey);
     } catch (error) {
-      console.error('Cannot complete confirmSign: ', error);
-    } finally {
-      setLoading(false);
+      setErrorMessage(error.message); // Set the error message to state variable
+      console.error('Cannot complete handlePasswords: ', error);
     }
   };
 
@@ -119,12 +82,13 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>How much are you requesting? (1/2)</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>(1/2) How much?</Text>
             <TextInput
               mode="outlined"
               autoFocus={true}
               style={styles.textInput}
-              placeholder="Amount..."
+              theme={{ colors: { primary: 'green' }}}
+              placeholder="Amount"
               value={amount}
               onChangeText={amount => setAmount(amount)}
               returnKeyType={'done'}
@@ -139,10 +103,8 @@ const Request = ({ navigation, route }) => {
         return (
           <View style={styles.inputContainer}>
             <Card style={styles.confirmCard}>
-              <Text style={styles.textMargin} variant='titleLarge'>Confirm Details (2/2)</Text>
-              <Text style={styles.textMargin} variant='titleMedium'>You are sending {amount} ETH to:</Text>
-              <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
-              <Text style={styles.textMargin} variant='titleMedium'>Estimated gas {gas} ETH</Text>
+              <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{amount} being paid to {publicKey}</Text>
             </Card>
           </View>
         );
@@ -156,14 +118,14 @@ const Request = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text="Scan Payer's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Account', publicKey) }}/>
+            <CustomButton text="Scan Payer's Card" type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Home', publicKey) }}/>
           </View>
         );
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Confirm and Send' type='primary' size='large' onPress={() => { confirmSign(); }} />
+            <CustomButton text='Scan card and Send' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );

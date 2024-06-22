@@ -92,11 +92,14 @@ const AddAccount = ({ navigation, route }) => {
           <View style={styles.inputContainer}>
             <Text style={styles.textMargin} variant='titleMedium'>(2/2) Name this account. You can change this name at any time.</Text>
             <TextInput
-              label='Enter Name'
+              mode="outlined"
+              theme={{ colors: { primary: 'green' } }}
+              returnKeyType="done"
+              style={styles.textInput}
+              placeholder={'Enter name'}
               value={label}
-              style={styles.TextInput}
               onChangeText={setLabel}
-              mode='outlined'
+              autoCapitalize='none'
             />
           </View>
         );

@@ -8,9 +8,33 @@ import CryptoJS from 'react-native-crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 const web3 = new Web3('https://sepolia.base.org');
-
-const usdcABI = [{ constant: true, inputs: [{ name: '_owner', type: 'address' }], name: 'balanceOf', outputs: [{ name: 'balance', type: 'uint256' }], type: 'function', },]
-const usdcAddress = process.env.BASE_USDC_CONTRACT;
+const abi = [
+  {
+    inputs: [
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint256', name: 'value', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];
+const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
 const factoryAddress = process.env.ACCOUNT_FACTORY_ADDRESS;
 //const contract = new web3.eth.Contract(usdcABI, usdcAddress);
 

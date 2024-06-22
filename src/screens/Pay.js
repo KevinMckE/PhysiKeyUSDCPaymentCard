@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
-import { accountLogin, signAndSend } from '../functions/core/accountFunctions';
+import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
-import { getGasEstimate } from '../functions/optimism/getGasEstimate';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
@@ -25,10 +24,10 @@ const Pay = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { publicKey } = route.params;
+  const { account } = route.params;
 
   const handleTransferPress = () => {
-    navigation.navigate('Home', { publicKey });
+    navigation.navigate('Home', { account, publicKey });
   };
 
   const handleNextStep = () => {
@@ -42,7 +41,7 @@ const Pay = ({ navigation, route }) => {
         }
         break;
       case 1:
-        if (parseFloat(amount) > 0 && gas !== null) {
+        if (parseFloat(amount) > 0) {
           setStep(step + 1);
           setInputError('');
         } else {
@@ -99,37 +98,12 @@ const Pay = ({ navigation, route }) => {
     fetchSign();
   };
 
-  useEffect(() => {
-    const fetchGasEstimate = async () => {
-      if (parseFloat(amount) ==  0) {
-        setInputError('Oops! Set a valid amount.');
-      }
-      try {
-        const gasEstimate = await getGasEstimate(publicKey, recipientKey, amount);
-        setGas(gasEstimate.toString() + 'n');
-        setInputError('');
-      } catch (error) {
-        setGas(null)
-        console.error('Cannot complete fetchGasEstimate: ', error);
-        setInputError('Error fetching gas estimate: ' + error.message); 
-      }
-    };
-
-    if (amount && publicKey && recipientKey) {
-      fetchGasEstimate();
-    }
-  }, [amount, publicKey, recipientKey]);
-
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
     try {
-      let { publicKey } = await accountLogin(tagID, password);
-      if (publicKey) {
-        setRecipientKey(publicKey);
-      } else {
-        console.error('Cannot complete handlePasswords. Key is not defined.');
-      }
+      let account = await accountLogin(tagID, password);
+      setRecipientKey(account.address);
     } catch (error) {
       console.error('Cannot complete handlePasswords: ', error);
     }
@@ -140,9 +114,9 @@ const Pay = ({ navigation, route }) => {
     setSignModal(false);
     setLoading(true);
     try {
-      let receipt = await signAndSend(tagID, password, amount, recipientKey, gas, publicKey);
+      let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
-      navigation.navigate('Account', { publicKey });
+      navigation.navigate('Account', { account });
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error);
     } finally {
@@ -155,11 +129,12 @@ const Pay = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>Input or scan card for recipient address. (1/3) </Text>
+            <Text style={styles.textMargin} variant='titleMedium'>(1/3) Input a recipient address.  You can also scan a card to populate this field.</Text>
             <TextInput
               mode="outlined"
               style={styles.textInput}
-              placeholder="Recipient address..."
+              theme={{ colors: { primary: 'green' }}}
+              placeholder="Recipient Address"
               value={recipientKey}
               onChangeText={recipientKey => setRecipientKey(recipientKey)}
               returnKeyType={'done'}
@@ -171,11 +146,12 @@ const Pay = ({ navigation, route }) => {
       case 1:
         return (
           <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>How much would you like to send? (2/3)</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>(2/3) How much would you like to send? Please note there will be a 0% transaction fee.</Text>
             <TextInput
               mode="outlined"
               style={styles.textInput}
-              placeholder="Amount..."
+              theme={{ colors: { primary: 'green' }}}
+              placeholder="Amount"
               value={amount}
               onChangeText={amount => setAmount(amount)}
               returnKeyType={'done'}
@@ -189,13 +165,12 @@ const Pay = ({ navigation, route }) => {
       case 2:
         return (
           <View style={styles.inputContainer}>
-            <Card style={styles.confirmCard}>
-              <Text style={styles.textMargin} variant='titleLarge'>Confirm Details (3/3)</Text>
-              <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
-              <Text style={styles.textMargin} variant='titleLarge'>Sending {amount} ETH to:</Text>
+              <Text style={styles.textMargin} variant='titleLarge'>(3/3) Review Details.  The recipient will scan your card to confirm the transaction.</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>You are is sending {amount} USDC to:</Text>
               <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
-              <Text style={styles.textMargin} variant='titleLarge'>Estimated gas {gas} ETH</Text>
-            </Card>
+              <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is {`0%`}</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>Total transaction amount is {amount} USDC</Text>
+        
           </View>
         );
       default:
@@ -208,21 +183,21 @@ const Pay = ({ navigation, route }) => {
       case 0:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Confirm Recipient' type='primary' size='large' onPress={handleNextStep} />
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handleTransferPress(); }} />
           </View>
         );
       case 1:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            <CustomButton text='Confirm Amount' type='primary' size='large' onPress={handleNextStep} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
       case 2:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Sign and Send' type='primary' size='large' onPress={() => { handleSignAndSend(); }} />
+            <CustomButton text='Confirm and Send' type='primary' size='large' onPress={() => { handleSignAndSend(); }} />
             <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
           </View>
         );
@@ -240,7 +215,7 @@ const Pay = ({ navigation, route }) => {
           </View>
         )}
         <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to transfer ETH to another wallet.</Text>
+          <Text variant='titleLarge'>Follow the prompts. </Text>
         </View>
         <View style={styles.inputContainer}>
           {renderStep()}

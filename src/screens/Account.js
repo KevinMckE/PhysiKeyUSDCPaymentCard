@@ -9,7 +9,7 @@ import styles from '../styles/common';
 import { trigger } from 'react-native-haptic-feedback';
 
 const Account = ({ navigation, route }) => {
-  const { label, publicKey, balance, activity } = route.params;
+  const { label, publicKey, account, balance, activity } = route.params;
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
 
   const handleCopyToClipboard = () => {
@@ -57,8 +57,8 @@ const Account = ({ navigation, route }) => {
         limit={3}
       />
       <View style={styles.mainButtons}>
-        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { publicKey }); }} />
-        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { publicKey }); }} />
+        <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Pay', { account }); }} />
+        <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', { account }); }} />
       </View>
     </>
   );

@@ -19,6 +19,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		228F00F102EF46E0CE60651D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AA6748A93C30B2586B0F5FAB /* PrivacyInfo.xcprivacy */; };
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		7699B88040F8A987B510C191 /* libPods-RegenCard-RegenCardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-RegenCard-RegenCardTests.a */; };
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		841AD0F97A2881CDC8315AEB /* libPods-RegenCard.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5800B8CF7F2FD8B9A515275F /* libPods-RegenCard.a */; };
 		DE25C99A48C095C9007BEF86 /* libPods-RegenCard-RegenCardTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D21F9FF8F14A987EA8B87D7 /* libPods-RegenCard-RegenCardTests.a */; };
@@ -49,11 +53,14 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RegenCardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegenCardTests.m; sourceTree = "<group>"; };
 <<<<<<< HEAD
+<<<<<<< HEAD
 		0A4D51D12C2CD8D800CEAD64 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		0A4D51D42C2CD9E900CEAD64 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 =======
 		0A0C8EF62C2CC8DA005B1048 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 >>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
+=======
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 		0A92BEC52C27A6AD00751F35 /* RegenCard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RegenCard.entitlements; path = RegenCard/RegenCard.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RegenCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RegenCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RegenCard/AppDelegate.h; sourceTree = "<group>"; };
@@ -62,6 +69,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RegenCard/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = RegenCard/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = RegenCard/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+<<<<<<< HEAD
 <<<<<<< HEAD
 		26E61DF35D6E3F8B69EAF80D /* Pods-RegenCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard.debug.xcconfig"; path = "Target Support Files/Pods-RegenCard/Pods-RegenCard.debug.xcconfig"; sourceTree = "<group>"; };
 		4D21F9FF8F14A987EA8B87D7 /* libPods-RegenCard-RegenCardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RegenCard-RegenCardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +86,16 @@
 		AA6748A93C30B2586B0F5FAB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = RegenCard/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DE11C21BB530E2E8FEFBFE80 /* Pods-RegenCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard.release.xcconfig"; path = "Target Support Files/Pods-RegenCard/Pods-RegenCard.release.xcconfig"; sourceTree = "<group>"; };
 		DF7E14A52D64432F0204FBF2 /* libPods-RegenCard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RegenCard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+=======
+		19F6CBCC0A4E27FBF8BF4A61 /* libPods-RegenCard-RegenCardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RegenCard-RegenCardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B4392A12AC88292D35C810B /* Pods-RegenCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard.debug.xcconfig"; path = "Target Support Files/Pods-RegenCard/Pods-RegenCard.debug.xcconfig"; sourceTree = "<group>"; };
+		5709B34CF0A7D63546082F79 /* Pods-RegenCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard.release.xcconfig"; path = "Target Support Files/Pods-RegenCard/Pods-RegenCard.release.xcconfig"; sourceTree = "<group>"; };
+		5B7EB9410499542E8C5724F5 /* Pods-RegenCard-RegenCardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard-RegenCardTests.debug.xcconfig"; path = "Target Support Files/Pods-RegenCard-RegenCardTests/Pods-RegenCard-RegenCardTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5DCACB8F33CDC322A6C60F78 /* libPods-RegenCard.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RegenCard.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RegenCard/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		89C6BE57DB24E9ADA2F236DE /* Pods-RegenCard-RegenCardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard-RegenCardTests.release.xcconfig"; path = "Target Support Files/Pods-RegenCard-RegenCardTests/Pods-RegenCard-RegenCardTests.release.xcconfig"; sourceTree = "<group>"; };
+		AA6748A93C30B2586B0F5FAB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = RegenCard/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 <<<<<<< HEAD
 		F36FF49A7EDCBEE6A6C65B8E /* Pods-RegenCard-RegenCardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RegenCard-RegenCardTests.release.xcconfig"; path = "Target Support Files/Pods-RegenCard-RegenCardTests/Pods-RegenCard-RegenCardTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -348,6 +366,7 @@
 				228F00F102EF46E0CE60651D /* PrivacyInfo.xcprivacy in Resources */,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				A64D66227FD44497903149F1 /* LeagueSpartan-Regular.ttf in Resources */,
 				1A8DF6D9BBCF4579AF471FD4 /* LeagueSpartan-SemiBold.ttf in Resources */,
 =======
@@ -355,6 +374,8 @@
 =======
 				0A0C8EF72C2CC8DA005B1048 /* main.jsbundle in Resources */,
 >>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
+=======
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,10 +811,14 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+<<<<<<< HEAD
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					" ",
 				);
+=======
+				OTHER_LDFLAGS = "$(inherited)  ";
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -865,10 +890,14 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+<<<<<<< HEAD
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					" ",
 				);
+=======
+				OTHER_LDFLAGS = "$(inherited)  ";
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

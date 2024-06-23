@@ -26,7 +26,10 @@
     "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-community/blur": "^4.4.0",
     "@react-native-community/masked-view": "^0.1.11",
+<<<<<<< HEAD
     "@react-native-community/netinfo": "^11.3.2",
+=======
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
     "@react-native/codegen": "^0.74.84",
     "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.1.17",
@@ -39,6 +42,7 @@
 >>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
     "expo-modules-core": "^1.12.15",
     "expo-web-browser": "^13.0.3",
+<<<<<<< HEAD
     "fetch": "^1.1.0",
     "hermes-engine": "^0.11.0",
     "node-fetch": "^3.3.2",
@@ -47,6 +51,9 @@
     "permissionless": "^0.2.39",
     "randomstring": "^1.3.0",
 =======
+=======
+    "hermes-engine": "^0.11.0",
+>>>>>>> e4c1a90 (All the podfile and necessary stuff for)
     "node-libs-browser": "^2.2.1",
     "permissionless": "^0.1.31",
 >>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)

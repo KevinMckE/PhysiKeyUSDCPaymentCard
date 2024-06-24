@@ -60,7 +60,7 @@ export const accountLogin = async (tag, password) => {
 
     //let encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
     let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
-    let publicKey = decryptedAccount.address;
+    //let publicKey = decryptedAccount.address;
     //console.log('encryptedPrivateKey: ', encryptedPrivateKey);
     //console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
     //console.log('EOA publicKey: ', publicKey);
@@ -83,6 +83,7 @@ export const accountLogin = async (tag, password) => {
 };
 
 export const transferUSDC = async (tag, password, amount, recipient) => {
+
   let simpleAccount = await accountLogin(tag, password);
 
   try {
@@ -111,7 +112,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
     const feeData = encodeFunctionData({
       abi: abi,
       functionName: 'transfer',
-      args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n],
+      args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n], //could be any account
     });
 
     const txHash = await smartAccountClient.sendTransactions({
@@ -130,7 +131,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
         },
       ]
     });
-    console.log(txHash)
+
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);

@@ -6,10 +6,22 @@ import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import AppNavigator from './src/components/AppNavigator.js';
 
 const App = () => {
-
+  
   useEffect(() => {
-    Appearance.setColorScheme('light');
-   }, []);
+    const fetchCatFact = async () => {
+      try {
+        const response = await fetch('https://catfact.ninja/fact');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchCatFact();
+  }, []);
 
   if (!__DEV__) {
     console.log = () => { };

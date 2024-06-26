@@ -4,10 +4,15 @@
 <dict>
 	<key>CFBundleIconFiles</key>
 	<array>
+<<<<<<< HEAD
 		<string/>
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+=======
+		<string></string>
+	</array>
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

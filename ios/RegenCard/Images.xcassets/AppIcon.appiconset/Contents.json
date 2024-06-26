@@ -1,55 +1,91 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 40.png",
+=======
+      "filename" : "Logo 40.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 60.png",
+=======
+      "filename" : "Logo 60.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 58.png",
+=======
+      "filename" : "Logo 58.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 87.png",
+=======
+      "filename" : "Logo 87.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 80.png",
+=======
+      "filename" : "Logo 80.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 120.png",
+=======
+      "filename" : "Logo 120.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 121.png",
+=======
+      "filename" : "Logo 121.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 180.png",
+=======
+      "filename" : "Logo 180.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
+<<<<<<< HEAD
       "filename" : "Regen Logo 1024 px.png",
+=======
+      "filename" : "Logo 1024.png",
+>>>>>>> 63cdb3f (To fix the script_phase build issue, you need to)
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

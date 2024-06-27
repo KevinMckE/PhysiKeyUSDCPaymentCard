@@ -1,14 +1,15 @@
 import './global';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Appearance } from 'react-native';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import AppNavigator from './src/components/AppNavigator.js';
 
 const App = () => {
 
   useEffect(() => {
-    Appearance.setColorScheme('light');
+    fetch('https://dummy.restapiexample.com/api/v1/employees') // api for the get request
+    .then(response => response.json())
+    .then(data => console.log(data));
    }, []);
 
   if (!__DEV__) {

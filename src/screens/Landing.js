@@ -5,7 +5,6 @@ import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
-
   const handleLinkPress = () => {
     Linking.openURL('https://anywhereaccess.io');
   };

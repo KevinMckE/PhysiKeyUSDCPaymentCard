@@ -46,7 +46,7 @@ const Login = ({ navigation }) => {
     try {
       let tag = await scanSerialForKey();
       if (tag) {
-        setScanModal(false); 
+        setScanModal(false);
         navigation.navigate('AddAccount', { tag });
       }
     } catch (error) {

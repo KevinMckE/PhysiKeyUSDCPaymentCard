@@ -2,7 +2,8 @@ import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V06 } from 'permissionless
 import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
 import { baseSepolia } from 'viem/chains';
-import { http, createPublicClient, encodeFunctionData } from "viem";
+import { http, createPublicClient, encodeFunctionData } from 'viem';
+import { RPC_URL, ACCOUNT_FACTORY_ADDRESS } from '@env';
 
 import CryptoJS from 'react-native-crypto-js';
 import argon2 from 'react-native-argon2';
@@ -35,7 +36,7 @@ const abi = [
   },
 ];
 const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
-const factoryAddress = process.env.ACCOUNT_FACTORY_ADDRESS;
+const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
 //const contract = new web3.eth.Contract(usdcABI, usdcAddress);
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
@@ -66,9 +67,9 @@ export const accountLogin = async (tag, password) => {
     //console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
-      transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
+      transport: http(RPC_URL),
     });
-
+    //console.log(client)
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
       privateKey: privateKey,
       factoryAddress: factoryAddress,
@@ -87,17 +88,19 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
 
   try {
-    const amountInWei = BigInt(amount) * BigInt(10 ** 6);
+    const factor = 10 ** 6; // for 6 decimal places
+    const amountInWei = BigInt(parseFloat(amount) * factor);
+
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,
-      transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
+      transport: http(RPC_URL),
       entryPoint: ENTRYPOINT_ADDRESS_V06,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
       chain: baseSepolia,
-      bundlerTransport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
+      bundlerTransport: http(RPC_URL),
       middleware: {
         sponsorUserOperation: cloudPaymaster.sponsorUserOperation,
       },

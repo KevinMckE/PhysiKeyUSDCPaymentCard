@@ -1,4 +1,5 @@
-import { http, createPublicClient } from "viem";
+import { http, createPublicClient } from 'viem';
+import { RPC_URL } from '@env';
 
 const abi = [{
   constant: true,
@@ -13,7 +14,7 @@ const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e';
 export const getUSDCBalance = async (address) => {
   try {
     const client = createPublicClient({
-      transport: http('https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME'),
+      transport: http(RPC_URL),
     });
 
     const accountBalance = await client.readContract({

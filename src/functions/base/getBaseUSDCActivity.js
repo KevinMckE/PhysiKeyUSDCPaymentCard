@@ -1,6 +1,8 @@
+import { BASE_SCAN_API_KEY } from '@env';
+
 export const getBaseUSDCActivity = async (walletAddress) => {
   try {
-    const apiEndpoint = `https://api-sepolia.basescan.org/api?module=account&action=tokentx&contractaddress=0x036cbd53842c5426634e7929541ec2318f3dcf7e&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${Config.BASE_SCAN_API_KEY}`;
+    const apiEndpoint = `https://api-sepolia.basescan.org/api?module=account&action=tokentx&contractaddress=0x036cbd53842c5426634e7929541ec2318f3dcf7e&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${BASE_SCAN_API_KEY}`;
     const response = await fetch(apiEndpoint);
 
     if (!response.ok) {

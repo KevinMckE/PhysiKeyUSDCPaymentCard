@@ -3,7 +3,7 @@ import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
 import { baseSepolia } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
-import Config from 'react-native-config';
+import { RPC_URL, ACCOUNT_FACTORY_ADDRESS } from '@env';
 
 import CryptoJS from 'react-native-crypto-js';
 import argon2 from 'react-native-argon2';
@@ -36,7 +36,7 @@ const abi = [
   },
 ];
 const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
-const factoryAddress = process.env.ACCOUNT_FACTORY_ADDRESS;
+const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
 //const contract = new web3.eth.Contract(usdcABI, usdcAddress);
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
@@ -67,7 +67,7 @@ export const accountLogin = async (tag, password) => {
     //console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
-      transport: http(Config.RPC_URL),
+      transport: http(RPC_URL),
     });
     //console.log(client)
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
@@ -93,14 +93,14 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
 
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,
-      transport: http(Config.RPC_URL),
+      transport: http(RPC_URL),
       entryPoint: ENTRYPOINT_ADDRESS_V06,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
       chain: baseSepolia,
-      bundlerTransport: http(Config.RPC_URL),
+      bundlerTransport: http(RPC_URL),
       middleware: {
         sponsorUserOperation: cloudPaymaster.sponsorUserOperation,
       },

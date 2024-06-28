@@ -1,5 +1,5 @@
 import { http, createPublicClient } from 'viem';
-import Config from 'react-native-config';
+import { RPC_URL } from '@env';
 
 const abi = [{
   constant: true,
@@ -14,7 +14,7 @@ const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e';
 export const getUSDCBalance = async (address) => {
   try {
     const client = createPublicClient({
-      transport: http(Config.RPC_URL),
+      transport: http(RPC_URL),
     });
 
     const accountBalance = await client.readContract({

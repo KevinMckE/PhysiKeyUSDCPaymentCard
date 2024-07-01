@@ -64,7 +64,11 @@
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-webview": "^13.10.5",
     "text-encoding": "^0.7.0",
+<<<<<<< HEAD
     "viem": "^2.24.3",
+=======
+    "viem": "^2.16.2",
+>>>>>>> 8c3f3ac (FIXED FETCH ISSUE!!)
     "web3": "^4.10.0",
     "whatwg-fetch": "^3.6.20"
   },

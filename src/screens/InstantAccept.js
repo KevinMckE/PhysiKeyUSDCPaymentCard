@@ -9,7 +9,7 @@ import CustomButton from '../components/CustomButton';
 import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
-import { instantAccept } from '../functions/core/instantAccept';
+import { createAndSaveAccount } from '../functions/core/createAndSaveAccount';
 //
 import styles from '../styles/common';
 
@@ -28,11 +28,11 @@ const InstantAccept = ({ navigation }) => {
   useEffect(() => {
     const initializeAccount = async () => {
       const account = await createAndSaveAccount();
-      console.log(account.publicKey);
-      setRecipientKey(account.publicKey);
+      console.log(account.address);
+      setRecipientKey(account.address);
+      console.log(recipientKey);
       console.log('Initialized account:', account);
     };
-
     initializeAccount();
   }, []);
 
@@ -111,7 +111,7 @@ const InstantAccept = ({ navigation }) => {
 
             <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+            <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
             {errorMessage ? (
               <Text style={styles.errorText}>{errorMessage}</Text>
             ) : null}
@@ -128,7 +128,7 @@ const InstantAccept = ({ navigation }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text="Review and Pay" type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Home', { publicKey, label }) }} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Landing')}} />
           </View>
         );
       case 1:

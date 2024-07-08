@@ -44,7 +44,7 @@ const AppNavigator = () => {
           name="InstantAccept"
           component={InstantAccept}
           options={{
-            title: 'Instant Accept',
+            title: 'Accept Payment',
           }}
         />
         <Stack.Screen

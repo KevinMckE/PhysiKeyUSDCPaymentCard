@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
+//
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+//
 import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
+import { instantAccept } from '../functions/core/instantAccept';
+//
 import styles from '../styles/common';
 
 const InstantAccept = ({ navigation }) => {
@@ -22,7 +26,14 @@ const InstantAccept = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setRecipientKey('0xC29Cf1209866259870F5179f9d2bb2F4eb048CAC')
+    const initializeAccount = async () => {
+      const account = await createAndSaveAccount();
+      console.log(account.publicKey);
+      setRecipientKey(account.publicKey);
+      console.log('Initialized account:', account);
+    };
+
+    initializeAccount();
   }, []);
 
   const handleNextStep = () => {

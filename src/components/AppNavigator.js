@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
+import InstantAccept from '../screens/InstantAccept';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
@@ -37,6 +38,13 @@ const AppNavigator = () => {
           component={AddAccount}
           options={{
             title: 'Add Account',
+          }}
+        />
+        <Stack.Screen
+          name="InstantAccept"
+          component={InstantAccept}
+          options={{
+            title: 'Instant Accept',
           }}
         />
         <Stack.Screen

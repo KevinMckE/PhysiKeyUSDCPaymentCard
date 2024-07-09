@@ -5,7 +5,6 @@ import { baseSepolia } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
 import { RPC_URL, ACCOUNT_FACTORY_ADDRESS } from '@env';
 
-import CryptoJS from 'react-native-crypto-js';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 const web3 = new Web3('https://sepolia.base.org');

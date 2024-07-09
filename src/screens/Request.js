@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { Text, TextInput, Card } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
@@ -11,20 +11,15 @@ import styles from '../styles/common';
 
 const Request = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
-  const [gas, setGas] = useState('');
   const [loading, setLoading] = useState(false);
-  const [signedTransaction, setSignedTransaction] = useState(null);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
-  const [signModal, setSignModal] = useState(false);
   const [tagID, setTagID] = useState('');
-  const [password, setPassword] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isSuccess, setSuccess] = useState(false);
 
   const { publicKey, label } = route.params;
 

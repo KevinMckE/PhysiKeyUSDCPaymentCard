@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 //
 import CustomButton from '../components/CustomButton';
@@ -15,6 +15,7 @@ const AddAccount = ({ navigation, route }) => {
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { tag } = route.params;
 
@@ -55,8 +56,10 @@ const AddAccount = ({ navigation, route }) => {
 
   const handleLogin = async (tag, password, name) => {
     try {
+      setLoading(true);
       let account = await accountLogin(tag, password);
       await storeData(name, account.address);
+      setLoading(false);
       navigation.navigate('Home', { label: name, publicKey: account.address, account });
     } catch (error) {
       console.error('Cannot complete handleLogin: ', error);
@@ -125,6 +128,11 @@ const AddAccount = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
+      {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#7FA324" />
+          </View>
+        )}
       <View style={styles.topContainer}>
         <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
       </View>

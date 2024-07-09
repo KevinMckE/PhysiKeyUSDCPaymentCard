@@ -41,6 +41,7 @@ const Home = ({ route, navigation }) => {
     if (isFocused) {
       fetchBalance();
     }
+    fetchBalance();
   }, [isFocused, navigation]);
 
   if (isLoading) {

@@ -120,7 +120,7 @@ const Send = ({ navigation, route }) => {
       console.log(receipt);
       navigation.navigate('Home', { publicKey, label });
     } catch (error) {
-      console.error('Cannot complete confirmSign: ', error);
+      console.error('Cannot complete confirmSign: ', error.message);
       setLoading(false);
 
     } finally {

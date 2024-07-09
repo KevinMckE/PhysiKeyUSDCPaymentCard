@@ -73,9 +73,9 @@ const InstantAccept = ({ navigation }) => {
     setModalVisible(false);
     setLoading(true);
     try {
-      let receipt = await transferUSDC(tagID, password, amount, publicKey);
+      let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
-      navigation.navigate('Home', { publicKey, label });
+      navigation.navigate('Home', { recipientKey, label });
     } catch (error) {
       setErrorMessage(error.message); // Set the error message to state variable
       console.error('Cannot complete handlePasswords: ', error);

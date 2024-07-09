@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Image, TouchableOpacity, Platform } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 //
 import InputModal from '../components/InputModal';
@@ -108,8 +108,7 @@ const InstantAccept = ({ navigation }) => {
       case 1:
         return (
           <View style={styles.inputContainer}>
-
-            <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
+            <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details.</Text>
             <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
             <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
             {errorMessage ? (
@@ -128,7 +127,7 @@ const InstantAccept = ({ navigation }) => {
         return (
           <View style={styles.bottomContainer}>
             <CustomButton text="Review and Pay" type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Landing')}} />
+            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Landing') }} />
           </View>
         );
       case 1:
@@ -164,6 +163,13 @@ const InstantAccept = ({ navigation }) => {
           {renderButtons()}
         </View>
       </View>
+
+      <TouchableOpacity onPress={() => console.log('move to settings')}>
+        <View style={styles.mainButtons}>
+          <Image source={require('../assets/icons/user_setting.png')} style={styles.icon} />
+
+        </View>
+      </TouchableOpacity>
 
       <InputModal
         visible={modalVisible}

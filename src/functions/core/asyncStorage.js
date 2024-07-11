@@ -30,3 +30,20 @@ export const removeItemFromAsyncStorage = async (key) => {
     console.error('Error removing item from AsyncStorage:', error);
   }
 };
+
+const ACCOUNT_KEY = 'ethereum_account';
+export const getInstantAccount = async () => {
+  try {
+    const existingAccount = await AsyncStorage.getItem(ACCOUNT_KEY);
+  
+    if (existingAccount !== null) {
+      const account = JSON.parse(existingAccount);
+      return account.address;
+    }
+    console.log('No account found');
+    return null;
+  } catch (error) {
+    console.error('Error retrieving account address:', error);
+    throw error;
+  }
+};

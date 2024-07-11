@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Image, TouchableOpacity, Platform } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import { View, ActivityIndicator, Image, Pressable, Platform } from 'react-native';
+import { Text, TextInput, Card } from 'react-native-paper';
 //
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
@@ -28,10 +28,7 @@ const InstantAccept = ({ navigation }) => {
   useEffect(() => {
     const initializeAccount = async () => {
       const account = await createAndSaveAccount();
-      console.log(account.address);
       setRecipientKey(account.address);
-      console.log(recipientKey);
-      console.log('Initialized account:', account);
     };
     initializeAccount();
   }, []);
@@ -75,9 +72,9 @@ const InstantAccept = ({ navigation }) => {
     try {
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
-      navigation.navigate('Home', { recipientKey, label });
+      handleNextStep();
     } catch (error) {
-      setErrorMessage(error.message); // Set the error message to state variable
+      setErrorMessage(error.message);
       console.error('Cannot complete handlePasswords: ', error);
       setLoading(false);
     }
@@ -116,6 +113,12 @@ const InstantAccept = ({ navigation }) => {
             ) : null}
           </View>
         );
+      case 2:
+        return (
+          <View style={styles.inputContainer}>
+            <Text style={styles.textMargin} variant='titleLarge'>Success! Return to perform another transaction.</Text>
+          </View>
+        );
       default:
         return null;
     }
@@ -137,6 +140,12 @@ const InstantAccept = ({ navigation }) => {
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
           </View>
         );
+      case 2:
+        return (
+          <View style={styles.bottomContainer}>
+            <CustomButton text='Return' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+          </View>
+        );
       default:
         return null;
     }
@@ -150,6 +159,19 @@ const InstantAccept = ({ navigation }) => {
             <ActivityIndicator size="large" color="#7FA324" />
           </View>
         )}
+
+        <Pressable onPress={() => console.log('move to settings')}>
+          <Card style={styles.card}>
+            <View style={styles.keyContent}>
+              <Text>Account Details: {recipientKey.slice(0, 7)}...{recipientKey.slice(-5)}</Text>
+              <Image
+                source={require('../assets/icons/user_setting.png')}
+                style={styles.copyImage}
+              />
+            </View>
+          </Card>
+        </Pressable>
+
         <View style={styles.topContainer}>
           <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
         </View>
@@ -162,14 +184,7 @@ const InstantAccept = ({ navigation }) => {
         <View style={styles.bottomContainer}>
           {renderButtons()}
         </View>
-      </View>
-
-      <TouchableOpacity onPress={() => console.log('move to settings')}>
-        <View style={styles.mainButtons}>
-          <Image source={require('../assets/icons/user_setting.png')} style={styles.icon} />
-
-        </View>
-      </TouchableOpacity>
+      </View >
 
       <InputModal
         visible={modalVisible}
@@ -178,12 +193,14 @@ const InstantAccept = ({ navigation }) => {
         title='Enter your password.'
       />
 
-      {Platform.OS === 'android' && ( // Render modal only on Android
-        <AndroidScanModal
-          visible={scanModal}
-          closeScanModal={closeScanModal}
-        />
-      )}
+      {
+        Platform.OS === 'android' && ( // Render modal only on Android
+          <AndroidScanModal
+            visible={scanModal}
+            closeScanModal={closeScanModal}
+          />
+        )
+      }
     </>
   );
 }

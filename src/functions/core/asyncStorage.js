@@ -13,7 +13,9 @@ export const getData = async () => {
   try {
     const keys = await AsyncStorage.getAllKeys();
     const items = await AsyncStorage.multiGet(keys);
-    return items.map(([key, value]) => ({ key, value: JSON.parse(value) }));
+    return items
+      .filter(([key, value]) => key !== "ethereum_account")
+      .map(([key, value]) => ({ key, value: JSON.parse(value) }));
   } catch (error) {
     console.log('Could not complete getData: ', error);
     return [];

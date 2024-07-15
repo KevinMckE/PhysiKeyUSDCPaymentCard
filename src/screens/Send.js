@@ -11,7 +11,6 @@ import styles from '../styles/common';
 
 const Send = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
-  const [gas, setGas] = useState('');
   const [loading, setLoading] = useState(false);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);

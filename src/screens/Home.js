@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Image, ActivityIndicator, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { useIsFocused } from '@react-navigation/native';
-
+//
 import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
 import { getUSDCBalance } from '../functions/base/getBaseUSDC';
-
+//
 import Account from './Account';
 import Fund from './Fund';
 import History from './History';
 import Contacts from './Contacts';
 import styles from '../styles/common';
-import CoinbaseOnRamp from '../components/CoinbaseOnramp';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = ({ route, navigation }) => {
-  const { label, account, publicKey } = route.params;
+  console.log(publicKey)
+  const { label, publicKey } = route.params;
   const [balance, setBalance] = useState('');
   const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,8 +103,8 @@ const Home = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="Fund"
-        component={CoinbaseOnRamp}
-        initialParams={{ publicKey }}
+        component={Fund}
+        initialParams={{ label, publicKey, balance, activity }}
         options={{
           tabBarLabel: 'Fund',
           tabBarIcon: ({ focused }) => (

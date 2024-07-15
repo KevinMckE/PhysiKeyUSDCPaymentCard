@@ -15,7 +15,7 @@ import styles from '../styles/common';
 
 const InstantAccept = ({ navigation }) => {
   const [step, setStep] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
@@ -29,6 +29,7 @@ const InstantAccept = ({ navigation }) => {
     const initializeAccount = async () => {
       const account = await createAndSaveAccount();
       setRecipientKey(account.address);
+      setLoading(false);
     };
     initializeAccount();
   }, []);
@@ -72,6 +73,7 @@ const InstantAccept = ({ navigation }) => {
     try {
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
+      setLoading(false);
       handleNextStep();
     } catch (error) {
       setErrorMessage(error.message);
@@ -160,7 +162,7 @@ const InstantAccept = ({ navigation }) => {
           </View>
         )}
 
-        <Pressable onPress={() => console.log('move to settings')}>
+        <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { recipientKey })}>
           <Card style={styles.card}>
             <View style={styles.keyContent}>
               <Text>Account Details: {recipientKey.slice(0, 7)}...{recipientKey.slice(-5)}</Text>

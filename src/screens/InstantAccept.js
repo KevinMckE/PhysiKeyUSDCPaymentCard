@@ -162,7 +162,7 @@ const InstantAccept = ({ navigation }) => {
           </View>
         )}
 
-        <Pressable onPress={() => console.log('move to settings')}>
+        <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { recipientKey })}>
           <Card style={styles.card}>
             <View style={styles.keyContent}>
               <Text>Account Details: {recipientKey.slice(0, 7)}...{recipientKey.slice(-5)}</Text>

@@ -14,7 +14,7 @@ const Landing = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.landingTopContainer}>
           <Image
-            source={require('../assets/regen_card.png')}
+            source={require('../assets/regen_card.jpg')}
             style={styles.centeredImage}
           />
         </View>

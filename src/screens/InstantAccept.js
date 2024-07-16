@@ -145,7 +145,7 @@ const InstantAccept = ({ navigation }) => {
       case 2:
         return (
           <View style={styles.bottomContainer}>
-            <CustomButton text='Return' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+            <CustomButton text='Return' type='primary' size='large' onPress={() => { setStep(0) }} />
           </View>
         );
       default:

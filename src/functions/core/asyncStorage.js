@@ -13,8 +13,9 @@ export const getData = async () => {
   try {
     const keys = await AsyncStorage.getAllKeys();
     const items = await AsyncStorage.multiGet(keys);
+    console.log(items)
     return items
-      .filter(([key, value]) => key !== "ethereum_account")
+      .filter(([key, value]) => key !== "default")
       .map(([key, value]) => ({ key, value: JSON.parse(value) }));
   } catch (error) {
     console.log('Could not complete getData: ', error);
@@ -31,19 +32,3 @@ export const removeItemFromAsyncStorage = async (key) => {
   }
 };
 
-const ACCOUNT_KEY = 'ethereum_account';
-export const getInstantAccount = async () => {
-  try {
-    const existingAccount = await AsyncStorage.getItem(ACCOUNT_KEY);
-  
-    if (existingAccount !== null) {
-      const account = JSON.parse(existingAccount);
-      return account.address;
-    }
-    console.log('No account found');
-    return null;
-  } catch (error) {
-    console.error('Error retrieving account address:', error);
-    throw error;
-  }
-};

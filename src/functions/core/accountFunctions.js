@@ -74,7 +74,6 @@ export const accountLogin = async (tag, password) => {
       factoryAddress: factoryAddress,
       entryPoint: ENTRYPOINT_ADDRESS_V06,
     });
-
     return simpleAccount;
   } catch (error) {
     console.log('Error logging in or creating account:', error);
@@ -137,7 +136,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);
-    throw error;
+    throw error.details;
   }
 };
 

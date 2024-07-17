@@ -7,7 +7,7 @@ import CustomButton from '../components/CustomButton';
 import AccountList from '../components/AccountList';
 import AndroidScanModal from '../components/AndroidScanModal';
 //
-import { getData, getInstantAccount } from '../functions/core/asyncStorage';
+import { getData } from '../functions/core/asyncStorage';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 //
@@ -15,7 +15,6 @@ import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
   const [dataList, setDataList] = useState([]);
-  const [instantAccount, setInstantAccount] = useState('');
   const [scanModal, setScanModal] = useState(false);
 
   useFocusEffect(
@@ -23,9 +22,7 @@ const Login = ({ navigation }) => {
       const fetchData = async () => {
         try {
           const data = await getData();
-          const instantAccount = await getInstantAccount();
           setDataList(data || []);
-          setInstantAccount (instantAccount || '');
         } catch (error) {
           console.error('Error fetching saved accounts:', error);
         }

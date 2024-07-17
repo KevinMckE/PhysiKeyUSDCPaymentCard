@@ -7,6 +7,7 @@ import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
 import InstantAccept from '../screens/InstantAccept';
 import InstantAcceptAccount from '../screens/InstantAcceptAccount';
+import InstantAcceptTransfer from '../screens/InstantAcceptTransfer';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
@@ -53,6 +54,13 @@ const AppNavigator = () => {
           component={InstantAcceptAccount}
           options={{
             title: 'Details',
+          }}
+        />
+        <Stack.Screen
+          name="InstantAcceptTransfer"
+          component={InstantAcceptTransfer}
+          options={{
+            title: 'Transfer Assets',
           }}
         />
         <Stack.Screen

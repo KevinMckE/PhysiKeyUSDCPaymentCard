@@ -8,6 +8,7 @@ import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 //
 import Account from './Account';
 import Fund from './Fund';
+import Transak from '../components/Transak';
 import History from './History';
 import Contacts from './Contacts';
 import styles from '../styles/common';
@@ -103,7 +104,7 @@ const Home = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="Fund"
-        component={Fund}
+        component={Transak}
         initialParams={{ label, publicKey, balance, activity }}
         options={{
           tabBarLabel: 'Fund',

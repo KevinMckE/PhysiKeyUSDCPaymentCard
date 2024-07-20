@@ -11,7 +11,6 @@ import styles from '../styles/common';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const InstantAccountTransfer = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -223,7 +222,7 @@ const InstantAccountTransfer = ({ navigation, route }) => {
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
         handlePasswords={handleRecipPassword}
-        title='Enter the recipients password.'
+        title='Enter the recipients password.' 
         changeGifSource={null}
       />
 

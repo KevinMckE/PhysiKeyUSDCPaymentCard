@@ -12,6 +12,7 @@ import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
+
 import styles from '../styles/common';
 
 const Stack = createStackNavigator();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, TextInput, Card } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
@@ -10,7 +10,6 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 const InstantAccountTransfer = ({ navigation, route }) => {
   const [step, setStep] = useState(0);
@@ -199,41 +198,46 @@ const InstantAccountTransfer = ({ navigation, route }) => {
 
   return (
     <>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#7FA324" />
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={styles.container}>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#7FA324" />
+            </View>
+          )}
+          <View style={styles.topContainer}>
+            <Text variant='titleLarge'>Follow the prompts to transfer USDC to another wallet.</Text>
           </View>
-        )}
-        <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to transfer USDC to another wallet.</Text>
+          <View style={styles.inputContainer}>
+            {renderStep()}
+            {inputError ? (
+              <Text style={styles.errorText}>{inputError}</Text>
+            ) : null}
+          </View>
+          <View style={styles.bottomContainer}>
+            {renderButtons()}
+          </View>
         </View>
-        <View style={styles.inputContainer}>
-          {renderStep()}
-          {inputError ? (
-            <Text style={styles.errorText}>{inputError}</Text>
-          ) : null}
-        </View>
-        <View style={styles.bottomContainer}>
-          {renderButtons()}
-        </View>
-      </View>
 
-      <InputModal
-        visible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-        handlePasswords={handleRecipPassword}
-        title='Enter the recipients password.'
-        changeGifSource={null}
-      />
-
-      {Platform.OS === 'android' && ( // Render modal only on Android
-        <AndroidScanModal
-          visible={scanModal}
-          closeScanModal={closeScanModal}
+        <InputModal
+          visible={modalVisible}
+          closeModal={() => setModalVisible(false)}
+          handlePasswords={handleRecipPassword}
+          title='Enter the recipients password.'
           changeGifSource={null}
         />
-      )}
+
+        {Platform.OS === 'android' && ( // Render modal only on Android
+          <AndroidScanModal
+            visible={scanModal}
+            closeScanModal={closeScanModal}
+            changeGifSource={null}
+          />
+        )}
+      </ImageBackground>
     </>
   );
 }

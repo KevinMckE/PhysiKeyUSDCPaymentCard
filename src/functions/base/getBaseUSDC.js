@@ -16,19 +16,14 @@ export const getUSDCBalance = async (address) => {
     const client = createPublicClient({
       transport: http(RPC_URL),
     });
-
     const accountBalance = await client.readContract({
       abi: abi,
       address: usdcContractAddress,
       functionName: 'balanceOf',
       args: [address],
     });
-
     let converted = Number(accountBalance) / 1000000;
-
-    // Format the balance to two decimal points
     let formattedBalance = converted.toFixed(2);
-
     return formattedBalance;
   } catch (error) {
     console.error('Error getting USDC balance:', error);

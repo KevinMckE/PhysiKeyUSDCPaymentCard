@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Pressable } from 'react-native';
+import { View, Image, Pressable, ImageBackground } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { trigger } from 'react-native-haptic-feedback';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -19,17 +19,21 @@ const InstantAcceptAccount = ({ navigation, route }) => {
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.topContainer}>
-          <Text variant='titleLarge'>This should be used a temporary wallet.</Text>
-        </View>
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={styles.container}>
+          <View style={styles.topContainer}>
+            <Text variant='titleLarge'>This should be used a temporary wallet.</Text>
+          </View>
 
-      </View >
-      <View style={styles.inputContainer}>
-        <Text>We recommend only keeping a small amount of money in this wallet.  Please utilize external tools to transfer your assets to a more secure place.</Text>
-        
-      </View>
-      <Pressable onPress={handleCopyToClipboard}>
+        </View >
+        <View style={styles.inputContainer}>
+          <Text>We recommend only keeping a small amount of money in this wallet.  Please utilize external tools to transfer your assets to a more secure place.</Text>
+
+        </View>
+        <Pressable onPress={handleCopyToClipboard}>
           <Card style={styles.card}>
             <View style={styles.keyContent}>
               <Text>Account Details: {publicKey}</Text>
@@ -40,10 +44,11 @@ const InstantAcceptAccount = ({ navigation, route }) => {
             </View>
           </Card>
         </Pressable>
-      <View style={styles.bottomContainer}>
-        <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
-        <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer', { publicKey }) }} />
-      </View>
+        <View style={styles.bottomContainer}>
+          <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+          <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer', { publicKey }) }} />
+        </View>
+      </ImageBackground>
     </>
   );
 }

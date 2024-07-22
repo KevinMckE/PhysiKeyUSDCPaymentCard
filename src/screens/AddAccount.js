@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 //
 import CustomButton from '../components/CustomButton';
@@ -127,25 +127,31 @@ const AddAccount = ({ navigation, route }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#7FA324" />
+    <>
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <KeyboardAvoidingView style={styles.container}>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#7FA324" />
+            </View>
+          )}
+          <View style={styles.topContainer}>
+            <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
           </View>
-        )}
-      <View style={styles.topContainer}>
-        <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        {renderStep()}
-        {inputError ? (
-          <Text style={styles.errorText}>{inputError}</Text>
-        ) : null}
-      </View>
-      <View style={styles.bottomContainer}>
-        {renderButtons()}
-      </View>
-    </KeyboardAvoidingView>
+          <View style={styles.inputContainer}>
+            {renderStep()}
+            {inputError ? (
+              <Text style={styles.errorText}>{inputError}</Text>
+            ) : null}
+          </View>
+          <View style={styles.bottomContainer}>
+            {renderButtons()}
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground></>
   );
 }
 

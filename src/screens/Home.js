@@ -7,7 +7,7 @@ import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
 import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 //
 import Account from './Account';
-import Fund from './Fund';
+import Transfer from './Transfer';
 import History from './History';
 import Contacts from './Contacts';
 import styles from '../styles/common';
@@ -102,11 +102,11 @@ const Home = ({ route, navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Fund"
-        component={Fund}
+        name="Transfer"
+        component={Transfer}
         initialParams={{ label, publicKey, balance, activity }}
         options={{
-          tabBarLabel: 'Fund',
+          tabBarLabel: 'Transfer',
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../assets/icons/fund.png')}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
@@ -136,39 +136,44 @@ const Request = ({ navigation, route }) => {
 
   return (
     <>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#7FA324" />
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={styles.container}>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#7FA324" />
+            </View>
+          )}
+          <View style={styles.topContainer}>
+            <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
           </View>
-        )}
-        <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
+          <View style={styles.inputContainer}>
+            {renderStep()}
+            {inputError ? (
+              <Text style={styles.errorText}>{inputError}</Text>
+            ) : null}
+          </View>
+          <View style={styles.bottomContainer}>
+            {renderButtons()}
+          </View>
         </View>
-        <View style={styles.inputContainer}>
-          {renderStep()}
-          {inputError ? (
-            <Text style={styles.errorText}>{inputError}</Text>
-          ) : null}
-        </View>
-        <View style={styles.bottomContainer}>
-          {renderButtons()}
-        </View>
-      </View>
 
-      <InputModal
-        visible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-        handlePasswords={handlePasswords}
-        title='Enter your password.'
-      />
-
-      {Platform.OS === 'android' && ( // Render modal only on Android
-        <AndroidScanModal
-          visible={scanModal}
-          closeScanModal={closeScanModal}
+        <InputModal
+          visible={modalVisible}
+          closeModal={() => setModalVisible(false)}
+          handlePasswords={handlePasswords}
+          title='Enter your password.'
         />
-      )}
+
+        {Platform.OS === 'android' && ( // Render modal only on Android
+          <AndroidScanModal
+            visible={scanModal}
+            closeScanModal={closeScanModal}
+          />
+        )}
+      </ImageBackground>
     </>
   );
 }

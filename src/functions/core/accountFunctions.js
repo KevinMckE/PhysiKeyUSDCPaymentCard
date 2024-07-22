@@ -34,9 +34,9 @@ const abi = [
     type: 'function',
   },
 ];
+
 const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
 const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
-//const contract = new web3.eth.Contract(usdcABI, usdcAddress);
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 
@@ -56,10 +56,10 @@ export const accountLogin = async (tag, password) => {
     let finalDataChain = argonResult.rawHash;
     const innerHash = web3.utils.keccak256(finalDataChain);
     let privateKey = web3.utils.keccak256(innerHash + finalDataChain);
-    //let oneTimeEncryptionPW = web3.utils.randomHex(32);
 
+    //let oneTimeEncryptionPW = web3.utils.randomHex(32);
     //let encryptedPrivateKey = CryptoJS.AES.encrypt(privateKey, oneTimeEncryptionPW).toString();
-    let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
+    //let decryptedAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
     //let publicKey = decryptedAccount.address;
     //console.log('encryptedPrivateKey: ', encryptedPrivateKey);
     //console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
@@ -68,7 +68,6 @@ export const accountLogin = async (tag, password) => {
     const client = createPublicClient({
       transport: http(RPC_URL),
     });
-    //console.log(client)
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
       privateKey: privateKey,
       factoryAddress: factoryAddress,
@@ -82,11 +81,9 @@ export const accountLogin = async (tag, password) => {
 };
 
 export const transferUSDC = async (tag, password, amount, recipient) => {
-
   let simpleAccount = await accountLogin(tag, password);
-
   try {
-    const factor = 10 ** 6; // for 6 decimal places
+    const factor = 10 ** 6; 
     const amountInWei = BigInt(parseFloat(amount) * factor);
 
     const cloudPaymaster = createPimlicoPaymasterClient({
@@ -132,7 +129,6 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
         },
       ]
     });
-
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);

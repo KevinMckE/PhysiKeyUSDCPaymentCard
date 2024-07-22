@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Image, Pressable, Platform } from 'react-native';
+import { View, ActivityIndicator, Image, Pressable, Platform, ImageBackground } from 'react-native';
 import { Text, TextInput, Card } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //
@@ -27,7 +27,7 @@ const InstantAccept = ({ navigation }) => {
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
+
   useEffect(() => {
     const initializeAccount = async () => {
       const defaultKey = "default";
@@ -38,11 +38,11 @@ const InstantAccept = ({ navigation }) => {
           console.log('creating new...')
           await AsyncStorage.setItem(defaultKey, input);
           const account = await accountLogin(input, input);
-          setPublicKey(account.address); 
+          setPublicKey(account.address);
         } else {
           console.log('account exists...')
           const account = await accountLogin(storedValue, storedValue);
-          setPublicKey(account.address); 
+          setPublicKey(account.address);
         }
       } catch (error) {
         console.error("Error initializing account: ", error);
@@ -175,60 +175,61 @@ const InstantAccept = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#7FA324" />
-          </View>
-        )}
-
-        <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
-          <Card style={styles.card}>
-            <View style={styles.keyContent}>
-              <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
-              <Image
-                source={require('../assets/icons/user_setting.png')}
-                style={styles.copyImage}
-              />
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={styles.container}>
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#7FA324" />
             </View>
-          </Card>
-        </Pressable>
+          )}
 
-        <View style={styles.topContainer}>
-          <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
-        </View>
-        <View style={styles.inputContainer}>
-          {renderStep()}
-          {inputError ? (
-            <Text style={styles.errorText}>{inputError}</Text>
-          ) : null}
-        </View>
-        <View style={styles.bottomContainer}>
-          {renderButtons()}
-        </View>
-      </View >
+          <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
+            <Card style={styles.card}>
+              <View style={styles.keyContent}>
+                <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                <Image
+                  source={require('../assets/icons/user_setting.png')}
+                  style={styles.copyImage}
+                />
+              </View>
+            </Card>
+          </Pressable>
 
-      <InputModal
-        visible={modalVisible}
-        closeModal={() => setModalVisible(false)}
-        handlePasswords={handlePasswords}
-        title='Enter your password.'
-      />
+          <View style={styles.topContainer}>
+            <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            {renderStep()}
+            {inputError ? (
+              <Text style={styles.errorText}>{inputError}</Text>
+            ) : null}
+          </View>
+          <View style={styles.bottomContainer}>
+            {renderButtons()}
+          </View>
+        </View >
 
-      {
-        Platform.OS === 'android' && ( // Render modal only on Android
-          <AndroidScanModal
-            visible={scanModal}
-            closeScanModal={closeScanModal}
-          />
-        )
-      }
+        <InputModal
+          visible={modalVisible}
+          closeModal={() => setModalVisible(false)}
+          handlePasswords={handlePasswords}
+          title='Enter your password.'
+        />
+
+        {
+          Platform.OS === 'android' && ( // Render modal only on Android
+            <AndroidScanModal
+              visible={scanModal}
+              closeScanModal={closeScanModal}
+            />
+          )
+        }
+      </ImageBackground>
     </>
   );
 }
 
 export default InstantAccept;
-
-/*
-{"address": "0x8EE908f003B039aEbD870b89EdE4BcFFBEdb9d52", "client": {"account": undefined, "batch": undefined, "cacheTime": 4000, "call": [Function call], "ccipRead": undefined, "chain": undefined, "createBlockFilter": [Function createBlockFilter], "createContractEventFilter": [Function createContractEventFilter], "createEventFilter": [Function createEventFilter], "createPendingTransactionFilter": [Function createPendingTransactionFilter], "estimateContractGas": [Function estimateContractGas], "estimateFeesPerGas": [Function estimateFeesPerGas], "estimateGas": [Function estimateGas], "estimateMaxPriorityFeePerGas": [Function estimateMaxPriorityFeePerGas], "extend": [Function anonymous], "getBalance": [Function getBalance], "getBlobBaseFee": [Function getBlobBaseFee], "getBlock": [Function getBlock], "getBlockNumber": [Function getBlockNumber], "getBlockTransactionCount": [Function getBlockTransactionCount], "getBytecode": [Function getBytecode], "getChainId": [Function getChainId], "getCode": [Function getCode], "getContractEvents": [Function getContractEvents], "getEip712Domain": [Function getEip712Domain], "getEnsAddress": [Function getEnsAddress], "getEnsAvatar": [Function getEnsAvatar], "getEnsName": [Function getEnsName], "getEnsResolver": [Function getEnsResolver], "getEnsText": [Function getEnsText], "getFeeHistory": [Function getFeeHistory], "getFilterChanges": [Function getFilterChanges], "getFilterLogs": [Function getFilterLogs], "getGasPrice": [Function getGasPrice], "getLogs": [Function getLogs], "getProof": [Function getProof], "getStorageAt": [Function getStorageAt], "getTransaction": [Function getTransaction], "getTransactionConfirmations": [Function getTransactionConfirmations], "getTransactionCount": [Function getTransactionCount], "getTransactionReceipt": [Function getTransactionReceipt], "key": "public", "multicall": [Function multicall], "name": "Public Client", "pollingInterval": 4000, "prepareTransactionRequest": [Function prepareTransactionRequest], "readContract": [Function readContract], "request": [Function anonymous], "sendRawTransaction": [Function sendRawTransaction], "simulateContract": [Function simulateContract], "transport": {"fetchOptions": undefined, "key": "http", "name": "HTTP JSON-RPC", "request": [Function request], "retryCount": 3, "retryDelay": 150, "timeout": 10000, "type": "http", "url": "https://api.developer.coinbase.com/rpc/v1/base-sepolia/IA6ru-E7imSIFQpmKGOzYYjXvryTrRME"}, "type": "publicClient", "uid": "0f1b5286cd8", "uninstallFilter": [Function uninstallFilter], "verifyMessage": [Function verifyMessage], "verifySiweMessage": [Function verifySiweMessage], "verifyTypedData": [Function verifyTypedData], "waitForTransactionReceipt": [Function waitForTransactionReceipt], "watchBlockNumber": [Function watchBlockNumber], "watchBlocks": [Function watchBlocks], "watchContractEvent": [Function watchContractEvent], "watchEvent": [Function watchEvent], "watchPendingTransactions": [Function watchPendingTransactions]}, "encodeCallData": [Function encodeCallData], "encodeDeployCallData": [Function encodeDeployCallData], "entryPoint": "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", "getDummySignature": [Function getDummySignature], "getFactory": [Function getFactory], "getFactoryData": [Function getFactoryData], "getInitCode": [Function getInitCode], "getNonce": [Function getNonce], "nonceManager": undefined, "publicKey": "0x8EE908f003B039aEbD870b89EdE4BcFFBEdb9d52", "signMessage": [Function signMessage], "signTransaction": [Function signTransaction], "signTypedData": [Function signTypedData], "signUserOperation": [Function signUserOperation], "source": "SimpleSmartAccount", "type": "local"}
-*/

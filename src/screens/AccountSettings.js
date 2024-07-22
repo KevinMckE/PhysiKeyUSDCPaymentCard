@@ -7,7 +7,7 @@ const AccountSettings = () => {
   return (
     <>
       <ImageBackground
-        source={require('../assets/regen_card_background.png')}
+        source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>

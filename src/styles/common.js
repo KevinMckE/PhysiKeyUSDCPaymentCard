@@ -159,6 +159,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#000', 
   },
+
+  reverifyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  reverifyText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+  },
 });
 
 export default styles;

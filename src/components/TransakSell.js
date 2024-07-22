@@ -3,13 +3,17 @@ import { TransakWebView, Environments, Events } from '@transak/react-native-sdk'
 
 const TransakSell = () => {
   const transakConfig = {
-    apiKey: '54789b9d-02ca-4bb4-9f1c-b475348bb61d', // Required
-    environment: Environments.STAGING, // or Environments.PRODUCTION, Required
-    defaultCryptoCurrency: 'USDC', // Example cryptocurrency, adjust as needed
-    fiatCurrency: 'USD', // Fiat currency for off-ramp
-    fiatAmount: 100, // Amount to off-ramp
+    apiKey: '54789b9d-02ca-4bb4-9f1c-b475348bb61d', 
+    environment: Environments.STAGING, 
+    defaultCryptoCurrency: 'USDC',
+    fiatCurrency: 'USD',
+    fiatAmount: 100, 
     productsAvailed: 'SELL',
-    // Other necessary configuration parameters for off-ramping
+    networks: 'BASE',
+    cryptoCurrencyList: 'USDC', 
+    disableCrypto: true,
+    disableNetwork: true, 
+    disableFiat: true, 
   };
 
   const onTransakEventHandler = (event, data) => {

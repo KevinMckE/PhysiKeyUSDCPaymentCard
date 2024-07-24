@@ -4,7 +4,6 @@ import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navig
 import { useIsFocused } from '@react-navigation/native';
 //
 import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
-import { getUSDCBalance } from '../functions/base/getBaseUSDC';
 //
 import Account from './Account';
 import Transfer from './Transfer';
@@ -21,6 +20,7 @@ const Home = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const isFocused = useIsFocused();
 
+  /** 
   const fetchBalance = async () => {
     try {
       let fetchedActivity = await getBaseUSDCActivity(publicKey);
@@ -42,7 +42,7 @@ const Home = ({ route, navigation }) => {
     }
     fetchBalance();
   }, [isFocused, navigation]);
-
+*/
   if (isLoading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>

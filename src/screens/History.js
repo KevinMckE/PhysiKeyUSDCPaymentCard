@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+//
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
-
+//
 import TransactionList from '../components/TransactionList';
-
+//
 import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();

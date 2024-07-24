@@ -15,7 +15,6 @@ import styles from '../styles/common';
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = ({ route, navigation }) => {
-  console.log(publicKey)
   const { label, publicKey } = route.params;
   const [balance, setBalance] = useState('');
   const [activity, setActivity] = useState([]);
@@ -54,7 +53,7 @@ const Home = ({ route, navigation }) => {
 
   return (
     <Tab.Navigator
-      theme={{ colors: { secondaryContainer: '#7FA324' } }}
+      theme={{ colors: { secondaryContainer: '#94BE43' } }}
       initialRouteName="Account"
       activeColor="#000000"
       inactiveColor="#808080"

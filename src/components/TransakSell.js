@@ -1,9 +1,10 @@
 import React from 'react';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
-
+import { TRANSAK_API_KEY } from '@env';
+//walletAddress 
 const TransakSell = () => {
   const transakConfig = {
-    apiKey: '54789b9d-02ca-4bb4-9f1c-b475348bb61d', 
+    apiKey: TRANSAK_API_KEY, 
     environment: Environments.STAGING, 
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
@@ -14,6 +15,7 @@ const TransakSell = () => {
     disableCrypto: true,
     disableNetwork: true, 
     disableFiat: true, 
+    themeColor: '000000',
   };
 
   const onTransakEventHandler = (event, data) => {

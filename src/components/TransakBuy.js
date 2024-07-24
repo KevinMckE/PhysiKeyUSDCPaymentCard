@@ -1,23 +1,25 @@
 import React from 'react';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
+import { TRANSAK_API_KEY } from '@env';
 
 const TransakBuy = () => {
   const transakConfig = {
-    apiKey: '54789b9d-02ca-4bb4-9f1c-b475348bb61d', 
-    environment: Environments.STAGING, 
+    apiKey: TRANSAK_API_KEY,
+    environment: Environments.STAGING,
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
-    fiatAmount: 100, 
     productsAvailed: 'BUY',
     networks: 'BASE',
-    cryptoCurrencyList: 'USDC', 
-    disableCrypto: true,
-    disableNetwork: true, 
-    disableFiat: true, 
+    cryptoCurrencyList: 'USDC',
+    disableCrypto: false,
+    disableNetwork: false,
+    disableFiat: false,
+    defaultPaymentMethod: 'pm_us_wire_bank_transfer',
+    themeColor: '000000',
   };
 
   const onTransakEventHandler = (event, data) => {
-    switch(event) {
+    switch (event) {
       case Events.ORDER_CREATED:
         console.log(event, data);
         break;

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, ImageBackground, Text, Platform, StyleSheet } from 'react-native';
+import { View, ImageBackground, Text, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TransakSell from '../components/TransakSell';
 import TransakBuy from '../components/TransakBuy';
+import ZeroFee from '../components/ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -20,7 +21,6 @@ const Transfer = ({ navigation, route }) => {
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); // Track verification status
   const { publicKey } = route.params;
-  console.log(publicKey);
 
   const closeScanModal = () => {
     cancelNfc();
@@ -86,10 +86,18 @@ const Transfer = ({ navigation, route }) => {
               <Tab.Screen
                 name="Onramp"
                 component={TransakBuy}
+                initialParams={{ publicKey: publicKey }}
+
               />
               <Tab.Screen
                 name="Offramp"
                 component={TransakSell}
+                initialParams={{ publicKey: publicKey }}
+              />
+              <Tab.Screen
+                name="Feeless"
+                component={ZeroFee}
+                initialParams={{ publicKey: publicKey }}
               />
             </Tab.Navigator>
           ) : (

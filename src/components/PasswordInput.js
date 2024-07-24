@@ -13,7 +13,7 @@ const PasswordInput = ({ text, value, setPassword }) => {
     <View>
       <TextInput
         mode="outlined"
-        theme={{ colors: { primary: 'green' } }}
+        theme={{ colors: { primary: '#2E3C49' } }}
         returnKeyType="done"
         style={styles.textInput}
         placeholder={text}

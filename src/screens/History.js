@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+// libraries
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-//
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// functions
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
-//
+// components
 import TransactionList from '../components/TransactionList';
-//
+// styles
 import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
@@ -36,8 +39,10 @@ const DayListComponent = ({ formattedData, limit }) => {
   );
 };
 
-const History = ({ route }) => {
-  const { activity } = route.params;
+const History = () => {
+ 
+  const { activity } = useContext(AccountContext);
+
   const [dayData, setDayData] = useState([]);
   const [monthData, setMonthData] = useState([]);
 

@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+
+// libraries
+import React, { useState, useContext } from 'react';
 import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-//
+// context 
+import { AccountContext } from '../contexts/AccountContext';
+// components
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
-//
+
+/**
 import { accountLogin } from '../functions/core/accountFunctions';
 import { storeData } from '../functions/core/asyncStorage';
+*/
 import styles from '../styles/common';
 
 const AddAccount = ({ navigation, route }) => {
+
+  const { loading, setNewAccount } = useContext(AccountContext);
+  const { tag } = route.params;
+
   const [step, setStep] = useState(0);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const { tag } = route.params;
 
   const handleNextStep = () => {
     switch (step) {
@@ -40,7 +47,7 @@ const AddAccount = ({ navigation, route }) => {
       case 1:
         if (label.trim() !== '') {
           setInputError('');
-          handleLogin(tag, password, label);
+          setNewAccount(tag, password, label, navigation);
         } else {
           setInputError('Oops! Please enter a name.');
         }
@@ -54,6 +61,7 @@ const AddAccount = ({ navigation, route }) => {
     setStep(step - 1);
   };
 
+  /** 
   const handleLogin = async (tag, password, name) => {
     try {
       setLoading(true);
@@ -65,6 +73,7 @@ const AddAccount = ({ navigation, route }) => {
       console.error('Cannot complete handleLogin: ', error);
     }
   };
+*/
 
   const renderStep = () => {
     switch (step) {
@@ -151,7 +160,8 @@ const AddAccount = ({ navigation, route }) => {
             {renderButtons()}
           </View>
         </KeyboardAvoidingView>
-      </ImageBackground></>
+      </ImageBackground>
+    </>
   );
 }
 

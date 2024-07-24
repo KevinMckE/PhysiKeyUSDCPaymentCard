@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+// libraries
+import React, { useState, useEffect, useContext } from 'react';
 import { Image, ActivityIndicator, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import { useIsFocused } from '@react-navigation/native';
-//
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// functions 
 import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
-//
+// pages
 import Account from './Account';
 import Transfer from './Transfer';
 import History from './History';
@@ -14,36 +16,10 @@ import styles from '../styles/common';
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = ({ route, navigation }) => {
-  const { label, publicKey } = route.params;
-  const [balance, setBalance] = useState('');
-  const [activity, setActivity] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const isFocused = useIsFocused();
 
-  /** 
-  const fetchBalance = async () => {
-    try {
-      let fetchedActivity = await getBaseUSDCActivity(publicKey);
-      setActivity(fetchedActivity);
-      let fetchedBalance = await getUSDCBalance(publicKey);
-      if (fetchedBalance === '0.') {
-        fetchedBalance = '0.0';
-      }
-      setBalance(fetchedBalance);
-      setIsLoading(false);
-    } catch (error) {
-      console.log('Cannot complete fetchBalance: ', error);
-    }
-  };
+  const { loading, activity } = useContext(AccountContext);
 
-  useEffect(() => {
-    if (isFocused) {
-      fetchBalance();
-    }
-    fetchBalance();
-  }, [isFocused, navigation]);
-*/
-  if (isLoading) {
+  if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
         <ActivityIndicator size="large" color="#7FA324" />
@@ -62,7 +38,6 @@ const Home = ({ route, navigation }) => {
       <Tab.Screen
         name="Account"
         component={Account}
-        initialParams={{ label, publicKey, balance, activity }}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
@@ -76,7 +51,6 @@ const Home = ({ route, navigation }) => {
       <Tab.Screen
         name="History"
         component={History}
-        initialParams={{ label, publicKey, balance, activity }}
         options={{
           tabBarLabel: 'History',
           tabBarIcon: ({ focused }) => (
@@ -103,7 +77,7 @@ const Home = ({ route, navigation }) => {
       <Tab.Screen
         name="Transfer"
         component={Transfer}
-        initialParams={{ label, publicKey, balance, activity }}
+        initialParams={{ activity }}
         options={{
           tabBarLabel: 'Transfer',
           tabBarIcon: ({ focused }) => (

@@ -1,26 +1,35 @@
-import React, { useState } from 'react';
+// libraries
+import React, { useState, useContext } from 'react';
 import { View, ImageBackground, Text, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// components
 import TransakSell from '../components/TransakSell';
 import TransakBuy from '../components/TransakBuy';
 import ZeroFee from '../components/ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
+// functions
 import { accountLogin } from '../functions/core/accountFunctions';
-import styles from '../styles/common';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+// styles
+import styles from '../styles/common';
+
 
 const Tab = createMaterialTopTabNavigator();
 
-const Transfer = ({ navigation, route }) => {
+const Transfer = () => {
+
+  const { publicKey } = useContext(AccountContext);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('Please reverify account before you proceed.');
   const [recipTag, setRecipTag] = useState('');
-  const [isVerified, setIsVerified] = useState(false); // Track verification status
-  const { publicKey } = route.params;
+  const [isVerified, setIsVerified] = useState(false); 
 
   const closeScanModal = () => {
     cancelNfc();
@@ -86,18 +95,14 @@ const Transfer = ({ navigation, route }) => {
               <Tab.Screen
                 name="Onramp"
                 component={TransakBuy}
-                initialParams={{ publicKey: publicKey }}
-
               />
               <Tab.Screen
                 name="Offramp"
                 component={TransakSell}
-                initialParams={{ publicKey: publicKey }}
               />
               <Tab.Screen
                 name="Feeless"
                 component={ZeroFee}
-                initialParams={{ publicKey: publicKey }}
               />
             </Tab.Navigator>
           ) : (

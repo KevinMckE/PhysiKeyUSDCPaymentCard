@@ -1,15 +1,21 @@
-import React from 'react';
+// libraries
+import React, { useContext } from 'react';
 import { View, Image, Pressable, ImageBackground } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
 import { Text, Card, List } from 'react-native-paper';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { trigger } from 'react-native-haptic-feedback';
+// components
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
 import CustomButton from '../components/CustomButton';
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// styles
 import styles from '../styles/common';
-import { trigger } from 'react-native-haptic-feedback';
 
-const Account = ({ navigation, route }) => {
-  const { label, publicKey, account, balance, activity } = route.params;
+const Account = ({ navigation }) => {
+
+  const { activity, publicKey, accountName, balance } = useContext(AccountContext);
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
 
   const handleCopyToClipboard = () => {
@@ -31,7 +37,7 @@ const Account = ({ navigation, route }) => {
           <Card style={styles.card}>
             <View style={styles.keyContent}>
               <List.Item
-                title={label}
+                title={accountName}
                 description={truncatedKey}
               />
               <Image
@@ -58,8 +64,8 @@ const Account = ({ navigation, route }) => {
           limit={3}
         />
         <View style={styles.mainButtons}>
-          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send', { publicKey, label }); }} />
-          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request', {  publicKey, label }); }} />
+          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send') }}/>
+          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request') }}/>
         </View>
       </ImageBackground>
     </>

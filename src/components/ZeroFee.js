@@ -1,13 +1,18 @@
-import React from 'react';
+// libraries
+import React, {useContext} from 'react';
 import styles from '../styles/common';
 import { View, Text } from 'react-native';
+// context
+import { AccountContext } from '../contexts/AccountContext';
 
 const ZeroFee = () => {
-  console.log(publicKey)
+
+  const { publicKey } = useContext(AccountContext);
+
   return (
     <>
       <View style={styles.reverifyContainer}>
-        <Text style={styles.reverifyText}>Test</Text>
+        <Text style={styles.reverifyText}>{publicKey}</Text>
       </View>
     </>
   );

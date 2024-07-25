@@ -1,22 +1,24 @@
+/////////////////////////////////
+// ADDACCOUNT PAGE //////////////
+// Users can add a new account //
+// by scanning their card,     //
+// naming their account,       //
+// and setting a password      //
+// RegenCard 2024              //
+/////////////////////////////////
 
 // libraries
-import React, { useState, useContext } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground } from 'react-native';
-import { Text, TextInput } from 'react-native-paper';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';import { Text, TextInput } from 'react-native-paper';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
-
-/**
-import { accountLogin } from '../functions/core/accountFunctions';
-import { storeData } from '../functions/core/asyncStorage';
-*/
+// styles
 import styles from '../styles/common';
 
 const AddAccount = ({ navigation, route }) => {
-
   const { loading, setNewAccount } = useContext(AccountContext);
   const { tag } = route.params;
 
@@ -25,6 +27,21 @@ const AddAccount = ({ navigation, route }) => {
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleNextStep = () => {
     switch (step) {
@@ -61,74 +78,59 @@ const AddAccount = ({ navigation, route }) => {
     setStep(step - 1);
   };
 
-  /** 
-  const handleLogin = async (tag, password, name) => {
-    try {
-      setLoading(true);
-      let account = await accountLogin(tag, password);
-      await storeData(name, account.address);
-      setLoading(false);
-      navigation.navigate('Home', { label: name, publicKey: account.address, account });
-    } catch (error) {
-      console.error('Cannot complete handleLogin: ', error);
-    }
-  };
-*/
-
   const renderStep = () => {
     switch (step) {
       case 0:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(1/2) Enter a password. Do not share this value. We cannot recover passwords for you.</Text>
-            <PasswordInput
-              text='Enter Password'
-              password={password}
-              setPassword={setPassword}
-            />
-            <PasswordInput
-              text='Confirm Password'
-              password={confirmPassword}
-              setPassword={setConfirmPassword}
-            />
-          </View>
+          <>
+            <TouchableOpacity style={styles.topContainer} onPress={() => console.log('Info clicked')}>
+              <Text variant='titleLarge'>(1/2) Enter a password. </Text>
+              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+            </TouchableOpacity>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <PasswordInput
+                text='Enter Password'
+                password={password}
+                setPassword={setPassword}
+              />
+              <PasswordInput
+                text='Confirm Password'
+                password={confirmPassword}
+                setPassword={setConfirmPassword}
+              />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
+              <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+            </View>
+          </>
         );
       case 1:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(2/2) Name this account. You can change this name at any time.</Text>
-            <TextInput
-              mode="outlined"
-              theme={{ colors: { primary: 'green' } }}
-              returnKeyType="done"
-              style={styles.textInput}
-              placeholder={'Enter name'}
-              value={label}
-              onChangeText={setLabel}
-              autoCapitalize='none'
-            />
-          </View>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const renderButtons = () => {
-    switch (step) {
-      case 0:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Save Password' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
-          </View>
-        );
-      case 1:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Save and Login' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={handlePreviousStep} />
-          </View>
+          <>
+            <View style={styles.topContainer}>
+              <Text variant='titleLarge'>(2/2) Name this account.</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                theme={{ colors: { primary: '#2E3C49' } }}
+                returnKeyType="done"
+                style={styles.textInput}
+                placeholder={'Enter name'}
+                value={label}
+                onChangeText={setLabel}
+                autoCapitalize='none'
+              />
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
+              <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+            </View>
+          </>
         );
       default:
         return null;
@@ -136,32 +138,26 @@ const AddAccount = ({ navigation, route }) => {
   };
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <KeyboardAvoidingView style={styles.container}>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#7FA324" />
-            </View>
-          )}
-          <View style={styles.topContainer}>
-            <Text variant='titleLarge'>Follow the prompts to add an account.</Text>
-          </View>
-          <View style={styles.inputContainer}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.container}>
+            {loading && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#7FA324" />
+              </View>
+            )}
             {renderStep()}
-            {inputError ? (
-              <Text style={styles.errorText}>{inputError}</Text>
-            ) : null}
           </View>
-          <View style={styles.bottomContainer}>
-            {renderButtons()}
-          </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
       </ImageBackground>
-    </>
+    </KeyboardAvoidingView>
   );
 }
 

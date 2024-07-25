@@ -1,6 +1,6 @@
 // libraries
 import React, { useRef, useContext } from 'react';
-import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
+import { StyleSheet, ScrollView, Text, Pressable, View, Image, KeyboardAvoidingView } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
 // context
@@ -124,5 +124,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
+    marginRight: 10,
   }
 });

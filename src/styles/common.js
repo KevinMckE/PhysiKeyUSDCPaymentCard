@@ -1,25 +1,11 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+  // CORE 
   container: {
     flex: 1,
     flexDirection: 'column',
     height: '100%',
-  },
-  landingTopContainer: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  landingBackgroundImage: {
-    position: 'absolute',
-    height: 650,
-    opacity: 1,
-  },
-  landingBottomContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   backgroundImage: {
     position: 'absolute',
@@ -27,7 +13,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     opacity: 1,
-
   },
   centeredImage: {
     position: 'absolute',
@@ -45,14 +30,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 3,
   },
-  topContainer: {
-    padding: 30,
-  },
-  bottomContainer: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   linkText: {
     color: 'blue',
     textDecorationLine: 'underline',
@@ -72,26 +50,18 @@ const styles = StyleSheet.create({
   keyContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', 
+    alignItems: 'center',
     padding: 10,
   },
   copyImage: {
     width: 30,
     height: 30,
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
-  errorText: {
-    color: 'red',
-  },
+
   transferButton: {
     margin: 10,
     alignItems: 'center',
-  },
-  inputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 2,
-    padding: 10,
   },
   textInput: {
     marginTop: 10,
@@ -122,7 +92,7 @@ const styles = StyleSheet.create({
   mainButtons: {
     position: 'absolute',
     flexDirection: 'row',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     gap: 10,
     bottom: 0,
     left: 0,
@@ -132,12 +102,12 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(23, 23, 23, 0.1)',
   },
   tabBarIcon: {
-    width: 24, 
+    width: 24,
     height: 24,
-    resizeMode: 'contain', 
+    resizeMode: 'contain',
   },
   inactiveTabIcon: {
-    tintColor: '#808080', 
+    tintColor: '#808080',
   },
   textContainer: {
     flexDirection: 'row',
@@ -149,17 +119,16 @@ const styles = StyleSheet.create({
   headerButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 15, 
+    marginLeft: 15,
   },
   headerButtonText: {
-    fontSize: 16, 
+    fontSize: 16,
     color: '#000',
   },
   headerButtonArrow: {
     fontSize: 22,
-    color: '#000', 
+    color: '#000',
   },
-
   reverifyContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -170,6 +139,62 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'red',
     textAlign: 'center',
+  },
+
+  // CORE PAGE CONTAINERS
+  topContainer: {
+    padding: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 2,
+    padding: 10,
+  },
+  inputContainerKeyboard: {
+    flex: 0,
+  },
+  bottomContainer: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    padding: 10,
+  },
+  bottomContainerKeyboard: {
+    flex: 0,
+  },
+  errorContainer: {
+    height: 20,
+  },
+  errorText: {
+    color: 'red',
+  },
+  icon: {
+    marginLeft: 10,
+    width: 24,
+    height: 24,
+  },
+
+  // LANDING PAGE
+  landingTopContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  landingBackgroundImage: {
+    position: 'absolute',
+    height: 650,
+    opacity: 1,
+  },
+  landingBottomContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

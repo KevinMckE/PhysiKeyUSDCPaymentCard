@@ -1,7 +1,18 @@
+/////////////////////////////////
+// LANDING PAGE   ///////////////
+// Direct users between        //
+// instant accept or           //
+// logging into a new account  //
+// RegenCard 2024           /////
+/////////////////////////////////
+
+// libraries
 import * as React from 'react';
 import { View, Image, TouchableOpacity, Linking, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
+// components
 import CustomButton from '../components/CustomButton';
+// styles
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {

@@ -7,7 +7,7 @@ const CustomButton = ({ text, type, size, onPress }) => {
     <Button
       mode={type === 'primary' ? 'contained' : 'outlined'}
       onPress={onPress}
-      style={[styles.button, [{ marginVertical: 10, }, size === 'small' ? { width: 150 } : { width: 250 }]]} 
+      style={[styles.button, [{ marginVertical: 10, }, size === 'small' ? { width: 175 } : { width: 250 }]]} 
       buttonColor={type === 'primary' ? '#2E3C49' : '#ffffff'}
       labelStyle={size === 'small' ? { fontSize: 16 } : { fontSize: 18 }}
       textColor={type === 'primary' ? '#ffffff' : '#2E3C49'}

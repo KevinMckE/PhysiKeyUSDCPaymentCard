@@ -84,8 +84,9 @@ const Login = ({ navigation }) => {
         )}
 
         <View style={styles.bottomContainer}>
-          <CustomButton text='Add Account' type='primary' size='large' onPress={handleScanCardPress} />
-          <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
+          <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Landing'); }} />
+
+          <CustomButton text='Add Account' type='primary' size='small' onPress={handleScanCardPress} />
         </View>
 
         {Platform.OS === 'android' && (

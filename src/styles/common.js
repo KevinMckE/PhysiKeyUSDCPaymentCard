@@ -166,8 +166,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   bottomContainerKeyboard: {
-    flex: 0,
+    position: 'absolute',
+    bottom: 100,
+    padding: 0,
   },
+
   errorContainer: {
     height: 20,
   },

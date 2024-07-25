@@ -9,7 +9,7 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';import { Text, TextInput } from 'react-native-paper';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native'; import { Text, TextInput } from 'react-native-paper';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -124,6 +124,7 @@ const AddAccount = ({ navigation, route }) => {
                 value={label}
                 onChangeText={setLabel}
                 autoCapitalize='none'
+                onSubmitEditing={handleNextStep}
               />
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
@@ -146,7 +147,7 @@ const AddAccount = ({ navigation, route }) => {
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
           <View style={styles.container}>
             {loading && (
               <View style={styles.loadingContainer}>

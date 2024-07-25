@@ -1,10 +1,16 @@
-import React, { useRef } from 'react';
+// libraries
+import React, { useRef, useContext } from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Image } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// functions
 import { removeItemFromAsyncStorage, getData } from '../functions/core/asyncStorage';
 
 const AccountList = ({ data, navigation, setData }) => {
+
+  const { setNewActivity, setNewBalance, setNewName, setNewPublicKey } = useContext(AccountContext);
   const swipeableRefs = useRef([]);
 
   const renderRightActions = (item, index) => {
@@ -48,7 +54,13 @@ const AccountList = ({ data, navigation, setData }) => {
                 rightThreshold={10}
               >
                 <Pressable
-                  onPress={() => navigation.navigate('Home', { label: item.key, publicKey: item.value })}
+                  onPress={() => {
+                    setNewActivity(item.value);
+                    setNewBalance(item.value);
+                    setNewPublicKey(item.value);
+                    setNewName(item.key);
+                    navigation.navigate('Home');
+                  }}
                 >
                   <View style={styles.listItem}>
                     <List.Item

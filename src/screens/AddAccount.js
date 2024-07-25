@@ -10,6 +10,7 @@
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
 import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native'; import { Text, TextInput } from 'react-native-paper';
+import Tooltip from 'react-native-walkthrough-tooltip';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -28,6 +29,7 @@ const AddAccount = ({ navigation, route }) => {
   const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -83,10 +85,18 @@ const AddAccount = ({ navigation, route }) => {
       case 0:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => console.log('Info clicked')}>
+            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
               <Text variant='titleLarge'>(1/2) Enter a password. </Text>
               <Image source={require('../assets/icons/info.png')} style={styles.icon} />
             </TouchableOpacity>
+            <Tooltip
+              isVisible={tooltipVisible}
+              content={<Text>Enter a secure password you will remember.  We will never ask your for your password and cannot recover it for you.</Text>}
+              placement="bottom"
+              onClose={() => setTooltipVisible(false)}
+            >
+              <View />
+            </Tooltip>
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <PasswordInput
                 text='Enter Password'
@@ -111,9 +121,18 @@ const AddAccount = ({ navigation, route }) => {
       case 1:
         return (
           <>
-            <View style={styles.topContainer}>
-              <Text variant='titleLarge'>(2/2) Name this account.</Text>
-            </View>
+            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
+              <Text variant='titleLarge'>(2/2) Name this account. </Text>
+              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+            </TouchableOpacity>
+            <Tooltip
+              isVisible={tooltipVisible}
+              content={<Text>Naming your accounts will help organize them in the future.</Text>}
+              placement="bottom"
+              onClose={() => setTooltipVisible(false)}
+            >
+              <View />
+            </Tooltip>
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"

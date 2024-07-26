@@ -7,9 +7,10 @@
 /////////////////////////////////
 
 // libraries
-import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, ImageBackground } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
+import Tooltip from 'react-native-walkthrough-tooltip';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -25,7 +26,7 @@ import styles from '../styles/common';
 
 const Request = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -50,11 +51,6 @@ const Request = ({ navigation }) => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
-  }, []);
-
-
-  useEffect(() => {
-    setRecipientKey(publicKey)
   }, []);
 
   const handleNextStep = () => {
@@ -189,7 +185,7 @@ const Request = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
             <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey) }} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey); setNewActivity(publicKey) }} />
             </View>
           </>
         ) : (
@@ -229,17 +225,6 @@ const Request = ({ navigation }) => {
                   <ActivityIndicator size="large" color="#7FA324" />
                 </View>
               )}
-              <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
-                <Card style={styles.card}>
-                  <View style={styles.keyContent}>
-                    <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
-                    <Image
-                      source={require('../assets/icons/user_setting.png')}
-                      style={styles.copyImage}
-                    />
-                  </View>
-                </Card>
-              </Pressable>
               {renderStep()}
             </View>
           </ScrollView>

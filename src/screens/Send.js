@@ -7,9 +7,10 @@
 /////////////////////////////////
 
 // libraries
-import React, { useState } from 'react';
-import { View, ActivityIndicator, ImageBackground } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
+import Tooltip from 'react-native-walkthrough-tooltip';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -53,10 +54,6 @@ const Send = ({ navigation }) => {
       keyboardDidHideListener.remove();
     };
   }, []);
-
-  const handleTransferPress = () => {
-    navigation.navigate('Home');
-  };
 
   const handleNextStep = () => {
     switch (step) {
@@ -145,7 +142,6 @@ const Send = ({ navigation }) => {
       setStatusMessage(receipt);
       setSuccess(true);
       setIsLoading(false);
-      console.log(receipt)
       setStep(3);
     } catch (error) {
       setErrorMessage(error);
@@ -277,7 +273,7 @@ const Send = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); }} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey) }} />
             </View>
           </>
         ) : (

@@ -1,27 +1,57 @@
+/////////////////////////////////
+// ACCOUNT REQUEST USDC       ///
+// Request Payment from        //
+// another card                //
+//                             //
+// RegenCard 2024           /////
+/////////////////////////////////
+
+// libraries
 import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, ImageBackground } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
+// context 
+import { AccountContext } from '../contexts/AccountContext';
+// components
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+// functions
 import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
+// styles 
 import styles from '../styles/common';
 
-const Request = ({ navigation, route }) => {
+const Request = ({ navigation }) => {
+
+  const { publicKey, loading, setIsLoading, setStatusMessage } = useContext(AccountContext);
+
   const [step, setStep] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [receipt, setReceipt] = useState('');
+  const [success, setSuccess] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [recipientKey, setRecipientKey] = useState('');
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
-  const { publicKey, label } = route.params;
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
 
   useEffect(() => {
     setRecipientKey(publicKey)
@@ -62,15 +92,19 @@ const Request = ({ navigation, route }) => {
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
-    setLoading(true);
     try {
+      setIsLoading(true);
       let receipt = await transferUSDC(tagID, password, amount, publicKey);
-      setReceipt(receipt);
-      navigation.navigate('Home', { publicKey, label });
+      setStatusMessage(receipt);
+      setSuccess(true);
+      setIsLoading(false);
+      handleNextStep();
     } catch (error) {
-      setErrorMessage(error.message); // Set the error message to state variable
+      setErrorMessage(error);
+      setIsLoading(false);
+      setSuccess(false);
+      handleNextStep();
       console.error('Cannot complete handlePasswords: ', error);
-      setLoading(false);
     }
   };
 
@@ -78,56 +112,99 @@ const Request = ({ navigation, route }) => {
     switch (step) {
       case 0:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(1/2) How much are you requesting?</Text>
-            <TextInput
-              mode="outlined"
-              autoFocus={true}
-              style={styles.textInput}
-              theme={{ colors: { primary: 'green' } }}
-              placeholder="Amount"
-              value={amount}
-              onChangeText={amount => setAmount(amount)}
-              returnKeyType={'done'}
-              keyboardType={'numeric'}
-            />
-            {errorMessage ? (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            ) : null}
-          </View>
+          <>
+            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
+              <Text variant='titleLarge'>(1/2) How much USDC?</Text>
+              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+            </TouchableOpacity>
+            <Tooltip
+              isVisible={tooltipVisible}
+              content={<Text>Enter a valid value. To be valid enter a number greater than 0.</Text>}
+              placement="bottom"
+              onClose={() => setTooltipVisible(false)}
+            >
+              <View />
+            </Tooltip>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                autoFocus={true}
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Amount"
+                value={amount}
+                onChangeText={amount => setAmount(amount)}
+                returnKeyType={'done'}
+                keyboardType={'numeric'}
+              />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.nagivate('Home')} />
+              <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            </View>
+          </>
         );
       case 1:
         return (
-          <View style={styles.inputContainer}>
-
-            <Text style={styles.textMargin} variant='titleLarge'>(2/2) Review Details. You will scan your card to pay.</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
-            {errorMessage ? (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            ) : null}
-          </View>
+          <>
+            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
+              <Text variant='titleLarge'>(2/2) Review Details. </Text>
+              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+            </TouchableOpacity>
+            <Tooltip
+              isVisible={tooltipVisible}
+              content={<Text>We recommend verifying the "paid to" address matches that in your account details.</Text>}
+              placement="bottom"
+              onClose={() => setTooltipVisible(false)}
+            >
+              <View />
+            </Tooltip>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being transferred to: </Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
+              <CustomButton text='Scan Card' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+            </View>
+          </>
         );
-      default:
-        return null;
-    }
-  };
-
-  const renderButtons = () => {
-    switch (step) {
-      case 0:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text="Review and Pay" type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { navigation.navigate('Home', { publicKey, label }) }} />
-          </View>
-        );
-      case 1:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Scan Card and Send' type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
-          </View>
+      case 2:
+        return success ? (
+          <>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleLarge'>Success!</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>Perform another transfer or return to account page.</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+            <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey) }} />
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleLarge'>Failed!</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>{errorMessage}</Text>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Try Again' type='primary' size='large' onPress={() => setStep(0)} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); }} />
+            </View>
+          </>
         );
       default:
         return null;
@@ -136,44 +213,51 @@ const Request = ({ navigation, route }) => {
 
   return (
     <>
-      <ImageBackground
-        source={require('../assets/background.png')}
-        style={{ flex: 1, width: '100%', height: '100%' }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
       >
-        <View style={styles.container}>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#7FA324" />
+        <ImageBackground
+          source={require('../assets/background.png')}
+          style={{ flex: 1, width: '100%', height: '100%' }}
+        >
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
+
+            <View style={styles.container}>
+              {loading && (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="#7FA324" />
+                </View>
+              )}
+              <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
+                <Card style={styles.card}>
+                  <View style={styles.keyContent}>
+                    <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                    <Image
+                      source={require('../assets/icons/user_setting.png')}
+                      style={styles.copyImage}
+                    />
+                  </View>
+                </Card>
+              </Pressable>
+              {renderStep()}
             </View>
-          )}
-          <View style={styles.topContainer}>
-            <Text variant='titleLarge'>Follow the prompts to accept a payment.</Text>
-          </View>
-          <View style={styles.inputContainer}>
-            {renderStep()}
-            {inputError ? (
-              <Text style={styles.errorText}>{inputError}</Text>
-            ) : null}
-          </View>
-          <View style={styles.bottomContainer}>
-            {renderButtons()}
-          </View>
-        </View>
+          </ScrollView>
+        </ImageBackground >
+      </KeyboardAvoidingView >
 
-        <InputModal
-          visible={modalVisible}
-          closeModal={() => setModalVisible(false)}
-          handlePasswords={handlePasswords}
-          title='Enter your password.'
+      <InputModal
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        handlePasswords={handlePasswords}
+        title='Enter your password.'
+      />
+      {Platform.OS === 'android' && ( // Render modal only on Android
+        <AndroidScanModal
+          visible={scanModal}
+          closeScanModal={closeScanModal}
         />
-
-        {Platform.OS === 'android' && ( // Render modal only on Android
-          <AndroidScanModal
-            visible={scanModal}
-            closeScanModal={closeScanModal}
-          />
-        )}
-      </ImageBackground>
+      )}
     </>
   );
 }

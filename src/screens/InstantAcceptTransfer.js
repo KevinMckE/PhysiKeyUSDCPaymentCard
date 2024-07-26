@@ -1,5 +1,5 @@
 /////////////////////////////////
-// INSTANT ACCOUTN TRANSFER   ///
+// INSTANT ACCOUNT TRANSFER   ///
 // Transfer assets from an     //
 // instant account             //
 //                             //
@@ -8,8 +8,8 @@
 
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Pressable, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
-import { Text, TextInput, Card } from 'react-native-paper';
+import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tooltip from 'react-native-walkthrough-tooltip';
 // context 

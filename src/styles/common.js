@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 3,
   },
-
   linkText: {
     color: 'blue',
     textDecorationLine: 'underline',

@@ -8,8 +8,7 @@ import { AccountContext } from '../contexts/AccountContext';
 // components
 import CurrencyCard from '../components/CurrencyCard';
 import CustomButton from '../components/CustomButton';
-//
-
+// styles
 import styles from '../styles/common';
 
 const InstantAcceptAccount = ({ navigation }) => {

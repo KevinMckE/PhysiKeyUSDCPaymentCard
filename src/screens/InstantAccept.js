@@ -24,16 +24,17 @@ import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { accountLogin } from '../functions/core/accountFunctions';
-// 
+// styles
 import styles from '../styles/common';
 
 const randomstring = require('randomstring');
 
 const InstantAccept = ({ navigation }) => {
 
-  const { publicKey, loading, setNewPublicKey, setStatusMessage } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setNewPublicKey, setStatusMessage, setNewBalance } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
+  const [success, setSuccess] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
@@ -117,11 +118,17 @@ const InstantAccept = ({ navigation }) => {
     setErrorMessage('');
     setModalVisible(false);
     try {
+      setIsLoading(true);
       let receipt = await transferUSDC(tagID, password, amount, publicKey);
       setStatusMessage(receipt);
+      setSuccess(true);
+      setIsLoading(false);
       handleNextStep();
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage(error);
+      setIsLoading(false);
+      setSuccess(false);
+      handleNextStep();
       console.error('Cannot complete handlePasswords: ', error);
     }
   };
@@ -194,20 +201,32 @@ const InstantAccept = ({ navigation }) => {
           </>
         );
       case 2:
-        return (
+        return success ? (
           <>
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <Text style={styles.textMargin} variant='titleLarge'>Success!</Text>
             </View>
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-              <Text style={styles.textMargin} variant='titleMedium'>Return to peform another transaction or transfer assets.</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>Return to perform another transaction or transfer assets.</Text>
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{inputError}</Text>
               </View>
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Return' type='primary' size='large' onPress={() => { setStep(0) }} />
-              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer', { publicKey }) }} />
+              <CustomButton text='Return' type='primary' size='large' onPress={() => setStep(0)} />
+              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptAccount'); setNewBalance(publicKey)}} />
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleLarge'>Failed!</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>{errorMessage}</Text>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Try Again' type='primary' size='large' onPress={() => setStep(0)} />
             </View>
           </>
         );
@@ -227,23 +246,24 @@ const InstantAccept = ({ navigation }) => {
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-          <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
-                <Card style={styles.card}>
-                  <View style={styles.keyContent}>
-                    <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
-                    <Image
-                      source={require('../assets/icons/user_setting.png')}
-                      style={styles.copyImage}
-                    />
-                  </View>
-                </Card>
-              </Pressable>
+
             <View style={styles.container}>
               {loading && (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="large" color="#7FA324" />
                 </View>
               )}
+              <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
+              <Card style={styles.card}>
+                <View style={styles.keyContent}>
+                  <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                  <Image
+                    source={require('../assets/icons/user_setting.png')}
+                    style={styles.copyImage}
+                  />
+                </View>
+              </Card>
+            </Pressable>
               {renderStep()}
             </View>
           </ScrollView>

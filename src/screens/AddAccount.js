@@ -113,8 +113,8 @@ const AddAccount = ({ navigation, route }) => {
               </View>
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
-              <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
+              <CustomButton text='Save' type='primary' size='large' onPress={handleNextStep} />
             </View>
           </>
         );
@@ -147,8 +147,8 @@ const AddAccount = ({ navigation, route }) => {
               />
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
-              <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={handlePreviousStep} />
+              <CustomButton text='Save' type='primary' size='large' onPress={handleNextStep} />
             </View>
           </>
         );

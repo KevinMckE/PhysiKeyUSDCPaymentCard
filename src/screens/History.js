@@ -1,46 +1,18 @@
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import { View, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // functions
 import { formatDataByDay, formatDataByMonth } from '../functions/base/getBaseUSDCActivity';
 // components
-import TransactionList from '../components/TransactionList';
-// styles
-import styles from '../styles/common';
+import DayListComponent from '../components/MonthActivityList';
+import MonthListComponent from '../components/DayActivityList';
 
 const Tab = createMaterialTopTabNavigator();
 
-const MonthListComponent = ({ formattedData, limit }) => {
-  return (
-    <View>
-      {formattedData.map((monthData, index) => (
-        <View key={index}>
-          <Text style={styles.textContainer}>{monthData.monthYear}</Text>
-          <TransactionList data={monthData.data} limit={limit} />
-        </View>
-      ))}
-    </View>
-  );
-};
-
-const DayListComponent = ({ formattedData, limit }) => {
-  return (
-    <View>
-      {formattedData.map((dayData, index) => (
-        <View key={index}>
-          <Text style={styles.textContainer}>{dayData.dayMonthYear}</Text>
-          <TransactionList data={dayData.data} limit={limit} />
-        </View>
-      ))}
-    </View>
-  );
-};
-
 const History = () => {
- 
   const { activity } = useContext(AccountContext);
 
   const [dayData, setDayData] = useState([]);
@@ -56,15 +28,11 @@ const History = () => {
     fetchData();
   }, [activity]);
 
-  const RenderMonthListComponent = () => <MonthListComponent formattedData={monthData} limit={1000} />;
-  const RenderDayListComponent = () => <DayListComponent formattedData={dayData} limit={1000} />;
-
   return (
-    <>
-      <ImageBackground
-        source={require('../assets/background.png')}
-        style={{ flex: 1, width: '100%', height: '100%' }}
-      >
+    <ImageBackground
+      source={require('../assets/background.png')}
+      style={{ flex: 1, width: '100%', height: '100%' }}
+    >
       <View style={{ flex: 1 }}>
         <Tab.Navigator
           screenOptions={{
@@ -73,20 +41,16 @@ const History = () => {
         >
           <Tab.Screen
             name="Month"
-            component={RenderMonthListComponent}
+            children={() => <MonthListComponent formattedData={monthData} limit={1000} />}
           />
           <Tab.Screen
             name="Day"
-            component={RenderDayListComponent}
+            children={() => <DayListComponent formattedData={dayData} limit={1000} />}
           />
         </Tab.Navigator>
       </View>
-    </ImageBackground >
-    </>
+    </ImageBackground>
   );
 };
 
 export default History;
-
-
-

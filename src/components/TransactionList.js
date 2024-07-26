@@ -1,18 +1,36 @@
+// libraries
 import React from 'react';
-import { StyleSheet, ScrollView, Text, Pressable, View, Linking } from 'react-native';
+import { StyleSheet, Text, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
+// styles
+import Styles from '../styles/common';
 
 const TransactionList = ({ data, limit }) => {
-
+  console.log(data)
   const openFullDetails = (hash) => {
     const url = `https://sepolia.basescan.org/tx/${hash}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 
+  const formatDate = (string) => {
+    let date = new Date(string);
+    let formattedDate = new Intl.DateTimeFormat('default', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short'
+    }).format(date);
+    return formattedDate
+  };
+
   return (
     <>
+
       <Card style={styles.card}>
-        <ScrollView>
+        <View>
           <List.Section>
             {data.length === 0 ? (
               <View style={styles.placeholder}>
@@ -26,18 +44,17 @@ const TransactionList = ({ data, limit }) => {
                 >
                   <View style={[styles.listItem, (index === data.length - 1 && styles.lastItem) || (limit === 3 && index === 2 && styles.lastItem)]}>
                     <List.Item
-                      title={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
-                      description={`${item.age}`}
+                      title={formatDate(item.age)}
+                      description={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
                     />
                     <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
-                      {item.method === 'IN' ? '+' : '-'}{Math.round(Number(item.value) * Math.pow(10, 18))}
-                    </Text>
+                      {item.method === 'IN' ? '+' : '-'}{(Number(item.value) * Math.pow(10, 18)).toFixed(2)}                    </Text>
                   </View>
                 </Pressable>
               ))
             )}
           </List.Section>
-        </ScrollView>
+        </View>
       </Card>
     </>
   );
@@ -64,7 +81,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     textAlign: 'right',
-    paddingRight: 20,
     color: '#000000',
   },
   greenText: {
@@ -76,7 +92,7 @@ const styles = StyleSheet.create({
   placeholder: {
     justifyContent: 'center',
     margin: 10,
-    height: 50, // Adjust the height as needed
+    height: 50,
   },
   placeholderText: {
     fontSize: 18,

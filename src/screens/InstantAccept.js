@@ -69,10 +69,12 @@ const InstantAccept = ({ navigation }) => {
           await AsyncStorage.setItem(defaultKey, input);
           const account = await accountLogin(input, input);
           setNewPublicKey(account.address);
+          setNewBalance(account.address);
         } else {
           console.log('account exists...')
           const account = await accountLogin(storedValue, storedValue);
           setNewPublicKey(account.address);
+          setNewBalance(account.address);
         }
       } catch (error) {
         console.error("Error initializing account: ", error);
@@ -256,7 +258,7 @@ const InstantAccept = ({ navigation }) => {
               <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
               <Card style={styles.card}>
                 <View style={styles.keyContent}>
-                  <Text>Account Details: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                  <Text>Account: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                   <Image
                     source={require('../assets/icons/user_setting.png')}
                     style={styles.copyImage}

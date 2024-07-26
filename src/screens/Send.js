@@ -144,14 +144,13 @@ const Send = ({ navigation }) => {
       setIsLoading(false);
       setStep(3);
     } catch (error) {
-      setErrorMessage(error);
+      console.error('Cannot complete confirmSign: ', error.message);
+      setErrorMessage(error.message || 'An error occurred.');
       setIsLoading(false);
       setSuccess(false);
       setStep(3);
-      console.error('Cannot complete confirmSign: ', error.message);
     }
   };
-
   const renderStep = () => {
     switch (step) {
       case 0:

@@ -29,7 +29,7 @@ const InstantAcceptAccount = ({ navigation }) => {
           <Pressable onPress={handleCopyToClipboard}>
             <Card style={styles.card}>
               <View style={styles.keyContent}>
-                <Text>Account Details: {publicKey}</Text>
+                <Text>Account: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                 <Image
                   source={require('../assets/icons/copy_icon.png')}
                   style={styles.copyImage}
@@ -45,7 +45,10 @@ const InstantAcceptAccount = ({ navigation }) => {
             publicKey={publicKey}
           />
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-            <Text>We recommend only keeping a small amount of money in this wallet.  Please utilize external tools to transfer your assets to a more secure place.</Text>
+            <Text>For best security we recommend only keeping a small amount of money in this wallet. </Text>
+          </View>
+
+          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
             <CustomButton text='Transfer' type='primary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer') }} />
             <CustomButton text='Cashout' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccountSell') }} />
           </View >

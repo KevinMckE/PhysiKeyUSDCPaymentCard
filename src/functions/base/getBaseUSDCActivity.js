@@ -4,11 +4,9 @@ export const getBaseUSDCActivity = async (walletAddress) => {
   try {
     const apiEndpoint = `https://api-sepolia.basescan.org/api?module=account&action=tokentx&contractaddress=0x036cbd53842c5426634e7929541ec2318f3dcf7e&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${BASE_SCAN_API_KEY}`;
     const response = await fetch(apiEndpoint);
-
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
     }
-
     const data = await response.json();
     const transactions = data.result.map(transaction => {
       const { timeStamp, value, hash } = transaction;
@@ -19,7 +17,7 @@ export const getBaseUSDCActivity = async (walletAddress) => {
       return { age, method, value: valueInDollars, hash };
     });
 
-    return transactions;
+    return transactions.reverse();
   } catch (error) {
     console.error('Error fetching USDC transactions:', error);
     return [];
@@ -71,7 +69,7 @@ export const formatDataByMonth = (data) => {
   for (const monthYear in groupedData) {
     formattedData.push({ monthYear, data: groupedData[monthYear] });
   }
-  return formattedData.reverse();
+  return formattedData;
 };
 
 export const formatDataByDay = (data) => {
@@ -80,5 +78,5 @@ export const formatDataByDay = (data) => {
   for (const dayMonthYear in groupedData) {
     formattedData.push({ dayMonthYear, data: groupedData[dayMonthYear] });
   }
-  return formattedData.reverse();
+  return formattedData;
 };

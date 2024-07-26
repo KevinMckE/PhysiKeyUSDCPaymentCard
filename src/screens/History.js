@@ -21,8 +21,8 @@ const History = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const day = await formatDataByDay(activity);
-        const month = await formatDataByMonth(activity);
+        const day = formatDataByDay(activity);
+        const month = formatDataByMonth(activity);
         setDayData(day);
         setMonthData(month);
       } catch (error) {

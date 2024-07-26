@@ -11,6 +11,7 @@ const MonthListComponent = ({ formattedData, limit }) => {
       <ScrollView>
         {formattedData.map((monthData, index) => (
           <TransactionList
+            key={index}
             data={monthData.data}
             limit={limit}
           />

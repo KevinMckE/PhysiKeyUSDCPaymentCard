@@ -10,6 +10,7 @@ const DayListComponent = ({ formattedData, limit }) => {
       <ScrollView>
         {formattedData.map((dayData, index) => (
           <TransactionList
+            key={index}
             data={dayData.data}
             limit={limit}
           />

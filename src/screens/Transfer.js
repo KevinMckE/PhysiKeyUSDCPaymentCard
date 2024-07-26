@@ -89,7 +89,7 @@ const Transfer = () => {
           {isVerified ? (
             <Tab.Navigator
               screenOptions={{
-                tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
+                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
               }}
             >
               <Tab.Screen

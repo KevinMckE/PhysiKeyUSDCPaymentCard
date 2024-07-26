@@ -12,7 +12,6 @@ const DayListComponent = ({ formattedData, limit }) => {
           <TransactionList
             data={dayData.data}
             limit={limit}
-            dateTitle={dayData.dayMonthYear}
           />
         ))}
       </ScrollView>

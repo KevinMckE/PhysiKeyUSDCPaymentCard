@@ -1,15 +1,24 @@
+// libraries
 import React, { useState } from 'react';
 import { View, ActivityIndicator, ImageBackground } from 'react-native';
-import { Text, TextInput, Card } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// components
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+// functions
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
+// styles
 import styles from '../styles/common';
 
 const Send = ({ navigation, route }) => {
+
+  const { publicKey, accountName, balance } = useContext(AccountContext);
+
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [receipt, setReceipt] = useState('');
@@ -24,10 +33,8 @@ const Send = ({ navigation, route }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isSuccess, setSuccess] = useState(false);
 
-  const { publicKey, label } = route.params;
-
   const handleTransferPress = () => {
-    navigation.navigate('Home', { publicKey, label });
+    navigation.navigate('Home');
   };
 
   const handleNextStep = () => {
@@ -117,7 +124,7 @@ const Send = ({ navigation, route }) => {
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
       setReceipt(receipt);
       console.log(receipt);
-      navigation.navigate('Home', { publicKey, label });
+      navigation.navigate('Home');
     } catch (error) {
       console.error('Cannot complete confirmSign: ', error.message);
       setLoading(false);

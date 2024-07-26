@@ -20,10 +20,14 @@ const History = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const day = await Promise.resolve(formatDataByDay(activity));
-      const month = await Promise.resolve(formatDataByMonth(activity));
-      setDayData(day);
-      setMonthData(month);
+      try {
+        const day = await formatDataByDay(activity);
+        const month = await formatDataByMonth(activity);
+        setDayData(day);
+        setMonthData(month);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
     fetchData();
   }, [activity]);
@@ -36,7 +40,7 @@ const History = () => {
       <View style={{ flex: 1 }}>
         <Tab.Navigator
           screenOptions={{
-            tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
+            tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
           }}
         >
           <Tab.Screen

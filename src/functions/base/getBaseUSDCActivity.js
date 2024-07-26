@@ -27,7 +27,7 @@ export const getBaseUSDCActivity = async (walletAddress) => {
 };
 
 export const groupDataByMonth = (data) => {
-  return data.reduce((acc, item) => {
+  const groupedByMonth = data.reduce((acc, item) => {
     const date = new Date(item.age);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -38,11 +38,15 @@ export const groupDataByMonth = (data) => {
     acc[monthYear].push(item);
     return acc;
   }, {});
+  const sortedGroupedByMonth = Object.keys(groupedByMonth).reduce((acc, monthYear) => {
+    acc[monthYear] = groupedByMonth[monthYear].sort((a, b) => new Date(b.age) - new Date(a.age));
+    return acc;
+  }, {});
+  return sortedGroupedByMonth;
 };
 
-
 export const groupDataByDay = (data) => {
-  return data.reduce((acc, item) => {
+  const groupedByDay = data.reduce((acc, item) => {
     const date = new Date(item.age);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -54,6 +58,11 @@ export const groupDataByDay = (data) => {
     acc[dayMonthYear].push(item);
     return acc;
   }, {});
+  const sortedGroupedByDay = Object.keys(groupedByDay).reduce((acc, day) => {
+    acc[day] = groupedByDay[day].sort((a, b) => new Date(b.age) - new Date(a.age));
+    return acc;
+  }, {});
+  return sortedGroupedByDay;
 };
 
 export const formatDataByMonth = (data) => {
@@ -62,7 +71,7 @@ export const formatDataByMonth = (data) => {
   for (const monthYear in groupedData) {
     formattedData.push({ monthYear, data: groupedData[monthYear] });
   }
-  return formattedData.reverse(); 
+  return formattedData.reverse();
 };
 
 export const formatDataByDay = (data) => {
@@ -71,5 +80,5 @@ export const formatDataByDay = (data) => {
   for (const dayMonthYear in groupedData) {
     formattedData.push({ dayMonthYear, data: groupedData[dayMonthYear] });
   }
-  return formattedData.reverse(); 
+  return formattedData.reverse();
 };

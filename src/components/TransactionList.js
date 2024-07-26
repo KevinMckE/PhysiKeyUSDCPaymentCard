@@ -2,8 +2,6 @@
 import React from 'react';
 import { StyleSheet, Text, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
-// styles
-import Styles from '../styles/common';
 
 const TransactionList = ({ data, limit }) => {
   console.log(data)
@@ -28,7 +26,6 @@ const TransactionList = ({ data, limit }) => {
 
   return (
     <>
-
       <Card style={styles.card}>
         <View>
           <List.Section>

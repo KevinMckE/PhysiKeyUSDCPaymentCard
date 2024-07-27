@@ -17,7 +17,7 @@ import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
   const handleLinkPress = () => {
-    Linking.openURL('https://anywhereaccess.io');
+    navigation.navigate('WebViewScreen', { url: 'https://anywhereaccess.io' });
   };
 
   return (
@@ -34,7 +34,7 @@ const Landing = ({ navigation }) => {
             />
           </View>
           <View style={styles.landingBottomContainer}> 
-            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept', { navigation })}} />
+            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
             <CustomButton text='Login' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
             <Text variant="bodyLarge">Don't have a card?</Text>
             <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>

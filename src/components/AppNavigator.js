@@ -18,6 +18,7 @@ import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
+import WebViewScreen from '../screens/WebViewScreen';
 // styles
 import styles from '../styles/common';
 
@@ -34,6 +35,13 @@ const AppNavigator = () => {
               component={Landing}
               options={{
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="WebViewScreen"
+              component={WebViewScreen}
+              options={{
+                title: 'AnywhereAccess.io',
               }}
             />
             <Stack.Screen

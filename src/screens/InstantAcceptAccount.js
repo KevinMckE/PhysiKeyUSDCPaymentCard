@@ -46,17 +46,16 @@ const InstantAcceptAccount = ({ navigation }) => {
             publicKey={publicKey}
           />
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-            <Text>For best security we recommend only keeping a small amount of money in this wallet. </Text>
+            <Text>For best security we recommend only keeping a small amount of money in this wallet. Please consider transferring your assets if holding more that $500.</Text>
           </View>
 
-          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, }}>
             <CustomButton text='Transfer' type='primary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer') }} />
             <CustomButton text='Cashout' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccountSell') }} />
           </View >
-        </View>
-
-        <View style={styles.bottomContainer}>
-          <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+          <View style={styles.bottomContainer}>
+            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+          </View>
         </View>
       </ImageBackground>
     </>

@@ -64,6 +64,7 @@ const InstantAccept = ({ navigation }) => {
       const defaultKey = "default";
       let input = randomstring.generate(35);
       try {
+        setIsLoading(true);
         const storedValue = await AsyncStorage.getItem(defaultKey);
         if (!storedValue) {
           console.log('creating new...')
@@ -71,14 +72,18 @@ const InstantAccept = ({ navigation }) => {
           const account = await accountLogin(input, input);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
+          setIsLoading(false);
         } else {
           console.log('account exists...')
           const account = await accountLogin(storedValue, storedValue);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
+          setIsLoading(false);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error("Error initializing account: ", error);
+        navigation.navigate('Landing');
       }
     };
 

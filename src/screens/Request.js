@@ -138,7 +138,7 @@ const Request = ({ navigation }) => {
               </View>
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.nagivate('Home')} />
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.navigate('Home')} />
               <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
             </View>
           </>

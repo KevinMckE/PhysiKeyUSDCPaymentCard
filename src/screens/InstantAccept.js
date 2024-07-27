@@ -13,13 +13,14 @@ import { View, Pressable, KeyboardAvoidingView, ActivityIndicator, ImageBackgrou
 import { Text, TextInput, Card } from 'react-native-paper';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
 // functions 
 import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
@@ -30,9 +31,8 @@ import styles from '../styles/common';
 
 const randomstring = require('randomstring');
 
-const InstantAccept = () => {
-  
-  const navigation = useNavigation();
+const InstantAccept = ({ navigation }) => {
+
   const { publicKey, loading, setIsLoading, setNewPublicKey, setStatusMessage, setNewBalance } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
@@ -142,18 +142,12 @@ const InstantAccept = () => {
       case 0:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(1/2) How much USDC?</Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>Enter a valid value. To be valid enter a number greater than 0.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/2) How much USDC?"
+              content="Enter a valid amount. To be valid the number must be greater than zero."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"
@@ -179,18 +173,12 @@ const InstantAccept = () => {
       case 1:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(2/2) Review Details. </Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>We recommend verifying the "paid to" address matches that in your account details.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/2) Review Details."
+              content="We recommend verifying the 'paid to' address matches that in your account details."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being paid to: </Text>
               <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
@@ -218,7 +206,7 @@ const InstantAccept = () => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Return' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptAccount'); setNewBalance(publicKey)}} />
+              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptAccount'); setNewBalance(publicKey) }} />
             </View>
           </>
         ) : (
@@ -250,24 +238,19 @@ const InstantAccept = () => {
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-
             <View style={styles.container}>
-              {loading && (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#7FA324" />
-                </View>
-              )}
+              <LoadingOverlay loading={loading} />
               <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
-              <Card style={styles.card}>
-                <View style={styles.keyContent}>
-                  <Text>Account: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
-                  <Image
-                    source={require('../assets/icons/user_setting.png')}
-                    style={styles.copyImage}
-                  />
-                </View>
-              </Card>
-            </Pressable>
+                <Card style={styles.card}>
+                  <View style={styles.keyContent}>
+                    <Text>Account: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                    <Image
+                      source={require('../assets/icons/user_setting.png')}
+                      style={styles.copyImage}
+                    />
+                  </View>
+                </Card>
+              </Pressable>
               {renderStep()}
             </View>
           </ScrollView>

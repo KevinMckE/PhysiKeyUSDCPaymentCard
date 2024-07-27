@@ -8,7 +8,6 @@ import { AccountContext } from '../contexts/AccountContext';
 const ZeroFee = () => {
 
   const { publicKey } = useContext(AccountContext);
-
   return (
     <>
       <View style={styles.reverifyContainer}>

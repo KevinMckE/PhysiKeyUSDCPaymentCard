@@ -26,7 +26,7 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please reverify account before you proceed.');
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you proceed.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); 
 
@@ -105,8 +105,8 @@ const Transfer = () => {
               />
             </Tab.Navigator>
           ) : (
-            <View style={styles.reverifyContainer}>
-              <Text style={styles.reverifyText}>{errorMessage}</Text>
+            <View style={styles.inputContainer}>
+              <Text>{errorMessage}</Text>
               <CustomButton text='Start Verification' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}

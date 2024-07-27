@@ -37,6 +37,7 @@ const AccountContextProvider = (props) => {
     } catch (error) {
       console.error('Cannot complete setNewAccount: ', error);
       setStatus(error);
+      navigation.navigate('Login');
       setLoading(false);
     }
   };

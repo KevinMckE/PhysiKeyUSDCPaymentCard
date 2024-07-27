@@ -27,10 +27,11 @@ import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+  const [signModalVisible, setSignModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [recipTag, setRecipTag] = useState('');
   const [scanModal, setScanModal] = useState(false);
@@ -106,7 +107,7 @@ const Send = ({ navigation }) => {
       let tag = await scanSerialForKey();
       if (tag) {
         setTagID(tag);
-        setSignModal(true);
+        setSignModalVisible(true);
         setScanModal(false);
       }
     } catch (error) {
@@ -135,8 +136,9 @@ const Send = ({ navigation }) => {
     }
   };
 
-  const confirmSign = async () => {
+  const confirmSign = async (password) => {
     setErrorMessage('');
+    setSignModalVisible(false);
     try {
       setIsLoading(true);
       let receipt = await transferUSDC(tagID, password, amount, recipientKey);
@@ -238,7 +240,7 @@ const Send = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
-              <CustomButton text='Confirm' type='primary' size='large' onPress={() => { confirmSign(); }} />
+              <CustomButton text='Confirm' type='primary' size='large' onPress={() => { handleSignAndSend(); }} />
             </View>
           </>
         );
@@ -256,7 +258,7 @@ const Send = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey) }} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey), setNewActivity(publicKey) }} />
             </View>
           </>
         ) : (
@@ -301,6 +303,12 @@ const Send = ({ navigation }) => {
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
         handlePasswords={handlePasswords}
+        title='Enter your password.'
+      />
+      <InputModal
+        visible={signModalVisible}
+        closeModal={() => setSignModalVisible(false)}
+        handlePasswords={confirmSign}
         title='Enter your password.'
       />
       {Platform.OS === 'android' && ( // Render modal only on Android

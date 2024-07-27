@@ -1,4 +1,4 @@
-// 
+// libraries
 import React, { useContext } from 'react';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
 // context

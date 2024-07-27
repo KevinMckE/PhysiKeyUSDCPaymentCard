@@ -1,3 +1,13 @@
+/////////////////////////////////
+// TRANSACTION LIST         /////
+// Used on account page        //
+// shows recent transactions   //
+// on the give account         //
+//                             //
+//                             //
+/////////////////////////////////
+
+// libraries
 import React from 'react';
 import { StyleSheet, Text, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';

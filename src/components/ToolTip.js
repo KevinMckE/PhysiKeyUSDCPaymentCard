@@ -1,3 +1,12 @@
+/////////////////////////////////
+// TOOL TIP                 /////
+// Used as header text         //
+// and is pressable to show    //
+// helpful tips                //
+//                             //
+//                             //
+/////////////////////////////////
+
 // libraries
 import React from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';

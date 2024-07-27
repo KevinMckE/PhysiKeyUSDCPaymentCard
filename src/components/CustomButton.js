@@ -1,4 +1,13 @@
+/////////////////////////////////
+// CUSTOM BUTTON           //////
+// Custom button with easy     //
+// to change styles            //
+// Large/Small                 //
+// Primary/Secondary           //
+// RegenCard 2024              //
+/////////////////////////////////
 
+// libraries
 import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 

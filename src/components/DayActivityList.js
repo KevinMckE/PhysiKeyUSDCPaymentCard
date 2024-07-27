@@ -1,3 +1,12 @@
+/////////////////////////////////
+// DAY ACTIVITY LIST        /////
+// List activity by the day    //
+// Used in History page        //
+//                             //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 // libraries
 import React from 'react';
 import { ScrollView } from 'react-native';

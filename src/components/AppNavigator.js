@@ -1,3 +1,12 @@
+/////////////////////////////////
+// APP NAVIGATOR COMPONENT///////
+// Handle context AND stack    //
+// of screens for stack        //
+// navigation.  Used in APP.TSX//
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 // libraries
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';

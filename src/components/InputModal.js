@@ -1,3 +1,12 @@
+/////////////////////////////////
+// INPUT MODAL              /////
+//  Main input modal used      //
+// to input passwords when     //
+// performing account actions  //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 import React, { useState } from 'react';
 import { Modal, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';

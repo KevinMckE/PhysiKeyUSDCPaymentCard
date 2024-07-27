@@ -1,3 +1,13 @@
+/////////////////////////////////
+// PASSWORD INPUT           /////
+//                             //
+//                             //
+//                             //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
+// libraries
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';

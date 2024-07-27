@@ -1,3 +1,12 @@
+/////////////////////////////////
+// ACCOUNT LIST COMPONENT ///////
+// Handles the account list    //
+// utilizing async storage     //
+// to populate the list        //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 // libraries
 import React, { useRef, useContext } from 'react';
 import { StyleSheet, ScrollView, Text, Pressable, View, Image, KeyboardAvoidingView } from 'react-native';

@@ -1,6 +1,17 @@
+/////////////////////////////////
+// SAVE ACCOUNT MODAL       /////
+//                             //
+//                             //
+//                             //
+//                             //
+//                             //
+/////////////////////////////////
+
+// libraries
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Modal, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
+// components
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 

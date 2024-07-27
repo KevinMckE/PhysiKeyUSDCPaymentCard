@@ -1,4 +1,12 @@
-// LoadingOverlay.js
+/////////////////////////////////
+// LOADING OVERLAY          /////
+// Full page overlay           //
+// When context loading is true//
+// this blocks other content   //
+// until loaded                //
+// RegenCard 2024              //
+/////////////////////////////////
+
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 

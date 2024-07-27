@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+// libraries
+import React, { useContext } from 'react';
 import { View, Image, Pressable, ImageBackground } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { trigger } from 'react-native-haptic-feedback';

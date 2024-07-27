@@ -13,6 +13,7 @@ import { View, Pressable, KeyboardAvoidingView, ActivityIndicator, ImageBackgrou
 import { Text, TextInput, Card } from 'react-native-paper';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -29,8 +30,9 @@ import styles from '../styles/common';
 
 const randomstring = require('randomstring');
 
-const InstantAccept = ({ navigation }) => {
-
+const InstantAccept = () => {
+  
+  const navigation = useNavigation();
   const { publicKey, loading, setIsLoading, setNewPublicKey, setStatusMessage, setNewBalance } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
@@ -169,7 +171,7 @@ const InstantAccept = ({ navigation }) => {
               </View>
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.nagivate('Landing')} />
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.navigate('Landing')} />
               <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
             </View>
           </>

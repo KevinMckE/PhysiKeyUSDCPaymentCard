@@ -9,9 +9,8 @@
 
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Pressable, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
+import { View, Pressable, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput, Card } from 'react-native-paper';
-import Tooltip from 'react-native-walkthrough-tooltip';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
@@ -37,7 +36,7 @@ const InstantAccept = ({ navigation }) => {
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false );
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');

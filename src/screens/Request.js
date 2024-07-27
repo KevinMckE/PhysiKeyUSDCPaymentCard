@@ -8,15 +8,16 @@
 
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import Tooltip from 'react-native-walkthrough-tooltip';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
 // functions
 import { transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
@@ -109,18 +110,12 @@ const Request = ({ navigation }) => {
       case 0:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(1/2) How much USDC?</Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>Enter a valid value. To be valid enter a number greater than 0.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/2) How much USDC?"
+              content="Enter a valid amount. To be valid the number must be greater than zero."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"
@@ -146,18 +141,12 @@ const Request = ({ navigation }) => {
       case 1:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(2/2) Review Details. </Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>We recommend verifying the "paid to" address matches that in your account details.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/2) Review Details."
+              content="We recommend verifying the 'paid to' address matches that in your account details."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being transferred to: </Text>
               <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
@@ -184,7 +173,7 @@ const Request = ({ navigation }) => {
               </View>
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-            <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
+              <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
               <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey); setNewActivity(publicKey) }} />
             </View>
           </>
@@ -218,13 +207,8 @@ const Request = ({ navigation }) => {
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-
             <View style={styles.container}>
-              {loading && (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#7FA324" />
-                </View>
-              )}
+              <LoadingOverlay loading={loading} />
               {renderStep()}
             </View>
           </ScrollView>

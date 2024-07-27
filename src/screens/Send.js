@@ -8,15 +8,16 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import Tooltip from 'react-native-walkthrough-tooltip';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
 // functions
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
@@ -151,23 +152,18 @@ const Send = ({ navigation }) => {
       setStep(3);
     }
   };
+
   const renderStep = () => {
     switch (step) {
       case 0:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(1/3) Input recipient address.</Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>You can paste in this value or use a Regen Card to populate the value.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/3) Input recipient address"
+              content="You can paste in this value or use a Regen Card to populate the value."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"
@@ -195,18 +191,12 @@ const Send = ({ navigation }) => {
       case 1:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(2/3) How much?</Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>Enter a valid value.  Please note there is a 0% transaction fee.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/3) How much?"
+              content="Enter a valid value.  Please note there is current a 0% transaction fee."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"
@@ -231,18 +221,12 @@ const Send = ({ navigation }) => {
       case 2:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(3/3) Review Details.</Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>It is important to review the details. You will scan your card to confirm the transaction.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(3/3) Review Details"
+              content="It is important to review the details. You will scan your card to confirm the transaction."
+            />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <Text style={styles.textMargin} variant='titleMedium'>You are sending {amount} USDC to:</Text>
               <Text style={styles.textMargin} variant='titleMedium'>{String(recipientKey)}</Text>
@@ -305,13 +289,8 @@ const Send = ({ navigation }) => {
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-
             <View style={styles.container}>
-              {loading && (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color="#7FA324" />
-                </View>
-              )}
+              <LoadingOverlay loading={loading} />
               {renderStep()}
             </View>
           </ScrollView>

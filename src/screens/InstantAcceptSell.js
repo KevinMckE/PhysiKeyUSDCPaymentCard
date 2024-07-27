@@ -7,8 +7,6 @@ import TransakSell from '../components/TransakSell';
 import TransakBuy from '../components/TransakBuy';
 import ZeroFee from '../components/ZeroFee';
 
-
-
 const Tab = createMaterialTopTabNavigator();
 
 const InstantAccountSell = () => {
@@ -25,12 +23,12 @@ const InstantAccountSell = () => {
             }}
           >
             <Tab.Screen
-              name="Onramp"
-              component={TransakBuy}
-            />
-            <Tab.Screen
               name="Offramp"
               component={TransakSell}
+            />
+            <Tab.Screen
+              name="Onramp"
+              component={TransakBuy}
             />
             <Tab.Screen
               name="Feeless"

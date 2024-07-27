@@ -8,19 +8,18 @@ import { AccountContext } from '../contexts/AccountContext';
 import Account from './Account';
 import Transfer from './Transfer';
 import History from './History';
-import AccountSettings from './AccountSettings';
 import styles from '../styles/common';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Home = ({ route, navigation }) => {
+const Home = () => {
 
   const { loading, activity } = useContext(AccountContext);
 
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#7FA324" />
+        <ActivityIndicator size="large" color="#2E3C49" />
       </View>
     );
   }

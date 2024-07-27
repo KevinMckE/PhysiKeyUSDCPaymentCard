@@ -19,6 +19,7 @@ const AccountContextProvider = (props) => {
 
   const setNewAccount = async (tag, password, name, navigation) => {
     try {
+      setLoading(true);
       let account = await accountLogin(tag, password);
       let fetchedBalance = await getUSDCBalance(account.address);
       if (fetchedBalance === '0.') {
@@ -32,9 +33,11 @@ const AccountContextProvider = (props) => {
       setAccountName(name);
       await storeData(name, account.address);
       navigation.navigate('Home');
+      setLoading(false);
     } catch (error) {
       console.error('Cannot complete setNewAccount: ', error);
       setStatus(error);
+      setLoading(false);
     }
   };
 

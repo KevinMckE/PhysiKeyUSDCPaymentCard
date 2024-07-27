@@ -148,7 +148,7 @@ const AddAccount = ({ navigation, route }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Go Back' type='secondary' size='large' onPress={handlePreviousStep} />
-              <CustomButton text='Save' type='primary' size='large' onPress={handleNextStep} />
+              <CustomButton text='Login' type='primary' size='large' onPress={handleNextStep} />
             </View>
           </>
         );

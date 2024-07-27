@@ -1,6 +1,17 @@
+/////////////////////////////////
+// ANDROID SCAN MODAL     ///////
+// Android specific modal for  //
+// scanning NFC chips          //
+// this mimics iOS popups      //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
+// libraries
 import React from 'react';
 import { Modal, View, Image, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
+// components
 import CustomButton from '../components/CustomButton';
 
 const AndroidScanModal = ({ visible, closeScanModal }) => {

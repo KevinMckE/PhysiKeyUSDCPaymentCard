@@ -1,8 +1,15 @@
-import React from 'react';
+// libraies
+import React, { useContext } from 'react';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
+// context
+import { AccountContext } from '../contexts/AccountContext';
+// env
 import { TRANSAK_API_KEY } from '@env';
 
 const TransakBuy = () => {
+
+  const { publicKey } = useContext(AccountContext);
+
   const transakConfig = {
     apiKey: TRANSAK_API_KEY,
     environment: Environments.STAGING,
@@ -15,7 +22,8 @@ const TransakBuy = () => {
     disableNetwork: false,
     disableFiat: false,
     defaultPaymentMethod: 'pm_us_wire_bank_transfer',
-    themeColor: '000000',
+    themeColor: '2E3C49',
+    walletAddress: publicKey
   };
 
   const onTransakEventHandler = (event, data) => {

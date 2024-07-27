@@ -5,9 +5,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
-import TransakSell from '../components/TransakSell';
-import TransakBuy from '../components/TransakBuy';
-import ZeroFee from '../components/ZeroFee';
+import TransakSell from './TransakSell';
+import TransakBuy from './TransakBuy';
+import ZeroFee from './ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -18,7 +18,6 @@ import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 // styles
 import styles from '../styles/common';
 
-
 const Tab = createMaterialTopTabNavigator();
 
 const Transfer = () => {
@@ -27,7 +26,7 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please reverify account before you proceed.');
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you proceed.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); 
 
@@ -89,7 +88,7 @@ const Transfer = () => {
           {isVerified ? (
             <Tab.Navigator
               screenOptions={{
-                tabBarIndicatorStyle: { backgroundColor: '#7FA324' }
+                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
               }}
             >
               <Tab.Screen
@@ -106,8 +105,8 @@ const Transfer = () => {
               />
             </Tab.Navigator>
           ) : (
-            <View style={styles.reverifyContainer}>
-              <Text style={styles.reverifyText}>{errorMessage}</Text>
+            <View style={styles.inputContainer}>
+              <Text>{errorMessage}</Text>
               <CustomButton text='Start Verification' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}

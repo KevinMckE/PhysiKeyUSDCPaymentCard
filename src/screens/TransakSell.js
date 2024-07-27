@@ -1,11 +1,11 @@
-// 
+// libraries
 import React, { useContext } from 'react';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // env
 import { TRANSAK_API_KEY } from '@env';
-//walletAddress 
+
 const TransakSell = () => {
 
   const { publicKey } = useContext(AccountContext);

@@ -4,25 +4,22 @@ import { Image, ActivityIndicator, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 // context
 import { AccountContext } from '../contexts/AccountContext';
-// functions 
-import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
 // pages
 import Account from './Account';
 import Transfer from './Transfer';
 import History from './History';
-import Contacts from './Contacts';
 import styles from '../styles/common';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Home = ({ route, navigation }) => {
+const Home = () => {
 
   const { loading, activity } = useContext(AccountContext);
 
   if (loading) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#7FA324" />
+        <ActivityIndicator size="large" color="#2E3C49" />
       </View>
     );
   }
@@ -56,19 +53,6 @@ const Home = ({ route, navigation }) => {
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../assets/icons/history.png')}
-              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
-            />
-          )
-        }}
-      />
-      <Tab.Screen
-        name="Contacts"
-        component={Contacts}
-        options={{
-          tabBarLabel: 'Contacts',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('../assets/icons/contacts.png')}
               style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
             />
           )

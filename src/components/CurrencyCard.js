@@ -1,3 +1,13 @@
+/////////////////////////////////
+// CURRENCY CARD COMPONENT //////
+// Clean display for the       //
+// amount in a given wallet.   //
+// Uses publikKey and getBaseUSDC
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
+// libraries
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text, Card } from 'react-native-paper';

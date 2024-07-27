@@ -1,6 +1,8 @@
+// libraries
 import React from 'react';
 import { View, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
+// components
 import styles from '../styles/common';
 
 const AccountSettings = () => {

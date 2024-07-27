@@ -1,31 +1,60 @@
-import React, { useState } from 'react';
-import { View, ActivityIndicator, ImageBackground } from 'react-native';
-import { Text, TextInput, Card } from 'react-native-paper';
+/////////////////////////////////
+// INSTANT ACCOUNT TRANSFER   ///
+// Transfer assets from an     //
+// instant account             //
+//                             //
+// RegenCard 2024           /////
+/////////////////////////////////
+
+// libraries
+import React, { useState, useEffect, useContext } from 'react';
+import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
+import { Text, TextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// context 
+import { AccountContext } from '../contexts/AccountContext';
+// components 
 import InputModal from '../components/InputModal';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
+import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
+// functions
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
+// styles
 import styles from '../styles/common';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+const InstantAccountTransfer = ({ navigation }) => {
 
-const InstantAccountTransfer = ({ navigation, route }) => {
+  const { publicKey, loading, setIsLoading, setStatusMessage } = useContext(AccountContext);
+
   const [step, setStep] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [receipt, setReceipt] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [tagID, setTagID] = useState('');
   const [recipTag, setRecipTag] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [recipientKey, setRecipientKey] = useState('');
   const [amount, setAmount] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isSuccess, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
-  const { publicKey } = route.params;
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const handleNextStep = () => {
     switch (step) {
@@ -77,7 +106,7 @@ const InstantAccountTransfer = ({ navigation, route }) => {
     fetchTag();
   };
 
-  const handleRecipPassword = async (password) => {
+  const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
     try {
@@ -91,19 +120,22 @@ const InstantAccountTransfer = ({ navigation, route }) => {
   const confirmSign = async () => {
     setErrorMessage('');
     const defaultKey = "default";
-
     const storedValue = await AsyncStorage.getItem(defaultKey);
+    console.log(storedValue)
     try {
+      setIsLoading(true);
       let receipt = await transferUSDC(storedValue, storedValue, amount, recipientKey);
-      setReceipt(receipt);
-      console.log(receipt);
-      navigation.navigate('InstantAccept');
+      setStatusMessage(receipt);
+      setSuccess(true);
+      setIsLoading(false);
+      console.log(receipt)
+      setStep(3);
     } catch (error) {
+      setErrorMessage(error);
+      setIsLoading(false);
+      setSuccess(false);
+      setStep(3);
       console.error('Cannot complete confirmSign: ', error.message);
-      setLoading(false);
-
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -111,85 +143,120 @@ const InstantAccountTransfer = ({ navigation, route }) => {
     switch (step) {
       case 0:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(1/3) Input a recipient address.  You can also scan a card to populate this field.</Text>
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              theme={{ colors: { primary: 'green' } }}
-              placeholder="Recipient Address"
-              value={recipientKey}
-              onChangeText={recipientKey => setRecipientKey(recipientKey)}
-              returnKeyType={'done'}
+          <>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/3) Input recipient address."
+              content="You can paste in this value or use a Regen Card to populate the value."
             />
-            <Text style={styles.textMargin} variant='titleMedium'>or</Text>
-            <CustomButton text="Scan Recipient's Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
-            {errorMessage ? (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            ) : null}
-          </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Recipient Address"
+                value={recipientKey}
+                onChangeText={recipientKey => setRecipientKey(recipientKey)}
+                returnKeyType={'done'}
+              />
+              <Text style={styles.textMargin} variant='titleMedium'>or</Text>
+              <CustomButton text="Scan Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => {
+                navigation.navigate('InstantAcceptAccount', { publicKey });
+              }} />
+              <CustomButton text='Confirm' type='primary' size='large' onPress={handleNextStep} />
+            </View>
+          </>
         );
       case 1:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleMedium'>(2/3) How much would you like to send? Please note there will be a 0% transaction fee.</Text>
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              theme={{ colors: { primary: 'green' } }}
-              placeholder="Amount"
-              value={amount}
-              onChangeText={amount => setAmount(amount)}
-              returnKeyType={'done'}
-              keyboardType={'numeric'}
+          <>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/3) How much?"
+              content="Enter a valid value.  Please note there is currently a 0% transaction fee."
             />
-            {errorMessage ? (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            ) : null}
-          </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Amount"
+                value={amount}
+                onChangeText={amount => setAmount(amount)}
+                returnKeyType={'done'}
+                keyboardType={'numeric'}
+              />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
+              <CustomButton text='Confirm' type='primary' size='large' onPress={handleNextStep} />
+            </View>
+          </>
         );
       case 2:
         return (
-          <View style={styles.inputContainer}>
-            <Text style={styles.textMargin} variant='titleLarge'>(3/3) Review Details.  You will scan your card to confirm the transaction.</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>You are is sending {amount} USDC to:</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>{recipientKey}</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is {`0%`}</Text>
-            <Text style={styles.textMargin} variant='titleMedium'>Total transaction amount is {amount} USDC</Text>
-            {errorMessage ? (
-              <Text style={styles.errorText}>{errorMessage}</Text>
-            ) : null}
-          </View>
+          <>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(3/3) Review Details"
+              content="It is important to review the details. You will scan your card to confirm the transaction."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>You are sending {amount} USDC to:</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{String(recipientKey)}</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is 0%</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>Total transaction amount is {amount} USDC</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
+              <CustomButton text='Confirm' type='primary' size='large' onPress={() => { confirmSign(); }} />
+            </View>
+          </>
         );
-      default:
-        return null;
-    }
-  };
-
-  const renderButtons = () => {
-    switch (step) {
-      case 0:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Confirm Recipient' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => {
-              navigation.navigate('InstantAcceptAccount', { publicKey });
-            }} />
-          </View>
-        );
-      case 1:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Confirm Amount' type='primary' size='large' onPress={handleNextStep} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={() => { handlePreviousStep(); setInputError(''); }} />
-          </View>
-        );
-      case 2:
-        return (
-          <View style={styles.bottomContainer}>
-            <CustomButton text='Confirm and Send' type='primary' size='large' onPress={() => { confirmSign(); }} />
-            <CustomButton text='Go Back' type='secondary' target='Account' size='large' onPress={handlePreviousStep} />
-          </View>
+      case 3:
+        return success ? (
+          <>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleLarge'>Success!</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>Perform another transfer or return to account page.</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptAccount'); }} />
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleLarge'>Failed!</Text>
+            </View>
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>{errorMessage}</Text>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Try Again' type='primary' size='large' onPress={() => setStep(0)} />
+            </View>
+          </>
         );
       default:
         return null;
@@ -198,46 +265,35 @@ const InstantAccountTransfer = ({ navigation, route }) => {
 
   return (
     <>
-      <ImageBackground
-        source={require('../assets/background.png')}
-        style={{ flex: 1, width: '100%', height: '100%' }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
       >
-        <View style={styles.container}>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#7FA324" />
+        <ImageBackground
+          source={require('../assets/background.png')}
+          style={{ flex: 1, width: '100%', height: '100%' }}
+        >
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
+            <View style={styles.container}>
+              <LoadingOverlay loading={loading} />
+              {renderStep()}
             </View>
-          )}
-          <View style={styles.topContainer}>
-            <Text variant='titleLarge'>Follow the prompts to transfer USDC to another wallet.</Text>
-          </View>
-          <View style={styles.inputContainer}>
-            {renderStep()}
-            {inputError ? (
-              <Text style={styles.errorText}>{inputError}</Text>
-            ) : null}
-          </View>
-          <View style={styles.bottomContainer}>
-            {renderButtons()}
-          </View>
-        </View>
+          </ScrollView>
+        </ImageBackground >
+      </KeyboardAvoidingView >
 
-        <InputModal
-          visible={modalVisible}
-          closeModal={() => setModalVisible(false)}
-          handlePasswords={handleRecipPassword}
-          title='Enter the recipients password.'
-          changeGifSource={null}
+      <InputModal
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        handlePasswords={handlePasswords}
+        title='Enter your password.'
+      />
+      {Platform.OS === 'android' && ( // Render modal only on Android
+        <AndroidScanModal
+          visible={scanModal}
+          closeScanModal={closeScanModal}
         />
-
-        {Platform.OS === 'android' && ( // Render modal only on Android
-          <AndroidScanModal
-            visible={scanModal}
-            closeScanModal={closeScanModal}
-            changeGifSource={null}
-          />
-        )}
-      </ImageBackground>
+      )}
     </>
   );
 }

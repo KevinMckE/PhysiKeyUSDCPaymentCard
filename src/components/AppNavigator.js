@@ -1,3 +1,12 @@
+/////////////////////////////////
+// APP NAVIGATOR COMPONENT///////
+// Handle context AND stack    //
+// of screens for stack        //
+// navigation.  Used in APP.TSX//
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 // libraries
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
@@ -13,10 +22,12 @@ import AddAccount from '../screens/AddAccount';
 import InstantAccept from '../screens/InstantAccept';
 import InstantAcceptAccount from '../screens/InstantAcceptAccount';
 import InstantAcceptTransfer from '../screens/InstantAcceptTransfer';
+import InstantAccountSell from '../screens/InstantAcceptSell';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
+import WebViewScreen from '../screens/WebViewScreen';
 // styles
 import styles from '../styles/common';
 
@@ -33,6 +44,13 @@ const AppNavigator = () => {
               component={Landing}
               options={{
                 headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="WebViewScreen"
+              component={WebViewScreen}
+              options={{
+                title: 'AnywhereAccess.io',
               }}
             />
             <Stack.Screen
@@ -60,7 +78,7 @@ const AppNavigator = () => {
               name="InstantAcceptAccount"
               component={InstantAcceptAccount}
               options={{
-                title: 'Details',
+                title: 'Account Details',
               }}
             />
             <Stack.Screen
@@ -68,6 +86,13 @@ const AppNavigator = () => {
               component={InstantAcceptTransfer}
               options={{
                 title: 'Transfer Assets',
+              }}
+            />
+            <Stack.Screen
+              name="InstantAccountSell"
+              component={InstantAccountSell}
+              options={{
+                title: 'Sell Assets',
               }}
             />
             <Stack.Screen

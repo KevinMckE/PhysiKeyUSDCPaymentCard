@@ -1,12 +1,23 @@
+/////////////////////////////////
+// LANDING PAGE   ///////////////
+// Direct users between        //
+// instant accept or           //
+// logging into a new account  //
+// RegenCard 2024           /////
+/////////////////////////////////
+
+// libraries
 import * as React from 'react';
 import { View, Image, TouchableOpacity, Linking, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
+// components
 import CustomButton from '../components/CustomButton';
+// styles
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
   const handleLinkPress = () => {
-    Linking.openURL('https://anywhereaccess.io');
+    navigation.navigate('WebViewScreen', { url: 'https://anywhereaccess.io' });
   };
 
   return (
@@ -22,8 +33,8 @@ const Landing = ({ navigation }) => {
               style={styles.centeredImage}
             />
           </View>
-          <View style={styles.landingBottomContainer}>
-            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept'); }} />
+          <View style={styles.landingBottomContainer}> 
+            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
             <CustomButton text='Login' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
             <Text variant="bodyLarge">Don't have a card?</Text>
             <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>

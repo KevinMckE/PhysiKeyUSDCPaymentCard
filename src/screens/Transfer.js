@@ -5,9 +5,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
-import TransakSell from '../components/TransakSell';
-import TransakBuy from '../components/TransakBuy';
-import ZeroFee from '../components/ZeroFee';
+import TransakSell from './TransakSell';
+import TransakBuy from './TransakBuy';
+import ZeroFee from './ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -17,7 +17,6 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 // styles
 import styles from '../styles/common';
-
 
 const Tab = createMaterialTopTabNavigator();
 

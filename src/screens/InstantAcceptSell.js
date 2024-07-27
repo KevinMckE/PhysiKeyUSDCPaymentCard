@@ -3,9 +3,9 @@ import React from 'react';
 import { View, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 // components
-import TransakSell from '../components/TransakSell';
-import TransakBuy from '../components/TransakBuy';
-import ZeroFee from '../components/ZeroFee';
+import TransakSell from './TransakSell';
+import TransakBuy from './TransakBuy';
+import ZeroFee from './ZeroFee';
 
 const Tab = createMaterialTopTabNavigator();
 

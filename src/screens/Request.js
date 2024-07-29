@@ -208,6 +208,7 @@ const Request = ({ navigation }) => {
       case 0:
         return (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -215,6 +216,25 @@ const Request = ({ navigation }) => {
                 title="Input USDC Amount."
                 text="*USDC on Base network"
                 content="Valid numbers are greater than 0 and formatted correctly."
+=======
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/2) How much USDC? (BASE network)"
+              content="Enter a valid amount. To be valid the number must be greater than zero."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                autoFocus={true}
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Amount"
+                value={amount}
+                onChangeText={amount => setAmount(amount)}
+                returnKeyType={'done'}
+                keyboardType={'numeric'}
+>>>>>>> 83e2e59 (Text changes for clarifications)
               />
             </View>
             <Pressable onPress={() => textInputRef.current.focus()} style={{ flex: 4, margin: 16 }}>
@@ -251,6 +271,7 @@ const Request = ({ navigation }) => {
       case 1:
         return (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -258,6 +279,20 @@ const Request = ({ navigation }) => {
                 title="Review Details."
                 content="We recommend verifying the 'paid to' address matches that in your account details below."
               />
+=======
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/2) Review Details."
+              content="We recommend verifying the 'paid to' address matches the one in your account details."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will be transferred to: </Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+>>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
             <View style={{ flex: 4, margin: 16 }}>
               <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>

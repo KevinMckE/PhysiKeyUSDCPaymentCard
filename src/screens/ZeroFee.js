@@ -32,6 +32,7 @@ const ZeroFee = ({ navigation }) => {
   };
 
   return (
+<<<<<<< HEAD
     <ScrollView>
       <View style={styles.container}>
         <View style={{ flex: 2, margin: 16 }}>
@@ -59,6 +60,14 @@ const ZeroFee = ({ navigation }) => {
             onPress={() => { navigation.navigate('Send'); }}
           />
         </View>
+=======
+    <>
+      <View style={styles.reverifyContainer}>
+      <Text style={styles.reverifyText}>Copy your BASE Ethereum address and paste in your wallet</Text>
+      <Text style={styles.reverifyText}>Be sure you send on the BASE network</Text>
+      <Text style={styles.reverifyText}>If you are unsure about this, do not proceed – We cannot recover funds</Text>
+        <Text selectable style={styles.reverifyText}>{publicKey}</Text>
+>>>>>>> 83e2e59 (Text changes for clarifications)
       </View>
     </ScrollView>
   );

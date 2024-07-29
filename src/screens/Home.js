@@ -104,9 +104,29 @@ const Home = ({ navigation }) => {
               />
             </>
           )
+<<<<<<< HEAD
         )}
       </View>
     </View>
+=======
+        }}
+      />
+      <Tab.Screen
+        name="Load Card"
+        component={Transfer}
+        initialParams={{ activity }}
+        options={{
+          tabBarLabel: 'Transfer',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../assets/icons/fund.png')}
+              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+            />
+          )
+        }}
+      />
+    </Tab.Navigator>
+>>>>>>> 83e2e59 (Text changes for clarifications)
   );
 };
 

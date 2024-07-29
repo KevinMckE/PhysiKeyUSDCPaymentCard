@@ -28,6 +28,7 @@ const Landing = ({ navigation }) => {
         source={require('../assets/background.png')}
         style={styles.backgroundImage}
       >
+<<<<<<< HEAD
         <View style={[{ flex: 5 }, styles.center]}>
           <Image
             source={require('../assets/regen_card_logo_color.png')}
@@ -41,6 +42,21 @@ const Landing = ({ navigation }) => {
         <View style={[{ flex: 1 }, styles.center]}>
           <CustomText size={"small"} color={"#000000"} text={"Don't have a card?"} />
           <TouchableOpacity onPress={handleLinkPress}><Text style={{color: 'blue', textDecorationLine: 'underline', fontSize: 16}}>Learn more here</Text></TouchableOpacity>
+=======
+        <View style={styles.container}>
+          <View style={styles.landingTopContainer}>
+            <Image
+              source={require('../assets/regen_card.jpg')}
+              style={styles.centeredImage}
+            />
+          </View>
+          <View style={styles.landingBottomContainer}> 
+            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
+            <CustomButton text='Card Login' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
+            <Text variant="bodyLarge">Don't have a card?</Text>
+            <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>
+          </View>
+>>>>>>> 83e2e59 (Text changes for clarifications)
         </View>
       </ImageBackground>
     </>

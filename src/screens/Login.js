@@ -89,6 +89,7 @@ const Login = ({ navigation }) => {
           </>
         ) : (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -97,6 +98,10 @@ const Login = ({ navigation }) => {
                 text="*Requires an NFC card"
                 content="You can make multiple accounts using a single card."
               />
+=======
+            <View style={styles.topContainer}>
+              <Text variant='titleLarge'>Scan card and input password to add account</Text>
+>>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
             <View style={[{ flex: 4}, styles.center]}>
             <Image

@@ -31,7 +31,11 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
+<<<<<<< HEAD
   const [errorMessage, setErrorMessage] = useState('');
+=======
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
+>>>>>>> 83e2e59 (Text changes for clarifications)
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const [lastVerificationTime, setLastVerificationTime] = useState(null);
@@ -105,6 +109,7 @@ const Transfer = () => {
     }
   };
 
+<<<<<<< HEAD
   const renderTabs = () => {
     if (isCard) {
       return (
@@ -142,6 +147,38 @@ const Transfer = () => {
                   </View>
                 </>
               )}
+=======
+  return (
+    <>
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={{ flex: 1 }}>
+          {isVerified ? (
+            <Tab.Navigator
+              screenOptions={{
+                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
+              }}
+            >
+              <Tab.Screen
+                name="Buy USDC"
+                component={TransakBuy}
+              />
+              <Tab.Screen
+                name="Sell USDC"
+                component={TransakSell}
+              />
+              <Tab.Screen
+                name="No Fees"
+                component={ZeroFee}
+              />
+            </Tab.Navigator>
+          ) : (
+            <View style={styles.inputContainer}>
+              <Text>{errorMessage}</Text>
+              <CustomButton text='Verify Again' type='primary' size='large' onPress={startVerificationProcess} />
+>>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
 
             <InputModal

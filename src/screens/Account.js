@@ -40,6 +40,7 @@ const Account = ({ navigation }) => {
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>
+<<<<<<< HEAD
           <Pressable
             onPress={() => setModalVisible(true)}
             style={{
@@ -53,6 +54,10 @@ const Account = ({ navigation }) => {
             <Text size={"small"} color={"#000000"} text={"Save Account"} />
           </Pressable>
 
+=======
+          <Text>Account Details(BASE network)</Text>
+          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
+>>>>>>> 83e2e59 (Text changes for clarifications)
         </View>
         <Pressable onPress={handleCopyToClipboard}>
           <AccountCard
@@ -61,10 +66,16 @@ const Account = ({ navigation }) => {
           />
         </Pressable>
         <CurrencyCard
+<<<<<<< HEAD
           title="Balance"
           subtitle="*USDC on Base network"
           amount={balance}
           imageSource={require('../assets/logos/usdc_base_logo.png')}
+=======
+          title="Balance(BASE network)"
+          subtitle={balance}
+          imageSource={require('../assets/logos/usdc_logo.png')}
+>>>>>>> 83e2e59 (Text changes for clarifications)
           navigation={navigation}
           publicKey={publicKey}
         />

@@ -199,6 +199,7 @@ const Send = ({ navigation }) => {
       case 0:
         return (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -209,6 +210,15 @@ const Send = ({ navigation }) => {
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
+=======
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(1/3) Input recipient address(ETH BASE network only)"
+              content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the BASE network."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+>>>>>>> 83e2e59 (Text changes for clarifications)
               <TextInput
                 mode="outlined"
                 style={styles.textInput}
@@ -235,6 +245,7 @@ const Send = ({ navigation }) => {
       case 1:
         return (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -242,6 +253,24 @@ const Send = ({ navigation }) => {
                 title="Input USDC Amount."
                 text="*USDC on Base network"
                 content="Valid numbers are greater than 0 and formatted correctly."
+=======
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(2/3) How much? (ETH BASE network only)"
+              content="Enter a valid value.  Please note there is current a 0% transaction fee."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <TextInput
+                mode="outlined"
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Amount"
+                value={amount}
+                onChangeText={amount => setAmount(amount)}
+                returnKeyType={'done'}
+                keyboardType={'numeric'}
+>>>>>>> 83e2e59 (Text changes for clarifications)
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
@@ -271,6 +300,7 @@ const Send = ({ navigation }) => {
       case 2:
         return (
           <>
+<<<<<<< HEAD
             <View style={{ flex: 2, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
@@ -278,6 +308,22 @@ const Send = ({ navigation }) => {
                 title="Review Details."
                 content="Verify the details below.  The fee is not calculated into the total."
               />
+=======
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(3/3) Review Details. (ETH BASE network only)"
+              content="It is important to review the details. You will scan your card to confirm the transaction."
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <Text style={styles.textMargin} variant='titleMedium'>You are sending {amount} USDC to:</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{String(recipientKey)}</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>The fee for this transaction is 0%</Text>
+              <Text style={styles.textMargin} variant='titleMedium'>Total transaction amount is {amount} USDC</Text>
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+>>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
             <View style={{ flex: 4, margin: 16 }}>
               <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>

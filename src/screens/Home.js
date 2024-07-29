@@ -59,7 +59,7 @@ const Home = () => {
         }}
       />
       <Tab.Screen
-        name="Transfer"
+        name="Load Card"
         component={Transfer}
         initialParams={{ activity }}
         options={{

@@ -30,7 +30,7 @@ const InstantAcceptAccount = ({ navigation }) => {
           <Pressable onPress={handleCopyToClipboard}>
             <Card style={styles.card}>
               <View style={styles.keyContent}>
-                <Text>Account: {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                <Text>Account(BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                 <Image
                   source={require('../assets/icons/copy_icon.png')}
                   style={styles.copyImage}
@@ -46,7 +46,7 @@ const InstantAcceptAccount = ({ navigation }) => {
             publicKey={publicKey}
           />
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-            <Text>For best security we recommend only keeping a small amount of money in this wallet. Please consider transferring your assets if holding more that $500.</Text>
+            <Text>For best security we recommend only keeping a small amount of money in this wallet. Please consider transferring your assets if holding more than $500.</Text>
           </View>
 
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, }}>

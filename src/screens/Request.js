@@ -113,7 +113,7 @@ const Request = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/2) How much USDC?"
+              title="(1/2) How much USDC? (BASE network)"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
@@ -145,10 +145,10 @@ const Request = ({ navigation }) => {
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
               title="(2/2) Review Details."
-              content="We recommend verifying the 'paid to' address matches that in your account details."
+              content="We recommend verifying the 'paid to' address matches the one in your account details."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will being transferred to: </Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will be transferred to: </Text>
               <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{inputError}</Text>

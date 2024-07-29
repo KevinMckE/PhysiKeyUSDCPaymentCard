@@ -26,7 +26,7 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please verify your account before you proceed.');
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); 
 
@@ -64,7 +64,7 @@ const Transfer = () => {
         setErrorMessage('');
       } else {
         setModalVisible(false);
-        setErrorMessage('This is not the correct account. Please Try again');
+        setErrorMessage('This is not the correct card/password combination. Please Try again');
       }
     } catch (error) {
       console.error('Cannot complete handlePasswords: ', error);
@@ -92,22 +92,22 @@ const Transfer = () => {
               }}
             >
               <Tab.Screen
-                name="Onramp"
+                name="Buy USDC"
                 component={TransakBuy}
               />
               <Tab.Screen
-                name="Offramp"
+                name="Sell USDC"
                 component={TransakSell}
               />
               <Tab.Screen
-                name="Feeless"
+                name="No Fees"
                 component={ZeroFee}
               />
             </Tab.Navigator>
           ) : (
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
-              <CustomButton text='Start Verification' type='primary' size='large' onPress={startVerificationProcess} />
+              <CustomButton text='Verify Again' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}
         </View>

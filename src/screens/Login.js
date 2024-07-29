@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
         ) : (
           <>
             <View style={styles.topContainer}>
-              <Text variant='titleLarge'>Add an account to continue.</Text>
+              <Text variant='titleLarge'>Scan card and input password to add account</Text>
             </View>
             <View style={styles.listContainer}>
               <Image

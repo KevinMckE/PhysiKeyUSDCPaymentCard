@@ -41,6 +41,7 @@ const Account = ({ navigation }) => {
       >
         <View style={styles.textContainer}>
 <<<<<<< HEAD
+<<<<<<< HEAD
           <Pressable
             onPress={() => setModalVisible(true)}
             style={{
@@ -55,6 +56,8 @@ const Account = ({ navigation }) => {
           </Pressable>
 
 =======
+=======
+>>>>>>> 83e2e59 (Text changes for clarifications)
           <Text>Account Details(BASE network)</Text>
           <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
 >>>>>>> 83e2e59 (Text changes for clarifications)
@@ -67,11 +70,14 @@ const Account = ({ navigation }) => {
         </Pressable>
         <CurrencyCard
 <<<<<<< HEAD
+<<<<<<< HEAD
           title="Balance"
           subtitle="*USDC on Base network"
           amount={balance}
           imageSource={require('../assets/logos/usdc_base_logo.png')}
 =======
+=======
+>>>>>>> 83e2e59 (Text changes for clarifications)
           title="Balance(BASE network)"
           subtitle={balance}
           imageSource={require('../assets/logos/usdc_logo.png')}

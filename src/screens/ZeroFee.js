@@ -67,6 +67,9 @@ const ZeroFee = ({ navigation }) => {
       <Text style={styles.reverifyText}>Be sure you send on the BASE network</Text>
       <Text style={styles.reverifyText}>If you are unsure about this, do not proceed – We cannot recover funds</Text>
         <Text selectable style={styles.reverifyText}>{publicKey}</Text>
+<<<<<<< HEAD
+>>>>>>> 83e2e59 (Text changes for clarifications)
+=======
 >>>>>>> 83e2e59 (Text changes for clarifications)
       </View>
     </ScrollView>

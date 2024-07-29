@@ -32,7 +32,11 @@ const Transfer = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [errorMessage, setErrorMessage] = useState('');
+=======
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
+>>>>>>> 83e2e59 (Text changes for clarifications)
 =======
   const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
 >>>>>>> 83e2e59 (Text changes for clarifications)
@@ -178,6 +182,9 @@ const Transfer = () => {
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
               <CustomButton text='Verify Again' type='primary' size='large' onPress={startVerificationProcess} />
+<<<<<<< HEAD
+>>>>>>> 83e2e59 (Text changes for clarifications)
+=======
 >>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
 

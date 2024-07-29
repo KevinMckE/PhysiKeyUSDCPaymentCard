@@ -112,6 +112,22 @@ const Home = ({ navigation }) => {
         }}
       />
       <Tab.Screen
+<<<<<<< HEAD
+=======
+        name="History"
+        component={History}
+        options={{
+          tabBarLabel: 'History',
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../assets/icons/history.png')}
+              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+            />
+          )
+        }}
+      />
+      <Tab.Screen
+>>>>>>> 83e2e59 (Text changes for clarifications)
         name="Load Card"
         component={Transfer}
         initialParams={{ activity }}

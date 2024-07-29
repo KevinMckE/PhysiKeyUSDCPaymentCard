@@ -101,6 +101,9 @@ const Login = ({ navigation }) => {
 =======
             <View style={styles.topContainer}>
               <Text variant='titleLarge'>Scan card and input password to add account</Text>
+<<<<<<< HEAD
+>>>>>>> 83e2e59 (Text changes for clarifications)
+=======
 >>>>>>> 83e2e59 (Text changes for clarifications)
             </View>
             <View style={[{ flex: 4}, styles.center]}>

@@ -30,7 +30,7 @@ const InstantAcceptAccount = ({ navigation }) => {
           <Pressable onPress={handleCopyToClipboard}>
             <Card style={styles.card}>
               <View style={styles.keyContent}>
-                <Text>Account(BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                <Text>Account (BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                 <Image
                   source={require('../assets/icons/copy_icon.png')}
                   style={styles.copyImage}

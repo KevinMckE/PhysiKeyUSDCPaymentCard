@@ -147,7 +147,7 @@ const InstantAccountTransfer = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/3) Input recipient address. (ETH BASE network only)"
+              title="(1/3) Input recipient address."
               content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the BASE network."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
@@ -180,8 +180,8 @@ const InstantAccountTransfer = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(2/3) How much? (ETH BASE network only)"
-              content="Enter a valid value.  Please note there is currently a 0% transaction fee."
+              title="(2/3) How much? (USDC on BASE)"
+              content="The amount you would like to transfer.  Please note there is currently a 0% transaction fee."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
@@ -210,7 +210,7 @@ const InstantAccountTransfer = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(3/3) Review Details (ETH BASE network only)"
+              title="(3/3) Review Details"
               content="It is important to review the details. You will scan your card to confirm the transaction."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>

@@ -128,12 +128,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  titleContainer: {
+    flexDirection: 'row',  // Ensure title and icon are in a row
+    justifyContent: 'left', // Center them horizontally
+  },
+  icon: {
+    marginLeft: 10,  // Add space between the title and the icon
+  },
+
   // CORE PAGE CONTAINERS
   topContainer: {
     padding: 30,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'left',
   },
   inputContainer: {
     justifyContent: 'center',

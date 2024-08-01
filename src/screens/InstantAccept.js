@@ -149,7 +149,8 @@ const InstantAccept = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/2) Input USDC Amount (BASE network)"
+              title="(1/2) Input USDC Amount."
+              text="USDC on BASE"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
@@ -247,7 +248,7 @@ const InstantAccept = ({ navigation }) => {
               <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
                 <Card style={styles.card}>
                   <View style={styles.keyContent}>
-                    <Text>Account(BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                    <Text>Account (BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                     <Image
                       source={require('../assets/icons/user_setting.png')}
                       style={styles.copyImage}

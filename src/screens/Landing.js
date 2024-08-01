@@ -8,7 +8,7 @@
 
 // libraries
 import * as React from 'react';
-import { View, Image, TouchableOpacity, Linking, ImageBackground } from 'react-native';
+import { View, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
 // components
 import CustomButton from '../components/CustomButton';

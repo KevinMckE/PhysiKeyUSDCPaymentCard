@@ -15,11 +15,14 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 // styles
 import styles from '../styles/common';
 
-const TooltipComponent = ({ tooltipVisible, setTooltipVisible, title, content }) => (
+const TooltipComponent = ({ tooltipVisible, setTooltipVisible, title, text, content }) => (
   <>
     <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-      <Text variant='titleLarge'>{title}</Text>
-      <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+      <View style={styles.titleContainer}>
+        <Text variant='titleLarge'>{title}</Text>
+        <Image source={require('../assets/icons/info.png')} style={styles.icon} />
+      </View>
+      <Text variant='titleMedium'>{text}</Text>
     </TouchableOpacity>
     <Tooltip
       isVisible={tooltipVisible}

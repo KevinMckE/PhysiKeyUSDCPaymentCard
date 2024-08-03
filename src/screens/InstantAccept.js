@@ -150,10 +150,11 @@ const InstantAccept = ({ navigation }) => {
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
               title="(1/2) Input USDC Amount."
-              text="USDC on BASE"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
+           
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+            <Text>USDC on BASE</Text>
               <TextInput
                 mode="outlined"
                 autoFocus={true}

@@ -12,14 +12,15 @@ import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 
-const CurrencyCard = ({ title, subtitle, imageSource }) => {
+const CurrencyCard = ({ title, subtitle, amount, imageSource }) => {
   return (
     <Card style={styles.card} mode="elevated">
       <Card.Content style={styles.content}>
         <Image source={imageSource} style={styles.image} />
         <View>
           <Text variant='titleLarge'>{title}</Text>
-          <Text style={styles.amountText}>{subtitle} USDC</Text>
+          <Text>{subtitle}</Text>
+          <Text style={styles.amountText}>{amount} USDC</Text>
         </View>
       </Card.Content>
     </Card>

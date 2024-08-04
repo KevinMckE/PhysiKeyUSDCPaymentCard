@@ -30,7 +30,7 @@ const Account = ({ navigation }) => {
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>
-          <Text>Account Details (BASE network)</Text>
+          <Text>Account (BASE network)</Text>
           <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
         </View>
         <Pressable onPress={handleCopyToClipboard}>
@@ -48,8 +48,9 @@ const Account = ({ navigation }) => {
           </Card>
         </Pressable>
         <CurrencyCard
-          title="Balance (USDC on BASE)"
-          subtitle={balance}
+          title="Balance"
+          subtitle="*USDC on BASE network"
+          amount={balance}
           imageSource={require('../assets/logos/usdc_logo.png')}
           navigation={navigation}
           publicKey={publicKey}

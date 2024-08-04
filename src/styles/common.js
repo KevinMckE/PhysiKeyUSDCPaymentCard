@@ -130,7 +130,10 @@ const styles = StyleSheet.create({
 
   // CORE PAGE CONTAINERS
   topContainer: {
-    padding: 30,
+    paddingTop: 30,
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

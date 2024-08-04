@@ -1,7 +1,8 @@
 // libraries
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { View, ImageBackground, Text, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useFocusEffect } from '@react-navigation/native';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -26,9 +27,16 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); 
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsVerified(false);
+      setErrorMessage('Please verify your account before you add or sell USDC. We cannot recover funds for you.')
+    }, [])
+  );
 
   const closeScanModal = () => {
     cancelNfc();
@@ -110,7 +118,7 @@ const Transfer = () => {
           ) : (
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
-              <CustomButton text='Verify Again' type='primary' size='large' onPress={startVerificationProcess} />
+              <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}
         </View>

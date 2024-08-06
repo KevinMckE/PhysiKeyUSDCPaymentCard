@@ -1,16 +1,17 @@
+// libraries
 import React, { useState, useCallback } from 'react';
 import { View, Image, Platform, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from 'react-native-paper';
-//
+// components
 import CustomButton from '../components/CustomButton';
 import AccountList from '../components/AccountList';
 import AndroidScanModal from '../components/AndroidScanModal';
-//
+// functions
 import { getData } from '../functions/core/asyncStorage';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
-//
+// styles
 import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
@@ -71,7 +72,7 @@ const Login = ({ navigation }) => {
         ) : (
           <>
             <View style={styles.topContainer}>
-              <Text variant='titleLarge'>Scan card and input password to add account</Text>
+              <Text variant='titleLarge'>Add an account to continue.</Text>
             </View>
             <View style={styles.listContainer}>
               <Image

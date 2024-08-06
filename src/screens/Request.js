@@ -113,7 +113,8 @@ const Request = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/2) How much USDC? (BASE network)"
+              title="(1/2) How much USDC?"
+              text="*USDC on BASE network"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>

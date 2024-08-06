@@ -36,7 +36,7 @@ const InstantAccept = ({ navigation }) => {
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false );
+  const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
@@ -149,10 +149,12 @@ const InstantAccept = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/2) Input USDC Amount (BASE network)"
+              title="(1/2) Input USDC Amount."
+              text="*USDC on BASE network"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+
               <TextInput
                 mode="outlined"
                 autoFocus={true}
@@ -184,7 +186,7 @@ const InstantAccept = ({ navigation }) => {
               content="We recommend verifying the 'paid to' address matches that in your account details."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC will be paid to: </Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC on BASE network will be paid to: </Text>
               <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{inputError}</Text>
@@ -247,7 +249,7 @@ const InstantAccept = ({ navigation }) => {
               <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
                 <Card style={styles.card}>
                   <View style={styles.keyContent}>
-                    <Text>Account(BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                    <Text>Account (BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                     <Image
                       source={require('../assets/icons/user_setting.png')}
                       style={styles.copyImage}

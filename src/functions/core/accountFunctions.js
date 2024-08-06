@@ -3,11 +3,12 @@ import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
 import { baseSepolia } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
-import { RPC_URL, ACCOUNT_FACTORY_ADDRESS } from '@env';
-
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://sepolia.base.org');
+
+import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL } from '@env';
+
+const web3 = new Web3(WEB3_URL);
 const abi = [
   {
     inputs: [
@@ -35,7 +36,7 @@ const abi = [
   },
 ];
 
-const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
+const usdcContractAddress = BASE_USDC_CONTRACT;
 const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
@@ -84,7 +85,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
   try {
     const factor = 10 ** 6; 
-    const amountInWei = BigInt(parseFloat(amount) * factor);
+    const amountInWei = BigInt(parseFloFat(amount) * factor);
 
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,

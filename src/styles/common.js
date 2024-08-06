@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     bottom: 100,
     padding: 0,
   },
-
   errorContainer: {
     height: 20,
   },

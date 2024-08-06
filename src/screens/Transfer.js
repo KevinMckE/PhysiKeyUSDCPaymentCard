@@ -1,12 +1,13 @@
 // libraries
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { View, ImageBackground, Text, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useFocusEffect } from '@react-navigation/native';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
-import TransakSell from './TransakSell';
-import TransakBuy from './TransakBuy';
+//import TransakSell from './TransakSell';
+//import TransakBuy from './TransakBuy';
 import ZeroFee from './ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
@@ -20,15 +21,22 @@ import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Transfer = () => {
+const Transfer = ({ navigation }) => {
 
   const { publicKey } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add funds. We cannot recover funds for you.');
+  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false); 
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsVerified(false);
+      setErrorMessage('Please verify your account before you add or sell USDC. We cannot recover funds for you.')
+    }, [])
+  );
 
   const closeScanModal = () => {
     cancelNfc();
@@ -86,6 +94,8 @@ const Transfer = () => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
+            <ZeroFee navigation={navigation} />
+            /*
             <Tab.Navigator
               screenOptions={{
                 tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
@@ -104,10 +114,11 @@ const Transfer = () => {
                 component={ZeroFee}
               />
             </Tab.Navigator>
+            */
           ) : (
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
-              <CustomButton text='Verify Again' type='primary' size='large' onPress={startVerificationProcess} />
+              <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}
         </View>

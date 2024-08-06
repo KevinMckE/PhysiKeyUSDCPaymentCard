@@ -4,7 +4,7 @@ const path = require('path');
 const env = process.argv[2]; // Get the environment from the command line argument
 
 if (!env) {
-  console.error('Please specify an environment (development or production)');
+  console.error('Please specify an environment (testnet or mainnet)');
   process.exit(1);
 }
 

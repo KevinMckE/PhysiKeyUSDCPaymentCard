@@ -21,7 +21,7 @@ import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Transfer = () => {
+const Transfer = ({ navigation }) => {
 
   const { publicKey } = useContext(AccountContext);
 
@@ -94,7 +94,7 @@ const Transfer = () => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
-            <ZeroFee/>
+            <ZeroFee navigation={navigation} />
             /*
             <Tab.Navigator
               screenOptions={{

@@ -4,7 +4,7 @@ import { TransakWebView, Environments, Events } from '@transak/react-native-sdk'
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // env
-import { TRANSAK_API_KEY } from '@env';
+import { TRANSAK_ENVIRONMENT, TRANSAK_API_KEY } from '@env';
 
 const TransakSell = () => {
 
@@ -12,7 +12,7 @@ const TransakSell = () => {
 
   const transakConfig = {
     apiKey: TRANSAK_API_KEY, 
-    environment: Environments.STAGING, 
+    environment: Environments[TRANSAK_ENVIRONMENT], 
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
     fiatAmount: 100, 

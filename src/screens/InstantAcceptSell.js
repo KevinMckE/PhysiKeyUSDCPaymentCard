@@ -23,11 +23,11 @@ const InstantAccountSell = () => {
             }}
           >
             <Tab.Screen
-              name="Offramp"
+              name="Sell USDC"
               component={TransakSell}
             />
             <Tab.Screen
-              name="Onramp"
+              name="Buy USDC"
               component={TransakBuy}
             />
             <Tab.Screen

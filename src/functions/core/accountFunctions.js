@@ -85,7 +85,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
   try {
     const factor = 10 ** 6; 
-    const amountInWei = BigInt(parseFloFat(amount) * factor);
+    const amountInWei = BigInt(parseFloat(amount) * factor);
 
     const cloudPaymaster = createPimlicoPaymasterClient({
       chain: baseSepolia,

@@ -11,7 +11,9 @@
     "bundle:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "postinstall": "npm run bundle:ios",
     "base:sepolia": "node start.js testnet && react-native start --reset-cache",
-    "base:mainnet": "node start.js mainnet && react-native start --reset-cache"
+    "base:mainnet": "node start.js mainnet && react-native start --reset-cache",
+    "build:android:base:sepolia": "node start.js testnet && cd android && ./gradlew assembleRelease",
+    "build:android:base:mainnet": "node start.js mainnet && cd android && ./gradlew assembleRelease",
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.0",

@@ -5,9 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 // components
 import ZeroFee from './ZeroFee';
 
-const Tab = createMaterialTopTabNavigator();
-
-const InstantAccountSell = () => {
+const InstantAccountSell = ({ navigation }) => {
   return (
     <>
       <ImageBackground

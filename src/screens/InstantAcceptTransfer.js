@@ -148,7 +148,7 @@ const InstantAccountTransfer = ({ navigation }) => {
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
               title="(1/3) Input recipient address."
-              content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the BASE network."
+              content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the Optimism network."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
@@ -180,7 +180,7 @@ const InstantAccountTransfer = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(2/3) How much? (USDC on BASE)"
+              title="(2/3) How much? (USDC on Optimism)"
               content="The amount you would like to transfer.  Please note there is currently a 0% transaction fee."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>

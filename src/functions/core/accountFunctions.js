@@ -1,12 +1,15 @@
-import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V06 } from 'permissionless';
-import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
+import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V07 } from 'permissionless';
+import {
+  createPimlicoBundlerClient,
+  createPimlicoPaymasterClient,
+} from "permissionless/clients/pimlico"
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { baseSepolia } from 'viem/chains';
+import { optimismSepolia } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
-import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL } from '@env';
+import { WEB3_URL, OPTIMISM_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_API_KEY } from '@env';
 
 const web3 = new Web3(WEB3_URL);
 const abi = [
@@ -36,7 +39,6 @@ const abi = [
   },
 ];
 
-const usdcContractAddress = BASE_USDC_CONTRACT;
 const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
@@ -67,13 +69,16 @@ export const accountLogin = async (tag, password) => {
     //console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
-      transport: http(RPC_URL),
+      transport: http('https://sepolia.optimism.io'),
     });
+
+
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
       privateKey: privateKey,
       factoryAddress: factoryAddress,
-      entryPoint: ENTRYPOINT_ADDRESS_V06,
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
+
     return simpleAccount;
   } catch (error) {
     console.log('Error logging in or creating account:', error);
@@ -84,21 +89,26 @@ export const accountLogin = async (tag, password) => {
 export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
   try {
-    const factor = 10 ** 6; 
+    const factor = 10 ** 6;
     const amountInWei = BigInt(parseFloat(amount) * factor);
 
-    const cloudPaymaster = createPimlicoPaymasterClient({
-      chain: baseSepolia,
-      transport: http(RPC_URL),
-      entryPoint: ENTRYPOINT_ADDRESS_V06,
+    const paymasterClient = createPimlicoPaymasterClient({
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
+      transport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
+    });
+
+    const pimlicoBundlerClient = createPimlicoBundlerClient({
+      transport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
-      chain: baseSepolia,
-      bundlerTransport: http(RPC_URL),
+      chain: optimismSepolia,
+      bundlerTransport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
       middleware: {
-        sponsorUserOperation: cloudPaymaster.sponsorUserOperation,
+        sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
+        gasPrice: async () => (await pimlicoBundlerClient.getUserOperationGasPrice()).fast, // if using pimlico bundler
       },
     });
 
@@ -118,13 +128,13 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
       transactions: [
         {
           account: smartAccountClient.account,
-          to: usdcContractAddress,
+          to: OPTIMISM_USDC_CONTRACT,
           data: recipientData,
           value: 0n,
         },
         {
           account: smartAccountClient.account,
-          to: usdcContractAddress,
+          to: OPTIMISM_USDC_CONTRACT,
           data: feeData,
           value: 0n,
         },

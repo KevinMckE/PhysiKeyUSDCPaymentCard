@@ -3,8 +3,8 @@ import React, { createContext, useState } from 'react';
 // functions
 import { storeData } from '../functions/core/asyncStorage';
 import { accountLogin } from '../functions/core/accountFunctions';
-import { getUSDCBalance } from '../functions/base/getBaseUSDC';
-import { getBaseUSDCActivity } from '../functions/base/getBaseUSDCActivity';
+import { getUSDCBalance } from '../functions/core/getOptimismUSDC';
+import { getBaseUSDCActivity } from '../functions/core/getOptimismUSDCActivity';
 
 export const AccountContext = createContext();
 

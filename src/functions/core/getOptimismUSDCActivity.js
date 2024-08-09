@@ -1,6 +1,8 @@
+import { OPTIMISM_SCAN_ENDPOINT, OPTIMISM_SCAN_API_KEY, OPTIMISM_USDC_CONTRACT } from '@env'
+
 export const getBaseUSDCActivity = async (walletAddress) => {
   try {
-    const apiEndpoint = `https://${process.env.BASE_SCAN_ENDPOINT}/api?module=account&action=tokentx&contractaddress=0x036cbd53842c5426634e7929541ec2318f3dcf7e&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${process.env.BASE_SCAN_API_KEY}`;
+    const apiEndpoint = `https://${OPTIMISM_SCAN_ENDPOINT}/api?module=account&action=tokentx&contractaddress=${OPTIMISM_USDC_CONTRACT}&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${OPTIMISM_SCAN_API_KEY}`;
     const response = await fetch(apiEndpoint);
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);

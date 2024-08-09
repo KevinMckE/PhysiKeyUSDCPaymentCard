@@ -26,14 +26,14 @@ const ZeroFee = ( {navigation }) => {
           <Text style={styles.textMargin} variant='titleLarge'>Use an external tool to transfer funds.</Text>
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.textMargin} variant='titleMedium'>Copy your BASE Ethereum address to paste in your wallet. Be sure you send on the BASE network</Text>
+          <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network</Text>
           <Text style={styles.textMargin} variant='titleMedium'>If you are unsure about this, do not proceed. We cannot recover funds.</Text>
           
         </View>
         <Pressable onPress={handleCopyToClipboard}>
             <Card style={styles.card}>
               <View style={styles.keyContent}>
-                <Text>Account (BASE network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
+                <Text>Account (Optimism network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                 <Image
                   source={require('../assets/icons/copy_icon.png')}
                   style={styles.copyImage}

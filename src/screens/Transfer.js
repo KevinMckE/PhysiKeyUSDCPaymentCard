@@ -6,8 +6,6 @@ import { useFocusEffect } from '@react-navigation/native';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
-//import TransakSell from './TransakSell';
-//import TransakBuy from './TransakBuy';
 import ZeroFee from './ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
@@ -94,27 +92,7 @@ const Transfer = ({ navigation }) => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
-            <ZeroFee navigation={navigation} />
-            /*
-            <Tab.Navigator
-              screenOptions={{
-                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
-              }}
-            >
-              <Tab.Screen
-                name="Buy USDC"
-                component={TransakBuy}
-              />
-              <Tab.Screen
-                name="Sell USDC"
-                component={TransakSell}
-              />
-              <Tab.Screen
-                name="No Fees"
-                component={ZeroFee}
-              />
-            </Tab.Navigator>
-            */
+            <ZeroFee navigation={navigation}/>
           ) : (
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>

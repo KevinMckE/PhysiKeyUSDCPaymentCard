@@ -15,7 +15,7 @@ import { List, Card } from 'react-native-paper';
 const TransactionList = ({ data, limit }) => {
 
   const openFullDetails = (hash) => {
-    const url = `https://sepolia.basescan.org/tx/${hash}`;
+    const url = `https://optimistic.etherscan.io/tx/${hash}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 

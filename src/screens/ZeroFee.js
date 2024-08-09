@@ -42,7 +42,7 @@ const ZeroFee = ( {navigation }) => {
             </Card>
           </Pressable>
         <View style={styles.bottomContainer}>
-          <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.navigate('Account') }} />
+          <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.goBack(); }} />
         </View>
       </View>
     </>

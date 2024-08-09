@@ -4,12 +4,12 @@ import {
   createPimlicoPaymasterClient,
 } from "permissionless/clients/pimlico"
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { optimismSepolia } from 'viem/chains';
+import { optimism } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
-import { WEB3_URL, OPTIMISM_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_API_KEY } from '@env';
+import { WEB3_URL, OPTIMISM_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
 
 const web3 = new Web3(WEB3_URL);
 const abi = [
@@ -69,7 +69,7 @@ export const accountLogin = async (tag, password) => {
     //console.log('EOA publicKey: ', publicKey);
 
     const client = createPublicClient({
-      transport: http('https://sepolia.optimism.io'),
+      transport: http(RPC_URL),
     });
 
 
@@ -94,18 +94,18 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
 
     const paymasterClient = createPimlicoPaymasterClient({
       entryPoint: ENTRYPOINT_ADDRESS_V07,
-      transport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
+      transport: http(PIMLICO_RPC_URL),
     });
 
     const pimlicoBundlerClient = createPimlicoBundlerClient({
-      transport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
+      transport: http(PIMLICO_RPC_URL),
       entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
-      chain: optimismSepolia,
-      bundlerTransport: http(`https://api.pimlico.io/v2/optimism-sepolia/rpc?apikey=${PIMLICO_API_KEY}`),
+      chain: optimism,
+      bundlerTransport: http(PIMLICO_RPC_URL),
       middleware: {
         sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
         gasPrice: async () => (await pimlicoBundlerClient.getUserOperationGasPrice()).fast, // if using pimlico bundler

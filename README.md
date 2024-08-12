@@ -21,6 +21,7 @@ npm run optimism:mainnet
 
 ### For iOS
 
+Copy the desired environment variables into .env
 Use xcode to run and build.
 
 # Troubleshooting

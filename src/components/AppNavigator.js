@@ -23,6 +23,7 @@ import InstantAccept from '../screens/InstantAccept';
 import InstantAcceptAccount from '../screens/InstantAcceptAccount';
 import InstantAcceptTransfer from '../screens/InstantAcceptTransfer';
 import InstantAccountSell from '../screens/InstantAcceptSell';
+import History from '../screens/History';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
@@ -93,6 +94,13 @@ const AppNavigator = () => {
               component={InstantAccountSell}
               options={{
                 title: 'Sell Assets',
+              }}
+            />
+            <Stack.Screen
+              name="History"
+              component={History}
+              options={{
+                title: 'Transaction History',
               }}
             />
             <Stack.Screen

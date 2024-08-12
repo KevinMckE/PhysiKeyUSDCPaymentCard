@@ -13,7 +13,7 @@ import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const InstantAcceptAccount = ({ navigation }) => {
-  const { publicKey, balance } = useContext(AccountContext);
+  const { publicKey, balance, setNewActivity } = useContext(AccountContext);
 
   const handleCopyToClipboard = () => {
     trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
@@ -40,15 +40,18 @@ const InstantAcceptAccount = ({ navigation }) => {
           </Pressable>
           <CurrencyCard
             title="Balance"
-            subtitle={balance}
+            subtitle="*USDC on Optimism network"
+            amount={balance}
             imageSource={require('../assets/logos/optimism_logo.png')}
             navigation={navigation}
             publicKey={publicKey}
           />
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <CustomButton text='Transactions' type='primary' size='large' onPress={() => { setNewActivity(publicKey); navigation.navigate('History'); }} />
+          </View>
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
             <Text>For best security we recommend only keeping a small amount of money in this wallet. Please consider transferring your assets if holding more than $500.</Text>
           </View>
-
           <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20, }}>
             <CustomButton text='Transfer' type='primary' size='large' onPress={() => { navigation.navigate('InstantAcceptTransfer') }} />
             <CustomButton text='Cashout' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccountSell') }} />

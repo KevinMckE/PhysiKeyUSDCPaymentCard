@@ -1,6 +1,6 @@
 // libraries
-import React, { useState, useEffect, useContext } from 'react';
-import { Image, ActivityIndicator, View } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, ActivityIndicator, View} from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 // context
 import { AccountContext } from '../contexts/AccountContext';

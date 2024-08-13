@@ -9,7 +9,8 @@
 
 // libraries
 import React, { useState } from 'react';
-import { Modal, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Modal from "react-native-modal";
 import { Text } from 'react-native-paper';
 // components
 import PasswordInput from '../components/PasswordInput';
@@ -30,9 +31,9 @@ const SaveAccount = ({ visible, closeModal, handleName, title }) => {
   return (
     <Modal
       avoidKeyboard
-      transparent={true}
       visible={visible}
       onRequestClose={closeModal}
+      style={styles.modal} 
     >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -58,12 +59,14 @@ const SaveAccount = ({ visible, closeModal, handleName, title }) => {
 export default SaveAccount;
 
 const styles = StyleSheet.create({
+  modal: {
+    margin: 0, 
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+    padding: 20
   },
   modalContent: {
     backgroundColor: '#fff',

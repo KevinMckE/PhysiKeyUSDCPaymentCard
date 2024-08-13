@@ -64,8 +64,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     marginTop: 10,
-    width: 250,
-    height: 50,
+    width: '85%',
     backgroundColor: '#ffffff',
   },
   confirmCard: {

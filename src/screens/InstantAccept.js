@@ -212,7 +212,7 @@ const InstantAccept = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Return' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAcceptAccount'); setNewBalance(publicKey) }} />
+              <CustomButton text='Transfer Assets' type='secondary' size='large' onPress={() => { setNewBalance(publicKey); navigation.navigate('InstantAcceptAccount'); }} />
             </View>
           </>
         ) : (
@@ -246,7 +246,7 @@ const InstantAccept = ({ navigation }) => {
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
             <View style={styles.container}>
               <LoadingOverlay loading={loading} />
-              <Pressable onPress={() => navigation.navigate('InstantAcceptAccount', { publicKey })}>
+              <Pressable onPress={() => { setNewBalance(publicKey); navigation.navigate('InstantAcceptAccount', { publicKey }); }}>
                 <Card style={styles.card}>
                   <View style={styles.keyContent}>
                     <Text>Account (Optimism network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>

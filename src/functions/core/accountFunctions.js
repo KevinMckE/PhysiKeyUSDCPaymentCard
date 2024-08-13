@@ -10,7 +10,6 @@ import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
 import { WEB3_URL, OPTIMISM_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
-
 const web3 = new Web3(WEB3_URL);
 const abi = [
   {
@@ -124,22 +123,32 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
       args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n], //could be any account
     });
 
-    const txHash = await smartAccountClient.sendTransactions({
-      transactions: [
-        {
-          account: smartAccountClient.account,
-          to: OPTIMISM_USDC_CONTRACT,
-          data: recipientData,
-          value: 0n,
-        },
-        {
-          account: smartAccountClient.account,
-          to: OPTIMISM_USDC_CONTRACT,
-          data: feeData,
-          value: 0n,
-        },
-      ]
+    /*
+        const txHash = await smartAccountClient.sendTransactions({
+          transactions: [
+            {
+              account: smartAccountClient.account,
+              to: OPTIMISM_USDC_CONTRACT,
+              data: recipientData,
+              value: 0n,
+            },
+            {
+              account: smartAccountClient.account,
+              to: OPTIMISM_USDC_CONTRACT,
+              data: feeData,
+              value: 0n,
+            },
+          ]
+        });
+    */
+
+    const txHash = await smartAccountClient.sendTransaction({
+      account: smartAccountClient.account,
+      to: OPTIMISM_USDC_CONTRACT,
+      data: recipientData,
+      value: 0n,
     });
+
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);

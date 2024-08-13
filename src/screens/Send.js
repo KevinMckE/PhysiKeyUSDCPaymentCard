@@ -261,7 +261,7 @@ const Send = ({ navigation }) => {
             </View>
             <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
               <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
-              <CustomButton text='Return' type='secondary' size='large' onPress={() => { navigation.navigate('Home'); setNewBalance(publicKey), setNewActivity(publicKey) }} />
+              <CustomButton text='Return' type='secondary' size='large' onPress={() => { setNewBalance(publicKey); setNewActivity(publicKey); navigation.navigate('Home'); }} />
             </View>
           </>
         ) : (

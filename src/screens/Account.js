@@ -1,6 +1,6 @@
 // libraries
-import React, { useContext } from 'react';
-import { View, Image, Pressable, ImageBackground } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Image, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import { Text, Card, List } from 'react-native-paper';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { trigger } from 'react-native-haptic-feedback';
@@ -14,9 +14,18 @@ import { AccountContext } from '../contexts/AccountContext';
 import styles from '../styles/common';
 
 const Account = ({ navigation }) => {
-
-  const { activity, publicKey, accountName, balance } = useContext(AccountContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
   const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setNewActivity(publicKey);
+    setNewBalance(publicKey);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const handleCopyToClipboard = () => {
     trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
@@ -24,7 +33,7 @@ const Account = ({ navigation }) => {
   };
 
   return (
-    <>
+    <ScrollView  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
@@ -69,7 +78,7 @@ const Account = ({ navigation }) => {
           <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request') }}/>
         </View>
       </ImageBackground>
-    </>
+    </ScrollView>
   );
 }
 

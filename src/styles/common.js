@@ -77,12 +77,10 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mainButtons: {
-    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
     bottom: 0,
-    left: 0,
     width: '100%',
     backgroundColor: '#ffffff',
     borderTopWidth: 2,

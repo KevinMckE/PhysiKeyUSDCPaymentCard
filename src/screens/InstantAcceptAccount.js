@@ -1,6 +1,6 @@
 // libraries
-import React, { useContext } from 'react';
-import { View, Image, Pressable, ImageBackground } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Image, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { trigger } from 'react-native-haptic-feedback';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -13,7 +13,17 @@ import CustomButton from '../components/CustomButton';
 import styles from '../styles/common';
 
 const InstantAcceptAccount = ({ navigation }) => {
-  const { publicKey, balance, setNewActivity } = useContext(AccountContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const { publicKey, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setNewActivity(publicKey);
+    setNewBalance(publicKey);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const handleCopyToClipboard = () => {
     trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
@@ -21,7 +31,7 @@ const InstantAcceptAccount = ({ navigation }) => {
   };
 
   return (
-    <>
+    <ScrollView  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
@@ -61,7 +71,7 @@ const InstantAcceptAccount = ({ navigation }) => {
           </View>
         </View>
       </ImageBackground>
-    </>
+    </ScrollView>
   );
 }
 

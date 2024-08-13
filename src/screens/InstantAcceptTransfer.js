@@ -157,6 +157,7 @@ const InstantAccountTransfer = ({ navigation }) => {
                 theme={{ colors: { primary: '#2E3C49' } }}
                 placeholder="Recipient Address"
                 value={recipientKey}
+                multiline={true} 
                 onChangeText={recipientKey => setRecipientKey(recipientKey)}
                 returnKeyType={'done'}
               />

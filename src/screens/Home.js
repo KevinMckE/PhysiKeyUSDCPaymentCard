@@ -1,6 +1,6 @@
 // libraries
 import React, { useContext } from 'react';
-import { Image, ActivityIndicator, View} from 'react-native';
+import { Image, ActivityIndicator, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 // context
 import { AccountContext } from '../contexts/AccountContext';
@@ -9,6 +9,7 @@ import Account from './Account';
 import Transfer from './Transfer';
 import History from './History';
 import styles from '../styles/common';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,54 +26,57 @@ const Home = () => {
   }
 
   return (
-    <Tab.Navigator
-      theme={{ colors: { secondaryContainer: '#94BE43' } }}
-      initialRouteName="Account"
-      activeColor="#000000"
-      inactiveColor="#808080"
-      barStyle={{ backgroundColor: '#ffffff' }}
-    >
-      <Tab.Screen
-        name="Account"
-        component={Account}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('../assets/icons/home.png')}
-              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
-            />
-          )
-        }}
-      />
-      <Tab.Screen
-        name="History"
-        component={History}
-        options={{
-          tabBarLabel: 'History',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('../assets/icons/history.png')}
-              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
-            />
-          )
-        }}
-      />
-      <Tab.Screen
-        name="Load Card"
-        component={Transfer}
-        initialParams={{ activity }}
-        options={{
-          tabBarLabel: 'Transfer',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              source={require('../assets/icons/fund.png')}
-              style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
-            />
-          )
-        }}
-      />
-    </Tab.Navigator>
+    <View style={styles.container}>
+      <LoadingOverlay loading={loading} />
+      <Tab.Navigator
+        theme={{ colors: { secondaryContainer: '#94BE43' } }}
+        initialRouteName="Account"
+        activeColor="#000000"
+        inactiveColor="#808080"
+        barStyle={{ backgroundColor: '#ffffff' }}
+      >
+        <Tab.Screen
+          name="Account"
+          component={Account}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/icons/home.png')}
+                style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="History"
+          component={History}
+          options={{
+            tabBarLabel: 'History',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/icons/history.png')}
+                style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+              />
+            )
+          }}
+        />
+        <Tab.Screen
+          name="Load Card"
+          component={Transfer}
+          initialParams={{ activity }}
+          options={{
+            tabBarLabel: 'Transfer',
+            tabBarIcon: ({ focused }) => (
+              <Image
+                source={require('../assets/icons/fund.png')}
+                style={[styles.tabBarIcon, focused ? null : styles.inactiveTabIcon]}
+              />
+            )
+          }}
+        />
+      </Tab.Navigator>
+    </View>
   );
 }
 

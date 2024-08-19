@@ -26,8 +26,8 @@ const ZeroFee = ( {navigation }) => {
           <Text style={styles.textMargin} variant='titleLarge'>Use an external tool to transfer funds.</Text>
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network</Text>
-          <Text style={styles.textMargin} variant='titleMedium'>If you are unsure about this, do not proceed. We cannot recover funds.</Text>
+          <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network. If you are unsure about this, do not proceed. We cannot recover funds.</Text>
+        
           
         </View>
         <Pressable onPress={handleCopyToClipboard}>

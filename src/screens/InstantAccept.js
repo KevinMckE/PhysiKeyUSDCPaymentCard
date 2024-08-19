@@ -10,8 +10,8 @@
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Pressable, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 import { Text, TextInput, Card } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -27,8 +27,6 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { accountLogin } from '../functions/core/accountFunctions';
 // styles
 import styles from '../styles/common';
-
-const randomstring = require('randomstring');
 
 const InstantAccept = ({ navigation }) => {
 
@@ -57,6 +55,29 @@ const InstantAccept = ({ navigation }) => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    const getDefaultAccount = async () => {
+      const username = "Default";
+      try {
+        const credentials = await Keychain.getGenericPassword();
+        if (credentials && credentials.username === username) {
+          console.log('Account exists...');
+          const account = await accountLogin(credentials.password, credentials.password);
+          setNewPublicKey(account.address);
+          setNewBalance(account.address);
+        } else {
+          console.log('No account found...');
+          navigation.navigate('InstantAcceptLogin');
+          return null; 
+        }
+      } catch (error) {
+        console.error("Error retrieving account: ", error);
+        navigation.navigate('Landing');
+      }
+    };
+    getDefaultAccount();
   }, []);
 
   const handleNextStep = () => {

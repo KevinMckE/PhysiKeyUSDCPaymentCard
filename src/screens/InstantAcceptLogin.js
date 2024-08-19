@@ -9,6 +9,7 @@
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Platform, Keyboard } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 import { Text, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
@@ -31,33 +32,30 @@ const InstantAcceptLogin = ({ navigation }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const initializeAccount = async () => {
-    const defaultKey = "default";
-    let input = randomstring.generate(35);
+    const username = "Default";
+    let password = randomstring.generate(35);
     try {
       setIsLoading(true);
-      const storedValue = await AsyncStorage.getItem(defaultKey);
-      if (!storedValue) {
-        console.log('creating new...')
-        await AsyncStorage.setItem(defaultKey, input);
-        const account = await accountLogin(input, input);
+      const credentials = await Keychain.getGenericPassword();
+      if (!credentials || credentials.username !== username) {
+        console.log('creating new...');
+        await Keychain.setGenericPassword(username, password);
+        const account = await accountLogin(password, password);
         setNewPublicKey(account.address);
         setNewBalance(account.address);
-        setIsLoading(false);
       } else {
-        console.log('account exists...')
-        const account = await accountLogin(storedValue, storedValue);
+        console.log('account exists...');
+        const account = await accountLogin(credentials.password, credentials.password);
         setNewPublicKey(account.address);
         setNewBalance(account.address);
-        setIsLoading(false);
       }
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       console.error("Error initializing account: ", error);
       navigation.navigate('Landing');
     }
   };
-
-  initializeAccount();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -107,7 +105,7 @@ const InstantAcceptLogin = ({ navigation }) => {
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => {
               navigation.navigate('Landing');
             }} />
-            <CustomButton text='Confirm' type='primary' size='large' onPress={() => {initializeAccount(); navigation.navigate(InstantAccept)}} />
+            <CustomButton text='Confirm' type='primary' size='large' onPress={() => {initializeAccount(); navigation.navigate('InstantAccept')}} />
           </View>
         </ImageBackground >
       </KeyboardAvoidingView >

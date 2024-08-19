@@ -10,8 +10,8 @@
 // libraries
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Pressable, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 import { Text, TextInput, Card } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -27,8 +27,6 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { accountLogin } from '../functions/core/accountFunctions';
 // styles
 import styles from '../styles/common';
-
-const randomstring = require('randomstring');
 
 const InstantAccept = ({ navigation }) => {
 
@@ -60,34 +58,26 @@ const InstantAccept = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const initializeAccount = async () => {
-      const defaultKey = "default";
-      let input = randomstring.generate(35);
+    const getDefaultAccount = async () => {
+      const username = "Default";
       try {
-        setIsLoading(true);
-        const storedValue = await AsyncStorage.getItem(defaultKey);
-        if (!storedValue) {
-          console.log('creating new...')
-          await AsyncStorage.setItem(defaultKey, input);
-          const account = await accountLogin(input, input);
+        const credentials = await Keychain.getGenericPassword();
+        if (credentials && credentials.username === username) {
+          console.log('Account exists...');
+          const account = await accountLogin(credentials.password, credentials.password);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
-          setIsLoading(false);
         } else {
-          console.log('account exists...')
-          const account = await accountLogin(storedValue, storedValue);
-          setNewPublicKey(account.address);
-          setNewBalance(account.address);
-          setIsLoading(false);
+          console.log('No account found...');
+          navigation.navigate('InstantAcceptLogin');
+          return null; 
         }
       } catch (error) {
-        setIsLoading(false);
-        console.error("Error initializing account: ", error);
+        console.error("Error retrieving account: ", error);
         navigation.navigate('Landing');
       }
     };
-
-    initializeAccount();
+    getDefaultAccount();
   }, []);
 
   const handleNextStep = () => {

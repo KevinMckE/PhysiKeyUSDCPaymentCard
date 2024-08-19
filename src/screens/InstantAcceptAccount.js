@@ -48,6 +48,9 @@ const InstantAcceptAccount = ({ navigation }) => {
               </View>
             </Card>
           </Pressable>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <CustomButton text='Edit' type='primary' size='large' onPress={() => { navigation.navigate('InstantAcceptLogin'); }} />
+          </View>
           <CurrencyCard
             title="Balance"
             subtitle="*USDC on Optimism network"

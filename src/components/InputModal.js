@@ -36,7 +36,7 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
       avoidKeyboard
       visible={visible}
       onRequestClose={closeModal}
-      style={styles.modal} // Apply full-screen style
+      style={styles.modal} 
     >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

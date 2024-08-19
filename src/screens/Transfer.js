@@ -21,7 +21,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Transfer = ({ navigation }) => {
 
-  const { publicKey } = useContext(AccountContext);
+  const { publicKey, setNewBalance } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);

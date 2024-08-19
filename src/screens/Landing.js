@@ -34,7 +34,7 @@ const Landing = ({ navigation }) => {
             />
           </View>
           <View style={styles.landingBottomContainer}> 
-            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
+            <CustomButton text='Instant Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAcceptLogin')}} />
             <CustomButton text='Card Login' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
             <Text variant="bodyLarge">Don't have a card?</Text>
             <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>

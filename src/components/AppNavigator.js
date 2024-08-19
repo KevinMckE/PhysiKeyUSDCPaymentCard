@@ -20,6 +20,7 @@ import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
 import InstantAccept from '../screens/InstantAccept';
+import InstantAcceptLogin from '../screens/InstantAcceptLogin';
 import InstantAcceptAccount from '../screens/InstantAcceptAccount';
 import InstantAcceptTransfer from '../screens/InstantAcceptTransfer';
 import InstantAccountSell from '../screens/InstantAcceptSell';
@@ -73,6 +74,13 @@ const AppNavigator = () => {
               component={InstantAccept}
               options={{
                 title: 'Accept Payment',
+              }}
+            />
+            <Stack.Screen
+              name="InstantAcceptLogin"
+              component={InstantAcceptLogin}
+              options={{
+                title: 'Configure Account',
               }}
             />
             <Stack.Screen

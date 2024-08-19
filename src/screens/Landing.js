@@ -7,15 +7,19 @@
 /////////////////////////////////
 
 // libraries
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { View, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { Text } from 'react-native-paper';
+// context
+import { AccountContext } from '../contexts/AccountContext';
 // components
 import CustomButton from '../components/CustomButton';
 // styles
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
+  const { setIsLoading } = useContext(AccountContext);
+
   const handleLinkPress = () => {
     navigation.navigate('WebViewScreen', { url: 'https://anywhereaccess.io' });
   };
@@ -35,7 +39,7 @@ const Landing = ({ navigation }) => {
           </View>
           <View style={styles.landingBottomContainer}> 
             <CustomButton text='Card Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
-            <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
+            <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); setIsLoading(true); }} />
             <Text variant="bodyLarge">Don't have a card?</Text>
             <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>
           </View>

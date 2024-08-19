@@ -14,7 +14,7 @@ import styles from '../styles/common';
 
 const InstantAcceptAccount = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const { publicKey, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
+  const { publicKey, balance, setNewActivity, setNewBalance, setIsLoading } = useContext(AccountContext);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -70,7 +70,7 @@ const InstantAcceptAccount = ({ navigation }) => {
             <CustomButton text='Cashout' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccountSell') }} />
           </View >
           <View style={styles.bottomContainer}>
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('InstantAccept'); setIsLoading(true); }} />
           </View>
         </View>
       </ImageBackground>

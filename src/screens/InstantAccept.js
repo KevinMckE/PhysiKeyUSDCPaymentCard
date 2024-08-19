@@ -76,6 +76,7 @@ const InstantAccept = ({ navigation }) => {
         console.error("Error retrieving account: ", error);
         navigation.navigate('Landing');
       }
+      setIsLoading(false);
     };
     getDefaultAccount();
   }, []);

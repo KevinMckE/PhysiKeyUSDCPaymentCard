@@ -11,7 +11,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Platform, Keyboard } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import { Text, TextInput } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components 
@@ -33,22 +32,15 @@ const InstantAcceptLogin = ({ navigation }) => {
 
   const initializeAccount = async () => {
     const username = "Default";
-    let password = randomstring.generate(35);
+    const password = randomstring.generate(35);
     try {
       setIsLoading(true);
-      const credentials = await Keychain.getGenericPassword();
-      if (!credentials || credentials.username !== username) {
-        console.log('creating new...');
-        await Keychain.setGenericPassword(username, password);
-        const account = await accountLogin(password, password);
-        setNewPublicKey(account.address);
-        setNewBalance(account.address);
-      } else {
-        console.log('account exists...');
-        const account = await accountLogin(credentials.password, credentials.password);
-        setNewPublicKey(account.address);
-        setNewBalance(account.address);
-      }
+      console.log('Creating a new account...');
+      await Keychain.setGenericPassword(username, password);
+      const account = await accountLogin(password, password);
+      setNewPublicKey(account.address);
+      setNewBalance(account.address);
+
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

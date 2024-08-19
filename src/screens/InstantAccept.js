@@ -38,6 +38,7 @@ const InstantAccept = ({ navigation }) => {
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
+  const [tip, setTip] = useState('');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -67,14 +68,17 @@ const InstantAccept = ({ navigation }) => {
           const account = await accountLogin(credentials.password, credentials.password);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
+          setIsLoading(false);
         } else {
           console.log('No account found...');
           navigation.navigate('InstantAcceptLogin');
-          return null; 
+          setIsLoading(false);
+          return null;
         }
       } catch (error) {
         console.error("Error retrieving account: ", error);
         navigation.navigate('Landing');
+        setIsLoading(false);
       }
     };
     getDefaultAccount();
@@ -139,7 +143,7 @@ const InstantAccept = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(1/2) Input USDC Amount."
+              title="(1/3) Input USDC Amount."
               text="*USDC on Optimism network"
               content="Enter a valid amount. To be valid the number must be greater than zero."
             />
@@ -172,11 +176,49 @@ const InstantAccept = ({ navigation }) => {
             <TooltipComponent
               tooltipVisible={tooltipVisible}
               setTooltipVisible={setTooltipVisible}
-              title="(2/2) Review Details."
+              title="(2/3) Include Tip (Optional)"
+              text="*USDC on Optimism network"
+              content="Enter a valid amount. This is optional"
+            />
+            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                <CustomButton text='1 USDC' type='secondary' size='small' onPress={() => { setTip('1') }} />
+                <CustomButton text='3 USDC' type='secondary' size='small' onPress={() => { setTip('3') }} />
+                <CustomButton text='5 USDC' type='secondary' size='small' onPress={() => { setTip('5') }} />
+              </View>
+              <TextInput
+                mode="outlined"
+                autoFocus={true}
+                style={styles.textInput}
+                theme={{ colors: { primary: '#2E3C49' } }}
+                placeholder="Custom Amount"
+                value={tip}
+                onChangeText={tip => setTip(tip)}
+                returnKeyType={'done'}
+                keyboardType={'numeric'}
+              />
+              <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{inputError}</Text>
+              </View>
+            </View>
+            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
+              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => navigation.navigate('Landing')} />
+              <CustomButton text='Continue' type='primary' size='large' onPress={handleNextStep} />
+            </View>
+          </>
+        );
+      case 2:
+        const totalAmount = parseFloat(amount) + parseFloat(tip);
+        return (
+          <>
+            <TooltipComponent
+              tooltipVisible={tooltipVisible}
+              setTooltipVisible={setTooltipVisible}
+              title="(3/3) Review Details."
               content="We recommend verifying the 'paid to' address matches that in your account details."
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-              <Text style={styles.textMargin} variant='titleMedium'>{amount} USDC on Optimism network will be paid to: </Text>
+              <Text style={styles.textMargin} variant='titleMedium'>{totalAmount} USDC on Optimism network will be paid to: </Text>
               <Text style={styles.textMargin} variant='titleMedium'>{publicKey}</Text>
               <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>{inputError}</Text>
@@ -188,7 +230,7 @@ const InstantAccept = ({ navigation }) => {
             </View>
           </>
         );
-      case 2:
+      case 3:
         return success ? (
           <>
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>

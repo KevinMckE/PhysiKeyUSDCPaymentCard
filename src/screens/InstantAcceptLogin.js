@@ -16,6 +16,7 @@ import { AccountContext } from '../contexts/AccountContext';
 // components 
 import CustomButton from '../components/CustomButton';
 import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
 // functions
 import { accountLogin } from '../functions/core/accountFunctions';
 // styles
@@ -25,7 +26,7 @@ const randomstring = require('randomstring');
 
 const InstantAcceptLogin = ({ navigation }) => {
 
-  const { publicKey, setIsLoading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
+  const { publicKey, setIsLoading, loading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
@@ -40,7 +41,6 @@ const InstantAcceptLogin = ({ navigation }) => {
       const account = await accountLogin(password, password);
       setNewPublicKey(account.address);
       setNewBalance(account.address);
-
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -73,6 +73,8 @@ const InstantAcceptLogin = ({ navigation }) => {
           source={require('../assets/background.png')}
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
+          <LoadingOverlay loading={loading} />
+
           <TooltipComponent
             tooltipVisible={tooltipVisible}
             setTooltipVisible={setTooltipVisible}
@@ -97,7 +99,7 @@ const InstantAcceptLogin = ({ navigation }) => {
             <CustomButton text='Go Back' type='secondary' size='large' onPress={() => {
               navigation.navigate('Landing');
             }} />
-            <CustomButton text='Confirm' type='primary' size='large' onPress={() => {initializeAccount(); navigation.navigate('InstantAccept')}} />
+            <CustomButton text='Confirm' type='primary' size='large' onPress={() => { initializeAccount(); navigation.navigate('InstantAccept') }} />
           </View>
         </ImageBackground >
       </KeyboardAvoidingView >

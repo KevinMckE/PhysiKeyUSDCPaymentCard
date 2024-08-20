@@ -182,6 +182,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  button: {
+    margin: 10,
+    borderRadius:15, 
+    borderColor:'#2E3C49',
+    borderWidth: 1,
+    color: '#2E3C49',
+  },
 });
 
 export default styles;

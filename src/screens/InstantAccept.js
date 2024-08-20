@@ -11,7 +11,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Pressable, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import { Text, TextInput, Card } from 'react-native-paper';
+import { Text, TextInput, Card, Button } from 'react-native-paper';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -38,7 +38,7 @@ const InstantAccept = ({ navigation }) => {
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState('');
-  const [tip, setTip] = useState('');
+  const [tip, setTip] = useState('0');
   const [inputError, setInputError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -181,17 +181,17 @@ const InstantAccept = ({ navigation }) => {
               content="Enter a valid amount. This is optional"
             />
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                <CustomButton text='1 USDC' type='secondary' size='small' onPress={() => { setTip('1') }} />
-                <CustomButton text='3 USDC' type='secondary' size='small' onPress={() => { setTip('3') }} />
-                <CustomButton text='5 USDC' type='secondary' size='small' onPress={() => { setTip('5') }} />
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Button style={styles.button} onPress={() => {setTip('1')}}> 1 USDC </Button>
+                <Button style={styles.button} onPress={() => {setTip('3')}}> 3 USDC </Button>
+                <Button style={styles.button} onPress={() => {setTip('5')}}> 5 USDC </Button>
               </View>
               <TextInput
                 mode="outlined"
                 autoFocus={true}
                 style={styles.textInput}
                 theme={{ colors: { primary: '#2E3C49' } }}
-                placeholder="Custom Amount"
+                placeholder="Custom Amount..."
                 value={tip}
                 onChangeText={tip => setTip(tip)}
                 returnKeyType={'done'}

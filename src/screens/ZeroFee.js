@@ -27,8 +27,6 @@ const ZeroFee = ( {navigation }) => {
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network. If you are unsure about this, do not proceed. We cannot recover funds.</Text>
-        
-          
         </View>
         <Pressable onPress={handleCopyToClipboard}>
             <Card style={styles.card}>

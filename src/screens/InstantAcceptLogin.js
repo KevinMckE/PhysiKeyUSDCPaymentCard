@@ -86,7 +86,7 @@ const InstantAcceptLogin = ({ navigation }) => {
               mode="outlined"
               style={styles.textInput}
               theme={{ colors: { primary: '#2E3C49' } }}
-              placeholder="Existing Wallet"
+              placeholder="Input Existing Wallet..."
               value={publicKey}
               multiline={true}
               onChangeText={publicKey => setNewPublicKey(publicKey)}

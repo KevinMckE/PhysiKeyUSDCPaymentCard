@@ -114,16 +114,9 @@ const AppNavigator = () => {
             <Stack.Screen
               name="Home"
               component={Home}
-              options={({ navigation }) => ({
+              options={{
                 title: 'Regen Card',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerButton}>
-                    <Text style={styles.headerButtonArrow}>{'<'}</Text>
-                    <Text style={[styles.headerButtonText, { marginLeft: 10, fontWeight: 'bold' }]}>
-                      Logout
-                    </Text>
-                  </TouchableOpacity>),
-              })}
+              }}
             />
             <Stack.Screen
               name="Send"

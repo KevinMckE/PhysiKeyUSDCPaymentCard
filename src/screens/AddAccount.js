@@ -9,8 +9,9 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ActivityIndicator, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native'; import { Text, TextInput } from 'react-native-paper';
+import { View, KeyboardAvoidingView, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native'; import { Text, TextInput } from 'react-native-paper';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import emojiRegex from 'emoji-regex';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -23,6 +24,7 @@ import styles from '../styles/common';
 const AddAccount = ({ navigation, route }) => {
   const { loading, setNewAccount } = useContext(AccountContext);
   const { tag } = route.params;
+  const regex = emojiRegex();
 
   const [step, setStep] = useState(0);
   const [password, setPassword] = useState(null);
@@ -50,9 +52,15 @@ const AddAccount = ({ navigation, route }) => {
     switch (step) {
       case 0:
         if (password && password.trim() !== '') {
+          if (regex.test(password)) {
+            setInputError('Oops! Emoji characters are not allowed.');
+            return;
+          }
           if (password.length < 4) {
-            setInputError('Please enter a password that is at least 4 characters long.');
-          } else if (confirmPassword && confirmPassword.trim() !== '') {
+            setInputError('Oops! Passwords must be at least 4 characters.');
+            return;
+          }
+          if (confirmPassword && confirmPassword.trim() !== '') {
             if (password === confirmPassword) {
               setStep(step + 1);
               setInputError('');
@@ -60,7 +68,7 @@ const AddAccount = ({ navigation, route }) => {
               setInputError('The passwords do not match.');
             }
           } else {
-            setInputError('Please complete the form.');
+            setInputError('Please confirm your password.');
           }
         } else {
           setInputError('Oops! Please enter a password.');

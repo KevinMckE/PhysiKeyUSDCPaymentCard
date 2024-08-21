@@ -52,7 +52,7 @@ const AppNavigator = () => {
               name="WebViewScreen"
               component={WebViewScreen}
               options={{
-                title: 'AnywhereAccess.io',
+                title: 'Regen.Cards',
               }}
             />
             <Stack.Screen

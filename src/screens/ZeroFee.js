@@ -11,7 +11,7 @@ import CustomButton from '../components/CustomButton';
 // styles
 import styles from '../styles/common';
 
-const ZeroFee = ( {navigation }) => {
+const ZeroFee = ({ navigation }) => {
   const { publicKey } = useContext(AccountContext);
 
   const handleCopyToClipboard = () => {
@@ -26,19 +26,22 @@ const ZeroFee = ( {navigation }) => {
           <Text style={styles.textMargin} variant='titleLarge'>Use an external tool to transfer funds.</Text>
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network. If you are unsure about this, do not proceed. We cannot recover funds.</Text>
+          <Text style={styles.textMargin} variant='titleMedium'>Copy your Optimism Ethereum address to paste in your wallet. Be sure you send on the Optimism network.</Text>
+          <Text style={styles.textMargin} variant='titleMedium'> If you are unsure about this do not proceed. We cannot recover funds.</Text>
         </View>
         <Pressable onPress={handleCopyToClipboard}>
-            <Card style={styles.card}>
-              <View style={styles.keyContent}>
-                <Text>Account (Optimism network): {publicKey}</Text>
-                <Image
-                  source={require('../assets/icons/copy_icon.png')}
-                  style={styles.copyImage}
-                />
-              </View>
-            </Card>
-          </Pressable>
+          <Card style={styles.card}>
+            <View style={styles.keyContent}>
+              <Text style={styles.accountText} numberOfLines={3} ellipsizeMode="tail">
+                Account (Optimism network): {publicKey}
+              </Text>
+              <Image
+                source={require('../assets/icons/copy_icon.png')}
+                style={styles.copyImage}
+              />
+            </View>
+          </Card>
+        </Pressable>
         <View style={styles.bottomContainer}>
           <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.goBack(); }} />
         </View>

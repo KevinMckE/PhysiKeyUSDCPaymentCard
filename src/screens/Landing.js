@@ -21,7 +21,7 @@ const Landing = ({ navigation }) => {
   const { setIsLoading } = useContext(AccountContext);
 
   const handleLinkPress = () => {
-    navigation.navigate('WebViewScreen', { url: 'https://anywhereaccess.io' });
+    navigation.navigate('WebViewScreen', { url: 'https://Regen.Cards' });
   };
 
   return (
@@ -38,8 +38,8 @@ const Landing = ({ navigation }) => {
             />
           </View>
           <View style={styles.landingBottomContainer}> 
-            <CustomButton text='Card Accept' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
-            <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); setIsLoading(true); }} />
+            <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept')}} />
+            <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
             <Text variant="bodyLarge">Don't have a card?</Text>
             <Text><TouchableOpacity onPress={handleLinkPress}><Text style={styles.linkText}>Learn more here</Text></TouchableOpacity></Text>
           </View>

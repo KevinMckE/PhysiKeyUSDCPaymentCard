@@ -11,6 +11,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import emojiRegex from 'emoji-regex';
 
 const PasswordInput = ({ text, value, setPassword }) => {
   const [confirmVisible, setConfirmVisible] = useState(true);
@@ -24,6 +25,7 @@ const PasswordInput = ({ text, value, setPassword }) => {
       <TextInput
         mode="outlined"
         theme={{ colors: { primary: '#2E3C49' } }}
+        keyboardType={Platform.OS === 'android' ? 'email-address' : 'ascii-capable'}
         returnKeyType="done"
         style={styles.textInput}
         placeholder={text}

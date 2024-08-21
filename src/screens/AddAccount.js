@@ -50,7 +50,9 @@ const AddAccount = ({ navigation, route }) => {
     switch (step) {
       case 0:
         if (password && password.trim() !== '') {
-          if (confirmPassword && confirmPassword.trim() !== '') {
+          if (password.length < 4) {
+            setInputError('Please enter a password that is at least 4 characters long.');
+          } else if (confirmPassword && confirmPassword.trim() !== '') {
             if (password === confirmPassword) {
               setStep(step + 1);
               setInputError('');
@@ -169,11 +171,11 @@ const AddAccount = ({ navigation, route }) => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
           <View style={styles.container}>
-          <LoadingOverlay loading={loading} />
-          {renderStep()}
-        </View>
-      </ScrollView>
-    </ImageBackground>
+            <LoadingOverlay loading={loading} />
+            {renderStep()}
+          </View>
+        </ScrollView>
+      </ImageBackground>
     </KeyboardAvoidingView >
   );
 }

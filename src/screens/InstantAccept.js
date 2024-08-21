@@ -119,9 +119,10 @@ const InstantAccept = ({ navigation }) => {
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
+    let totalAmount = parseFloat(amount) + parseFloat(tip);
     try {
       setIsLoading(true);
-      let receipt = await transferUSDC(tagID, password, amount, publicKey);
+      let receipt = await transferUSDC(tagID, password, totalAmount, publicKey);
       setStatusMessage(receipt);
       setSuccess(true);
       setIsLoading(false);
@@ -208,7 +209,7 @@ const InstantAccept = ({ navigation }) => {
           </>
         );
       case 2:
-        const totalAmount = parseFloat(amount) + parseFloat(tip);
+        let totalAmount = parseFloat(amount) + parseFloat(tip);
         return (
           <>
             <TooltipComponent

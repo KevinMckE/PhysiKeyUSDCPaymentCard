@@ -83,12 +83,10 @@ const Login = ({ navigation }) => {
             </View>
           </>
         )}
-
         <View style={styles.bottomContainer}>
           <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
           <CustomButton text='Add Account' type='primary' size='large' onPress={handleScanCardPress} />
         </View>
-
         {Platform.OS === 'android' && (
           <AndroidScanModal
             visible={scanModal}

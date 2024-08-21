@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#ffffff',
   },
+  accountText: {
+    flex: 1,
+    marginRight: 10, // Add some margin to create space between the text and the image
+  },
   keyContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',

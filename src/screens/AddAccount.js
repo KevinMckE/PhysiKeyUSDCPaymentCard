@@ -16,6 +16,7 @@ import { AccountContext } from '../contexts/AccountContext';
 // components
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
+import LoadingOverlay from '../components/LoadingOverlay';
 // styles
 import styles from '../styles/common';
 
@@ -168,16 +169,12 @@ const AddAccount = ({ navigation, route }) => {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
           <View style={styles.container}>
-            {loading && (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#7FA324" />
-              </View>
-            )}
-            {renderStep()}
-          </View>
-        </ScrollView>
-      </ImageBackground>
-    </KeyboardAvoidingView>
+          <LoadingOverlay loading={loading} />
+          {renderStep()}
+        </View>
+      </ScrollView>
+    </ImageBackground>
+    </KeyboardAvoidingView >
   );
 }
 

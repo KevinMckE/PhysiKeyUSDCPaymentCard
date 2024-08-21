@@ -52,7 +52,7 @@ const AppNavigator = () => {
               name="WebViewScreen"
               component={WebViewScreen}
               options={{
-                title: 'AnywhereAccess.io',
+                title: 'Regen.Cards',
               }}
             />
             <Stack.Screen
@@ -114,16 +114,9 @@ const AppNavigator = () => {
             <Stack.Screen
               name="Home"
               component={Home}
-              options={({ navigation }) => ({
+              options={{
                 title: 'Regen Card',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerButton}>
-                    <Text style={styles.headerButtonArrow}>{'<'}</Text>
-                    <Text style={[styles.headerButtonText, { marginLeft: 10, fontWeight: 'bold' }]}>
-                      Logout
-                    </Text>
-                  </TouchableOpacity>),
-              })}
+              }}
             />
             <Stack.Screen
               name="Send"

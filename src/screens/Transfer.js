@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import ZeroFee from './ZeroFee';
+import MoonpayOnramp from './MoonpayOnramp';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -21,13 +22,13 @@ const Tab = createMaterialTopTabNavigator();
 
 const Transfer = ({ navigation }) => {
 
-  const { publicKey, setNewBalance } = useContext(AccountContext);
+  const { publicKey } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
-  const [isVerified, setIsVerified] = useState(false); 
+  const [isVerified, setIsVerified] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -92,7 +93,24 @@ const Transfer = ({ navigation }) => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
-            <ZeroFee navigation={navigation}/>
+            <Tab.Navigator
+              screenOptions={{
+                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
+              }}
+            >
+              <Tab.Screen
+                name="Buy USDC"
+                component={MoonpayOnramp}
+              />
+              <Tab.Screen
+                name="Sell USDC"
+                component={MoonpayOnramp}
+              />
+              <Tab.Screen
+                name="No Fees"
+                component={ZeroFee}
+              />
+            </Tab.Navigator>
           ) : (
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
@@ -121,3 +139,4 @@ const Transfer = ({ navigation }) => {
 };
 
 export default Transfer;
+

@@ -79,8 +79,8 @@ android {
         applicationId "com.regencard"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "1.7"
+        versionCode 100
+        versionName "1.0.0"
     }
     signingConfigs {
         debug {

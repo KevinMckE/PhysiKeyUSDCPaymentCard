@@ -33,7 +33,7 @@ const Landing = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.landingTopContainer}>
             <Image
-              source={require('../assets/regen_card.jpg')}
+              source={require('../assets/regen_card_logo_color.png')}
               style={styles.centeredImage}
             />
           </View>

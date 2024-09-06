@@ -9,9 +9,11 @@
 
 // libraries
 import React, { useRef, useContext } from 'react';
-import { StyleSheet, ScrollView, Text, Pressable, View, Image, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, ScrollView, Pressable, View, Image } from 'react-native';
 import { List, Card } from 'react-native-paper';
 import { Swipeable } from 'react-native-gesture-handler';
+// components
+import Text from '../components/CustomText';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // functions
@@ -29,7 +31,7 @@ const AccountList = ({ data, navigation, setData }) => {
         style={[styles.rightAction, { transform: [{ translateX: 0 }] }]}
       >
         <View style={styles.removeButton}>
-          <Text style={styles.text}>Remove</Text>
+          <Text size={"small"} text={"Remove"} />
         </View>
       </Pressable>
     );
@@ -73,8 +75,12 @@ const AccountList = ({ data, navigation, setData }) => {
                 >
                   <View style={styles.listItem}>
                     <List.Item
-                      title={`${item.key}`}
-                      description={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`}
+                      title={() => (
+                        <Text size="large" text={`${item.key}`} />
+                      )}
+                      description={() => (
+                        <Text size="small" text={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`} />
+                      )}
                     />
                     <Image source={require('../assets/drag_handle.png')} style={styles.icon} />
                   </View>
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   card: {
-    margin: 10,
+    margin: 16,
     backgroundColor: '#ffffff',
   },
   lastItem: {
@@ -111,28 +117,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 100, // Set the width of the right action button
-    borderRadius: 10,
-  },
-  rightActionText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  text: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: 'bold',
+    width: 100, // width of the right action button space
   },
   removeButton: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#de0a26',
     borderRadius: 15,
-    padding: 10,
+    height: 48,
+    width: 84,
   },
   icon: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
+    width: 24,
+    height: 24,
+    marginRight: 16,
   }
 });

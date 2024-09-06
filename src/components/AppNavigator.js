@@ -9,7 +9,6 @@
 
 // libraries
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -30,8 +29,6 @@ import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
 import WebViewScreen from '../screens/WebViewScreen';
-// styles
-import styles from '../styles/common';
 
 const Stack = createStackNavigator();
 

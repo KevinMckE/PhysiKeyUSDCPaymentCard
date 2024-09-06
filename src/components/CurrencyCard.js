@@ -10,7 +10,8 @@
 // libraries
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import { Text, Card } from 'react-native-paper';
+import { Card } from 'react-native-paper';
+import Text from '../components/CustomText';
 
 const CurrencyCard = ({ title, subtitle, amount, imageSource }) => {
   return (
@@ -18,40 +19,37 @@ const CurrencyCard = ({ title, subtitle, amount, imageSource }) => {
       <Card.Content style={styles.content}>
         <Image source={imageSource} style={styles.image} />
         <View>
-          <Text variant='titleLarge'>{title}</Text>
-          <Text>{subtitle}</Text>
-          <Text style={styles.amountText}>{amount} USDC</Text>
-        </View>
-      </Card.Content>
-    </Card>
+          <Text size={"large"} text={title} />
+          <Text size={"small"} text={subtitle} />
+          <View style={styles.amountContainer}>
+          <Text size={"xl"} text={amount}/>
+          <Text size={"large"} text={"USDC"}/>
+          </View>
+      </View>
+    </Card.Content>
+    </Card >
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    margin: 10,
+    margin: 16,
     backgroundColor: '#ffffff',
-    borderRadius: 10,
+    borderRadius: 15,
   },
   content: {
     flexDirection: 'row',
-    gap: 20,
+    gap: 16,
   },
   image: {
     width: 100,
     height: 100,
-    borderRadius: 10,
+    alignSelf: 'center', 
   },
-  amountText: {
-    fontSize: 30,
+  amountContainer: {
+    flexDirection: 'row', 
+    alignItems: 'baseline',
   },
-  actions: {
-    flexDirection: 'row',
-    gap: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20
-  }
 });
 
 export default CurrencyCard;

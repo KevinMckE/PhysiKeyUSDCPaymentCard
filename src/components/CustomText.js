@@ -1,18 +1,36 @@
+/////////////////////////////////
+//CUSTOM TEXT COMPONENT   ///////
+// Handles rendering custom    //
+// font                        //
+//                             //
+//                             //
+// RegenCard 2024              //
+/////////////////////////////////
+
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 
 const CustomText = ({ size, text }) => {
+  const getTextStyle = () => {
+    switch (size) {
+      case 'small':
+        return { fontSize: 16, fontFamily: 'LeagueSpartan-SemiBold' };
+      case 'medium':
+        return { fontSize: 24, fontFamily: 'LeagueSpartan-SemiBold' };
+      case 'large':
+        return { fontSize: 32, fontFamily: 'LeagueSpartan-Regular', };
+      case 'xl':
+        return { fontSize: 48, fontFamily: 'LeagueSpartan-Regular' };
+      default:
+        return { fontSize: 16, fontFamily: 'LeagueSpartan-SemiBold' };
+    }
+  };
+
   return (
-    <Text style={styles.text}>
+    <Text style={getTextStyle()}>
       {text}
     </Text>
   );
 };
 
 export default CustomText;
-
-const styles = StyleSheet.create({
-  text: {
-    fontFamily: "LeagueSpartan-Regular", 
-  },
-});

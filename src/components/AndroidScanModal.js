@@ -25,14 +25,14 @@ const AndroidScanModal = ({ visible, closeScanModal }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.bottomThirdContainer}>
-          <Text size={"large"} text={"Ready to Scan"} />
+          <Text size={"large"} color={"#000000"} text={"Ready to Scan"} />
           <Image
             source={require('../assets/icons/nfc_icon.png')}
             resizeMode="contain"
             scanModalImage
             style={styles.scanModalImage}
           />
-          <Text size={"medium"} text={"Hold device near NFC tag."} />
+          <Text size={"medium"} color={"#000000"} text={"Hold device near NFC tag."} />
           <CustomButton text='Cancel' type='primary' size='small' onPress={() => { closeScanModal(); }}
           />
         </View>

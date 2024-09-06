@@ -10,7 +10,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Modal from "react-native-modal";
-import { Text } from 'react-native-paper';
+// components
+import Text from '../components/CustomText';
 import PasswordInput from '../components/PasswordInput';
 import CustomButton from '../components/CustomButton';
 
@@ -40,7 +41,7 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
     >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.text} variant='titleMedium'>{title}</Text>
+          <Text   size={"large"} color={"#000000"} text={title} style={{ marginBottom: 32, marginTop: 16 }}/>
             <PasswordInput
               text='Enter Password'
               password={password}
@@ -52,7 +53,7 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
               setPassword={setConfirmPassword}
             />
             {errorMessage ? (
-              <Text style={styles.errorMessage}>{errorMessage}</Text>
+              <Text size={"small"} color={"#FF0000"} text={errorMessage} />
             ) : null}
             <View style={styles.inlineButton}>
               <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
@@ -73,28 +74,21 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-    padding: 20
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    padding: 16
   },
   modalContent: {
     backgroundColor: '#fff',
     width: '100%',
-    padding: 30,
-    borderRadius: 10,
+    padding: 16,
+    borderRadius: 15,
     alignItems: 'center',
   },
   inlineButton: {
-    flexDirection: 'row',
-    marginTop: 15,
-    width: 100,
-    justifyContent: 'center',
-    gap: 5,
-  },
-  text: {
-    margin: 10,
+    marginTop: 32,
   },
   errorMessage: {
     color: 'red',
-    margin: 10,
+    margin: 16,
   },
 });

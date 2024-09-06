@@ -10,7 +10,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 
-const CustomText = ({ size, text }) => {
+const CustomText = ({ size, color, text, style }) => {
   const getTextStyle = () => {
     switch (size) {
       case 'small':
@@ -18,7 +18,7 @@ const CustomText = ({ size, text }) => {
       case 'medium':
         return { fontSize: 24, fontFamily: 'LeagueSpartan-SemiBold' };
       case 'large':
-        return { fontSize: 32, fontFamily: 'LeagueSpartan-Regular', };
+        return { fontSize: 32, fontFamily: 'LeagueSpartan-Regular' };
       case 'xl':
         return { fontSize: 48, fontFamily: 'LeagueSpartan-Regular' };
       default:
@@ -27,7 +27,7 @@ const CustomText = ({ size, text }) => {
   };
 
   return (
-    <Text style={getTextStyle()}>
+    <Text style={[getTextStyle(), { color }, style]}>
       {text}
     </Text>
   );

@@ -31,7 +31,7 @@ const AccountList = ({ data, navigation, setData }) => {
         style={[styles.rightAction, { transform: [{ translateX: 0 }] }]}
       >
         <View style={styles.removeButton}>
-          <Text size={"small"} text={"Remove"} />
+          <Text size={"small"} color={"#ffffff"} text={"Remove"} />
         </View>
       </Pressable>
     );
@@ -131,5 +131,5 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 16,
-  }
+  },
 });

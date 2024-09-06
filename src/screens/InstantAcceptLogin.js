@@ -78,21 +78,10 @@ const InstantAcceptLogin = ({ navigation }) => {
           <TooltipComponent
             tooltipVisible={tooltipVisible}
             setTooltipVisible={setTooltipVisible}
-            title="Use existing wallet or generate a new one."
-            content="Paste in an existing wallet if you prefer.  Otherwise we can generate a wallet for you!"
+            title="Generate a newaccount"
+            content="Make sure you have cleared any funds from your old account!"
           />
           <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              theme={{ colors: { primary: '#2E3C49' } }}
-              placeholder="Input Existing Wallet..."
-              value={publicKey}
-              multiline={true}
-              onChangeText={publicKey => setNewPublicKey(publicKey)}
-              returnKeyType={'done'}
-            />
-            <Text style={styles.textMargin} variant='titleMedium'>or</Text>
             <CustomButton text="Generate" type='primary' size='large' onPress={() => { initializeAccount(); }} />
           </View>
           <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>

@@ -49,7 +49,7 @@ const AppNavigator = () => {
               name="WebViewScreen"
               component={WebViewScreen}
               options={{
-                title: 'Regen.Cards',
+                title: 'Regen Card',
               }}
             />
             <Stack.Screen

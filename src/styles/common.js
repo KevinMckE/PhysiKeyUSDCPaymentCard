@@ -5,15 +5,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    height: '100%',
   },
   backgroundImage: {
-    position: 'absolute',
-    top: 20,
-    width: 300,
-    height: 300,
-    opacity: 1,
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
+  center: {
+    alignItems: 'center'
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   centeredImage: {
     position: 'absolute',
     width: '100%',
@@ -30,11 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 3,
   },
-  linkText: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    fontSize: 18,
-  },
+
   button: {
     width: 250,
     margin: 10,
@@ -188,8 +196,8 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 10,
-    borderRadius:15, 
-    borderColor:'#2E3C49',
+    borderRadius: 15,
+    borderColor: '#2E3C49',
     borderWidth: 1,
     color: '#2E3C49',
   },

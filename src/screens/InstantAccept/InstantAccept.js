@@ -8,10 +8,9 @@
 /////////////////////////////////
 
 // libraries
-import React, { useState, useEffect, useContext } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, Image, Platform, Keyboard, TextInput } from 'react-native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { View, KeyboardAvoidingView, ImageBackground, Image, Platform, Keyboard, TextInput, Pressable } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import { Card } from 'react-native-paper';
 // context 
 import { AccountContext } from '../../contexts/AccountContext';
 // components
@@ -33,20 +32,21 @@ import styles from '../../styles/common';
 
 const InstantAccept = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setNewPublicKey, setStatusMessage, setNewBalance } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setNewPublicKey, setStatusMessage, setNewBalance, setNewName } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [tagID, setTagID] = useState('');
   const [scanModal, setScanModal] = useState(false);
-  const [amount, setAmount] = useState('');
-  const [tip, setTip] = useState('0');
+  const [amount, setAmount] = useState();
+  const [rawInput, setRawInput] = useState('');
   const [inputError, setInputError] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+
+  const textInputRef = useRef(null); 
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
@@ -64,9 +64,9 @@ const InstantAccept = ({ navigation }) => {
     };
   }, []);
 
-
   useEffect(() => {
     const getDefaultAccount = async () => {
+      setIsLoading(true);
       const username = "Default";
       try {
         const credentials = await Keychain.getGenericPassword();
@@ -75,26 +75,33 @@ const InstantAccept = ({ navigation }) => {
           const account = await accountLogin(credentials.password, credentials.password);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
-          setIsLoading(false);
+          setNewName(username);
         } else {
           console.log('No account found...');
           const password = await generateRandomString(70);
-          console.log(password);
           await Keychain.setGenericPassword(username, password);
           const account = await accountLogin(password, password);
           setNewPublicKey(account.address);
           setNewBalance(account.address);
-          setIsLoading(false);
-          return null;
+          setNewName(username);
         }
       } catch (error) {
         console.error("Error retrieving account: ", error);
         navigation.navigate('Landing');
-        setIsLoading(false);
+      } finally {
+        setIsLoading(false); 
       }
     };
     getDefaultAccount();
   }, []);
+
+  useEffect(() => {
+    if (!loading && textInputRef.current) {
+      setTimeout(() => {
+        textInputRef.current.focus(); 
+      }, 1000); 
+    }
+  }, [loading]);
 
   const handleNextStep = () => {
     switch (step) {
@@ -103,7 +110,7 @@ const InstantAccept = ({ navigation }) => {
           setStep(step + 1);
           setInputError('');
         } else {
-          setInputError('Oops! Please enter a valid number.')
+          setInputError('Please enter a valid number.')
         }
         break;
       case 1:
@@ -117,6 +124,22 @@ const InstantAccept = ({ navigation }) => {
   const handlePreviousStep = () => {
     setStep(step - 1);
   };
+
+
+const handleAmountChange = (input) => {
+  const validNumberRegex = /^(\d+(\.\d*)?|\.\d+)$/;
+
+  // Temporarily set raw input
+  setRawInput(input);
+
+  // Check if the input matches the valid number regex or is empty
+  if (validNumberRegex.test(input) || input === '') {
+    setAmount(input); // Update the amount state if valid
+    setInputError(''); // Clear the error message
+  } else {
+    setInputError('Please enter a valid number.'); // Set error message
+  }
+};
 
   const closeScanModal = () => {
     cancelNfc();
@@ -176,25 +199,25 @@ const InstantAccept = ({ navigation }) => {
                 content="Valid numbers are greater than 0 and formatted correctly."
               />
             </View>
-            <View style={{ flex: 4, margin: 16 }}>
+            <Pressable onPress={() => textInputRef.current.focus()} style={{ flex: 4, margin: 16 }}>
               <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
                 <TextInput
+                  ref={textInputRef}
                   style={styles.amountInput}
-                  autoFocus={true}
                   selectionColor={'#000000'}
                   placeholder="0"
-                  value={amount}
-                  onChangeText={amount => setAmount(amount)}
+                  value={rawInput}
+                  onChangeText={handleAmountChange}
                   returnKeyType={'done'}
                   keyboardType={'numeric'}
                 />
                 <Text size={"large"} color={"#000000"} text={'  USDC'} />
               </View>
               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
-            </View>
-            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 50) }]}>
+            </Pressable>
+            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => navigation.navigate('Landing')} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.navigate('Landing')}} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
               <AccountButton
@@ -217,12 +240,15 @@ const InstantAccept = ({ navigation }) => {
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
-              <Text size={"medium"} color={"#000000"} text={`${amount} USDC on Optimism network will be paid to: `} />
+            <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>
+              <Text size={"xl"} color={"#000000"} text={`${amount} USDC`} />
+            </View>
+              <Text size={"medium"} color={"#000000"} text={"will be paid to: "} />
               <Text size={"medium"} color={"#000000"} text={publicKey} />
             </View>
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); setInputError(''); }} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); }} />
                 <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleScanCardPress(); }} />
               </View>
               <AccountButton

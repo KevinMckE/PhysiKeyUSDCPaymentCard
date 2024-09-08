@@ -153,6 +153,7 @@ const InstantAccountTransfer = ({ navigation }) => {
             <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
               <TextInput
                 mode="outlined"
+                ref={amountInputRef}  
                 style={styles.textInput}
                 theme={{ colors: { primary: '#2E3C49' } }}
                 placeholder="Recipient Address"

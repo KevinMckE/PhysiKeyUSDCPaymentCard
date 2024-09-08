@@ -7,7 +7,7 @@ const AccountButton = ({ publicKey, setNewBalance, navigation }) => {
   return (
     <Pressable onPress={() => {
       setNewBalance(publicKey);
-      navigation.navigate('InstantAcceptAccount', { publicKey });
+      navigation.navigate('Home');
     }}>
       <Card style={styles.card}>
         <View style={styles.keyContent}>
@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 24,
     height: 24,
-    marginHorizontal: 8,
   },
 });
 

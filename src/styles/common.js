@@ -28,7 +28,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-
+  homeButtons: {
+    position: 'absolute',
+    bottom: 90, 
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 16,
+  },
 
 
   card: {

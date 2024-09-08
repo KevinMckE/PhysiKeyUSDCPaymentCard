@@ -9,6 +9,7 @@
 
 // libraries
 import React from 'react';
+import { TouchableOpacity, Image, Keyboard } from 'react-native';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -69,9 +70,17 @@ const AppNavigator = () => {
             <Stack.Screen
               name="InstantAccept"
               component={InstantAccept}
-              options={{
+              options={({ navigation }) => ({
                 title: 'Accept Payment',
-              }}
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    Keyboard.dismiss();
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="InstantAcceptLogin"

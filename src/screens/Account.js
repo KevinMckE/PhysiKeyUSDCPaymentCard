@@ -73,10 +73,6 @@ const Account = ({ navigation }) => {
           data={activity}
           limit={3}
         />
-        <View style={styles.mainButtons}>
-          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send') }}/>
-          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request') }}/>
-        </View>
       </ImageBackground>
     </ScrollView>
   );

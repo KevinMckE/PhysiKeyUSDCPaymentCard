@@ -37,7 +37,7 @@ const TransactionList = ({ data, limit }) => {
     <View style={styles.container}>
       {data.length === 0 ? (
         <View style={styles.placeholder}>
-          <Text style={styles.placeholderText}>Woah, no activity yet!</Text>
+          <Text style={styles.placeholderText}>You have no recent activity.</Text>
         </View>
       ) : (
         <Card style={styles.card}>

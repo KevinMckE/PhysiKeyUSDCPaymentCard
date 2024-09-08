@@ -71,17 +71,11 @@ const Home = ({ navigation }) => {
       </Tab.Navigator>
 
       <View style={styles.homeButtons}>
-        {accountName === "Default" ? (
-          <CustomButton text="Request" type="primary" size="Large" onPress={() => { navigation.navigate('InstantAccept'); }} />
-        ) : (
-          <>
-            <CustomButton text="Send" type="primary" size="small" onPress={() => { navigation.navigate('Send'); }} />
-            <CustomButton text="Request" type="primary" size="small" onPress={() => {navigation.navigate('Request'); }} />
-          </>
-        )}
+        <CustomButton text="Send" type="primary" size="small" onPress={() => { navigation.navigate('Send'); }} />
+        <CustomButton text="Request" type="primary" size="small" onPress={() => { navigation.navigate('Request'); }} />
       </View>
     </View>
-    
+
   );
 };
 

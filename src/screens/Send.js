@@ -10,6 +10,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
+import * as Keychain from 'react-native-keychain';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -27,7 +28,7 @@ import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity, accountName, setNewPublicKey, setNewName } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);

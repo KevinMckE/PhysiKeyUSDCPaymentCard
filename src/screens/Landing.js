@@ -13,6 +13,7 @@ import { Text } from 'react-native-paper';
 // components
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomText'
+
 // styles
 import styles from '../styles/common';
 
@@ -34,7 +35,7 @@ const Landing = ({ navigation }) => {
           />
         </View>
         <View style={[{ flex: 2, justifyContent: 'center', gap: 16 }, styles.center]}>
-          <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { navigation.navigate('InstantAccept') }} />
+          <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { navigation.navigate('Request') }} />
           <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
         </View>
         <View style={[{ flex: 1 }, styles.center]}>

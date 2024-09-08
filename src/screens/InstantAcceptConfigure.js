@@ -11,15 +11,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Platform, Keyboard } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 // context 
-import { AccountContext } from '../../contexts/AccountContext';
+import { AccountContext } from '../contexts/AccountContext';
 // components 
-import CustomButton from '../../components/CustomButton';
-import TooltipComponent from '../../components/ToolTip';
-import LoadingOverlay from '../../components/LoadingOverlay';
+import CustomButton from '../components/CustomButton';
+import TooltipComponent from '../components/ToolTip';
+import LoadingOverlay from '../components/LoadingOverlay';
 // functions
-import { accountLogin } from '../../functions/core/accountFunctions';
+import { accountLogin } from '../functions/core/accountFunctions';
 // styles
-import styles from '../../styles/common';
+import styles from '../styles/common';
 
 const InstantAcceptLogin = ({ navigation }) => {
   const { setIsLoading, loading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
@@ -66,7 +66,7 @@ const InstantAcceptLogin = ({ navigation }) => {
         style={{ flex: 1 }}
       >
         <ImageBackground
-          source={require('../../assets/background.png')}
+          source={require('../assets/background.png')}
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <LoadingOverlay loading={loading} />

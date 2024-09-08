@@ -19,10 +19,7 @@ import AccountContextProvider from '../contexts/AccountContext';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
-import InstantAccept from '../screens/InstantAccept/InstantAccept';
-import InstantAcceptLogin from '../screens/InstantAccept/InstantAcceptLogin';
-import InstantAcceptTransfer from '../screens/InstantAccept/InstantAcceptTransfer';
-import InstantAccountSell from '../screens/InstantAccept/InstantAcceptSell';
+import InstantAcceptLogin from '../screens/InstantAcceptConfigure';
 import History from '../screens/History';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
@@ -81,63 +78,6 @@ const AppNavigator = () => {
               })}
             />
             <Stack.Screen
-              name="InstantAccept"
-              component={InstantAccept}
-              options={({ navigation }) => ({
-                title: 'Accept Payment',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => {
-                    Keyboard.dismiss();
-                    navigation.goBack();
-                  }}>
-                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
-                  </TouchableOpacity>
-                ),
-              })}
-            />
-            <Stack.Screen
-              name="InstantAcceptLogin"
-              component={InstantAcceptLogin}
-              options={({ navigation }) => ({
-                title: 'Configure Account',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                  }}>
-                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
-                  </TouchableOpacity>
-                ),
-              })}
-            />
-            <Stack.Screen
-              name="InstantAcceptTransfer"
-              component={InstantAcceptTransfer}
-              options={({ navigation }) => ({
-                title: 'Transfer Assets',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                  }}>
-                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
-                  </TouchableOpacity>
-                ),
-              })}
-            />
-            <Stack.Screen
-              name="InstantAccountSell"
-              component={InstantAccountSell}
-              options={({ navigation }) => ({
-                title: 'Sell Assets',
-                headerLeft: () => (
-                  <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                  }}>
-                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
-                  </TouchableOpacity>
-                ),
-              })}
-            />
-            <Stack.Screen
               name="History"
               component={History}
               options={({ navigation }) => ({
@@ -172,6 +112,7 @@ const AppNavigator = () => {
                 title: 'Send USDC',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
+                    Keyboard.dismiss();
                     navigation.goBack();
                   }}>
                     <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
@@ -186,6 +127,7 @@ const AppNavigator = () => {
                 title: 'Request USDC',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
+                    Keyboard.dismiss();
                     navigation.goBack();
                   }}>
                     <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />

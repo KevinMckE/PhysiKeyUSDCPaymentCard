@@ -29,7 +29,7 @@ import styles from '../styles/common';
 
 const Request = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity, accountName, setNewPublicKey, setNewName } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, accountName, setNewPublicKey, setNewName } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);

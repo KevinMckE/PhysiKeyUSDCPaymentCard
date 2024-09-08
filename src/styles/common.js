@@ -50,7 +50,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 15,
   },
-
+  animationContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
 
 
 
@@ -60,12 +65,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 3,
-    marginTop: 50,
-  },
+
   listContainer: {
     justifyContent: 'center',
     alignItems: 'center',

@@ -10,7 +10,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platform, Keyboard } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
-import * as Keychain from 'react-native-keychain';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components

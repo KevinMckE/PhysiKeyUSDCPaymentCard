@@ -15,12 +15,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   amountInput: {
-    fontSize: 48,              
-    color: '#000000',           
-    borderWidth: 0,            
-    backgroundColor: 'transparent', 
-    padding: 0,                 
-    margin: 0,   
+    fontSize: 48,
+    color: '#000000',
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -30,12 +30,15 @@ const styles = StyleSheet.create({
   },
   homeButtons: {
     position: 'absolute',
-    bottom: 80, 
+    bottom: 80,
     left: 0,
     right: 0,
+    paddingTop: 8,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#ffffff', 
+    backgroundColor: '#ffffff',
+    borderTopWidth: 2,
+    borderTopColor: 'rgba(23, 23, 23, 0.1)',
   },
   textContainer: {
     flexDirection: 'row',
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
   },
-  
+
   confirmCard: {
     backgroundColor: '#ffffff',
     width: '100%',
@@ -108,16 +111,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     backgroundColor: '#ffffff',
-    borderTopWidth: 2,
-    borderTopColor: 'rgba(23, 23, 23, 0.1)',
+    
   },
   tabBarIcon: {
     width: 24,
     height: 24,
+    padding: 16,
     resizeMode: 'contain',
   },
   inactiveTabIcon: {
-    tintColor: '#808080',
+    tintColor: '#909090',
+    backgroundColor: '#ffffff',
   },
 
   headerButton: {

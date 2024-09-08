@@ -69,11 +69,7 @@ const Account = ({ navigation }) => {
           <Text size={"small"} color={"#000000"} text={"Recent Transactions"} />
           <Pressable
             onPress={() => {
-              if (accountName === 'Default') {
-                navigation.navigate('InstantAcceptLogin');
-              } else {
-                navigation.navigate('AccountSettings', { navigation });
-              }
+              navigation.navigate('History');
             }}
           >
             <Text size={"small"} color={"#000000"} text={"View All >"} />

@@ -23,8 +23,7 @@ const Home = ({ navigation }) => {
       <LoadingOverlay loading={loading} />
 
       <Tab.Navigator
-        theme={{ colors: { secondaryContainer: '#94BE43' } }}
-        initialRouteName="Account"
+        theme={{ colors: { secondaryContainer: 'rgba(1, 1, 1, 0)' } }} // Fully transparent        initialRouteName="Account"
         activeColor="#000000"
         inactiveColor="#808080"
         barStyle={{ backgroundColor: '#ffffff', height: 80 }}

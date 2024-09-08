@@ -17,7 +17,7 @@ const AccountCard = ({ publicKey, accountName }) => {
             style={styles.icon}
           />
         </View>
-          <Text size={"small"} color={"#000000"} text={truncatedKey} />
+          <Text size={"medium"} color={"#000000"} text={truncatedKey} />
         </View>
 
         <Image

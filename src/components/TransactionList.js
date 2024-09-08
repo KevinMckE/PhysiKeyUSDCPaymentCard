@@ -9,8 +9,10 @@
 
 // libraries
 import React from 'react';
-import { StyleSheet, Text, Pressable, View, Linking } from 'react-native';
+import { StyleSheet, Pressable, View, Linking } from 'react-native';
 import { List, Card } from 'react-native-paper';
+// components
+import Text from '../components/CustomText';
 
 const TransactionList = ({ data, limit }) => {
 
@@ -27,17 +29,15 @@ const TransactionList = ({ data, limit }) => {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
-      timeZoneName: 'short'
     }).format(date);
     return formattedDate;
   };
 
   return (
-    <View style={styles.container}>
+    <>
       {data.length === 0 ? (
         <View style={styles.placeholder}>
-          <Text style={styles.placeholderText}>You have no recent activity.</Text>
+          <Text size="large" text={"No recent transactions."} />
         </View>
       ) : (
         <Card style={styles.card}>
@@ -50,12 +50,19 @@ const TransactionList = ({ data, limit }) => {
                 >
                   <View style={[styles.listItem, (index === data.length - 1 && styles.lastItem) || (limit === 3 && index === 2 && styles.lastItem)]}>
                     <List.Item
-                      title={formatDate(item.age)}
-                      description={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`}
+                      title={() => (
+                        <Text size="medium" text={formatDate(item.age)} />
+                      )}
+                      description={() => (
+                        <Text size="small" text={`${item.hash ? item.hash.slice(0, 10) + '...' + item.hash.slice(-10) : ''}`} />
+                      )}
                     />
-                    <Text style={[styles.text, item.method === 'IN' ? styles.greenText : styles.redText]}>
-                      {item.method === 'IN' ? '+' : '-'}{(Number(item.value) * Math.pow(10, 18)).toFixed(2)}
-                    </Text>
+                    <Text
+                      size="medium"
+                      color={item.method === 'IN' ? 'green' : 'red'}
+                      text={`${item.method === 'IN' ? '+' : '-'}${(Number(item.value) * Math.pow(10, 18)).toFixed(2)}`}
+                      style={item.method === 'IN' ? styles.greenText : styles.redText}
+                    />
                   </View>
                 </Pressable>
               ))}
@@ -63,18 +70,16 @@ const TransactionList = ({ data, limit }) => {
           </View>
         </Card>
       )}
-    </View>
+    </>
   );
 };
 
 export default TransactionList;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 10,
-  },
+
   listItem: {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -86,26 +91,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
   card: {
+    marginHorizontal: 16,
     backgroundColor: '#ffffff',
-  },
-  text: {
-    fontSize: 18,
-    textAlign: 'right',
-    marginRight: 20,
-    color: '#000000',
   },
   greenText: {
     color: 'green',
+    marginRight: 16
   },
   redText: {
     color: 'red',
+    marginRight: 16
   },
   placeholder: {
-    justifyContent: 'center',
-    height: 50,
+    marginHorizontal: 16,
   },
-  placeholderText: {
-    fontSize: 18,
-    color: '#000000',
-  },
+
 });

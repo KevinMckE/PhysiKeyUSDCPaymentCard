@@ -22,13 +22,12 @@ const Home = ({ navigation }) => {
     <View style={styles.container}>
       <LoadingOverlay loading={loading} />
 
-      {/* Tab Navigator */}
       <Tab.Navigator
         theme={{ colors: { secondaryContainer: '#94BE43' } }}
         initialRouteName="Account"
         activeColor="#000000"
         inactiveColor="#808080"
-        barStyle={{ backgroundColor: '#ffffff', height: 80 }} // Adjust height for more space
+        barStyle={{ backgroundColor: '#ffffff', height: 80 }}
       >
         <Tab.Screen
           name="Account"

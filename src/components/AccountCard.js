@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { Card, List } from 'react-native-paper';
+import { Card } from 'react-native-paper';
 import Text from './CustomText';
 
 const AccountCard = ({ publicKey, accountName }) => {
@@ -10,7 +10,13 @@ const AccountCard = ({ publicKey, accountName }) => {
     <Card style={styles.card}>
       <View style={styles.content}>
       <View>
-          <Text size={"large"} color={"#000000"} text={accountName} />
+        <View style={styles.name}>
+        <Text size={"large"} color={"#000000"} text={accountName} />
+        <Image
+            source={require('../assets/logos/op_eth.png')}
+            style={styles.icon}
+          />
+        </View>
           <Text size={"small"} color={"#000000"} text={truncatedKey} />
         </View>
 
@@ -35,6 +41,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     gap: 16,
+  },
+  name: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   icon: {
     width: 24,

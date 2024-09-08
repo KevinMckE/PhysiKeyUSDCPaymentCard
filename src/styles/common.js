@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
   },
   homeButtons: {
     position: 'absolute',
-    bottom: 90, 
+    bottom: 80, 
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 16,
+    backgroundColor: '#ffffff', 
   },
   textContainer: {
     flexDirection: 'row',

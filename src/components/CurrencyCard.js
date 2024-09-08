@@ -23,7 +23,7 @@ const CurrencyCard = ({ title, subtitle, amount, imageSource }) => {
           <Text size={"small"} color={"#000000"} text={subtitle} />
           <View style={styles.amountContainer}>
             <Text size={"xl"} color={"#000000"} text={amount}/>
-            <Text size={"large"} color={"#000000"} text={"USDC"}/>
+            <Text size={"large"} color={"#000000"} text={" USDC"}/>
           </View>
       </View>
     </Card.Content>

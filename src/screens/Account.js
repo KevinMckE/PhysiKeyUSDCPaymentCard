@@ -80,6 +80,7 @@ const Account = ({ navigation }) => {
           data={activity}
           limit={3}
         />
+        <View style={{ height: 80 }}/>
       </ImageBackground>
     </ScrollView>
   );

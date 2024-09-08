@@ -73,10 +73,17 @@ const Home = () => {
       </Tab.Navigator>
 
       <View style={styles.homeButtons}>
-        <CustomButton text="Send" type="primary" size="small" onPress={() => {/* handle press */}} />
-        <CustomButton text="Request" type="primary" size="small" onPress={() => {/* handle press */}} />
+        {accountName === "Default" ? (
+          <CustomButton text="Request" type="primary" size="Large" onPress={() => {/* handle press */}} />
+        ) : (
+          <>
+            <CustomButton text="Send" type="primary" size="small" onPress={() => {/* handle press */}} />
+            <CustomButton text="Request" type="primary" size="small" onPress={() => {/* handle press */}} />
+          </>
+        )}
       </View>
     </View>
+    
   );
 };
 

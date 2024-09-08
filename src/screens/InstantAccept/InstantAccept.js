@@ -125,19 +125,14 @@ const InstantAccept = ({ navigation }) => {
     setStep(step - 1);
   };
 
-
 const handleAmountChange = (input) => {
   const validNumberRegex = /^(\d+(\.\d*)?|\.\d+)$/;
-
-  // Temporarily set raw input
   setRawInput(input);
-
-  // Check if the input matches the valid number regex or is empty
   if (validNumberRegex.test(input) || input === '') {
-    setAmount(input); // Update the amount state if valid
-    setInputError(''); // Clear the error message
+    setAmount(input); 
+    setInputError(''); 
   } else {
-    setInputError('Please enter a valid number.'); // Set error message
+    setInputError('Please enter a valid number.');
   }
 };
 

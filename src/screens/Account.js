@@ -1,13 +1,13 @@
 // libraries
 import React, { useContext, useState } from 'react';
-import { View, Image, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
-import { Text, Card, List } from 'react-native-paper';
+import { View, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { trigger } from 'react-native-haptic-feedback';
 // components
+import AccountCard from '../components/AccountCard';
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
-import CustomButton from '../components/CustomButton';
+import Text from '../components/CustomText';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // styles
@@ -16,7 +16,6 @@ import styles from '../styles/common';
 const Account = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
-  const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -33,28 +32,30 @@ const Account = ({ navigation }) => {
   };
 
   return (
-    <ScrollView  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>
-          <Text>Account (Optimism network)</Text>
-          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
+          <Text size={"small"} color={"#000000"} text={"Account"} />
+          <Pressable
+            onPress={() => {
+              if (accountName === 'Default') {
+                navigation.navigate('InstantAcceptLogin');
+              } else {
+                navigation.navigate('AccountSettings', { navigation });
+              }
+            }}
+          >
+            <Text size={"small"} color={"#000000"} text={"View Details >"} />
+          </Pressable>
         </View>
         <Pressable onPress={handleCopyToClipboard}>
-          <Card style={styles.card}>
-            <View style={styles.keyContent}>
-              <List.Item
-                title={accountName}
-                description={truncatedKey}
-              />
-              <Image
-                source={require('../assets/icons/copy_icon.png')}
-                style={styles.copyImage}
-              />
-            </View>
-          </Card>
+          <AccountCard
+            publicKey={publicKey}
+            accountName={accountName}
+          />
         </Pressable>
         <CurrencyCard
           title="Balance"
@@ -65,8 +66,18 @@ const Account = ({ navigation }) => {
           publicKey={publicKey}
         />
         <View style={styles.textContainer}>
-          <Text>Recent Activity</Text>
-          <Text onPress={() => { navigation.navigate('History') }}>{`View all >`}</Text>
+          <Text size={"small"} color={"#000000"} text={"Recent Transactions"} />
+          <Pressable
+            onPress={() => {
+              if (accountName === 'Default') {
+                navigation.navigate('InstantAcceptLogin');
+              } else {
+                navigation.navigate('AccountSettings', { navigation });
+              }
+            }}
+          >
+            <Text size={"small"} color={"#000000"} text={"View All >"} />
+          </Pressable>
         </View>
         <RecentTransactionList
           navigation={navigation}

@@ -37,8 +37,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingHorizontal: 16,
   },
-
-
+  textContainer: {
+    flexDirection: 'row',
+    margin: 16,
+    justifyContent: 'space-between',
+  },
   card: {
     marginHorizontal: 16,
     backgroundColor: '#ffffff',
@@ -116,13 +119,7 @@ const styles = StyleSheet.create({
   inactiveTabIcon: {
     tintColor: '#808080',
   },
-  textContainer: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    justifyContent: 'space-between',
-  },
+
   headerButton: {
     flexDirection: 'row',
     alignItems: 'center',

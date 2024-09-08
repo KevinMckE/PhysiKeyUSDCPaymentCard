@@ -15,7 +15,7 @@ import LoadingOverlay from '../components/LoadingOverlay';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const { loading, activity, accountName } = useContext(AccountContext);
 
   return (
@@ -74,11 +74,11 @@ const Home = () => {
 
       <View style={styles.homeButtons}>
         {accountName === "Default" ? (
-          <CustomButton text="Request" type="primary" size="Large" onPress={() => {/* handle press */}} />
+          <CustomButton text="Request" type="primary" size="Large" onPress={() => { navigation.navigate('InstantAccept'); }} />
         ) : (
           <>
-            <CustomButton text="Send" type="primary" size="small" onPress={() => {/* handle press */}} />
-            <CustomButton text="Request" type="primary" size="small" onPress={() => {/* handle press */}} />
+            <CustomButton text="Send" type="primary" size="small" onPress={() => { navigation.navigate('Send'); }} />
+            <CustomButton text="Request" type="primary" size="small" onPress={() => {navigation.navigate('Request'); }} />
           </>
         )}
       </View>

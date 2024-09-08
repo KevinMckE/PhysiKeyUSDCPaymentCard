@@ -21,7 +21,6 @@ import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
 import InstantAccept from '../screens/InstantAccept/InstantAccept';
 import InstantAcceptLogin from '../screens/InstantAccept/InstantAcceptLogin';
-import InstantAcceptAccount from '../screens/InstantAccept/InstantAcceptAccount';
 import InstantAcceptTransfer from '../screens/InstantAccept/InstantAcceptTransfer';
 import InstantAccountSell from '../screens/InstantAccept/InstantAcceptSell';
 import History from '../screens/History';
@@ -87,13 +86,6 @@ const AppNavigator = () => {
               component={InstantAcceptLogin}
               options={{
                 title: 'Configure Account',
-              }}
-            />
-            <Stack.Screen
-              name="InstantAcceptAccount"
-              component={InstantAcceptAccount}
-              options={{
-                title: 'Account Details',
               }}
             />
             <Stack.Screen

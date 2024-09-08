@@ -12,19 +12,19 @@ import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Image, Platfor
 import { Text, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // context 
-import { AccountContext } from '../contexts/AccountContext';
+import { AccountContext } from '../../contexts/AccountContext';
 // components 
-import InputModal from '../components/InputModal';
-import AndroidScanModal from '../components/AndroidScanModal';
-import CustomButton from '../components/CustomButton';
-import TooltipComponent from '../components/ToolTip';
-import LoadingOverlay from '../components/LoadingOverlay';
+import InputModal from '../../components/InputModal';
+import AndroidScanModal from '../../components/AndroidScanModal';
+import CustomButton from '../../components/CustomButton';
+import TooltipComponent from '../../components/ToolTip';
+import LoadingOverlay from '../../components/LoadingOverlay';
 // functions
-import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
-import { cancelNfc } from '../functions/core/cancelNfcRequest';
+import { accountLogin, transferUSDC } from '../../functions/core/accountFunctions';
+import { scanSerialForKey } from '../../functions/core/scanSerialForKey';
+import { cancelNfc } from '../../functions/core/cancelNfcRequest';
 // styles
-import styles from '../styles/common';
+import styles from '../../styles/common';
 
 const InstantAccountTransfer = ({ navigation }) => {
 
@@ -271,7 +271,7 @@ const InstantAccountTransfer = ({ navigation }) => {
         style={{ flex: 1 }}
       >
         <ImageBackground
-          source={require('../assets/background.png')}
+          source={require('../../assets/background.png')}
           style={{ flex: 1, width: '100%', height: '100%' }}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>

@@ -1,22 +1,22 @@
 // libraries
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { View, Image, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import { Text, Card } from 'react-native-paper';
 import { trigger } from 'react-native-haptic-feedback';
 import Clipboard from '@react-native-clipboard/clipboard';
 // context
-import { AccountContext } from '../contexts/AccountContext';
+import { AccountContext } from '../../contexts/AccountContext';
 // components
-import CurrencyCard from '../components/CurrencyCard';
-import CustomButton from '../components/CustomButton';
+import CurrencyCard from '../../components/CurrencyCard';
+import CustomButton from '../../components/CustomButton';
 // styles
-import styles from '../styles/common';
+import styles from '../../styles/common';
 
 const InstantAcceptAccount = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const { publicKey, balance, setNewActivity, setNewBalance, setIsLoading } = useContext(AccountContext);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setNewActivity(publicKey);
     setNewBalance(publicKey);
@@ -33,7 +33,7 @@ const InstantAcceptAccount = ({ navigation }) => {
   return (
     <ScrollView  refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
       <ImageBackground
-        source={require('../assets/background.png')}
+        source={require('../../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.container}>
@@ -42,7 +42,7 @@ const InstantAcceptAccount = ({ navigation }) => {
               <View style={styles.keyContent}>
                 <Text>Account (Optimism network): {publicKey.slice(0, 7)}...{publicKey.slice(-5)}</Text>
                 <Image
-                  source={require('../assets/icons/copy_icon.png')}
+                  source={require('../../assets/icons/copy_icon.png')}
                   style={styles.copyImage}
                 />
               </View>
@@ -55,7 +55,7 @@ const InstantAcceptAccount = ({ navigation }) => {
             title="Balance"
             subtitle="*USDC on Optimism network"
             amount={balance}
-            imageSource={require('../assets/logos/optimism_logo.png')}
+            imageSource={require('../../assets/logos/optimism_logo.png')}
             navigation={navigation}
             publicKey={publicKey}
           />

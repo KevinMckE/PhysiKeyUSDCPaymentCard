@@ -20,11 +20,15 @@ const CustomButton = ({ text, type, size, onPress, loading }) => {
       mode={type === 'primary' ? 'elevated' : 'elevated'}
       onPress={onPress}
       disabled={loading} 
-      style={[styles.button, { width: buttonWidth }]}
+      style={[
+        styles.button, 
+        { width: buttonWidth }, 
+        size === 'small' ? { alignSelf: 'flex-end' } : {}
+      ]}
       contentStyle={{ justifyContent: 'center', height: '100%', paddingVertical: 0 }}
       buttonColor={type === 'primary' ? '#2E3C49' : '#ffffff'}
       labelStyle={[
-        size === 'small' ? { fontSize: 24, lineHeight: 24 } : { fontSize: 24, lineHeight: 24 },
+        size === 'small' ? { fontSize: 24, lineHeight: 28 } : { fontSize: 24, lineHeight: 28 },
         { fontFamily: 'LeagueSpartan-SemiBold' }
       ]}
       textColor={type === 'primary' ? '#ffffff' : '#2E3C49'}

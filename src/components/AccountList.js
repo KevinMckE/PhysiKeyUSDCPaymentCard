@@ -82,7 +82,7 @@ const AccountList = ({ data, navigation, setData }) => {
                         <Text size="small" text={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`} />
                       )}
                     />
-                    <Image source={require('../assets/drag_handle.png')} style={styles.icon} />
+                    <Image source={require('../assets/icons/drag_handle.png')} style={styles.icon} />
                   </View>
                 </Pressable>
               </Swipeable>

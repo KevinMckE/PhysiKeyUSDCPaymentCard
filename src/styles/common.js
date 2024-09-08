@@ -14,13 +14,28 @@ const styles = StyleSheet.create({
   center: {
     alignItems: 'center'
   },
+  amountInput: {
+    fontSize: 48,              
+    color: '#000000',           
+    borderWidth: 0,            
+    backgroundColor: 'transparent', 
+    padding: 0,                 
+    margin: 0,   
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+  },
 
 
 
-
-
-
-
+  card: {
+    marginHorizontal: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+  },
 
 
 
@@ -50,23 +65,15 @@ const styles = StyleSheet.create({
   textMargin: {
     margin: 10,
   },
-  card: {
-    margin: 10,
-    backgroundColor: '#ffffff',
-  },
+
   accountText: {
     flex: 1,
     marginRight: 10, // Add some margin to create space between the text and the image
   },
-  keyContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
+
   copyImage: {
-    width: 30,
-    height: 30,
+    width: 24,
+    height: 24,
     alignSelf: 'center',
   },
 
@@ -74,11 +81,7 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: 'center',
   },
-  textInput: {
-    marginTop: 10,
-    width: '85%',
-    backgroundColor: '#ffffff',
-  },
+  
   confirmCard: {
     backgroundColor: '#ffffff',
     width: '100%',
@@ -153,14 +156,7 @@ const styles = StyleSheet.create({
   inputContainerKeyboard: {
     flex: 0,
   },
-  bottomContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%',
-    padding: 10,
-  },
+
   bottomContainerKeyboard: {
     position: 'absolute',
     bottom: 100,

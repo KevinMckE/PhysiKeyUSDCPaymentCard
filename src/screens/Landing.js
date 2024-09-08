@@ -38,7 +38,7 @@ const Landing = ({ navigation }) => {
           <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
         </View>
         <View style={[{ flex: 1 }, styles.center]}>
-          <CustomText text={"Don't have a card?"} />
+          <CustomText size={"small"} color={"#000000"} text={"Don't have a card?"} />
           <TouchableOpacity onPress={handleLinkPress}><Text style={{color: 'blue', textDecorationLine: 'underline', fontSize: 16}}>Learn more here</Text></TouchableOpacity>
         </View>
       </ImageBackground>

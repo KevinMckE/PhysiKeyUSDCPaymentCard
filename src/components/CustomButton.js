@@ -11,7 +11,7 @@
 import { StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 
-const CustomButton = ({ text, type, size, onPress, loading }) => {
+const CustomButton = ({ text, type, size, onPress, loading, style }) => {
   const screenWidth = Dimensions.get('window').width;
   const buttonWidth = size === 'small' ? (screenWidth / 2) - 32 : screenWidth - 32;
 
@@ -23,7 +23,8 @@ const CustomButton = ({ text, type, size, onPress, loading }) => {
       style={[
         styles.button, 
         { width: buttonWidth }, 
-        size === 'small' ? { alignSelf: 'flex-end' } : {}
+        size === 'small' ? { alignSelf: 'flex-end' } : {},
+        style 
       ]}
       contentStyle={{ justifyContent: 'center', height: '100%', paddingVertical: 0 }}
       buttonColor={type === 'primary' ? '#2E3C49' : '#ffffff'}

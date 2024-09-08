@@ -33,8 +33,9 @@ const AndroidScanModal = ({ visible, closeScanModal }) => {
             style={styles.scanModalImage}
           />
           <Text size={"medium"} color={"#000000"} text={"Hold device near NFC tag."} />
-          <CustomButton text='Cancel' type='primary' size='small' onPress={() => { closeScanModal(); }}
-          />
+
+          <CustomButton text='Cancel' type='primary' size='small' onPress={closeScanModal} style={{ alignSelf: 'center', marginTop: 16 }} />
+
         </View>
       </View>
     </Modal>

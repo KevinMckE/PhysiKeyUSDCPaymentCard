@@ -1,6 +1,6 @@
 // libraries
 import React, { useContext } from 'react';
-import { Image, ActivityIndicator, View, StyleSheet } from 'react-native';
+import { Image, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 // components
 import CustomButton from '../components/CustomButton';
@@ -16,14 +16,15 @@ import LoadingOverlay from '../components/LoadingOverlay';
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = ({ navigation }) => {
-  const { loading, activity, accountName } = useContext(AccountContext);
+  const { loading, activity, isCard } = useContext(AccountContext);
 
   return (
     <View style={styles.container}>
       <LoadingOverlay loading={loading} />
 
       <Tab.Navigator
-        theme={{ colors: { secondaryContainer: 'rgba(1, 1, 1, 0)' } }} // Fully transparent        initialRouteName="Account"
+        theme={{ colors: { secondaryContainer: 'rgba(1, 1, 1, 0)' } }}
+        initialRouteName="Account"
         activeColor="#000000"
         inactiveColor="#808080"
         barStyle={{ backgroundColor: '#ffffff', height: 80 }}
@@ -71,8 +72,29 @@ const Home = ({ navigation }) => {
       </Tab.Navigator>
 
       <View style={styles.homeButtons}>
-        <CustomButton text="Send" type="primary" size="small" onPress={() => { navigation.navigate('Send'); }} />
-        <CustomButton text="Request" type="primary" size="small" onPress={() => { navigation.navigate('Request'); }} />
+        {isCard ? (
+          <CustomButton
+            text="Accept Payment"
+            type="primary"
+            size="large"
+            onPress={() => { navigation.navigate('Request'); }}
+          />
+        ) : (
+          <>
+            <CustomButton
+              text="Send"
+              type="primary"
+              size="small"
+              onPress={() => { navigation.navigate('Send'); }}
+            />
+            <CustomButton
+              text="Request"
+              type="primary"
+              size="small"
+              onPress={() => { navigation.navigate('Request'); }}
+            />
+          </>
+        )}
       </View>
     </View>
 

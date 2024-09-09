@@ -37,7 +37,6 @@ const History = () => {
       source={require('../assets/background.png')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
-
       <Tab.Navigator
         screenOptions={{
           tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },

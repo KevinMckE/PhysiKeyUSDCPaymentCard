@@ -7,6 +7,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import ZeroFee from './ZeroFee';
+import TransakSell from './TransakSell';
+import TransakBuy from './TransakBuy';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
@@ -22,7 +24,7 @@ const Tab = createMaterialTopTabNavigator();
 
 const Transfer = () => {
 
-  const { publicKey, accountName } = useContext(AccountContext);
+  const { publicKey, accountName, card } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
@@ -32,7 +34,7 @@ const Transfer = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (accountName === 'Default') {
+      if (!card) {
         setIsVerified(true);
         setErrorMessage('');
       } else {
@@ -98,14 +100,32 @@ const Transfer = () => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
-            <ZeroFee />
+            <Tab.Navigator
+              screenOptions={{
+                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
+              }}
+            >
+               <Tab.Screen
+                name="No Fees"
+                component={ZeroFee}
+              />
+              <Tab.Screen
+                name="Buy USDC"
+                component={TransakBuy}
+              />
+              <Tab.Screen
+                name="Sell USDC"
+                component={TransakSell}
+              />
+            </Tab.Navigator>
           ) : (
-            <View style={[{ flex: 8, margin: 16, justifyContent: 'center' }, styles.center]}>
-              <Text size={"medium"} color={"#000000"} text={errorMessage} />
+            <View style={styles.inputContainer}>
+              <Text>{errorMessage}</Text>
               <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}
         </View>
+
         <InputModal
           visible={modalVisible}
           closeModal={handleModalClose}
@@ -127,4 +147,5 @@ const Transfer = () => {
 };
 
 export default Transfer;
+
 

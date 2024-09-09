@@ -1,15 +1,14 @@
 // libraries
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { View, Image, Platform, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { List, Card } from 'react-native-paper';
-
 // components
-import Text from '../components/CustomText';
 import CustomButton from '../components/CustomButton';
 import AccountList from '../components/AccountList';
 import TooltipComponent from '../components/ToolTip';
 import AndroidScanModal from '../components/AndroidScanModal';
+// context
+import { AccountContext } from '../contexts/AccountContext';
 // functions
 import { getData } from '../functions/core/asyncStorage';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
@@ -18,12 +17,16 @@ import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import styles from '../styles/common';
 
 const Login = ({ navigation }) => {
+
+  const { setIsCard } = useContext(AccountContext);
+
   const [dataList, setDataList] = useState([]);
   const [scanModal, setScanModal] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
+      setIsCard(false);
       const fetchData = async () => {
         try {
           const data = await getData();
@@ -76,9 +79,7 @@ const Login = ({ navigation }) => {
               />
             </View>
             <View style={{ flex: 4 }}>
-      
               <AccountList data={dataList} navigation={navigation} setData={setDataList} />
-         
             </View>
           </>
         ) : (

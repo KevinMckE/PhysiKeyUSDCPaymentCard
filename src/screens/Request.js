@@ -25,6 +25,7 @@ import AccountButton from '../components/AccountButton';
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
+import { generateRandomString } from '../functions/core/generateRandomString';
 // styles
 import styles from '../styles/common';
 
@@ -32,7 +33,7 @@ const Request = ({ navigation }) => {
   const navigationState = useNavigationState(state => state);
   const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewPublicKey, setNewName, setNewActivity } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewPublicKey, setNewName, setNewActivity, setIsCard } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -47,42 +48,43 @@ const Request = ({ navigation }) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
-  const textInputRef = useRef(null); 
+  const textInputRef = useRef(null);
 
   useEffect(() => {
-    if (previousRouteName === "Landing") { 
+    if (previousRouteName === "Landing") {
       const getDefaultAccount = async () => {
         setIsLoading(true);
+        setIsCard(true);
         const username = "Default";
         try {
           const credentials = await Keychain.getGenericPassword();
           if (credentials && credentials.username === username) {
             console.log('Account exists...');
             const account = await accountLogin(credentials.password, credentials.password);
+            setNewActivity(account.address);
             setNewPublicKey(account.address);
             setNewBalance(account.address);
-            setNewActivity(account.address);
             setNewName(username);
           } else {
             console.log('No account found...');
             const password = await generateRandomString(70);
             await Keychain.setGenericPassword(username, password);
             const account = await accountLogin(password, password);
+            setNewActivity(account.address);
             setNewPublicKey(account.address);
             setNewBalance(account.address);
-            setNewActivity(account.address);
             setNewName(username);
           }
         } catch (error) {
           console.error("Error retrieving account: ", error);
           navigation.navigate('Landing');
         } finally {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
       };
       getDefaultAccount();
     }
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
@@ -102,9 +104,10 @@ const Request = ({ navigation }) => {
 
   useEffect(() => {
     if (!loading && textInputRef.current) {
-      setTimeout(() => {
-        textInputRef.current.focus(); 
-      }, 1000); 
+      const timer = setTimeout(() => {
+        textInputRef.current?.focus();
+      }, 1000);
+      return () => clearTimeout(timer); 
     }
   }, [loading]);
 
@@ -125,21 +128,21 @@ const Request = ({ navigation }) => {
         break;
     }
   };
-  
+
   const handlePreviousStep = () => {
     setStep(step - 1);
   };
 
-const handleAmountChange = (input) => {
-  const validNumberRegex = /^(\d+(\.\d*)?|\.\d+)$/;
-  setRawInput(input);
-  if (validNumberRegex.test(input) || input === '') {
-    setAmount(input); 
-    setInputError(''); 
-  } else {
-    setInputError('Please enter a valid number.');
-  }
-};
+  const handleAmountChange = (input) => {
+    const validNumberRegex = /^(\d+(\.\d*)?|\.\d+)$/;
+    setRawInput(input);
+    if (validNumberRegex.test(input) || input === '') {
+      setAmount(input);
+      setInputError('');
+    } else {
+      setInputError('Please enter a valid number.');
+    }
+  };
 
   const closeScanModal = () => {
     cancelNfc();
@@ -158,7 +161,9 @@ const handleAmountChange = (input) => {
     } catch (error) {
       console.log(error);
     }
+
   };
+
 
   const handleScanCardPress = () => {
     setScanModal(true);
@@ -168,7 +173,7 @@ const handleAmountChange = (input) => {
   const handlePasswords = async (password) => {
     setErrorMessage('');
     setModalVisible(false);
-    let totalAmount = parseFloat(amount) + parseFloat(tip);
+    let totalAmount = parseFloat(amount);
     try {
       setIsLoading(true);
       let receipt = await transferUSDC(tagID, password, totalAmount, publicKey);
@@ -240,9 +245,9 @@ const handleAmountChange = (input) => {
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
-            <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>
-              <Text size={"xl"} color={"#000000"} text={`${amount} USDC`} />
-            </View>
+              <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>
+                <Text size={"xl"} color={"#000000"} text={`${amount} USDC`} />
+              </View>
               <Text size={"medium"} color={"#000000"} text={"Will be paid to: "} />
               <Text size={"medium"} color={"#000000"} text={publicKey} />
             </View>
@@ -270,7 +275,7 @@ const handleAmountChange = (input) => {
                 content="Press the account details below to view your account and its details."
               />
             </View>
-            <View style={[{ flex: 4, margin:16 }, styles.center]}>
+            <View style={[{ flex: 4, margin: 16 }, styles.center]}>
               <Image
                 source={require('../assets/icons/success.png')}
                 style={{ width: 128, height: 128 }}
@@ -296,7 +301,7 @@ const handleAmountChange = (input) => {
                 content="Failure most often occurs due to lack of funds. If you suspect something different please contact us."
               />
             </View>
-            <View style={[{ flex: 4, margin:16 }, styles.center]}>
+            <View style={[{ flex: 4, margin: 16 }, styles.center]}>
               <Image
                 source={require('../assets/icons/failure.png')}
                 style={{ width: 128, height: 128 }}

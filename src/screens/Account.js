@@ -1,5 +1,5 @@
 // libraries
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { View, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { trigger } from 'react-native-haptic-feedback';
@@ -17,7 +17,7 @@ const Account = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setNewActivity(publicKey);
     setNewBalance(publicKey);

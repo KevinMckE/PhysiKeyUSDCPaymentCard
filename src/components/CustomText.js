@@ -14,7 +14,7 @@ const CustomText = ({ size, color, text, style }) => {
   const getTextStyle = () => {
     switch (size) {
       case 'small':
-        return { fontSize: 16, fontFamily: 'LeagueSpartan-SemiBold' };
+        return { fontSize: 16, fontFamily: 'LeagueSpartan-Regular' };
       case 'medium':
         return { fontSize: 24, fontFamily: 'LeagueSpartan-SemiBold' };
       case 'large':

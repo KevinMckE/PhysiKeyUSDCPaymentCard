@@ -41,24 +41,22 @@ const InputModal = ({ visible, closeModal, handlePasswords, title }) => {
     >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-          <Text   size={"large"} color={"#000000"} text={title} style={{ marginBottom: 32, marginTop: 16 }}/>
+          <Text size={"large"} color={"#000000"} text={"Input Password"} style={{ alignSelf: 'center', marginBottom: 16 }}/>
             <PasswordInput
-              text='Enter Password'
+              text='Enter Password...'
               password={password}
               setPassword={setPassword}
             />
             <PasswordInput
-              text='Confirm Password'
+              text='Confirm Password...'
               password={confirmPassword}
               setPassword={setConfirmPassword}
             />
             {errorMessage ? (
               <Text size={"small"} color={"#FF0000"} text={errorMessage} />
             ) : null}
-            <View style={styles.inlineButton}>
-              <CustomButton text='Close' type='secondary' size='small' onPress={() => { closeModal(); }} />
-              <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} />
-            </View>
+            <CustomButton text='Enter' type='primary' size='small' onPress={handleConfirmPasswords} style={{ alignSelf: 'center', marginTop: 16 }}/>
+            <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { closeModal(); }} style={{ alignSelf: 'center', marginTop: 16 }} />
           </View>
         </View>
     </Modal>
@@ -82,7 +80,6 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 16,
     borderRadius: 15,
-    alignItems: 'center',
   },
   inlineButton: {
     marginTop: 32,

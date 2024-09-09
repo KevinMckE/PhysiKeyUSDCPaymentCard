@@ -52,7 +52,6 @@ const PasswordInput = ({ text, value, setPassword }) => {
 const styles = StyleSheet.create({
   textInput: {
     fontSize: 24,
-    fontFamily: 'LeagueSpartan-Regular',
     width: '100%',
     height: 48,
     backgroundColor: '#ffffff',

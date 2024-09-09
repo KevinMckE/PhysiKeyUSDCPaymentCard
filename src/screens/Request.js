@@ -41,6 +41,7 @@ const Request = ({ navigation }) => {
   const [scanModal, setScanModal] = useState(false);
   const [amount, setAmount] = useState();
   const [rawInput, setRawInput] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState('');
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -124,7 +125,7 @@ const Request = ({ navigation }) => {
         break;
     }
   };
-
+  
   const handlePreviousStep = () => {
     setStep(step - 1);
   };
@@ -216,7 +217,7 @@ const handleAmountChange = (input) => {
             </Pressable>
             <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.navigate('Landing')}} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep();}} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
               <AccountButton
@@ -242,7 +243,7 @@ const handleAmountChange = (input) => {
             <View style={{ justifyContent: 'center', flexDirection: 'row', margin: 16 }}>
               <Text size={"xl"} color={"#000000"} text={`${amount} USDC`} />
             </View>
-              <Text size={"medium"} color={"#000000"} text={"will be paid to: "} />
+              <Text size={"medium"} color={"#000000"} text={"Will be paid to: "} />
               <Text size={"medium"} color={"#000000"} text={publicKey} />
             </View>
             <View style={{ flex: 2 }}>

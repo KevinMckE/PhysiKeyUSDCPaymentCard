@@ -85,13 +85,8 @@ const AddAccount = ({ navigation, route }) => {
           try {
             const keys = await AsyncStorage.getAllKeys();
             const items = await AsyncStorage.multiGet(keys);
-            console.log(items)
-
             const accountNames = items.map(item => item[0]);
-
-
             const inputName = label;
-
             const isDuplicate = accountNames.includes(inputName);
             if (isDuplicate) {
               setInputError('This name is already being used on this device. Please try another name.');

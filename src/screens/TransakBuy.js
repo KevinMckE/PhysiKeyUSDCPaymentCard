@@ -1,6 +1,6 @@
 // libraies
 import React, { useContext } from 'react';
-import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
+import { TransakWebView, Environments, Events, ScrollView } from '@transak/react-native-sdk';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // env
@@ -46,10 +46,14 @@ const TransakBuy = () => {
   };
 
   return (
+    <>
+    <ScrollView>
     <TransakWebView
       transakConfig={transakConfig}
       onTransakEvent={onTransakEventHandler}
     />
+    </ScrollView>
+    </>
   );
 };
 

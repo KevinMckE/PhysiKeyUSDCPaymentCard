@@ -2,6 +2,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, Image, Platform, ImageBackground } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { List, Card } from 'react-native-paper';
+
 // components
 import Text from '../components/CustomText';
 import CustomButton from '../components/CustomButton';
@@ -64,7 +66,7 @@ const Login = ({ navigation }) => {
       >
         {dataList.length > 0 ? (
           <>
-            <View style={{ flex: 2, margin: 16 }}>
+            <View style={{ flex: 1, margin: 16 }}>
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
@@ -73,8 +75,10 @@ const Login = ({ navigation }) => {
                 content="You can make multiple accounts using a single card."
               />
             </View>
-            <View style={styles.listContainer}>
+            <View style={{ flex: 4 }}>
+      
               <AccountList data={dataList} navigation={navigation} setData={setDataList} />
+         
             </View>
           </>
         ) : (

@@ -108,7 +108,9 @@ const styles = StyleSheet.create({
   },
   card: {
     margin: 16,
+    borderRadius: 16,
     backgroundColor: '#ffffff',
+    overflow: 'hidden',
   },
   lastItem: {
     borderBottomWidth: 0,

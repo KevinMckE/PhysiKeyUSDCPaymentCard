@@ -11,7 +11,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Platform, Keyboard } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import Tooltip from 'react-native-walkthrough-tooltip';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import emojiRegex from 'emoji-regex';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
@@ -54,7 +54,7 @@ const AddAccount = ({ navigation, route }) => {
     };
   }, []);
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     switch (step) {
       case 0:
         if (password && password.trim() !== '') {
@@ -82,8 +82,26 @@ const AddAccount = ({ navigation, route }) => {
         break;
       case 1:
         if (label.trim() !== '') {
-          setInputError('');
-          setNewAccount(tag, password, label, navigation);
+          try {
+            const keys = await AsyncStorage.getAllKeys();
+            const items = await AsyncStorage.multiGet(keys);
+            console.log(items)
+
+            const accountNames = items.map(item => item[0]);
+
+
+            const inputName = label;
+
+            const isDuplicate = accountNames.includes(inputName);
+            if (isDuplicate) {
+              setInputError('This name is already being used on this device. Please try another name.');
+              return;
+            }
+            setInputError('');
+            setNewAccount(tag, password, label, navigation);
+          } catch (error) {
+            console.error('Error retrieving accounts from AsyncStorage:', error);
+          }
         } else {
           setInputError('Please enter a name.');
         }
@@ -110,7 +128,7 @@ const AddAccount = ({ navigation, route }) => {
                 content="Passwords must be 4 characters and may not contain emoji's.  It is important you remember this password."
               />
             </View>
-            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight/2) }]}>
+            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
               <PasswordInput
                 text='Enter Password...'
                 password={password}
@@ -142,7 +160,7 @@ const AddAccount = ({ navigation, route }) => {
                 content="Names can be any length or character but must be unique."
               />
             </View>
-            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight/2) }]}>
+            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
               <TextInput
                 mode="outlined"
                 theme={{ colors: { primary: '#2E3C49' } }}
@@ -154,11 +172,13 @@ const AddAccount = ({ navigation, route }) => {
                 autoCapitalize='none'
                 onSubmitEditing={handleNextStep}
               />
+               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
+            
             <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
-                <CustomButton text='Login' type='primary' size='small' onPress={ () => { Keyboard.dismiss(); handleNextStep(); }} />
+                <CustomButton text='Login' type='primary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep(); }} />
               </View>
             </View>
           </>

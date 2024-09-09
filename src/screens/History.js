@@ -37,22 +37,35 @@ const History = () => {
       source={require('../assets/background.png')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
-      <View style={{ flex: 1 }}>
-        <Tab.Navigator
-          screenOptions={{
-            tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
-          }}
-        >
-          <Tab.Screen
-            name="Month"
-            children={() => <MonthListComponent formattedData={monthData} limit={1000} />}
-          />
-          <Tab.Screen
-            name="Day"
-            children={() => <DayListComponent formattedData={dayData} limit={1000} />}
-          />
-        </Tab.Navigator>
-      </View>
+
+      <Tab.Navigator
+        screenOptions={{
+          tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+          tabBarLabelStyle: {
+            fontFamily: 'LeagueSpartan-Regular',
+            fontSize: 24,
+            textTransform: 'none',
+          },
+        }}
+      >
+        <Tab.Screen
+          name="Month"
+          children={() => (
+            <View style={{ flex: 1, marginTop: 16 }}>
+              <MonthListComponent formattedData={monthData} limit={1000} />
+            </View>
+          )}
+        />
+        <Tab.Screen
+          name="Day"
+          children={() => (
+            <View style={{ flex: 1, marginTop: 16 }}>
+              <DayListComponent formattedData={dayData} limit={1000} />
+            </View>
+          )}
+        />
+      </Tab.Navigator>
+
     </ImageBackground>
   );
 };

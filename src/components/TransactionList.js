@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   card: {
     marginHorizontal: 16,
+    marginBottom: 16,
     backgroundColor: '#ffffff',
   },
   greenText: {

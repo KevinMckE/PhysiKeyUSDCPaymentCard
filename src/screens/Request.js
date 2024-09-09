@@ -32,7 +32,7 @@ const Request = ({ navigation }) => {
   const navigationState = useNavigationState(state => state);
   const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, accountName, setNewPublicKey, setNewName, setNewActivity } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewPublicKey, setNewName, setNewActivity } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -217,7 +217,7 @@ const handleAmountChange = (input) => {
             </Pressable>
             <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep();}} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.navigate('Landing') }} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
               <AccountButton

@@ -9,9 +9,10 @@
 
 // libraries
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import emojiRegex from 'emoji-regex';
+// components
+import Custom from '../components/CustomText';
 
 const PasswordInput = ({ text, value, setPassword }) => {
   const [confirmVisible, setConfirmVisible] = useState(true);
@@ -38,7 +39,11 @@ const PasswordInput = ({ text, value, setPassword }) => {
       <TouchableOpacity
         style={styles.toggleButton}
         onPress={() => setConfirmVisible(!confirmVisible)}>
-        <Text>{confirmVisible ? 'Show' : 'Hide'}</Text>
+        <Custom
+          size="small" 
+          color="#000000" 
+          text={confirmVisible ? 'Show' : 'Hide'}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -46,13 +51,14 @@ const PasswordInput = ({ text, value, setPassword }) => {
 
 const styles = StyleSheet.create({
   textInput: {
-    marginTop: 10,
-    width: 250,
-    height: 50,
+    fontSize: 24,
+    fontFamily: 'LeagueSpartan-Regular',
+    width: '100%',
+    height: 48,
     backgroundColor: '#ffffff',
   },
   toggleButton: {
-    marginTop: 10,
+    margin: 16,
   },
 });
 

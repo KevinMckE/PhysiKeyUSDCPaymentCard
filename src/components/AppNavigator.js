@@ -98,7 +98,7 @@ const AppNavigator = () => {
                 title: 'Your Account',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
-                    navigation.goBack();
+                    navigation.navigate('Landing');
                   }}>
                     <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
                   </TouchableOpacity>

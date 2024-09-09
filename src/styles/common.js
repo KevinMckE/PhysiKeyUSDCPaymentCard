@@ -56,6 +56,13 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  textInput: {
+    fontSize: 24,
+    fontFamily: 'LeagueSpartan-Regular',
+    width: '100%',
+    height: 48,
+    backgroundColor: '#ffffff',
+  },
 
 
 

@@ -23,6 +23,14 @@ const ZeroFee = ({ navigation }) => {
     Clipboard.setString(publicKey);
   };
 
+  const onramp = () => {
+    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/onramp' });
+  };
+
+  const offramp = () => {
+    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/offramp' });
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -45,8 +53,8 @@ const ZeroFee = ({ navigation }) => {
           <Text size={"medium"} color={"#000000"} text={"Be sure you send on the Optimism network."} />
           <Text size={"medium"} color={"#000000"} text={"If you are unsure about this do not proceed. We cannot recover funds."} />
           <Text size={"medium"} color={"#000000"} text={"The following tutorials can walk you through the process:"} />
-          <CustomButton text='Receive Funds' type='primary' size='large' onPress={() => { navigation.goBack(); }} style={{ marginVertical: 8 }} />
-          <CustomButton text='Export Funds' type='primary' size='large' onPress={() => { navigation.goBack(); }} />
+          <CustomButton text='Tutorial: Receive Funds' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
+          <CustomButton text='Tutorial: Export Funds' type='primary' size='large' onPress={offramp} />
         </View>
       </View>
     </ScrollView>

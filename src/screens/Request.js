@@ -9,6 +9,7 @@
 // libraries
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Image, Platform, Keyboard, TextInput, Pressable } from 'react-native';
+import { useNavigationState } from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
 // context
 import { AccountContext } from '../contexts/AccountContext';
@@ -28,8 +29,10 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
 const Request = ({ navigation }) => {
+  const navigationState = useNavigationState(state => state);
+  const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, accountName, setNewPublicKey, setNewName } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, accountName, setNewPublicKey, setNewName, setNewActivity } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -46,7 +49,7 @@ const Request = ({ navigation }) => {
   const textInputRef = useRef(null); 
 
   useEffect(() => {
-    if (accountName === "") { 
+    if (previousRouteName === "Landing") { 
       const getDefaultAccount = async () => {
         setIsLoading(true);
         const username = "Default";
@@ -57,6 +60,7 @@ const Request = ({ navigation }) => {
             const account = await accountLogin(credentials.password, credentials.password);
             setNewPublicKey(account.address);
             setNewBalance(account.address);
+            setNewActivity(account.address);
             setNewName(username);
           } else {
             console.log('No account found...');
@@ -65,6 +69,7 @@ const Request = ({ navigation }) => {
             const account = await accountLogin(password, password);
             setNewPublicKey(account.address);
             setNewBalance(account.address);
+            setNewActivity(account.address);
             setNewName(username);
           }
         } catch (error) {

@@ -8,13 +8,16 @@
 /////////////////////////////////
 
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 
 const LoadingOverlay = ({ loading }) => {
   if (!loading) return null;
   return (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#2E3C49" />
+      <Image
+        source={require('../assets/regen_card_loading_animation.gif')}
+        style={styles.loadingSpinner}
+      />
     </View>
   );
 };
@@ -31,6 +34,12 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 999,
+  },
+  loadingSpinner: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 128,
+    height: 128
   },
 })
 

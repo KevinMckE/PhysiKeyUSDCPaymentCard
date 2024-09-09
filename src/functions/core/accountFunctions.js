@@ -71,7 +71,6 @@ export const accountLogin = async (tag, password) => {
       transport: http(RPC_URL),
     });
 
-
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
       privateKey: privateKey,
       factoryAddress: factoryAddress,
@@ -79,14 +78,18 @@ export const accountLogin = async (tag, password) => {
     });
 
     return simpleAccount;
+
   } catch (error) {
     console.log('Error logging in or creating account:', error);
     throw error;
   }
 };
 
+
+
 export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
+
   try {
     const factor = 10 ** 6;
     const amountInWei = BigInt(parseFloat(amount) * factor);
@@ -141,7 +144,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
           ]
         });
     */
-
+   
     const txHash = await smartAccountClient.sendTransaction({
       account: smartAccountClient.account,
       to: OPTIMISM_USDC_CONTRACT,
@@ -155,8 +158,6 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
     throw error.details;
   }
 };
-
-
 
 
 

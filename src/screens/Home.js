@@ -1,7 +1,9 @@
 // libraries
 import React, { useContext } from 'react';
-import { Image, ActivityIndicator, View } from 'react-native';
+import { Image, ActivityIndicator, View, StyleSheet } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+// components
+import CustomButton from '../components/CustomButton';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // pages
@@ -13,27 +15,18 @@ import LoadingOverlay from '../components/LoadingOverlay';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Home = () => {
-
-  const { loading, activity } = useContext(AccountContext);
-
-  if (loading) {
-    return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <ActivityIndicator size="large" color="#2E3C49" />
-      </View>
-    );
-  }
+const Home = ({ navigation }) => {
+  const { loading, activity, accountName } = useContext(AccountContext);
 
   return (
     <View style={styles.container}>
       <LoadingOverlay loading={loading} />
+
       <Tab.Navigator
-        theme={{ colors: { secondaryContainer: '#94BE43' } }}
-        initialRouteName="Account"
+        theme={{ colors: { secondaryContainer: 'rgba(1, 1, 1, 0)' } }} // Fully transparent        initialRouteName="Account"
         activeColor="#000000"
         inactiveColor="#808080"
-        barStyle={{ backgroundColor: '#ffffff' }}
+        barStyle={{ backgroundColor: '#ffffff', height: 80 }}
       >
         <Tab.Screen
           name="Account"
@@ -76,8 +69,15 @@ const Home = () => {
           }}
         />
       </Tab.Navigator>
+
+      <View style={styles.homeButtons}>
+        <CustomButton text="Send" type="primary" size="small" onPress={() => { navigation.navigate('Send'); }} />
+        <CustomButton text="Request" type="primary" size="small" onPress={() => { navigation.navigate('Request'); }} />
+      </View>
     </View>
+
   );
-}
+};
+
 
 export default Home;

@@ -10,7 +10,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Platform, Keyboard } from 'react-native';
 import * as Keychain from 'react-native-keychain';
-import { Text, TextInput } from 'react-native-paper';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components 
@@ -22,18 +21,15 @@ import { accountLogin } from '../functions/core/accountFunctions';
 // styles
 import styles from '../styles/common';
 
-const randomstring = require('randomstring');
-
 const InstantAcceptLogin = ({ navigation }) => {
-
-  const { publicKey, setIsLoading, loading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
+  const { setIsLoading, loading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const initializeAccount = async () => {
     const username = "Default";
-    const password = randomstring.generate(35);
+    const password = randomString;
     try {
       setIsLoading(true);
       console.log('Creating a new account...');
@@ -78,21 +74,10 @@ const InstantAcceptLogin = ({ navigation }) => {
           <TooltipComponent
             tooltipVisible={tooltipVisible}
             setTooltipVisible={setTooltipVisible}
-            title="Use existing wallet or generate a new one."
-            content="Paste in an existing wallet if you prefer.  Otherwise we can generate a wallet for you!"
+            title="Generate a newaccount"
+            content="Make sure you have cleared any funds from your old account!"
           />
           <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-            <TextInput
-              mode="outlined"
-              style={styles.textInput}
-              theme={{ colors: { primary: '#2E3C49' } }}
-              placeholder="Input Existing Wallet..."
-              value={publicKey}
-              multiline={true}
-              onChangeText={publicKey => setNewPublicKey(publicKey)}
-              returnKeyType={'done'}
-            />
-            <Text style={styles.textMargin} variant='titleMedium'>or</Text>
             <CustomButton text="Generate" type='primary' size='large' onPress={() => { initializeAccount(); }} />
           </View>
           <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>

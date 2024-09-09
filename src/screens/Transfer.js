@@ -1,6 +1,6 @@
 // libraries
 import React, { useState, useContext, useCallback } from 'react';
-import { View, ImageBackground, Text, Platform } from 'react-native';
+import { View, ImageBackground, Platform } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useFocusEffect } from '@react-navigation/native';
 // context
@@ -10,6 +10,7 @@ import ZeroFee from './ZeroFee';
 import AndroidScanModal from '../components/AndroidScanModal';
 import CustomButton from '../components/CustomButton';
 import InputModal from '../components/InputModal';
+import Text from '../components/CustomText';
 // functions
 import { accountLogin } from '../functions/core/accountFunctions';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
@@ -19,21 +20,26 @@ import styles from '../styles/common';
 
 const Tab = createMaterialTopTabNavigator();
 
-const Transfer = ({ navigation }) => {
+const Transfer = () => {
 
-  const { publicKey, setNewBalance } = useContext(AccountContext);
+  const { publicKey, accountName } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
-  const [isVerified, setIsVerified] = useState(false); 
+  const [isVerified, setIsVerified] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      setIsVerified(false);
-      setErrorMessage('Please verify your account before you add or sell USDC. We cannot recover funds for you.')
-    }, [])
+      if (accountName === 'Default') {
+        setIsVerified(true);
+        setErrorMessage('');
+      } else {
+        setIsVerified(false);
+        setErrorMessage('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
+      }
+    }, [accountName])
   );
 
   const closeScanModal = () => {
@@ -65,7 +71,7 @@ const Transfer = ({ navigation }) => {
       let account = await accountLogin(recipTag, password);
       console.log('account address: ', account.address);
       if (account.address === publicKey) {
-        setIsVerified(true); // Set verification status to true
+        setIsVerified(true);
         setModalVisible(false);
         setErrorMessage('');
       } else {
@@ -92,10 +98,10 @@ const Transfer = ({ navigation }) => {
       >
         <View style={{ flex: 1 }}>
           {isVerified ? (
-            <ZeroFee navigation={navigation}/>
+            <ZeroFee />
           ) : (
-            <View style={styles.inputContainer}>
-              <Text>{errorMessage}</Text>
+            <View style={[{ flex: 8, margin: 16, justifyContent: 'center' }, styles.center]}>
+              <Text size={"medium"} color={"#000000"} text={errorMessage} />
               <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
           )}
@@ -121,3 +127,4 @@ const Transfer = ({ navigation }) => {
 };
 
 export default Transfer;
+

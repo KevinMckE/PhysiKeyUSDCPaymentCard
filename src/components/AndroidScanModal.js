@@ -10,9 +10,9 @@
 // libraries
 import React from 'react';
 import { Modal, View, Image, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
 // components
 import CustomButton from '../components/CustomButton';
+import Text from '../components/CustomText';
 
 const AndroidScanModal = ({ visible, closeScanModal }) => {
 
@@ -25,16 +25,17 @@ const AndroidScanModal = ({ visible, closeScanModal }) => {
     >
       <View style={styles.modalContainer}>
         <View style={styles.bottomThirdContainer}>
-          <Text variant='titleLarge' style={styles.text}>Ready to Scan</Text>
+          <Text size={"large"} color={"#000000"} text={"Ready to Scan"} />
           <Image
             source={require('../assets/icons/nfc_icon.png')}
             resizeMode="contain"
             scanModalImage
             style={styles.scanModalImage}
           />
-          <Text variant='titleMedium'>Hold your device near the NFC tag.</Text>
-          <CustomButton text='Cancel' type='secondary' size='small' onPress={() => { closeScanModal(); }}
-          />
+          <Text size={"medium"} color={"#000000"} text={"Hold device near NFC tag."} />
+
+          <CustomButton text='Cancel' type='primary' size='small' onPress={closeScanModal} style={{ alignSelf: 'center', marginTop: 16 }} />
+
         </View>
       </View>
     </Modal>
@@ -49,10 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-  },
-  text: {
-    margin: 10,
+    padding: 16,
   },
   bottomThirdContainer: {
     position: 'absolute',
@@ -66,6 +64,6 @@ const styles = StyleSheet.create({
   },
   scanModalImage: {
     height: 150,
-    marginBottom: 10,
+    margin: 16,
   },
 });

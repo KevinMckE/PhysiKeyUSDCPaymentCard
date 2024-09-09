@@ -9,15 +9,18 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, ScrollView, TouchableOpacity, Image, Platform, Keyboard } from 'react-native'; import { Text, TextInput } from 'react-native-paper';
-import Tooltip from 'react-native-walkthrough-tooltip';
+import { View, KeyboardAvoidingView, ImageBackground, ScrollView, Platform, Keyboard } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import emojiRegex from 'emoji-regex';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components
 import CustomButton from '../components/CustomButton';
 import PasswordInput from '../components/PasswordInput';
+import Text from '../components/CustomText';
 import LoadingOverlay from '../components/LoadingOverlay';
+import TooltipComponent from '../components/ToolTip';
 // styles
 import styles from '../styles/common';
 
@@ -31,15 +34,18 @@ const AddAccount = ({ navigation, route }) => {
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [label, setLabel] = useState('');
   const [inputError, setInputError] = useState('');
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
       setKeyboardVisible(true);
+      setKeyboardHeight(event.endCoordinates.height);
     });
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardVisible(false);
+      setKeyboardHeight(0);
     });
 
     return () => {
@@ -48,16 +54,16 @@ const AddAccount = ({ navigation, route }) => {
     };
   }, []);
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     switch (step) {
       case 0:
         if (password && password.trim() !== '') {
           if (regex.test(password)) {
-            setInputError('Oops! Emoji characters are not allowed.');
+            setInputError('Emoji characters are not allowed.');
             return;
           }
           if (password.length < 4) {
-            setInputError('Oops! Passwords must be at least 4 characters.');
+            setInputError('Passwords must be at least 4 characters.');
             return;
           }
           if (confirmPassword && confirmPassword.trim() !== '') {
@@ -71,15 +77,28 @@ const AddAccount = ({ navigation, route }) => {
             setInputError('Please confirm your password.');
           }
         } else {
-          setInputError('Oops! Please enter a password.');
+          setInputError('Please enter a password.');
         }
         break;
       case 1:
         if (label.trim() !== '') {
-          setInputError('');
-          setNewAccount(tag, password, label, navigation);
+          try {
+            const keys = await AsyncStorage.getAllKeys();
+            const items = await AsyncStorage.multiGet(keys);
+            const accountNames = items.map(item => item[0]);
+            const inputName = label;
+            const isDuplicate = accountNames.includes(inputName);
+            if (isDuplicate) {
+              setInputError('This name is already being used on this device. Please try another name.');
+              return;
+            }
+            setInputError('');
+            setNewAccount(tag, password, label, navigation);
+          } catch (error) {
+            console.error('Error retrieving accounts from AsyncStorage:', error);
+          }
         } else {
-          setInputError('Oops! Please enter a name.');
+          setInputError('Please enter a name.');
         }
         break;
       default:
@@ -96,70 +115,66 @@ const AddAccount = ({ navigation, route }) => {
       case 0:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(1/2) Enter a password. </Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>Enter a secure password you will remember.  We will never ask your for your password and cannot recover it for you.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
-            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+            <View style={{ flex: 2, margin: 16 }}>
+              <TooltipComponent
+                tooltipVisible={tooltipVisible}
+                setTooltipVisible={setTooltipVisible}
+                title="Enter a password"
+                content="Passwords must be 4 characters and may not contain emoji's.  It is important you remember this password."
+              />
+            </View>
+            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
               <PasswordInput
-                text='Enter Password'
+                text='Enter Password...'
                 password={password}
                 setPassword={setPassword}
               />
               <PasswordInput
-                text='Confirm Password'
+                text='Confirm Password...'
                 password={confirmPassword}
                 setPassword={setConfirmPassword}
               />
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>{inputError}</Text>
-              </View>
+              <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
-            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
-              <CustomButton text='Save' type='primary' size='large' onPress={handleNextStep} />
+            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
+              <View style={styles.buttonContainer}>
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
+                <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+              </View>
             </View>
           </>
         );
       case 1:
         return (
           <>
-            <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-              <Text variant='titleLarge'>(2/2) Name this account. </Text>
-              <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-            </TouchableOpacity>
-            <Tooltip
-              isVisible={tooltipVisible}
-              content={<Text>Naming your accounts will help organize them in the future.</Text>}
-              placement="bottom"
-              onClose={() => setTooltipVisible(false)}
-            >
-              <View />
-            </Tooltip>
-            <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
+            <View style={{ flex: 2, margin: 16 }}>
+              <TooltipComponent
+                tooltipVisible={tooltipVisible}
+                setTooltipVisible={setTooltipVisible}
+                title="Name this account"
+                content="Names can be any length or character but must be unique."
+              />
+            </View>
+            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
               <TextInput
                 mode="outlined"
                 theme={{ colors: { primary: '#2E3C49' } }}
                 returnKeyType="done"
                 style={styles.textInput}
-                placeholder={'Enter name'}
+                placeholder={'Enter name...'}
                 value={label}
                 onChangeText={setLabel}
                 autoCapitalize='none'
                 onSubmitEditing={handleNextStep}
               />
+               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
-            <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-              <CustomButton text='Go Back' type='secondary' size='large' onPress={handlePreviousStep} />
-              <CustomButton text='Login' type='primary' size='large' onPress={handleNextStep} />
+            
+            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
+              <View style={styles.buttonContainer}>
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
+                <CustomButton text='Login' type='primary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep(); }} />
+              </View>
             </View>
           </>
         );
@@ -170,19 +185,15 @@ const AddAccount = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={{ flex: 1 }}
     >
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
-          <View style={styles.container}>
-            <LoadingOverlay loading={loading} />
-            {renderStep()}
-          </View>
-        </ScrollView>
+        <LoadingOverlay loading={loading} />
+        {renderStep()}
       </ImageBackground>
     </KeyboardAvoidingView >
   );

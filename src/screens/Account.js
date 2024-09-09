@@ -42,7 +42,7 @@ const Account = ({ navigation }) => {
           <Pressable
             onPress={() => {
               if (isCard) {
-                navigation.navigate('InstantAcceptLogin');
+                navigation.navigate('InstantAcceptConfigure');
               } else {
                 navigation.navigate('AccountSettings', { navigation });
               }

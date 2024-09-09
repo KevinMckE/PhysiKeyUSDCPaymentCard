@@ -1,35 +1,28 @@
-/////////////////////////////////
-// INSTANT ACCOUNT LOGIN      ///
-//                             //
-//                             //
-//                             //
-// RegenCard 2024           /////
-/////////////////////////////////
-
-// libraries
-import React, { useState, useEffect, useContext } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, Platform, Keyboard } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, ImageBackground } from 'react-native';
 import * as Keychain from 'react-native-keychain';
 // context 
 import { AccountContext } from '../contexts/AccountContext';
 // components 
 import CustomButton from '../components/CustomButton';
+import Text from '../components/CustomText';
 import TooltipComponent from '../components/ToolTip';
 import LoadingOverlay from '../components/LoadingOverlay';
+import WarningModal from '../components/WarningModal'; 
 // functions
 import { accountLogin } from '../functions/core/accountFunctions';
+import { generateRandomString } from '../functions/core/generateRandomString';
 // styles
 import styles from '../styles/common';
 
-const InstantAcceptLogin = ({ navigation }) => {
-  const { setIsLoading, loading, setNewPublicKey, setNewBalance } = useContext(AccountContext);
-
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+const InstantAcceptConfigure = ({ navigation }) => {
+  const { setIsLoading, loading, setNewPublicKey, setNewBalance, publicKey, updateAccount } = useContext(AccountContext);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); 
 
   const initializeAccount = async () => {
     const username = "Default";
-    const password = randomString;
+    const password = await generateRandomString(70);
     try {
       setIsLoading(true);
       console.log('Creating a new account...');
@@ -45,51 +38,46 @@ const InstantAcceptLogin = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-    });
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-    });
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+  const handleConfirm = () => {
+    initializeAccount(); 
+    setModalVisible(false); 
+  };
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <ImageBackground
-          source={require('../assets/background.png')}
-          style={{ flex: 1, width: '100%', height: '100%' }}
-        >
-          <LoadingOverlay loading={loading} />
-
+        <LoadingOverlay loading={loading} />
+        <View style={{ flex: 2, margin: 16 }}>
           <TooltipComponent
             tooltipVisible={tooltipVisible}
             setTooltipVisible={setTooltipVisible}
-            title="Generate a newaccount"
-            content="Make sure you have cleared any funds from your old account!"
+            title="Generate new address"
+            content="You will not be able to access your old account.  Proceed with caution."
           />
-          <View style={[styles.inputContainer, keyboardVisible && styles.inputContainerKeyboard]}>
-            <CustomButton text="Generate" type='primary' size='large' onPress={() => { initializeAccount(); }} />
+        </View>
+        <View style={[{ flex: 4, margin: 16, justifyContent: 'center' }, styles.center]}>
+          <Text size={"medium"} color={"#000000"} text={"Your address: "} />
+          <Text size={"small"} color={"#000000"} text={publicKey} />
+          <Text size={"medium"} color={"#000000"} text={"Generating a new address will overwrite your previous account. "} />
+          <CustomButton text="Generate" type='primary' size='large' onPress={() => setModalVisible(true)} style={{ marginVertical: 16 }} /> 
+        </View>
+        <View style={{ flex: 2 }}>
+          <View style={styles.buttonContainer}>
+            <CustomButton text='Go Back' type='primary' size='large' onPress={() => { navigation.navigate('Home'); updateAccount(publicKey) }} />
           </View>
-          <View style={[styles.bottomContainer, keyboardVisible && styles.bottomContainerKeyboard]}>
-            <CustomButton text='Go Back' type='secondary' size='large' onPress={() => {
-              navigation.navigate('Landing');
-            }} />
-            <CustomButton text='Confirm' type='primary' size='large' onPress={() => { initializeAccount(); navigation.navigate('InstantAccept') }} />
-          </View>
-        </ImageBackground >
-      </KeyboardAvoidingView >
+        </View>
+
+        <WarningModal
+          visible={modalVisible}
+          closeModal={() => setModalVisible(false)} 
+          handleConfirm={handleConfirm} 
+        />
+      </ImageBackground>
     </>
   );
-}
+};
 
-export default InstantAcceptLogin;
+export default InstantAcceptConfigure;

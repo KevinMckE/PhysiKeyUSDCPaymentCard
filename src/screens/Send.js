@@ -8,7 +8,7 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, TextInput, Platform, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView, ImageBackground, TextInput, Platform, Keyboard, Image } from 'react-native';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -27,7 +27,7 @@ import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity, updateAccount } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -265,7 +265,7 @@ const Send = ({ navigation }) => {
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); }} />
-                <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleScanCardPress(); }} />
+                <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleSignAndSend(); }} />
               </View>
             </View>
           </>
@@ -290,8 +290,8 @@ const Send = ({ navigation }) => {
             </View>
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Transfer Again' type='primary' size='large' onPress={() => setStep(0)} />
-                <CustomButton text='Return' type='secondary' size='large' onPress={() => { setNewBalance(publicKey); setNewActivity(publicKey); navigation.navigate('Home'); }} />
+                <CustomButton text='Return' type='primary' size='small' onPress={() => {setStep(0); setRecipientKey('')}} />
+                <CustomButton text='Account' type='secondary' size='small' onPress={() => { updateAccount(publicKey); navigation.navigate('Home'); }} />
               </View>
             </View>
           </>
@@ -314,8 +314,8 @@ const Send = ({ navigation }) => {
             </View>
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Try Again' type='primary' size='large' onPress={() => setStep(0)} />
-                <CustomButton text='Return' type='secondary' size='large' onPress={() => { setNewBalance(publicKey); setNewActivity(publicKey); navigation.navigate('Home'); }} />
+                <CustomButton text='Try Again' type='primary' size='small' onPress={() => setStep(0)} />
+                <CustomButton text='Account' type='secondary' size='small' onPress={() => { updateAccount(publicKey); navigation.navigate('Home'); }} />
               </View>
             </View>
           </>

@@ -40,7 +40,7 @@ const ZeroFee = ({ navigation }) => {
             setTooltipVisible={setTooltipVisible}
             title="Use an external tool."
             text="*We recommend Coinbase"
-            content="At this time we ask you utilize an external exchange to fund or cashout your Regen Card accounts."
+            content="Utilizing an external tool can help avoid transfer fees.  For advanced users this is the best option."
           />
         </View>
         <Pressable onPress={handleCopyToClipboard}>
@@ -50,9 +50,8 @@ const ZeroFee = ({ navigation }) => {
           />
         </Pressable>
         <View style={{ flex: 6, margin: 16 }}>
-          <Text size={"medium"} color={"#000000"} text={"Be sure you send on the Optimism network."} />
           <Text size={"medium"} color={"#000000"} text={"If you are unsure about this do not proceed. We cannot recover funds."} />
-          <Text size={"medium"} color={"#000000"} text={"The following tutorials can walk you through the process:"} />
+          <Text size={"medium"} color={"#000000"} text={"The following tutorials can walk you through the process with Coinbase:"} />
           <CustomButton text='Loading Card Tutorial' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
           <CustomButton text='Cashout Tutorial' type='primary' size='large' onPress={offramp} />
         </View>

@@ -101,9 +101,14 @@ const Transfer = () => {
         <View style={{ flex: 1 }}>
           {isVerified ? (
             <Tab.Navigator
-              screenOptions={{
-                tabBarIndicatorStyle: { backgroundColor: '#94BE43' }
-              }}
+            screenOptions={{
+              tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+              tabBarLabelStyle: {
+                fontFamily: 'LeagueSpartan-Regular',
+                fontSize: 24,
+                textTransform: 'none',
+              },
+            }}
             >
                <Tab.Screen
                 name="No Fees"

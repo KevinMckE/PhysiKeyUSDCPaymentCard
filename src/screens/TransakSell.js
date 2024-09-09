@@ -1,5 +1,5 @@
-// libraries
 import React, { useContext } from 'react';
+import { ScrollView, View } from 'react-native';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
 // context
 import { AccountContext } from '../contexts/AccountContext';
@@ -46,10 +46,16 @@ const TransakSell = () => {
   };
 
   return (
-    <TransakWebView
-      transakConfig={transakConfig}
-      onTransakEvent={onTransakEventHandler}
-    />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ flex: 1 }}>
+        <TransakWebView
+          transakConfig={transakConfig}
+          onTransakEvent={onTransakEventHandler}
+        />
+      </View>
+      <View style={{ height: 50 }}/>
+
+    </ScrollView>
   );
 };
 

@@ -274,7 +274,6 @@ const Request = ({ navigation }) => {
       case 2:
         return success ? (
           <>
-          
             <View style={[{ flex: 6, margin: 16, justifyContent: 'center' }, styles.center]}>
               <Image
                 source={require('../assets/icons/success.png')}

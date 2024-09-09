@@ -7,9 +7,9 @@
 /////////////////////////////////
 
 // libraries
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
 import { View, KeyboardAvoidingView, ImageBackground, Image, Platform, Keyboard, TextInput, Pressable } from 'react-native';
-import { useNavigationState } from '@react-navigation/native';
+import { useNavigationState, useFocusEffect } from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
 // context
 import { AccountContext } from '../contexts/AccountContext';
@@ -33,7 +33,7 @@ const Request = ({ navigation }) => {
   const navigationState = useNavigationState(state => state);
   const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewPublicKey, setNewName, setNewActivity, setIsCard } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewPublicKey, setNewName, setIsCard, updateAccount } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -61,19 +61,17 @@ const Request = ({ navigation }) => {
           if (credentials && credentials.username === username) {
             console.log('Account exists...');
             const account = await accountLogin(credentials.password, credentials.password);
-            setNewActivity(account.address);
             setNewPublicKey(account.address);
-            setNewBalance(account.address);
             setNewName(username);
+            updateAccount(account.address);
           } else {
             console.log('No account found...');
             const password = await generateRandomString(70);
             await Keychain.setGenericPassword(username, password);
             const account = await accountLogin(password, password);
-            setNewActivity(account.address);
             setNewPublicKey(account.address);
-            setNewBalance(account.address);
             setNewName(username);
+            updateAccount(account.address);
           }
         } catch (error) {
           console.error("Error retrieving account: ", error);
@@ -110,6 +108,16 @@ const Request = ({ navigation }) => {
       return () => clearTimeout(timer); 
     }
   }, [loading]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setStep(0);        
+        setAmount();
+        setRawInput('');      
+      };
+    }, [])
+  );
 
   const handleNextStep = () => {
     switch (step) {
@@ -163,7 +171,6 @@ const Request = ({ navigation }) => {
     }
 
   };
-
 
   const handleScanCardPress = () => {
     setScanModal(true);
@@ -222,12 +229,12 @@ const Request = ({ navigation }) => {
             </Pressable>
             <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.navigate('Landing') }} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.goBack(); }} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
               <AccountButton
                 publicKey={publicKey}
-                setNewBalance={setNewBalance}
+                updateAccount={updateAccount}
                 navigation={navigation}
               />
             </View>
@@ -258,7 +265,7 @@ const Request = ({ navigation }) => {
               </View>
               <AccountButton
                 publicKey={publicKey}
-                setNewBalance={setNewBalance}
+                updateAccount={updateAccount}
                 navigation={navigation}
               />
             </View>
@@ -267,52 +274,39 @@ const Request = ({ navigation }) => {
       case 2:
         return success ? (
           <>
-            <View style={{ flex: 2, margin: 16 }}>
-              <TooltipComponent
-                tooltipVisible={tooltipVisible}
-                setTooltipVisible={setTooltipVisible}
-                title="Success!"
-                content="Press the account details below to view your account and its details."
-              />
-            </View>
-            <View style={[{ flex: 4, margin: 16 }, styles.center]}>
+          
+            <View style={[{ flex: 6, margin: 16, justifyContent: 'center' }, styles.center]}>
               <Image
                 source={require('../assets/icons/success.png')}
                 style={{ width: 128, height: 128 }}
               />
+              <Text size={"xl"} color={"#000000"} text={"Success!"} />
               <Text size={"medium"} color={"#000000"} text={"You can now view the transaction in your account details."} />
             </View>
             <View style={[{ flex: 2 }, styles.center]}>
-              <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { setStep(0) }} />
+              <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { setStep(0); setRawInput(''); }} />
               <AccountButton
                 publicKey={publicKey}
-                setNewBalance={setNewBalance}
+                updateAccount={updateAccount}
                 navigation={navigation}
               />
             </View>
           </>
         ) : (
           <>
-            <View style={{ flex: 2, margin: 16 }}>
-              <TooltipComponent
-                tooltipVisible={tooltipVisible}
-                setTooltipVisible={setTooltipVisible}
-                title="Failed!"
-                content="Failure most often occurs due to lack of funds. If you suspect something different please contact us."
-              />
-            </View>
-            <View style={[{ flex: 4, margin: 16 }, styles.center]}>
+            <View style={[{ flex: 6, margin: 16, justifyContent: 'center' }, styles.center]}>
               <Image
                 source={require('../assets/icons/failure.png')}
                 style={{ width: 128, height: 128 }}
               />
+              <Text size={"xl"} color={"#000000"} text={"Failure!"} />
               <Text size={"medium"} color={"#000000"} text={"There was an error and this payment was declined."} />
             </View>
             <View style={[{ flex: 2 }, styles.center]}>
               <CustomButton text='Try Again' type='primary' size='large' onPress={() => { setStep(0) }} />
               <AccountButton
                 publicKey={publicKey}
-                setNewBalance={setNewBalance}
+                updateAccount={updateAccount}
                 navigation={navigation}
               />
             </View>

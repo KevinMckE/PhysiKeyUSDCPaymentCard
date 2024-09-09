@@ -25,7 +25,6 @@ const CustomText = ({ size, color, text, style }) => {
         return { fontSize: 16, fontFamily: 'LeagueSpartan-SemiBold' };
     }
   };
-
   return (
     <Text style={[getTextStyle(), { color }, style]}>
       {text}

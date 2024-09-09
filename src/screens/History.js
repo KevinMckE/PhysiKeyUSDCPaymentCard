@@ -50,7 +50,7 @@ const History = () => {
         <Tab.Screen
           name="Month"
           children={() => (
-            <View style={{ flex: 1, marginTop: 16 }}>
+            <View style={{ flex: 1, }}>
               <MonthListComponent formattedData={monthData} limit={1000} />
             </View>
           )}
@@ -58,13 +58,13 @@ const History = () => {
         <Tab.Screen
           name="Day"
           children={() => (
-            <View style={{ flex: 1, marginTop: 16 }}>
+            <View style={{ flex: 1,  }}>
               <DayListComponent formattedData={dayData} limit={1000} />
             </View>
           )}
         />
       </Tab.Navigator>
-
+      <View style={{ height: 50 }}/>
     </ImageBackground>
   );
 };

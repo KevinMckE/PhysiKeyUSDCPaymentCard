@@ -15,7 +15,7 @@ import styles from '../styles/common';
 
 const Account = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
+  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance, isCard } = useContext(AccountContext);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -41,7 +41,7 @@ const Account = ({ navigation }) => {
           <Text size={"small"} color={"#000000"} text={"Account"} />
           <Pressable
             onPress={() => {
-              if (accountName === 'Default') {
+              if (isCard) {
                 navigation.navigate('InstantAcceptLogin');
               } else {
                 navigation.navigate('AccountSettings', { navigation });

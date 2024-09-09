@@ -3,10 +3,10 @@ import { Pressable, View, Image, StyleSheet } from 'react-native';
 import { Card } from 'react-native-paper';
 import Text from './CustomText';
 
-const AccountButton = ({ publicKey, setNewBalance, navigation }) => {
+const AccountButton = ({ publicKey, updateAccount, navigation }) => {
   return (
     <Pressable onPress={() => {
-      setNewBalance(publicKey);
+      updateAccount(publicKey);
       navigation.navigate('Home');
     }}>
       <Card style={styles.card}>

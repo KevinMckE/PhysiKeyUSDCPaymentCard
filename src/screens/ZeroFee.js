@@ -24,11 +24,11 @@ const ZeroFee = ({ navigation }) => {
   };
 
   const onramp = () => {
-    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/onramp' });
+    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/loadcard' });
   };
 
   const offramp = () => {
-    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/offramp' });
+    navigation.navigate('WebViewScreen', { url: 'https://regencard.app/cashout' });
   };
 
   return (
@@ -53,8 +53,8 @@ const ZeroFee = ({ navigation }) => {
           <Text size={"medium"} color={"#000000"} text={"Be sure you send on the Optimism network."} />
           <Text size={"medium"} color={"#000000"} text={"If you are unsure about this do not proceed. We cannot recover funds."} />
           <Text size={"medium"} color={"#000000"} text={"The following tutorials can walk you through the process:"} />
-          <CustomButton text='Tutorial: Receive Funds' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
-          <CustomButton text='Tutorial: Export Funds' type='primary' size='large' onPress={offramp} />
+          <CustomButton text='Loading Card Tutorial' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
+          <CustomButton text='Cashout Tutorial' type='primary' size='large' onPress={offramp} />
         </View>
       </View>
     </ScrollView>

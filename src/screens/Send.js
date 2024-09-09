@@ -27,7 +27,7 @@ import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity, accountName, setNewPublicKey, setNewName } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);

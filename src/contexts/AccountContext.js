@@ -18,7 +18,6 @@ const AccountContextProvider = (props) => {
   const [loading, setLoading] = useState(false);
   const [isCard, setIsCard] = useState(false);
 
-
   const setNewAccount = async (tag, password, name, navigation) => {
     try {
       setLoading(true);
@@ -43,6 +42,11 @@ const AccountContextProvider = (props) => {
       setLoading(false);
     }
   };
+
+  const updateAccount = async (address) => {
+    setNewBalance(address);
+    setNewActivity(address);
+  }
 
   const setNewBalance = async (address) => {
     try {
@@ -91,7 +95,7 @@ const AccountContextProvider = (props) => {
   return (
     <AccountContext.Provider value={{
       publicKey, activity, accountName, balance, status, loading, isCard, setNewAccount, setStatusMessage, setNewBalance, 
-      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard
+      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard, updateAccount
     }}>
       {props.children}
     </AccountContext.Provider>

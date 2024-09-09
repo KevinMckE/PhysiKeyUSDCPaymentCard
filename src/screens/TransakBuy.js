@@ -46,14 +46,10 @@ const TransakBuy = () => {
   };
 
   return (
-    <>
-    <ScrollView>
     <TransakWebView
       transakConfig={transakConfig}
       onTransakEvent={onTransakEventHandler}
     />
-    </ScrollView>
-    </>
   );
 };
 

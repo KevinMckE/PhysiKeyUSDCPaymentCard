@@ -1,7 +1,8 @@
 // libraries
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { Image, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+import { useFocusEffect } from '@react-navigation/native';
 // components
 import CustomButton from '../components/CustomButton';
 // context

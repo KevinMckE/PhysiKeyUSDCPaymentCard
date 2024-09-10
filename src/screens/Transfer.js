@@ -130,8 +130,6 @@ const Transfer = () => {
               ) : (
                 <>
                   <View style={[{ flex: 2, marginTop: 64}]}>
-                    <Text size={"large"} color={"#000000"} text={"We recommend Coinbase"} style={{ margin: 16 }} />
-
                     <TransferTutorial />
                   </View>
 

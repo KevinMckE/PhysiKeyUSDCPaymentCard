@@ -33,7 +33,7 @@ const Transfer = () => {
   const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false);
-  console.log(isCard)
+
   useFocusEffect(
     useCallback(() => {
       if (!isCard) {
@@ -41,7 +41,7 @@ const Transfer = () => {
         setErrorMessage('');
       } else {
         setIsVerified(false);
-        setErrorMessage('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
+        setErrorMessage('Please verify your account to continue.');
       }
     }, [accountName])
   );
@@ -98,111 +98,116 @@ const Transfer = () => {
     if (isCard) {
       return (
         <>
-      <ImageBackground
-        source={require('../assets/background.png')}
-        style={{ flex: 1, width: '100%', height: '100%' }}
-      >
-        <View style={{ flex: 1 }}>
-          {isVerified ? (
-            <Tab.Navigator
-            screenOptions={{
-              tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
-              tabBarLabelStyle: {
-                fontFamily: 'LeagueSpartan-Regular',
-                fontSize: 24,
-                textTransform: 'none',
-              },
-            }}
-            >
-               <Tab.Screen
-                name="No Fees"
-                component={ZeroFee}
-              />
-              <Tab.Screen
-                name="Buy USDC"
-                component={TransakBuy}
-              />
-              <Tab.Screen
-                name="Sell USDC"
-                component={TransakSell}
-              />
-            </Tab.Navigator>
-          ) : (
-            <>
-            <TransferTutorial />
-            <View style={styles.inputContainer}>
-              <Text>{errorMessage}</Text>
-              <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
-            </View>
-            </>
-          )}
-        </View>
+          <ImageBackground
+            source={require('../assets/background.png')}
+            style={{ flex: 1, width: '100%', height: '100%' }}
+          >
+            <View style={{ flex: 1 }}>
+              {isVerified ? (
+                <Tab.Navigator
+                  screenOptions={{
+                    tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+                    tabBarLabelStyle: {
+                      fontFamily: 'LeagueSpartan-Regular',
+                      fontSize: 24,
+                      textTransform: 'none',
+                    },
+                  }}
+                >
+                  <Tab.Screen
+                    name="No Fees"
+                    component={ZeroFee}
+                  />
+                  <Tab.Screen
+                    name="Buy USDC"
+                    component={TransakBuy}
+                  />
+                  <Tab.Screen
+                    name="Sell USDC"
+                    component={TransakSell}
+                  />
+                </Tab.Navigator>
+              ) : (
+                <>
+                  <View style={[{ flex: 2, marginTop: 64}]}>
+                    <Text size={"large"} color={"#000000"} text={"We recommend Coinbase"} style={{ margin: 16 }} />
 
-        <InputModal
-          visible={modalVisible}
-          closeModal={handleModalClose}
-          handlePasswords={handleRecipPassword}
-          title='Confirm your password.'
-          errorMessage={errorMessage}
-        />
-        {Platform.OS === 'android' && (
-          <AndroidScanModal
-            visible={scanModal}
-            closeScanModal={closeScanModal}
-            changeGifSource={null}
-            fetchTag={fetchTag}
-          />
-        )}
-      </ImageBackground>
-    </>
+                    <TransferTutorial />
+                  </View>
+
+                  <View style={[{ flex: 2 }, styles.center]}>
+                    <Text size={"small"} color={"#000000"} text={errorMessage} style={{ textAlign: 'center' }} />
+                    <CustomButton text='Verify Account' type='primary' size='large' onPress={startVerificationProcess} style={{ marginVertical: 16 }} />
+                  </View>
+                </>
+              )}
+            </View>
+
+            <InputModal
+              visible={modalVisible}
+              closeModal={handleModalClose}
+              handlePasswords={handleRecipPassword}
+              title='Confirm your password.'
+              errorMessage={errorMessage}
+            />
+            {Platform.OS === 'android' && (
+              <AndroidScanModal
+                visible={scanModal}
+                closeScanModal={closeScanModal}
+                changeGifSource={null}
+                fetchTag={fetchTag}
+              />
+            )}
+          </ImageBackground>
+        </>
       );
     } else {
       return (
         <>
-      <ImageBackground
-        source={require('../assets/background.png')}
-        style={{ flex: 1, width: '100%', height: '100%' }}
-      >
-        <View style={{ flex: 1 }}>
-            <Tab.Navigator
-            screenOptions={{
-              tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
-              tabBarLabelStyle: {
-                fontFamily: 'LeagueSpartan-Regular',
-                fontSize: 24,
-                textTransform: 'none',
-              },
-            }}
-            >
-               <Tab.Screen
-                name="No Fees"
-                component={ZeroFee}
-              />
-              <Tab.Screen
-                name="Sell USDC"
-                component={TransakSell}
-              />
-            </Tab.Navigator>
-      
-        </View>
+          <ImageBackground
+            source={require('../assets/background.png')}
+            style={{ flex: 1, width: '100%', height: '100%' }}
+          >
+            <View style={{ flex: 1 }}>
+              <Tab.Navigator
+                screenOptions={{
+                  tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+                  tabBarLabelStyle: {
+                    fontFamily: 'LeagueSpartan-Regular',
+                    fontSize: 24,
+                    textTransform: 'none',
+                  },
+                }}
+              >
+                <Tab.Screen
+                  name="No Fees"
+                  component={ZeroFee}
+                />
+                <Tab.Screen
+                  name="Sell USDC"
+                  component={TransakSell}
+                />
+              </Tab.Navigator>
 
-        <InputModal
-          visible={modalVisible}
-          closeModal={handleModalClose}
-          handlePasswords={handleRecipPassword}
-          title='Confirm your password.'
-          errorMessage={errorMessage}
-        />
-        {Platform.OS === 'android' && (
-          <AndroidScanModal
-            visible={scanModal}
-            closeScanModal={closeScanModal}
-            changeGifSource={null}
-            fetchTag={fetchTag}
-          />
-        )}
-      </ImageBackground>
-    </>
+            </View>
+
+            <InputModal
+              visible={modalVisible}
+              closeModal={handleModalClose}
+              handlePasswords={handleRecipPassword}
+              title='Confirm your password.'
+              errorMessage={errorMessage}
+            />
+            {Platform.OS === 'android' && (
+              <AndroidScanModal
+                visible={scanModal}
+                closeScanModal={closeScanModal}
+                changeGifSource={null}
+                fetchTag={fetchTag}
+              />
+            )}
+          </ImageBackground>
+        </>
       );
     }
   };

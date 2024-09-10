@@ -19,7 +19,7 @@ import AccountContextProvider from '../contexts/AccountContext';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
-import InstantAcceptLogin from '../screens/InstantAcceptConfigure';
+import InstantAcceptConfigure from '../screens/InstantAcceptConfigure';
 import History from '../screens/History';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
@@ -98,7 +98,7 @@ const AppNavigator = () => {
                 title: 'Your Account',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
-                    navigation.navigate('Landing');
+                    navigation.goBack();
                   }}>
                     <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
                   </TouchableOpacity>
@@ -140,6 +140,20 @@ const AppNavigator = () => {
               component={AccountSettings}
               options={({ navigation }) => ({
                 title: 'Account',
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="InstantAcceptConfigure"
+              component={InstantAcceptConfigure}
+              options={({ navigation }) => ({
+                title: 'Configure',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
                     navigation.goBack();

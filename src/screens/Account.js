@@ -1,5 +1,5 @@
 // libraries
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { View, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { trigger } from 'react-native-haptic-feedback';
@@ -15,9 +15,9 @@ import styles from '../styles/common';
 
 const Account = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance } = useContext(AccountContext);
+  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance, isCard } = useContext(AccountContext);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     setNewActivity(publicKey);
     setNewBalance(publicKey);
@@ -41,8 +41,8 @@ const Account = ({ navigation }) => {
           <Text size={"small"} color={"#000000"} text={"Account"} />
           <Pressable
             onPress={() => {
-              if (accountName === 'Default') {
-                navigation.navigate('InstantAcceptLogin');
+              if (!isCard) {
+                navigation.navigate('InstantAcceptConfigure');
               } else {
                 navigation.navigate('AccountSettings', { navigation });
               }

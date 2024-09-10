@@ -9,6 +9,8 @@ import { formatDataByDay, formatDataByMonth } from '../functions/core/getOptimis
 // components
 import DayListComponent from '../components/MonthActivityList';
 import MonthListComponent from '../components/DayActivityList';
+import Text from '../components/CustomText';
+import CustomButton from '../components/CustomButton';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,39 +34,50 @@ const History = () => {
     fetchData();
   }, [activity]);
 
+  const isActivityEmpty = activity.length === 0;
+
   return (
     <ImageBackground
       source={require('../assets/background.png')}
       style={{ flex: 1, width: '100%', height: '100%' }}
     >
-      <Tab.Navigator
-        screenOptions={{
-          tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
-          tabBarLabelStyle: {
-            fontFamily: 'LeagueSpartan-Regular',
-            fontSize: 24,
-            textTransform: 'none',
-          },
-        }}
-      >
-        <Tab.Screen
-          name="Month"
-          children={() => (
-            <View style={{ flex: 1, }}>
-              <MonthListComponent formattedData={monthData} limit={1000} />
-            </View>
-          )}
-        />
-        <Tab.Screen
-          name="Day"
-          children={() => (
-            <View style={{ flex: 1,  }}>
-              <DayListComponent formattedData={dayData} limit={1000} />
-            </View>
-          )}
-        />
-      </Tab.Navigator>
-      <View style={{ height: 50 }}/>
+      {isActivityEmpty ? (
+        <View style={{ flex: 8, margin: 16, justifyContent: 'center' }}>
+          <Text size={"large"} color={"#000000"} text={'Your account has no transaction history.'} style={{ textAlign: 'center' }} />
+          <CustomButton text='Go Back' type='primary' size='large' onPress={() => {
+            navigation.navigate('Home');
+          }} />
+        </View>
+      ) : (
+        <Tab.Navigator
+          screenOptions={{
+            tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+            tabBarLabelStyle: {
+              fontFamily: 'LeagueSpartan-Regular',
+              fontSize: 24,
+              textTransform: 'none',
+            },
+          }}
+        >
+          <Tab.Screen
+            name="Month"
+            children={() => (
+              <View style={{ flex: 1 }}>
+                <MonthListComponent formattedData={monthData} limit={1000} />
+              </View>
+            )}
+          />
+          <Tab.Screen
+            name="Day"
+            children={() => (
+              <View style={{ flex: 1 }}>
+                <DayListComponent formattedData={dayData} limit={1000} />
+              </View>
+            )}
+          />
+        </Tab.Navigator>
+      )}
+      <View style={{ height: 50 }} />
     </ImageBackground>
   );
 };

@@ -52,9 +52,9 @@ const Request = ({ navigation }) => {
 
   useEffect(() => {
     if (previousRouteName === "Landing") {
+      setIsCard(false);
       const getDefaultAccount = async () => {
         setIsLoading(true);
-        setIsCard(true);
         const username = "Default";
         try {
           const credentials = await Keychain.getGenericPassword();

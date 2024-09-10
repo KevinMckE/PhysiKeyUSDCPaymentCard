@@ -17,6 +17,8 @@ import Text from '../components/CustomText';
 import { accountLogin } from '../functions/core/accountFunctions';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+// components
+import TransferTutorial from '../components/TransferTutorial';
 // styles
 import styles from '../styles/common';
 
@@ -24,17 +26,17 @@ const Tab = createMaterialTopTabNavigator();
 
 const Transfer = () => {
 
-  const { publicKey, accountName, card } = useContext(AccountContext);
+  const { publicKey, accountName, isCard } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false);
-
+  console.log(isCard)
   useFocusEffect(
     useCallback(() => {
-      if (!card) {
+      if (!isCard) {
         setIsVerified(true);
         setErrorMessage('');
       } else {
@@ -92,8 +94,10 @@ const Transfer = () => {
     }
   };
 
-  return (
-    <>
+  const renderTabs = () => {
+    if (isCard) {
+      return (
+        <>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
@@ -124,10 +128,13 @@ const Transfer = () => {
               />
             </Tab.Navigator>
           ) : (
+            <>
+            <TransferTutorial />
             <View style={styles.inputContainer}>
               <Text>{errorMessage}</Text>
               <CustomButton text='Verify' type='primary' size='large' onPress={startVerificationProcess} />
             </View>
+            </>
           )}
         </View>
 
@@ -148,6 +155,60 @@ const Transfer = () => {
         )}
       </ImageBackground>
     </>
+      );
+    } else {
+      return (
+        <>
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
+        <View style={{ flex: 1 }}>
+            <Tab.Navigator
+            screenOptions={{
+              tabBarIndicatorStyle: { backgroundColor: '#2E3C49' },
+              tabBarLabelStyle: {
+                fontFamily: 'LeagueSpartan-Regular',
+                fontSize: 24,
+                textTransform: 'none',
+              },
+            }}
+            >
+               <Tab.Screen
+                name="No Fees"
+                component={ZeroFee}
+              />
+              <Tab.Screen
+                name="Sell USDC"
+                component={TransakSell}
+              />
+            </Tab.Navigator>
+      
+        </View>
+
+        <InputModal
+          visible={modalVisible}
+          closeModal={handleModalClose}
+          handlePasswords={handleRecipPassword}
+          title='Confirm your password.'
+          errorMessage={errorMessage}
+        />
+        {Platform.OS === 'android' && (
+          <AndroidScanModal
+            visible={scanModal}
+            closeScanModal={closeScanModal}
+            changeGifSource={null}
+            fetchTag={fetchTag}
+          />
+        )}
+      </ImageBackground>
+    </>
+      );
+    }
+  };
+
+  return (
+    renderTabs()
   );
 };
 

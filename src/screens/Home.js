@@ -1,8 +1,7 @@
 // libraries
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import { useFocusEffect } from '@react-navigation/native';
 // components
 import CustomButton from '../components/CustomButton';
 // context
@@ -18,6 +17,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const Home = ({ navigation }) => {
   const { loading, activity, isCard } = useContext(AccountContext);
+  const [routeName, setRouteName] = useState('');
 
   return (
     <View style={styles.container}>
@@ -29,6 +29,13 @@ const Home = ({ navigation }) => {
         activeColor="#000000"
         inactiveColor="#808080"
         barStyle={{ backgroundColor: '#ffffff', height: 80 }}
+        screenListeners={{
+          state: (e) => {
+            const routeName = e.data.state.routes[e.data.state.index].name;
+            setRouteName(routeName)
+            console.log('Current route:', routeName);
+          }
+        }}
       >
         <Tab.Screen
           name="Account"
@@ -73,34 +80,34 @@ const Home = ({ navigation }) => {
       </Tab.Navigator>
 
       <View style={styles.homeButtons}>
-        {isCard ? (
-          <CustomButton
-            text="Accept Payment"
-            type="primary"
-            size="large"
-            onPress={() => { navigation.navigate('Request'); }}
-          />
-        ) : (
-          <>
+        {routeName !== "Load Card" && (
+          !isCard ? (
             <CustomButton
-              text="Send"
+              text="Accept Payment"
               type="primary"
-              size="small"
-              onPress={() => { navigation.navigate('Send'); }}
-            />
-            <CustomButton
-              text="Request"
-              type="primary"
-              size="small"
+              size="large"
               onPress={() => { navigation.navigate('Request'); }}
             />
-          </>
+          ) : (
+            <>
+              <CustomButton
+                text="Send"
+                type="primary"
+                size="small"
+                onPress={() => { navigation.navigate('Send'); }}
+              />
+              <CustomButton
+                text="Request"
+                type="primary"
+                size="small"
+                onPress={() => { navigation.navigate('Request'); }}
+              />
+            </>
+          )
         )}
       </View>
     </View>
-
   );
 };
-
 
 export default Home;

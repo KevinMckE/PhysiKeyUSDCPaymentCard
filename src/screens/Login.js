@@ -26,7 +26,7 @@ const Login = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      setIsCard(false);
+      setIsCard(true);
       const fetchData = async () => {
         try {
           const data = await getData();

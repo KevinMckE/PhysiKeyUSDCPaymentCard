@@ -50,10 +50,11 @@ const ZeroFee = ({ navigation }) => {
           />
         </Pressable>
         <View style={{ flex: 6, margin: 16 }}>
-          <Text size={"medium"} color={"#000000"} text={"If you are unsure about this do not proceed. We cannot recover funds."} />
-          <Text size={"medium"} color={"#000000"} text={"The following tutorials can walk you through the process with Coinbase:"} />
+          <Text size={"medium"} color={"#000000"} text={"Please refer to the following tutorials:"} />
           <CustomButton text='Loading Card Tutorial' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
           <CustomButton text='Cashout Tutorial' type='primary' size='large' onPress={offramp} />
+          <Text size={"small"} color={"#000000"} text={"If you are unsure about this do not proceed. We cannot recover funds."} />
+
         </View>
       </View>
     </ScrollView>

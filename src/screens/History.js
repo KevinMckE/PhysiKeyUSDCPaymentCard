@@ -44,9 +44,6 @@ const History = () => {
       {isActivityEmpty ? (
         <View style={{ flex: 8, margin: 16, justifyContent: 'center' }}>
           <Text size={"large"} color={"#000000"} text={'Your account has no transaction history.'} style={{ textAlign: 'center' }} />
-          <CustomButton text='Go Back' type='primary' size='large' onPress={() => {
-            navigation.navigate('Home');
-          }} />
         </View>
       ) : (
         <Tab.Navigator

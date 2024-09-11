@@ -8,7 +8,7 @@
 
 // libraries
 import React, { useState, useEffect, useContext, useRef, useCallback } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, Image, Platform, Keyboard, TextInput, Pressable } from 'react-native';
+import { View, ImageBackground, Image, Platform, Keyboard, TextInput, Pressable, Dimensions } from 'react-native';
 import { useNavigationState, useFocusEffect } from '@react-navigation/native';
 import * as Keychain from 'react-native-keychain';
 // context
@@ -49,7 +49,7 @@ const Request = ({ navigation }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const textInputRef = useRef(null);
-
+console.log(keyboardVisible)
   useEffect(() => {
     if (previousRouteName === "Landing") {
       setIsCard(false);
@@ -317,17 +317,16 @@ const Request = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={{ flex: 1 }}
-    >
+    <>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
-      </ImageBackground >
+        </ImageBackground >
+        <View style={{height: keyboardVisible }}>
+          </View>      
 
       <InputModal
         visible={modalVisible}
@@ -335,13 +334,14 @@ const Request = ({ navigation }) => {
         handlePasswords={handlePasswords}
         title='Enter your password.'
       />
+
       {Platform.OS === 'android' && ( // Render modal only on Android
         <AndroidScanModal
           visible={scanModal}
           closeScanModal={closeScanModal}
         />
       )}
-    </KeyboardAvoidingView>
+    </>
   );
 }
 

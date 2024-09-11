@@ -17,14 +17,14 @@ const TransakBuy = () => {
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
     productsAvailed: 'BUY',
-    networks: 'BASE',
+    networks: 'OPTIMISM',
     cryptoCurrencyList: 'USDC',
     disableCrypto: false,
     disableNetwork: false,
     disableFiat: false,
     defaultPaymentMethod: 'pm_us_wire_bank_transfer',
     themeColor: '2E3C49',
-    walletAddress: publicKey
+    walletAddress: publicKey,
   };
 
   const onTransakEventHandler = (event, data) => {

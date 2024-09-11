@@ -54,7 +54,6 @@ const TransakSell = () => {
         />
       </View>
       <View style={{ height: 50 }}/>
-
     </ScrollView>
   );
 };

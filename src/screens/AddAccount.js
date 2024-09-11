@@ -123,7 +123,7 @@ const AddAccount = ({ navigation, route }) => {
                 content="Passwords must be 4 characters and may not contain emoji's.  It is important you remember this password."
               />
             </View>
-            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
+            <View style={{ flex: 5, margin: 16 }}>
               <PasswordInput
                 text='Enter Password...'
                 password={password}
@@ -136,7 +136,7 @@ const AddAccount = ({ navigation, route }) => {
               />
               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
-            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
+            <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
                 <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
@@ -155,7 +155,7 @@ const AddAccount = ({ navigation, route }) => {
                 content="Names can be any length or character but must be unique."
               />
             </View>
-            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
+            <View style={{ flex: 4, margin: 16 }}>
               <TextInput
                 mode="outlined"
                 theme={{ colors: { primary: '#2E3C49' } }}
@@ -170,7 +170,7 @@ const AddAccount = ({ navigation, route }) => {
                <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
             
-            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }]}>
+            <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
                 <CustomButton text='Login' type='primary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep(); }} />
@@ -184,10 +184,7 @@ const AddAccount = ({ navigation, route }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={{ flex: 1 }}
-    >
+    <>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
@@ -195,7 +192,9 @@ const AddAccount = ({ navigation, route }) => {
         <LoadingOverlay loading={loading} />
         {renderStep()}
       </ImageBackground>
-    </KeyboardAvoidingView >
+      <View style={{height: keyboardHeight }}>
+      </View> 
+    </>
   );
 }
 

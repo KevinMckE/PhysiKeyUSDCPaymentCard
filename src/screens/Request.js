@@ -325,8 +325,8 @@ console.log(keyboardVisible)
         <LoadingOverlay loading={loading} />
         {renderStep()}
         </ImageBackground >
-        <View style={{height: keyboardVisible }}>
-          </View>      
+        <View style={{height: keyboardHeight }}>
+        </View>   
 
       <InputModal
         visible={modalVisible}

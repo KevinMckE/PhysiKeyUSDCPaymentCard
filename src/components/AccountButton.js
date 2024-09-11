@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     margin: 16,
     borderRadius: 15,
     backgroundColor: '#ffffff',
+    height: 48,
   },
   keyContent: {
     flexDirection: 'row',

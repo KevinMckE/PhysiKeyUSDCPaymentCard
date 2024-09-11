@@ -8,7 +8,7 @@
 
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ImageBackground, TextInput, Platform, Keyboard, Image } from 'react-native';
+import { View, ImageBackground, TextInput, Platform, Keyboard, Image } from 'react-native';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -48,8 +48,6 @@ const Send = ({ navigation }) => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
       setKeyboardVisible(true);
       setKeyboardHeight(event.endCoordinates.height);
-      console.log('hi')
-      console.log(keyboardHeight)
     });
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardVisible(false);
@@ -185,7 +183,7 @@ const Send = ({ navigation }) => {
                 content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the Optimism network."
               />
             </View>
-            <View style={[{ flex: 4, margin: 16 }, keyboardVisible && { marginBottom: (keyboardHeight / 2) }]}>
+            <View style={{ flex: 4, margin: 16 }}>
               <TextInput
                 mode="outlined"
                 style={styles.textInput}
@@ -199,7 +197,7 @@ const Send = ({ navigation }) => {
               <CustomButton text="Scan Card" type='primary' size='large' onPress={() => { handleScanCardPress(); }} />
               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
-            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }, styles.center]}>
+            <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => {
                   navigation.navigate('Home');
@@ -237,9 +235,9 @@ const Send = ({ navigation }) => {
               </View>
               <Text size={"small"} color={"#ff0000"} text={inputError} style={{ textAlign: 'center' }} />
             </View>
-            <View style={[{ flex: 2 }, keyboardVisible && { marginBottom: (keyboardHeight + 32) }, styles.center]}>
+            <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); handlePreviousStep();}}/>
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); handlePreviousStep(); }} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
             </View>
@@ -291,7 +289,7 @@ const Send = ({ navigation }) => {
             </View>
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Return' type='primary' size='small' onPress={() => {setStep(0); setRecipientKey('')}} />
+                <CustomButton text='Return' type='primary' size='small' onPress={() => { setStep(0); setRecipientKey('') }} />
                 <CustomButton text='Account' type='secondary' size='small' onPress={() => { updateAccount(publicKey); navigation.navigate('Home'); }} />
               </View>
             </View>
@@ -328,20 +326,16 @@ const Send = ({ navigation }) => {
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        style={{ flex: 1 }}
+      <ImageBackground
+        source={require('../assets/background.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <ImageBackground
-          source={require('../assets/background.png')}
-          style={{ flex: 1, width: '100%', height: '100%' }}
-        >
-          <LoadingOverlay loading={loading} />
-          {renderStep()}
+        <LoadingOverlay loading={loading} />
+        {renderStep()}
 
-        </ImageBackground >
-      </KeyboardAvoidingView >
-
+      </ImageBackground >
+      <View style={{ height: keyboardHeight }}>
+      </View>
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

@@ -13,7 +13,7 @@ const AccountCard = ({ publicKey, accountName }) => {
         <View style={styles.name}>
         <Text size={"large"} color={"#000000"} text={accountName} />
         <Image
-            source={require('../assets/logos/op_eth.png')}
+            source={require('../assets/logos/base_logo.png')}
             style={styles.icon}
           />
         </View>
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 16,
+    height: 16,
   },
 });
 

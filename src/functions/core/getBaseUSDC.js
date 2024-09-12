@@ -1,5 +1,5 @@
 import { http, createPublicClient } from 'viem';
-import { OPTIMISM_USDC_CONTRACT, RPC_URL } from '@env';
+import { BASE_USDC_CONTRACT, RPC_URL } from '@env';
 
 const abi = [{
   constant: true,
@@ -16,7 +16,7 @@ export const getUSDCBalance = async (address) => {
     });
     const accountBalance = await client.readContract({
       abi: abi,
-      address: OPTIMISM_USDC_CONTRACT,
+      address: BASE_USDC_CONTRACT,
       functionName: 'balanceOf',
       args: [address],
     });

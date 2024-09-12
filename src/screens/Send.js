@@ -179,8 +179,8 @@ const Send = ({ navigation }) => {
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Input recipient address."
-                text="*Optimism network only"
-                content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the Optimism network."
+                text="*Base network only"
+                content="You can paste in this value or use a Regen Card to populate the value. This must be an Ethereum address on the Base network."
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
@@ -215,7 +215,7 @@ const Send = ({ navigation }) => {
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Input USDC Amount."
-                text="*USDC on Optimism network"
+                text="*USDC on Base network"
                 content="Valid numbers are greater than 0 and formatted correctly."
               />
             </View>
@@ -332,10 +332,7 @@ const Send = ({ navigation }) => {
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
-
       </ImageBackground >
-      <View style={{ height: keyboardHeight }}>
-      </View>
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

@@ -59,9 +59,9 @@ const Account = ({ navigation }) => {
         </Pressable>
         <CurrencyCard
           title="Balance"
-          subtitle="*USDC on Optimism network"
+          subtitle="*USDC on Base network"
           amount={balance}
-          imageSource={require('../assets/logos/optimism_logo.png')}
+          imageSource={require('../assets/logos/usdc_base_logo.png')}
           navigation={navigation}
           publicKey={publicKey}
         />

@@ -4,12 +4,12 @@ import {
   createPimlicoPaymasterClient,
 } from "permissionless/clients/pimlico"
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { optimism } from 'viem/chains';
+import { base } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
-import { WEB3_URL, OPTIMISM_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
+import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
 const web3 = new Web3(WEB3_URL);
 const abi = [
   {
@@ -106,7 +106,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
-      chain: optimism,
+      chain: base,
       bundlerTransport: http(PIMLICO_RPC_URL),
       middleware: {
         sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
@@ -147,7 +147,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
    
     const txHash = await smartAccountClient.sendTransaction({
       account: smartAccountClient.account,
-      to: OPTIMISM_USDC_CONTRACT,
+      to: BASE_USDC_CONTRACT,
       data: recipientData,
       value: 0n,
     });

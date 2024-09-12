@@ -17,7 +17,7 @@ const TransakBuy = () => {
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
     productsAvailed: 'BUY',
-    networks: 'OPTIMISM',
+    networks: 'BASE',
     cryptoCurrencyList: 'USDC',
     disableCrypto: false,
     disableNetwork: false,

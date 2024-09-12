@@ -5,7 +5,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // functions
-import { formatDataByDay, formatDataByMonth } from '../functions/core/getOptimismUSDCActivity';
+import { formatDataByDay, formatDataByMonth } from '../functions/core/getBaseUSDCActivity';
 // components
 import DayListComponent from '../components/MonthActivityList';
 import MonthListComponent from '../components/DayActivityList';

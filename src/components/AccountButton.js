@@ -13,7 +13,7 @@ const AccountButton = ({ publicKey, updateAccount, navigation }) => {
         <View style={styles.keyContent}>
           <Text size={"medium"} color={"#000000"} text={"Account"} />
           <Image
-            source={require('../assets/logos/op_eth.png')}
+            source={require('../assets/logos/base_logo.png')}
             style={styles.icon}
           />
           <Text size={"medium"} color={"#000000"} text={`  ${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`} />
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 16,
+    height: 16,
   },
 });
 

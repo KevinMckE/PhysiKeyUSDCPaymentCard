@@ -49,7 +49,7 @@ const Request = ({ navigation }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const textInputRef = useRef(null);
-console.log(keyboardVisible)
+  console.log(keyboardVisible)
   useEffect(() => {
     if (previousRouteName === "Landing") {
       setIsCard(false);
@@ -105,16 +105,16 @@ console.log(keyboardVisible)
       const timer = setTimeout(() => {
         textInputRef.current?.focus();
       }, 1000);
-      return () => clearTimeout(timer); 
+      return () => clearTimeout(timer);
     }
   }, [loading]);
 
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setStep(0);        
+        setStep(0);
         setAmount();
-        setRawInput('');      
+        setRawInput('');
       };
     }, [])
   );
@@ -207,7 +207,7 @@ console.log(keyboardVisible)
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Input USDC Amount."
-                text="*USDC on Optimism network"
+                text="*USDC on Base network"
                 content="Valid numbers are greater than 0 and formatted correctly."
               />
             </View>
@@ -324,10 +324,9 @@ console.log(keyboardVisible)
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
-        </ImageBackground >
-        <View style={{height: keyboardHeight }}>
-        </View>   
-
+        <View style={{ height: Platform.OS === 'android' ? keyboardHeight : 0 }}>
+        </View>
+      </ImageBackground >
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

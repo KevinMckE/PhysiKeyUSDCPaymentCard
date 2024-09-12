@@ -23,7 +23,7 @@ const TransferTutorial = () => {
 
   const slides = [
     { key: '1', text: 'To avoid fees create a Coinbase account.  Otherwise utilize Transak within our app.', image: require('../assets/icons/sign_up.png') },
-    { key: '2', text: 'Set up a wallet in Coinbase to buy or receive USDC. Remember, this must be on the Optimism network', image: require('../assets/icons/buy_icon.png') },
+    { key: '2', text: 'Set up a wallet in Coinbase to buy or receive USDC. Remember, this must be on the BASE network', image: require('../assets/icons/buy_icon.png') },
     { key: '3', text: 'Copy your account address from our app to use in the Coinbase interface', image: require('../assets/icons/copy_icon.png') },
     { key: '4', text: 'Transfer your assets.  Any money in your Coinbase account can be easily transferred to your bank.', image: require('../assets/icons/transfer_icon.png') },
   ];
@@ -46,7 +46,6 @@ const TransferTutorial = () => {
               margin: 16,
             }}
           >
-               
           <Text size={"medium"} color={"#000000"} text={item.text} />
           <Image
                 source={item.image}

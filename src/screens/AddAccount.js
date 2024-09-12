@@ -191,9 +191,9 @@ const AddAccount = ({ navigation, route }) => {
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
+        <View style={{ height: Platform.OS === 'android' ? keyboardHeight : 0 }}>
+        </View>
       </ImageBackground>
-      <View style={{height: keyboardHeight }}>
-      </View> 
     </>
   );
 }

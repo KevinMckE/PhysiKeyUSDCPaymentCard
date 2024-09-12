@@ -324,8 +324,7 @@ const Request = ({ navigation }) => {
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
-        <View style={{ height: Platform.OS === 'android' ? keyboardHeight : 0 }}>
-        </View>
+
       </ImageBackground >
       <InputModal
         visible={modalVisible}

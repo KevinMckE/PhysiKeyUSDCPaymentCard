@@ -17,7 +17,7 @@ import Text from '../components/CustomText';
 const TransactionList = ({ data, limit }) => {
 
   const openFullDetails = (hash) => {
-    const url = `https://optimistic.etherscan.io/tx/${hash}`;
+    const url = `https://basescan.org/tx/${hash}`;
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   };
 

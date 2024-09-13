@@ -60,6 +60,7 @@ const Request = ({ navigation }) => {
           const credentials = await Keychain.getGenericPassword();
           if (credentials && credentials.username === username) {
             console.log('Account exists...');
+            console.log(credentials.password)
             const account = await accountLogin(credentials.password, credentials.password);
             setNewPublicKey(account.address);
             setNewName(username);

@@ -73,7 +73,7 @@ const Transfer = () => {
     setErrorMessage('');
     try {
       let account = await accountLogin(recipTag, password);
-      console.log('account address: ', account.address);
+      console.log('Recipient account address: ', account.address);
       if (account.address === publicKey) {
         setIsVerified(true);
         setModalVisible(false);
@@ -134,8 +134,8 @@ const Transfer = () => {
                   </View>
 
                   <View style={[{ flex: 2 }, styles.center]}>
-                    <Text size={"small"} color={"#000000"} text={errorMessage} style={{ textAlign: 'center' }} />
                     <CustomButton text='Verify Account' type='primary' size='large' onPress={startVerificationProcess} style={{ marginVertical: 16 }} />
+                    <Text size={"small"} color={"#ff0000"} text={errorMessage} style={{ textAlign: 'center' }} />
                   </View>
                 </>
               )}

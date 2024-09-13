@@ -13,7 +13,7 @@ export const getData = async () => {
   try {
     const keys = await AsyncStorage.getAllKeys();
     const items = await AsyncStorage.multiGet(keys);
-    console.log(items)
+    console.log('Your saved accounts: ', items)
     return items
       .filter(([key, value]) => key !== "default")
       .map(([key, value]) => ({ key, value: JSON.parse(value) }));

@@ -15,6 +15,7 @@ const AccountButton = ({ publicKey, updateAccount, navigation }) => {
           <Image
             source={require('../assets/logos/base_logo.png')}
             style={styles.icon}
+            resizeMode="contain"
           />
           <Text size={"medium"} color={"#000000"} text={`  ${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`} />
           <Image
@@ -42,8 +43,8 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   icon: {
-    width: 16,
-    height: 16,
+    width: 24,
+    height: 24,
   },
 });
 

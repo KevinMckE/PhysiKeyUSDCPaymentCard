@@ -15,13 +15,13 @@ const TransakSell = () => {
     environment: Environments[TRANSAK_ENVIRONMENT],
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
-    fiatAmount: 100,
+    fiatAmount: '', // Leave this blank
     productsAvailed: 'SELL',
     networks: 'BASE',
     cryptoCurrencyList: 'USDC',
     disableCrypto: true,
     disableNetwork: true,
-    disableFiat: true,
+    disableFiat: false, // Enable the fiat amount input
     themeColor: '2E3C49',
     walletAddress: publicKey
   };

@@ -33,7 +33,7 @@ const Home = ({ navigation }) => {
           state: (e) => {
             const routeName = e.data.state.routes[e.data.state.index].name;
             setRouteName(routeName)
-            console.log('Current route:', routeName);
+            //console.log('Current route:', routeName);
           }
         }}
       >

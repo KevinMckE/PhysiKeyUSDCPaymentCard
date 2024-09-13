@@ -53,8 +53,13 @@ const ZeroFee = ({ navigation }) => {
           <Text size={"medium"} color={"#000000"} text={"Please refer to the following tutorials:"} />
           <CustomButton text='Loading Card Tutorial' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
           <CustomButton text='Cashout Tutorial' type='primary' size='large' onPress={offramp} />
-          <Text size={"small"} color={"#000000"} text={"*If you are unsure about this do not proceed. We cannot recover funds."} style={{ marginVertical: 8 }} />
-
+          <Text size={"small"} color={"#ff0000"} text={"*If you are unsure about this do not proceed. We cannot recover funds."} style={{ marginVertical: 8 }} />
+          <CustomButton
+                text="Send / Cashout"
+                type="secondary"
+                size="large"
+                onPress={() => { navigation.navigate('Send'); }}
+              />
         </View>
       </View>
     </ScrollView>

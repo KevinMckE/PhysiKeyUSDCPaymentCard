@@ -9,6 +9,7 @@
 // libraries
 import React, { useState, useContext, useEffect } from 'react';
 import { View, ImageBackground, TextInput, Platform, Keyboard, Image } from 'react-native';
+import * as Keychain from 'react-native-keychain';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // components
@@ -27,7 +28,7 @@ import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewBalance, setNewActivity, updateAccount } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, updateAccount, isCard } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -149,6 +150,24 @@ const Send = ({ navigation }) => {
       console.error('Cannot complete handlePasswords: ', error);
     }
   };
+  const instantAcceptSign = async () => {
+    setErrorMessage('');
+    try {
+      setIsLoading(true);
+      const credentials = await Keychain.getGenericPassword();
+      let receipt = await transferUSDC(credentials.password, credentials.password, amount, recipientKey);
+      setStatusMessage(receipt);
+      setSuccess(true);
+      setIsLoading(false);
+      setStep(3);
+    } catch (error) {
+      console.error('Cannot complete confirmSign: ', error.message);
+      setErrorMessage(error.message || 'An error occurred.');
+      setIsLoading(false);
+      setSuccess(false);
+      setStep(3);
+    }
+  };
 
   const confirmSign = async (password) => {
     setErrorMessage('');
@@ -264,7 +283,18 @@ const Send = ({ navigation }) => {
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); }} />
-                <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleSignAndSend(); }} />
+                <CustomButton
+                  text={isCard ? 'Scan Card' : 'Send'}
+                  type='primary'
+                  size='small'
+                  onPress={() => {
+                    if (isCard) {
+                      handleSignAndSend();
+                    } else {
+                      instantAcceptSign();
+                    }
+                  }}
+                />
               </View>
             </View>
           </>
@@ -332,7 +362,8 @@ const Send = ({ navigation }) => {
       >
         <LoadingOverlay loading={loading} />
         {renderStep()}
-      </ImageBackground >
+      </ImageBackground>
+
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

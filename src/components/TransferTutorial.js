@@ -46,11 +46,12 @@ const TransferTutorial = () => {
               margin: 16,
             }}
           >
-          <Text size={"medium"} color={"#000000"} text={item.text} />
-          <Image
+             <Image
                 source={item.image}
                 style={{ width: 64, height: 64, marginVertical: 16 }}
               />
+          <Text size={"medium"} color={"#000000"} text={item.text} />
+         
           </View>
         )}
       />

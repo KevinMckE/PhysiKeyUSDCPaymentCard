@@ -76,7 +76,6 @@ export const accountLogin = async (tag, password) => {
       factoryAddress: factoryAddress,
       entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
-
     return simpleAccount;
 
   } catch (error) {
@@ -106,7 +105,7 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
-      chain: base,
+      chain: WEB3_URL,
       bundlerTransport: http(PIMLICO_RPC_URL),
       middleware: {
         sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
@@ -158,6 +157,5 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
     throw error.details;
   }
 };
-
 
 

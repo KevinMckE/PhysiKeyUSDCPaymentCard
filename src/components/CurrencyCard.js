@@ -17,7 +17,7 @@ const CurrencyCard = ({ title, subtitle, amount, imageSource }) => {
   return (
     <Card style={styles.card} mode="elevated">
       <Card.Content style={styles.content}>
-        <Image source={imageSource} style={styles.image} />
+        <Image source={imageSource} style={styles.image} resizeMode="contain"/>
         <View>
           <Text size={"large"} color={"#000000"} text={title} />
           <Text size={"small"} color={"#000000"} text={subtitle} />

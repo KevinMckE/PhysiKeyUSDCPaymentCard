@@ -15,6 +15,7 @@ const AccountCard = ({ publicKey, accountName }) => {
         <Image
             source={require('../assets/logos/base_logo.png')}
             style={styles.icon}
+            resizeMode="contain"
           />
         </View>
           <Text size={"medium"} color={"#000000"} text={truncatedKey} />
@@ -48,8 +49,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   icon: {
-    width: 16,
-    height: 16,
+    width: 24,
+    height: 24,
   },
 });
 

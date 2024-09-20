@@ -9,19 +9,33 @@ export const getBaseUSDCActivity = async (walletAddress) => {
       throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
-    const transactions = data.result.map(transaction => {
+    
+    const transactions = [];
+    let totalUSDCTransferredLast24Hours = 0;
+    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+    data.result.forEach(transaction => {
       const { timeStamp, value, hash } = transaction;
       const method = transaction.to.toLowerCase() === walletAddress.toLowerCase() ? 'IN' : 'OUT';
       const age = new Date(parseInt(timeStamp) * 1000).toISOString(); // Convert to ISO string
       const formattedValue = parseFloat(value) / Math.pow(10, 18);
       const valueInDollars = formattedValue / 1000000;
-      return { age, method, value: valueInDollars, hash };
-    });
 
-    return transactions.reverse();
+      // Add to transactions array
+      transactions.push({ age, method, value: valueInDollars, hash });
+
+      // Check if transaction is within the last 24 hours
+      if (new Date(age).getTime() >= twentyFourHoursAgo) {
+        totalUSDCTransferredLast24Hours += formattedValue;
+      }
+    });
+    return {
+      transactions: transactions.reverse(),
+      totalUSDCTransferredLast24Hours: totalUSDCTransferredLast24Hours / 1000000 // Return in dollars
+    };
   } catch (error) {
     console.error('Error fetching USDC transactions:', error);
-    return [];
+    return { transactions: [], totalUSDCTransferredLast24Hours: 0 };
   }
 };
 

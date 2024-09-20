@@ -14,7 +14,7 @@ const AccountButton = ({ publicKey, updateAccount, navigation }) => {
           <Text size={"medium"} color={"#000000"} text={"Account"} />
           <Image
             source={require('../assets/logos/base_logo.png')}
-            style={styles.icon}
+            style={styles.networkIcon}
             resizeMode="contain"
           />
           <Text size={"medium"} color={"#000000"} text={`  ${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`} />
@@ -42,10 +42,14 @@ const styles = StyleSheet.create({
     padding: 8,
     width: '100%'
   },
-  icon: {
+  networkIcon: {
+    width: 16,
+    height: 16,
+  },
+  icon : {
     width: 24,
     height: 24,
-  },
+  }
 });
 
 export default AccountButton;

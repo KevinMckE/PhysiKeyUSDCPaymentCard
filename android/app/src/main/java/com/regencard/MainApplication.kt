@@ -1,4 +1,4 @@
-package com.regencard
+package com.regen.card
 
 import android.app.Application
 import com.facebook.react.PackageList

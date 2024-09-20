@@ -14,7 +14,7 @@ const AccountCard = ({ publicKey, accountName }) => {
         <Text size={"large"} color={"#000000"} text={accountName} />
         <Image
             source={require('../assets/logos/base_logo.png')}
-            style={styles.icon}
+            style={styles.networkIcon}
             resizeMode="contain"
           />
         </View>
@@ -48,10 +48,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  icon: {
+  networkIcon: {
+    width: 16,
+    height: 16,
+  },
+  icon : {
     width: 24,
     height: 24,
-  },
+  }
 });
 
 export default AccountCard;

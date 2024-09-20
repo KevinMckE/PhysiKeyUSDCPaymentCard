@@ -30,7 +30,7 @@ const Transfer = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('Please verify your account before you add or sell USDC. We cannot recover funds for you.');
+  const [errorMessage, setErrorMessage] = useState('');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false);
 
@@ -41,9 +41,29 @@ const Transfer = () => {
         setErrorMessage('');
       } else {
         setIsVerified(false);
-        setErrorMessage('Please verify your account to continue.');
+        setErrorMessage('To make sure you have the correct card account, verify the card and password combination.');
       }
     }, [accountName])
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      // When the component is focused (i.e., the "Load Card" route is active), 
+      // you can set your initial isVerified state or reset error messages
+      if (!isCard) {
+        setIsVerified(true);
+        setErrorMessage('');
+      } else {
+        setIsVerified(false);
+        setErrorMessage('To make sure you have the correct card account, verify the card and password combination.');
+      }
+
+      // Return a function to be called when the component loses focus (i.e., navigated away)
+      return () => {
+        // Reset isVerified or take action when navigating away from the page
+        setIsVerified(false);
+      };
+    }, [isCard])
   );
 
   const closeScanModal = () => {
@@ -73,7 +93,7 @@ const Transfer = () => {
     setErrorMessage('');
     try {
       let account = await accountLogin(recipTag, password);
-      console.log('Recipient account address: ', account.address);
+      console.log('Your verified address: ', account.address);
       if (account.address === publicKey) {
         setIsVerified(true);
         setModalVisible(false);
@@ -135,7 +155,7 @@ const Transfer = () => {
 
                   <View style={[{ flex: 2 }, styles.center]}>
                     <CustomButton text='Verify Account' type='primary' size='large' onPress={startVerificationProcess} style={{ marginVertical: 16 }} />
-                    <Text size={"small"} color={"#ff0000"} text={errorMessage} style={{ textAlign: 'center' }} />
+                    <Text size={"small"} color={"#ff0000"} text={errorMessage} style={{ textAlign: 'center', marginHorizontal: 16}} />
                   </View>
                 </>
               )}

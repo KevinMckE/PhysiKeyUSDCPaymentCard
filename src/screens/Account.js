@@ -41,11 +41,7 @@ const Account = ({ navigation }) => {
           <Text size={"small"} color={"#000000"} text={"Account"} />
           <Pressable
             onPress={() => {
-              if (!isCard) {
-                navigation.navigate('InstantAcceptConfigure');
-              } else {
-                navigation.navigate('AccountSettings', { navigation });
-              }
+              navigation.navigate('AccountSettings', { navigation });
             }}
           >
             <Text size={"small"} color={"#000000"} text={"View Details >"} />

@@ -17,8 +17,8 @@ const TransakBuy = () => {
     cryptoCurrencyList: 'USDC',
     disableCrypto: false,
     disableNetwork: false,
-    disableFiat: false,  // Ensure this is false to allow editing of the fiat amount
-    fiatAmount: '',  // Leave this blank to start with an empty field
+    disableFiat: false,  
+    fiatAmount: '',  
     defaultPaymentMethod: 'pm_us_wire_bank_transfer',
     themeColor: '2E3C49',
     walletAddress: publicKey,

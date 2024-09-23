@@ -93,7 +93,7 @@ const Login = ({ navigation }) => {
                 content="You can make multiple accounts using a single card."
               />
             </View>
-            <View style={[{ flex: 4, }, styles.center]}>
+            <View style={[{ flex: 4}, styles.center]}>
             <Image
                 source={require('../assets/card_tap_animation.gif')}
                 style={styles.animationContainer}

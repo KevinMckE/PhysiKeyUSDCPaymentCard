@@ -12,29 +12,35 @@ export const getBaseUSDCActivity = async (walletAddress) => {
 
     const now = new Date();
     const past24Hours = now.getTime() - (24 * 60 * 60 * 1000);
+    const scaleFactor = 1e18;
     let totalTransferred = 0;
-
+  
     const transactions = data.result.map(transaction => {
       const { timeStamp, value, hash } = transaction;
       const method = transaction.to.toLowerCase() === walletAddress.toLowerCase() ? 'IN' : 'OUT';
       const age = new Date(parseInt(timeStamp) * 1000).toISOString(); // Convert to ISO string
-      const formattedValue = parseFloat(value) / Math.pow(10, 18);
+      const formattedValue = parseFloat(value) / scaleFactor;
+
       const transactionTime = parseInt(timeStamp) * 1000;
       if (transactionTime >= past24Hours) {
         totalTransferred += formattedValue / 1000000;
       }
+
       return { age, method, value: formattedValue / 1000000, hash };
+
     });
 
+    const scaledDailyTotal = totalTransferred * scaleFactor;
+    const roundedDailyTotal = Math.ceil(scaledDailyTotal);
+    const formattedDailyTotal = roundedDailyTotal.toFixed(2);
+
     const reversedTransactions = transactions.reverse();
-    return { transactions: reversedTransactions, totalTransferred };
+    return { transactions: reversedTransactions, totalTransferred: formattedDailyTotal };
   } catch (error) {
     console.error('Error fetching USDC transactions:', error);
     return { transactions: [], totalTransferred: 0 };
   }
 };
-
-
 
 export const groupDataByMonth = (data) => {
   const groupedByMonth = data.reduce((acc, item) => {

@@ -23,7 +23,8 @@ const AccountContextProvider = (props) => {
     try {
       setLoading(true);
       let account = await accountLogin(tag, password);
-      let { fetchedActivity, totalTransferred } = await getBaseUSDCActivity(account.address);
+      let fetchedBalance = await getUSDCBalance(account.address);
+      let { transactions: fetchedActivity, totalTransferred } = await getBaseUSDCActivity(account.address);
       if (fetchedBalance === '0.') {
         setBalance('0.0');
       } else {
@@ -65,8 +66,8 @@ const AccountContextProvider = (props) => {
 
   const setNewActivity = async (address) => {
     try {
-      let { transactions, totalTransferred } = await getBaseUSDCActivity(address);
-      setActivity(transactions);
+      let { transactions: fetchedActivity, totalTransferred } = await getBaseUSDCActivity(address);
+      setActivity(fetchedActivity);
       setDailyAmount(totalTransferred);
     } catch (error) {
       console.error('Cannot complete fetchActivity: ', error);

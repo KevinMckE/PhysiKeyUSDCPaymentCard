@@ -4,7 +4,7 @@
 <dict>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string></string>
+		<string/>
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
@@ -53,5 +53,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>LeagueSpartan-Regular.ttf</string>
+		<string>LeagueSpartan-SemiBold.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -1,18 +1,15 @@
-// libraies
 import React, { useContext } from 'react';
+import { View } from 'react-native';
 import { TransakWebView, Environments, Events } from '@transak/react-native-sdk';
-// context
 import { AccountContext } from '../contexts/AccountContext';
-// env
-import { TRANSAK_API_KEY } from '@env';
+import { TRANSAK_ENVIRONMENT, TRANSAK_API_KEY } from '@env';
 
 const TransakBuy = () => {
-
   const { publicKey } = useContext(AccountContext);
 
   const transakConfig = {
     apiKey: TRANSAK_API_KEY,
-    environment: Environments.STAGING,
+    environment: Environments[TRANSAK_ENVIRONMENT],
     defaultCryptoCurrency: 'USDC',
     fiatCurrency: 'USD',
     productsAvailed: 'BUY',
@@ -20,36 +17,25 @@ const TransakBuy = () => {
     cryptoCurrencyList: 'USDC',
     disableCrypto: false,
     disableNetwork: false,
-    disableFiat: false,
+    disableFiat: false,  
+    fiatAmount: '',  
     defaultPaymentMethod: 'pm_us_wire_bank_transfer',
     themeColor: '2E3C49',
-    walletAddress: publicKey
+    walletAddress: publicKey,
   };
 
   const onTransakEventHandler = (event, data) => {
-    switch (event) {
-      case Events.ORDER_CREATED:
-        console.log(event, data);
-        break;
-
-      case Events.ORDER_PROCESSING:
-        console.log(event, data);
-        break;
-
-      case Events.ORDER_COMPLETED:
-        console.log(event, data);
-        break;
-
-      default:
-        console.log(event, data);
-    }
+    console.log(event, data);
   };
 
   return (
-    <TransakWebView
-      transakConfig={transakConfig}
-      onTransakEvent={onTransakEventHandler}
-    />
+    <View style={{ flex: 1 }}>
+      <TransakWebView
+        transakConfig={transakConfig}
+        onTransakEvent={onTransakEventHandler}
+        style={{ flex: 1 }}  // Ensure the WebView takes full height
+      />
+    </View>
   );
 };
 

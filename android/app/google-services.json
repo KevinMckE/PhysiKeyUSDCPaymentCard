@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "476592762966",
+    "firebase_url": "https://regen-card-default-rtdb.firebaseio.com",
+    "project_id": "regen-card",
+    "storage_bucket": "regen-card.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476592762966:android:bb6054736685e283ab4bf7",
+        "android_client_info": {
+          "package_name": "com.regencard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHyFNEAIz3WsYhcaYxZDc-Zpatc4bZ9Gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

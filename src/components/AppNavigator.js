@@ -9,7 +9,7 @@
 
 // libraries
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Image, Keyboard } from 'react-native';
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,17 +19,13 @@ import AccountContextProvider from '../contexts/AccountContext';
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
 import AddAccount from '../screens/AddAccount';
-import InstantAccept from '../screens/InstantAccept';
-import InstantAcceptAccount from '../screens/InstantAcceptAccount';
-import InstantAcceptTransfer from '../screens/InstantAcceptTransfer';
-import InstantAccountSell from '../screens/InstantAcceptSell';
+import InstantAcceptConfigure from '../screens/InstantAcceptConfigure';
+import History from '../screens/History';
 import Home from '../screens/Home';
 import Send from '../screens/Send';
 import Request from '../screens/Request';
 import AccountSettings from '../screens/AccountSettings';
 import WebViewScreen from '../screens/WebViewScreen';
-// styles
-import styles from '../styles/common';
 
 const Stack = createStackNavigator();
 
@@ -50,85 +46,122 @@ const AppNavigator = () => {
               name="WebViewScreen"
               component={WebViewScreen}
               options={{
-                title: 'AnywhereAccess.io',
+                title: 'Regen Card',
               }}
             />
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{
+              options={({ navigation }) => ({
                 title: 'Login',
-              }}
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="AddAccount"
               component={AddAccount}
-              options={{
+              options={({ navigation }) => ({
                 title: 'Add Account',
-              }}
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
-              name="InstantAccept"
-              component={InstantAccept}
-              options={{
-                title: 'Accept Payment',
-              }}
-            />
-            <Stack.Screen
-              name="InstantAcceptAccount"
-              component={InstantAcceptAccount}
-              options={{
-                title: 'Account Details',
-              }}
-            />
-            <Stack.Screen
-              name="InstantAcceptTransfer"
-              component={InstantAcceptTransfer}
-              options={{
-                title: 'Transfer Assets',
-              }}
-            />
-            <Stack.Screen
-              name="InstantAccountSell"
-              component={InstantAccountSell}
-              options={{
-                title: 'Sell Assets',
-              }}
+              name="History"
+              component={History}
+              options={({ navigation }) => ({
+                title: 'Transaction History',
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="Home"
               component={Home}
               options={({ navigation }) => ({
-                title: 'Regen Card',
+                title: 'Your Account',
                 headerLeft: () => (
-                  <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerButton}>
-                    <Text style={styles.headerButtonArrow}>{'<'}</Text>
-                    <Text style={[styles.headerButtonText, { marginLeft: 10, fontWeight: 'bold' }]}>
-                      Logout
-                    </Text>
-                  </TouchableOpacity>),
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
               })}
             />
             <Stack.Screen
               name="Send"
               component={Send}
-              options={{
+              options={({ navigation }) => ({
                 title: 'Send USDC',
-              }}
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    Keyboard.dismiss();
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="Request"
               component={Request}
-              options={{
+              options={({ navigation }) => ({
                 title: 'Request USDC',
-              }}
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    Keyboard.dismiss();
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
             <Stack.Screen
               name="AccountSettings"
               component={AccountSettings}
-              options={{
-                title: 'Account Settings',
-              }}
+              options={({ navigation }) => ({
+                title: 'Account',
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="InstantAcceptConfigure"
+              component={InstantAcceptConfigure}
+              options={({ navigation }) => ({
+                title: 'Configure',
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -1,38 +1,36 @@
-/////////////////////////////////
-// TOOL TIP                 /////
-// Used as header text         //
-// and is pressable to show    //
-// helpful tips                //
-//                             //
-//                             //
-/////////////////////////////////
-
-// libraries
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Text from '../components/CustomText';
 import Tooltip from 'react-native-walkthrough-tooltip';
-// styles
-import styles from '../styles/common';
 
 const TooltipComponent = ({ tooltipVisible, setTooltipVisible, title, text, content }) => (
   <>
     <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-      <View style={styles.titleContainer}>
-        <Text variant='titleLarge'>{title}</Text>
-        <Image source={require('../assets/icons/info.png')} style={styles.icon} />
-      </View>
-      <Text variant='titleMedium'>{text}</Text>
+      <Text size={"large"} color={"#000000"} text={title} />
+      <Image source={require('../assets/icons/info.png')} style={styles.icon} />
     </TouchableOpacity>
     <Tooltip
       isVisible={tooltipVisible}
-      content={<Text>{content}</Text>}
+      content={<Text size={"small"} color={"#000000"} text={content} />}
       placement="bottom"
       onClose={() => setTooltipVisible(false)}
     >
       <View />
     </Tooltip>
+    <Text size={"small"} color={"#000000"} text={text} />
   </>
 );
+
+const styles = StyleSheet.create({
+  topContainer: {
+    flexDirection: 'row',     
+    alignItems: 'baseline'
+  },
+  icon: {
+    marginLeft: 10,          
+    width: 24,
+    height: 24
+  },
+});
 
 export default TooltipComponent;

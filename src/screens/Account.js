@@ -1,22 +1,30 @@
 // libraries
-import React, { useContext } from 'react';
-import { View, Image, Pressable, ImageBackground } from 'react-native';
-import { Text, Card, List } from 'react-native-paper';
+import React, { useContext, useState, useCallback } from 'react';
+import { View, Pressable, ImageBackground, RefreshControl, ScrollView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { trigger } from 'react-native-haptic-feedback';
 // components
+import AccountCard from '../components/AccountCard';
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
-import CustomButton from '../components/CustomButton';
+import Text from '../components/CustomText';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // styles
 import styles from '../styles/common';
 
 const Account = ({ navigation }) => {
+  const [refreshing, setRefreshing] = useState(false);
+  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance, isCard } = useContext(AccountContext);
 
-  const { activity, publicKey, accountName, balance } = useContext(AccountContext);
-  const truncatedKey = `${publicKey.slice(0, 7)}...${publicKey.slice(-5)}`;
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setNewActivity(publicKey);
+    setNewBalance(publicKey);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   const handleCopyToClipboard = () => {
     trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
@@ -24,51 +32,53 @@ const Account = ({ navigation }) => {
   };
 
   return (
-    <>
+    <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
       <ImageBackground
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>
-          <Text>Account Details (BASE network)</Text>
-          <Text onPress={() => { navigation.navigate('AccountSettings', { navigation }) }}>{`View All >`}</Text>
+          <Text size={"small"} color={"#000000"} text={"Account"} />
+          <Pressable
+            onPress={() => {
+              navigation.navigate('AccountSettings', { navigation });
+            }}
+          >
+            <Text size={"small"} color={"#000000"} text={"View Details >"} />
+          </Pressable>
         </View>
         <Pressable onPress={handleCopyToClipboard}>
-          <Card style={styles.card}>
-            <View style={styles.keyContent}>
-              <List.Item
-                title={accountName}
-                description={truncatedKey}
-              />
-              <Image
-                source={require('../assets/icons/copy_icon.png')}
-                style={styles.copyImage}
-              />
-            </View>
-          </Card>
+          <AccountCard
+            publicKey={publicKey}
+            accountName={accountName}
+          />
         </Pressable>
         <CurrencyCard
-          title="Balance (USDC on BASE)"
-          subtitle={balance}
-          imageSource={require('../assets/logos/usdc_logo.png')}
+          title="Balance"
+          subtitle="*USDC on Base network"
+          amount={balance}
+          imageSource={require('../assets/logos/usdc_base_logo.png')}
           navigation={navigation}
           publicKey={publicKey}
         />
         <View style={styles.textContainer}>
-          <Text>Recent Activity</Text>
-          <Text onPress={() => { navigation.navigate('History') }}>{`View all >`}</Text>
+          <Text size={"small"} color={"#000000"} text={"Recent Transactions"} />
+          <Pressable
+            onPress={() => {
+              navigation.navigate('History');
+            }}
+          >
+            <Text size={"small"} color={"#000000"} text={"View All >"} />
+          </Pressable>
         </View>
         <RecentTransactionList
           navigation={navigation}
           data={activity}
           limit={3}
         />
-        <View style={styles.mainButtons}>
-          <CustomButton text='Send' type='primary' size='small' onPress={() => { navigation.navigate('Send') }}/>
-          <CustomButton text='Request' type='primary' size='small' onPress={() => { navigation.navigate('Request') }}/>
-        </View>
+        <View style={{ height: 80 }}/>
       </ImageBackground>
-    </>
+    </ScrollView>
   );
 }
 

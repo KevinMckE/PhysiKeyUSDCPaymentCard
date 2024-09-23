@@ -1,13 +1,16 @@
-import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V06 } from 'permissionless';
-import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
+import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V07 } from 'permissionless';
+import {
+  createPimlicoBundlerClient,
+  createPimlicoPaymasterClient,
+} from "permissionless/clients/pimlico"
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { baseSepolia } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
-import { RPC_URL, ACCOUNT_FACTORY_ADDRESS } from '@env';
-
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
-const web3 = new Web3('https://sepolia.base.org');
+
+import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
+console.log('chain: ', WEB3_URL);
+const web3 = new Web3(WEB3_URL);
 const abi = [
   {
     inputs: [
@@ -35,7 +38,6 @@ const abi = [
   },
 ];
 
-const usdcContractAddress = '0x036cbd53842c5426634e7929541ec2318f3dcf7e'
 const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
@@ -68,36 +70,46 @@ export const accountLogin = async (tag, password) => {
     const client = createPublicClient({
       transport: http(RPC_URL),
     });
+
     const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
       privateKey: privateKey,
       factoryAddress: factoryAddress,
-      entryPoint: ENTRYPOINT_ADDRESS_V06,
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
     return simpleAccount;
+
   } catch (error) {
     console.log('Error logging in or creating account:', error);
     throw error;
   }
 };
 
+
+
 export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
+
   try {
-    const factor = 10 ** 6; 
+    const factor = 10 ** 6;
     const amountInWei = BigInt(parseFloat(amount) * factor);
 
-    const cloudPaymaster = createPimlicoPaymasterClient({
-      chain: baseSepolia,
-      transport: http(RPC_URL),
-      entryPoint: ENTRYPOINT_ADDRESS_V06,
+    const paymasterClient = createPimlicoPaymasterClient({
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
+      transport: http(PIMLICO_RPC_URL),
+    });
+
+    const pimlicoBundlerClient = createPimlicoBundlerClient({
+      transport: http(PIMLICO_RPC_URL),
+      entryPoint: ENTRYPOINT_ADDRESS_V07,
     });
 
     const smartAccountClient = createSmartAccountClient({
       account: simpleAccount,
-      chain: baseSepolia,
-      bundlerTransport: http(RPC_URL),
+      chain: WEB3_URL,
+      bundlerTransport: http(PIMLICO_RPC_URL),
       middleware: {
-        sponsorUserOperation: cloudPaymaster.sponsorUserOperation,
+        sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
+        gasPrice: async () => (await pimlicoBundlerClient.getUserOperationGasPrice()).fast, // if using pimlico bundler
       },
     });
 
@@ -113,30 +125,37 @@ export const transferUSDC = async (tag, password, amount, recipient) => {
       args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n], //could be any account
     });
 
-    const txHash = await smartAccountClient.sendTransactions({
-      transactions: [
-        {
-          account: smartAccountClient.account,
-          to: usdcContractAddress,
-          data: recipientData,
-          value: 0n,
-        },
-        {
-          account: smartAccountClient.account,
-          to: usdcContractAddress,
-          data: feeData,
-          value: 0n,
-        },
-      ]
+    /*
+        const txHash = await smartAccountClient.sendTransactions({
+          transactions: [
+            {
+              account: smartAccountClient.account,
+              to: OPTIMISM_USDC_CONTRACT,
+              data: recipientData,
+              value: 0n,
+            },
+            {
+              account: smartAccountClient.account,
+              to: OPTIMISM_USDC_CONTRACT,
+              data: feeData,
+              value: 0n,
+            },
+          ]
+        });
+    */
+   
+    const txHash = await smartAccountClient.sendTransaction({
+      account: smartAccountClient.account,
+      to: BASE_USDC_CONTRACT,
+      data: recipientData,
+      value: 0n,
     });
+
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);
     throw error.details;
   }
 };
-
-
-
 
 

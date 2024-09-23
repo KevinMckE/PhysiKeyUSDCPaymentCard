@@ -1,40 +1,83 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  // CORE 
   container: {
     flex: 1,
     flexDirection: 'column',
-    height: '100%',
   },
   backgroundImage: {
-    position: 'absolute',
-    top: 20,
-    width: 300,
-    height: 300,
-    opacity: 1,
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
+  center: {
+    alignItems: 'center'
+  },
+  amountInput: {
+    fontSize: 48,
+    color: '#000000',
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+  },
+  homeButtons: {
+    position: 'absolute',
+    bottom: 80,
+    left: 0,
+    right: 0,
+    paddingTop: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#ffffff',
+    borderTopWidth: 2,
+    borderTopColor: 'rgba(23, 23, 23, 0.1)',
+  },
+  textContainer: {
+    flexDirection: 'row',
+    margin: 16,
+    justifyContent: 'space-between',
+  },
+  card: {
+    marginHorizontal: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+  },
+  animationContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '85%',
+  },
+  textInput: {
+    fontSize: 24,
+    fontFamily: 'LeagueSpartan-Regular',
+    width: '100%',
+    height: 48,
+    backgroundColor: '#ffffff',
+  },
+
+
+
+
   centeredImage: {
     position: 'absolute',
     width: '100%',
     height: '100%'
   },
-  imageContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 3,
-    marginTop: 50,
-  },
+
   listContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 3,
   },
-  linkText: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    fontSize: 18,
-  },
+
   button: {
     width: 250,
     margin: 10,
@@ -42,31 +85,20 @@ const styles = StyleSheet.create({
   textMargin: {
     margin: 10,
   },
-  card: {
-    margin: 10,
-    backgroundColor: '#ffffff',
-  },
-  keyContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
-  copyImage: {
-    width: 30,
-    height: 30,
-    alignSelf: 'center',
+
+  accountText: {
+    flex: 1,
+    marginRight: 10, // Add some margin to create space between the text and the image
   },
 
+  copyImage: {
+    width: 24,
+    height: 24,
+    alignSelf: 'center',
+  },
   transferButton: {
     margin: 10,
     alignItems: 'center',
-  },
-  textInput: {
-    marginTop: 10,
-    width: 250,
-    height: 50,
-    backgroundColor: '#ffffff',
   },
   confirmCard: {
     backgroundColor: '#ffffff',
@@ -77,32 +109,24 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   mainButtons: {
-    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
     bottom: 0,
-    left: 0,
     width: '100%',
     backgroundColor: '#ffffff',
-    borderTopWidth: 2,
-    borderTopColor: 'rgba(23, 23, 23, 0.1)',
   },
   tabBarIcon: {
     width: 24,
     height: 24,
+    padding: 16,
     resizeMode: 'contain',
   },
   inactiveTabIcon: {
-    tintColor: '#808080',
+    tintColor: '#909090',
+    backgroundColor: '#ffffff',
   },
-  textContainer: {
-    flexDirection: 'row',
-    marginLeft: 10,
-    marginTop: 10,
-    marginRight: 10,
-    justifyContent: 'space-between',
-  },
+
   headerButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -128,19 +152,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  titleContainer: {
-    flexDirection: 'row',  // Ensure title and icon are in a row
-    justifyContent: 'left', // Center them horizontally
-  },
-  icon: {
-    marginLeft: 10,  // Add space between the title and the icon
-  },
-
   // CORE PAGE CONTAINERS
   topContainer: {
     padding: 30,
-    flexDirection: 'column',
-    alignItems: 'left',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputContainer: {
     justifyContent: 'center',
@@ -151,20 +168,12 @@ const styles = StyleSheet.create({
   inputContainerKeyboard: {
     flex: 0,
   },
-  bottomContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width: '100%',
-    padding: 10,
-  },
+
   bottomContainerKeyboard: {
     position: 'absolute',
     bottom: 100,
     padding: 0,
   },
-
   errorContainer: {
     height: 20,
   },
@@ -192,6 +201,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  button: {
+    margin: 10,
+    borderRadius: 15,
+    borderColor: '#2E3C49',
+    borderWidth: 1,
+    color: '#2E3C49',
   },
 });
 

@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  // CORE 
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -97,12 +96,10 @@ const styles = StyleSheet.create({
     height: 24,
     alignSelf: 'center',
   },
-
   transferButton: {
     margin: 10,
     alignItems: 'center',
   },
-
   confirmCard: {
     backgroundColor: '#ffffff',
     width: '100%',
@@ -118,7 +115,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
     backgroundColor: '#ffffff',
-    
   },
   tabBarIcon: {
     width: 24,

@@ -26,39 +26,33 @@ const Tab = createMaterialTopTabNavigator();
 
 const Transfer = () => {
 
-  const { publicKey, accountName, isCard } = useContext(AccountContext);
+  const { publicKey, isCard } = useContext(AccountContext);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scanModal, setScanModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [recipTag, setRecipTag] = useState('');
   const [isVerified, setIsVerified] = useState(false);
+  const [lastVerificationTime, setLastVerificationTime] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
-      if (!isCard) {
+      const currentTime = Date.now();
+      const fiveMinutes = 5 * 60 * 1000; // 5 minutes in milliseconds
+      if (!isCard || (lastVerificationTime && currentTime - lastVerificationTime < fiveMinutes)) {
         setIsVerified(true);
         setErrorMessage('');
       } else {
         setIsVerified(false);
         setErrorMessage('To make sure you have the correct card account, verify the card and password combination.');
       }
-    }, [accountName])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      if (!isCard) {
-        setIsVerified(true);
-        setErrorMessage('');
-      } else {
-        setIsVerified(false);
-        setErrorMessage('To make sure you have the correct card account, verify the card and password combination.');
+      if (isVerified) {
+        setLastVerificationTime(currentTime);
       }
       return () => {
-        setIsVerified(false);
+        setIsVerified(false); 
       };
-    }, [isCard])
+    }, [isCard, isVerified])
   );
 
   const closeScanModal = () => {

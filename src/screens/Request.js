@@ -121,7 +121,6 @@ const Request = ({ navigation }) => {
   );
 
   const handleNextStep = () => {
-
     switch (step) {
       case 0:
         if (totalAmount > 0) {

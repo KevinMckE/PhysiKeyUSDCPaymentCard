@@ -48,8 +48,6 @@ const Transfer = () => {
 
   useFocusEffect(
     useCallback(() => {
-      // When the component is focused (i.e., the "Load Card" route is active), 
-      // you can set your initial isVerified state or reset error messages
       if (!isCard) {
         setIsVerified(true);
         setErrorMessage('');
@@ -57,10 +55,7 @@ const Transfer = () => {
         setIsVerified(false);
         setErrorMessage('To make sure you have the correct card account, verify the card and password combination.');
       }
-
-      // Return a function to be called when the component loses focus (i.e., navigated away)
       return () => {
-        // Reset isVerified or take action when navigating away from the page
         setIsVerified(false);
       };
     }, [isCard])

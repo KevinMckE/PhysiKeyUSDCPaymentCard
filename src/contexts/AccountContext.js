@@ -23,14 +23,14 @@ const AccountContextProvider = (props) => {
     try {
       setLoading(true);
       let account = await accountLogin(tag, password);
-      let fetchedBalance = await getUSDCBalance(account.address);
+      let { fetchedActivity, totalTransferred } = await getBaseUSDCActivity(account.address);
       if (fetchedBalance === '0.') {
         setBalance('0.0');
       } else {
         setBalance(fetchedBalance);
       }
-      const fetchedActivity = await getBaseUSDCActivity(account.address);
-      setNewActivity(fetchedActivity);
+      setDailyAmount(totalTransferred);
+      setActivity(fetchedActivity);
       setPublicKey(account.address);
       setAccountName(name);
       await storeData(name, account.address);
@@ -65,10 +65,9 @@ const AccountContextProvider = (props) => {
 
   const setNewActivity = async (address) => {
     try {
-      const { transactions, totalUSDCTransferredLast24Hours } = await getBaseUSDCActivity(address);
-      console.log(totalUSDCTransferredLast24Hours);
+      let { transactions, totalTransferred } = await getBaseUSDCActivity(address);
       setActivity(transactions);
-      setDailyAmount(totalUSDCTransferredLast24Hours); 
+      setDailyAmount(totalTransferred);
     } catch (error) {
       console.error('Cannot complete fetchActivity: ', error);
       setStatus(error);
@@ -99,7 +98,7 @@ const AccountContextProvider = (props) => {
   return (
     <AccountContext.Provider value={{
       publicKey, activity, accountName, balance, status, loading, isCard, dailyAmount, setNewAccount, setStatusMessage, setNewBalance, 
-      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard, updateAccount
+      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard, updateAccount, setNewCard
     }}>
       {props.children}
     </AccountContext.Provider>

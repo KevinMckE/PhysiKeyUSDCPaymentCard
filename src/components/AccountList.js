@@ -73,7 +73,7 @@ const AccountList = ({ data, navigation, setData }) => {
                     navigation.navigate('Home');
                   }}
                 >
-                  <View style={styles.listItem}>
+                  <View style={[styles.listItem, index === data.length - 1 && styles.lastItem]}>
                     <List.Item
                       title={() => (
                         <Text size="large" text={`${item.key}`} />
@@ -133,5 +133,8 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 16,
+  },
+  lastItem: {
+    borderBottomWidth: 0,
   },
 });

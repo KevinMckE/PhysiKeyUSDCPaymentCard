@@ -123,8 +123,8 @@ const Request = ({ navigation }) => {
   const handleNextStep = () => {
     switch (step) {
       case 0:
-        if (totalAmount > 0) {
-          if (totalAmount >= 3000) {
+        if (amount > 0) {
+          if (amount >= 3000) {
             setInputError('Amount cannot be greater than or equal to 3000.');
           } else {
             setStep(step + 1);

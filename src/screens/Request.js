@@ -33,7 +33,7 @@ const Request = ({ navigation }) => {
   const navigationState = useNavigationState(state => state);
   const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewPublicKey, setNewName, setIsCard, updateAccount } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewPublicKey, setNewName, setIsCard, updateAccount, isCard, dailyAmount } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -49,7 +49,7 @@ const Request = ({ navigation }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const textInputRef = useRef(null);
-  console.log(keyboardVisible)
+
   useEffect(() => {
     if (previousRouteName === "Landing") {
       setIsCard(false);
@@ -123,11 +123,15 @@ const Request = ({ navigation }) => {
   const handleNextStep = () => {
     switch (step) {
       case 0:
-        if (parseFloat(amount) > 0) {
-          setStep(step + 1);
-          setInputError('');
+        if (totalAmount > 0) {
+          if (totalAmount >= 3000) {
+            setInputError('Amount cannot be greater than or equal to 3000.');
+          } else {
+            setStep(step + 1);
+            setInputError('');
+          }
         } else {
-          setInputError('Please enter a valid number.')
+          setInputError('Please enter a valid number.');
         }
         break;
       case 1:
@@ -233,11 +237,13 @@ const Request = ({ navigation }) => {
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.goBack(); }} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );
@@ -264,11 +270,13 @@ const Request = ({ navigation }) => {
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); }} />
                 <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleScanCardPress(); }} />
               </View>
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );
@@ -304,11 +312,13 @@ const Request = ({ navigation }) => {
             </View>
             <View style={[{ flex: 2 }, styles.center]}>
               <CustomButton text='Try Again' type='primary' size='large' onPress={() => { setStep(0) }} />
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );
@@ -323,10 +333,15 @@ const Request = ({ navigation }) => {
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <LoadingOverlay loading={loading} />
-        {renderStep()}
-
+        {parseFloat(dailyAmount) >= 10000 ? (
+          <View style={{ alignItems: 'center', margin: 16 }}>
+            <Text size={"medium"} color={"#ff0000"} text="You have hit your daily transaction limit, please try again later." />
+          </View>
+        ) : (
+          renderStep()
+        )}
       </ImageBackground >
+
       <InputModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

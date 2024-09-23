@@ -14,7 +14,7 @@ import AccountCard from '../components/AccountCard';
 import styles from '../styles/common';
 
 const ZeroFee = ({ navigation }) => {
-  const { publicKey, accountName } = useContext(AccountContext);
+  const { publicKey, accountName, balance } = useContext(AccountContext);
 
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
@@ -47,19 +47,22 @@ const ZeroFee = ({ navigation }) => {
           <AccountCard
             publicKey={publicKey}
             accountName={accountName}
+            balance={balance}
           />
         </Pressable>
-        <View style={{ flex: 6, margin: 16 }}>
-          <Text size={"medium"} color={"#000000"} text={"Please refer to the following tutorials:"} />
-          <CustomButton text='Loading Card Tutorial' type='primary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
-          <CustomButton text='Cashout Tutorial' type='primary' size='large' onPress={offramp} />
+        <View style={{ flex: 3, margin: 16 }}>
           <Text size={"small"} color={"#ff0000"} text={"*If you are unsure about this do not proceed. We cannot recover funds."} style={{ marginVertical: 8 }} />
           <CustomButton
-                text="Send / Cashout"
-                type="secondary"
-                size="large"
-                onPress={() => { navigation.navigate('Send'); }}
-              />
+            text="Send / Cashout"
+            type="primary"
+            size="large"
+            onPress={() => { navigation.navigate('Send'); }}
+          />
+        </View>
+        <View style={{ flex: 3, margin: 16 }}>
+          <Text size={"medium"} color={"#000000"} text={"To learn how:"} />
+          <CustomButton text='Loading Card Tutorial' type='secondary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
+          <CustomButton text='Cashout Tutorial' type='secondary' size='large' onPress={offramp} />
         </View>
       </View>
     </ScrollView>

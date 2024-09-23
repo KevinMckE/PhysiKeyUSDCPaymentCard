@@ -10,7 +10,6 @@ import { formatDataByDay, formatDataByMonth } from '../functions/core/getBaseUSD
 import DayListComponent from '../components/MonthActivityList';
 import MonthListComponent from '../components/DayActivityList';
 import Text from '../components/CustomText';
-import CustomButton from '../components/CustomButton';
 
 const Tab = createMaterialTopTabNavigator();
 

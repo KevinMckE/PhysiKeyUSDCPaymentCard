@@ -3,25 +3,42 @@ import { BASE_SCAN_ENDPOINT, BASE_SCAN_API_KEY, BASE_USDC_CONTRACT } from '@env'
 export const getBaseUSDCActivity = async (walletAddress) => {
   try {
     //const apiEndpoint = `https://${OPTIMISM_SCAN_ENDPOINT}?module=account&action=tokentx&contractaddress=${OPTIMISM_USDC_CONTRACT}&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${OPTIMISM_SCAN_API_KEY}`;
-    const apiEndpoint = `https://${BASE_SCAN_ENDPOINT}/api?module=account&action=tokentx&contractaddress=${BASE_USDC_CONTRACT}&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${BASE_SCAN_API_KEY}`;    
+    const apiEndpoint = `https://${BASE_SCAN_ENDPOINT}/api?module=account&action=tokentx&contractaddress=${BASE_USDC_CONTRACT}&address=${walletAddress}&page=1&offset=100&startblock=0&endblock=27025780&sort=asc&apikey=${BASE_SCAN_API_KEY}`;
     const response = await fetch(apiEndpoint);
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
+
+    const now = new Date();
+    const past24Hours = now.getTime() - (24 * 60 * 60 * 1000);
+    const scaleFactor = 1e18;
+    let totalTransferred = 0;
+  
     const transactions = data.result.map(transaction => {
       const { timeStamp, value, hash } = transaction;
       const method = transaction.to.toLowerCase() === walletAddress.toLowerCase() ? 'IN' : 'OUT';
       const age = new Date(parseInt(timeStamp) * 1000).toISOString(); // Convert to ISO string
-      const formattedValue = parseFloat(value) / Math.pow(10, 18);
-      const valueInDollars = formattedValue / 1000000;
-      return { age, method, value: valueInDollars, hash };
+      const formattedValue = parseFloat(value) / scaleFactor;
+
+      const transactionTime = parseInt(timeStamp) * 1000;
+      if (transactionTime >= past24Hours) {
+        totalTransferred += formattedValue / 1000000;
+      }
+
+      return { age, method, value: formattedValue / 1000000, hash };
+
     });
 
-    return transactions.reverse();
+    const scaledDailyTotal = totalTransferred * scaleFactor;
+    const roundedDailyTotal = Math.ceil(scaledDailyTotal);
+    const formattedDailyTotal = roundedDailyTotal.toFixed(2);
+
+    const reversedTransactions = transactions.reverse();
+    return { transactions: reversedTransactions, totalTransferred: formattedDailyTotal };
   } catch (error) {
     console.error('Error fetching USDC transactions:', error);
-    return [];
+    return { transactions: [], totalTransferred: 0 };
   }
 };
 

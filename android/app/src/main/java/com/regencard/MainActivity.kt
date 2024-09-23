@@ -1,4 +1,4 @@
-package com.regencard
+package com.regen.card
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

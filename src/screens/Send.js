@@ -27,8 +27,7 @@ import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import styles from '../styles/common';
 
 const Send = ({ navigation }) => {
-
-  const { publicKey, loading, setIsLoading, setStatusMessage, updateAccount, isCard } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, updateAccount, isCard, dailyAmount } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,6 +44,7 @@ const Send = ({ navigation }) => {
   const [success, setSuccess] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
       setKeyboardVisible(true);
@@ -72,11 +72,15 @@ const Send = ({ navigation }) => {
         }
         break;
       case 1:
-        if (parseFloat(amount) > 0) {
-          setStep(step + 1);
-          setInputError('');
+        if (amount > 0) {
+          if (amount >= 3000) {
+            setInputError('Amount cannot be greater than or equal to 3000.');
+          } else {
+            setStep(step + 1);
+            setInputError('');
+          }
         } else {
-          setInputError('Please enter a valid number.')
+          setInputError('Please enter a valid number.');
         }
         break;
       default:
@@ -361,7 +365,13 @@ const Send = ({ navigation }) => {
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <LoadingOverlay loading={loading} />
-        {renderStep()}
+        {parseFloat(dailyAmount) >= 10000 ? (
+          <View style={{ alignItems: 'center', margin: 16 }}>
+            <Text size={"medium"} color={"#ff0000"} text="You have hit your daily transaction limit, please try again later." />
+          </View>
+        ) : (
+          renderStep()
+        )}
       </ImageBackground>
 
       <InputModal
@@ -384,6 +394,7 @@ const Send = ({ navigation }) => {
       )}
     </>
   );
-}
+};
 
 export default Send;
+

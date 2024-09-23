@@ -36,10 +36,9 @@ const styles = StyleSheet.create({
     zIndex: 999,
   },
   loadingSpinner: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: 128,
-    height: 128
+    height: 128,
+    marginBottom: 128,
   },
 })
 

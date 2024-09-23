@@ -14,6 +14,7 @@ const AccountContextProvider = (props) => {
   const [accountName, setAccountName] = useState('');
   const [balance, setBalance] = useState('');
   const [status, setStatus] = useState('');
+  const [dailyAmount, setDailyAmount] = useState();
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isCard, setIsCard] = useState(false);
@@ -23,12 +24,13 @@ const AccountContextProvider = (props) => {
       setLoading(true);
       let account = await accountLogin(tag, password);
       let fetchedBalance = await getUSDCBalance(account.address);
+      let { transactions: fetchedActivity, totalTransferred } = await getBaseUSDCActivity(account.address);
       if (fetchedBalance === '0.') {
         setBalance('0.0');
       } else {
         setBalance(fetchedBalance);
       }
-      const fetchedActivity = await getBaseUSDCActivity(account.address);
+      setDailyAmount(totalTransferred);
       setActivity(fetchedActivity);
       setPublicKey(account.address);
       setAccountName(name);
@@ -64,13 +66,15 @@ const AccountContextProvider = (props) => {
 
   const setNewActivity = async (address) => {
     try {
-      const fetchedActivity = await getBaseUSDCActivity(address);
+      let { transactions: fetchedActivity, totalTransferred } = await getBaseUSDCActivity(address);
       setActivity(fetchedActivity);
+      setDailyAmount(totalTransferred);
     } catch (error) {
-      console.error('Cannot complete fetchAcitivy: ', error);
+      console.error('Cannot complete fetchActivity: ', error);
       setStatus(error);
     }
   };
+
 
   const setNewCard = async (isCard) => {
     setIsCard(isCard);
@@ -94,8 +98,8 @@ const AccountContextProvider = (props) => {
 
   return (
     <AccountContext.Provider value={{
-      publicKey, activity, accountName, balance, status, loading, isCard, setNewAccount, setStatusMessage, setNewBalance, 
-      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard, updateAccount
+      publicKey, activity, accountName, balance, status, loading, isCard, dailyAmount, setNewAccount, setStatusMessage, setNewBalance, 
+      setIsLoading, setNewName, setNewPublicKey, setNewActivity, setIsCard, updateAccount, setNewCard
     }}>
       {props.children}
     </AccountContext.Provider>

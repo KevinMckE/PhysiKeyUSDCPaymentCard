@@ -4,12 +4,12 @@ import {
   createPimlicoPaymasterClient,
 } from "permissionless/clients/pimlico"
 import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { base } from 'viem/chains';
 import { http, createPublicClient, encodeFunctionData } from 'viem';
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
 import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
+console.log('chain: ', WEB3_URL);
 const web3 = new Web3(WEB3_URL);
 const abi = [
   {

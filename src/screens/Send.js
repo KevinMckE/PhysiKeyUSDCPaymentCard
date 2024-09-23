@@ -45,6 +45,7 @@ const Send = ({ navigation }) => {
   const [success, setSuccess] = useState(false);
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
+  
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (event) => {
       setKeyboardVisible(true);

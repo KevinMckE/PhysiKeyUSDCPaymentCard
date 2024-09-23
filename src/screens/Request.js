@@ -33,7 +33,7 @@ const Request = ({ navigation }) => {
   const navigationState = useNavigationState(state => state);
   const previousRouteName = navigationState.routes[navigationState.index - 1]?.name;
 
-  const { publicKey, loading, setIsLoading, setStatusMessage, setNewPublicKey, setNewName, setIsCard, updateAccount } = useContext(AccountContext);
+  const { publicKey, loading, setIsLoading, setStatusMessage, setNewPublicKey, setNewName, setIsCard, updateAccount, isCard } = useContext(AccountContext);
 
   const [step, setStep] = useState(0);
   const [success, setSuccess] = useState(false);
@@ -49,7 +49,7 @@ const Request = ({ navigation }) => {
   const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const textInputRef = useRef(null);
-  console.log(keyboardVisible)
+
   useEffect(() => {
     if (previousRouteName === "Landing") {
       setIsCard(false);
@@ -233,11 +233,13 @@ const Request = ({ navigation }) => {
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { Keyboard.dismiss(); navigation.goBack(); }} />
                 <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );
@@ -264,11 +266,13 @@ const Request = ({ navigation }) => {
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { handlePreviousStep(); }} />
                 <CustomButton text='Scan Card' type='primary' size='small' onPress={() => { handleScanCardPress(); }} />
               </View>
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );
@@ -304,11 +308,13 @@ const Request = ({ navigation }) => {
             </View>
             <View style={[{ flex: 2 }, styles.center]}>
               <CustomButton text='Try Again' type='primary' size='large' onPress={() => { setStep(0) }} />
+              {!isCard && (
               <AccountButton
                 publicKey={publicKey}
                 updateAccount={updateAccount}
                 navigation={navigation}
               />
+            )}
             </View>
           </>
         );

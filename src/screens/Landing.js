@@ -19,7 +19,7 @@ import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
   const handleLinkPress = () => {
-    navigation.navigate('WebViewScreen', { url: 'https://regencard.app' });
+    navigation.navigate('WebViewScreen', { url: 'https://physikey.xyz' });
   };
 
   return (

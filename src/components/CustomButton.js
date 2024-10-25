@@ -27,14 +27,14 @@ const CustomButton = ({ text, type, size, onPress, loading, style }) => {
         style 
       ]}
       contentStyle={{ justifyContent: 'center', height: '100%', paddingVertical: 0 }}
-      buttonColor={type === 'primary' ? '#2E3C49' : '#ffffff'}
+      buttonColor={type === 'primary' ? '#000000' : '#ffffff'}
       labelStyle={[
         size === 'small' ? { fontSize: 24, lineHeight: 28 } : { fontSize: 24, lineHeight: 28 },
         { fontFamily: 'LeagueSpartan-SemiBold' }
       ]}
-      textColor={type === 'primary' ? '#ffffff' : '#2E3C49'}
+      textColor={type === 'primary' ? '#ffffff' : '#000000'}
     >
-      {loading ? <ActivityIndicator color={type === 'primary' ? '#ffffff' : '#2E3C49'} /> : text}
+      {loading ? <ActivityIndicator color={type === 'primary' ? '#ffffff' : '#000000'} /> : text}
     </Button>
   );
 };

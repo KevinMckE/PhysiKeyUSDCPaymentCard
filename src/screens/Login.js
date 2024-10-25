@@ -95,7 +95,7 @@ const Login = ({ navigation }) => {
             </View>
             <View style={[{ flex: 4}, styles.center]}>
             <Image
-                source={require('../assets/card_tap_animation.gif')}
+                source={require('../assets/physicard_black.png')}
                 style={styles.animationContainer}
                 resizeMode="contain"
               />

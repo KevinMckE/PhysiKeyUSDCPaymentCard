@@ -30,7 +30,7 @@ const Landing = ({ navigation }) => {
       >
         <View style={[{ flex: 5 }, styles.center]}>
           <Image
-            source={require('../assets/regen_card_logo_color.png')}
+            source={require('../assets/physicard_black.png')}
             style={{ width: '100%', height: '100%', }}
           />
         </View>

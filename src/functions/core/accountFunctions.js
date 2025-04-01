@@ -1,16 +1,18 @@
-import { createSmartAccountClient, ENTRYPOINT_ADDRESS_V07 } from 'permissionless';
-import {
-  createPimlicoBundlerClient,
-  createPimlicoPaymasterClient,
-} from "permissionless/clients/pimlico"
-import { privateKeyToSimpleSmartAccount } from 'permissionless/accounts';
-import { http, createPublicClient, encodeFunctionData } from 'viem';
+import { toSimpleSmartAccount } from "permissionless/_esm/accounts"
+import { createPublicClient, http, encodeFunctionData  } from "viem"
+import { privateKeyToAccount } from "viem/accounts"
+import { entryPoint07Address } from "viem/account-abstraction"
+import { sepolia, baseSepolia } from "viem/chains"
+import { createPimlicoClient } from "permissionless/_esm/clients/pimlico"
+import { createSmartAccountClient } from "permissionless/_esm/"
+
+
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
-import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL, PIMLICO_RPC_URL } from '@env';
-console.log('chain: ', WEB3_URL);
-const web3 = new Web3(WEB3_URL);
+import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL } from '@env';
+console.log('chain: ', 'https://sepolia.base.org');
+const web3 = new Web3('https://sepolia.base.org');
 const abi = [
   {
     inputs: [
@@ -38,7 +40,8 @@ const abi = [
   },
 ];
 
-const factoryAddress = ACCOUNT_FACTORY_ADDRESS;
+const factoryAddress = '0x9406Cc6185a346906296840746125a0E44976454';
+const pimlicoUrl = 'https://api.pimlico.io/v2/84532/rpc?apikey=pim_UvGRM5DmWTcGZj7pjTP5L7'
 
 let salt = 'BklcooclkncUhnaiianhUcnklcooclkB';
 
@@ -67,15 +70,21 @@ export const accountLogin = async (tag, password) => {
     //console.log('oneTimeEncryptionPW: ', oneTimeEncryptionPW);
     //console.log('EOA publicKey: ', publicKey);
 
-    const client = createPublicClient({
-      transport: http(RPC_URL),
-    });
+    const publicClient = createPublicClient({
+      chain: baseSepolia,
+      transport: http("https://sepolia.base.org"),
+    })
 
-    const simpleAccount = await privateKeyToSimpleSmartAccount(client, {
-      privateKey: privateKey,
-      factoryAddress: factoryAddress,
-      entryPoint: ENTRYPOINT_ADDRESS_V07,
-    });
+    const simpleAccount = await toSimpleSmartAccount({ 
+      client: publicClient, 
+      owner: privateKeyToAccount(privateKey),
+      entryPoint: { // optional, defaults to 0.7
+          address: entryPoint07Address, 
+          version: "0.7", 
+      }, 
+      factory: factoryAddress
+    })
+
     return simpleAccount;
 
   } catch (error) {
@@ -86,75 +95,59 @@ export const accountLogin = async (tag, password) => {
 
 
 
+
+const PIMLICO_RPC_URL = 'https://api.pimlico.io/v2/84532/rpc?apikey=pim_UvGRM5DmWTcGZj7pjTP5L7';
+
 export const transferUSDC = async (tag, password, amount, recipient) => {
   let simpleAccount = await accountLogin(tag, password);
-
+  console.log(simpleAccount.address);
+  console.log('simpleAccount:', simpleAccount);
   try {
-    const factor = 10 ** 6;
-    const amountInWei = BigInt(parseFloat(amount) * factor);
 
-    const paymasterClient = createPimlicoPaymasterClient({
-      entryPoint: ENTRYPOINT_ADDRESS_V07,
-      transport: http(PIMLICO_RPC_URL),
-    });
-
-    const pimlicoBundlerClient = createPimlicoBundlerClient({
-      transport: http(PIMLICO_RPC_URL),
-      entryPoint: ENTRYPOINT_ADDRESS_V07,
-    });
+    
+    const pimlicoClient = createPimlicoClient({
+      transport: http(pimlicoUrl),
+      entryPoint: {
+        address: entryPoint07Address,
+        version: "0.7",
+      },
+    })
 
     const smartAccountClient = createSmartAccountClient({
-      account: simpleAccount,
-      chain: WEB3_URL,
-      bundlerTransport: http(PIMLICO_RPC_URL),
-      middleware: {
-        sponsorUserOperation: paymasterClient.sponsorUserOperation, // optional
-        gasPrice: async () => (await pimlicoBundlerClient.getUserOperationGasPrice()).fast, // if using pimlico bundler
+      account: simpleAccount, // Ensure this is set
+      chain: baseSepolia,
+      bundlerTransport: http(pimlicoUrl),
+      paymaster: pimlicoClient,
+      userOperation: {
+        estimateFeesPerGas: async () => {
+          return (await pimlicoClient.getUserOperationGasPrice()).fast
+        },
       },
-    });
+    })
 
-    const recipientData = encodeFunctionData({
-      abi: abi,
-      functionName: 'transfer',
-      args: [recipient, amountInWei],
-    });
+    const decimals = 6; // USDC has 6 decimal places
+  const amountInWei = BigInt(Math.floor(Number(amount) * 10 ** decimals));
 
-    const feeData = encodeFunctionData({
-      abi: abi,
-      functionName: 'transfer',
-      args: ['0x179F961d5A0cC6FCB32e321d77121D502Fe3abF4', 0n], //could be any account
-    });
-
-    /*
-        const txHash = await smartAccountClient.sendTransactions({
-          transactions: [
-            {
-              account: smartAccountClient.account,
-              to: OPTIMISM_USDC_CONTRACT,
-              data: recipientData,
-              value: 0n,
-            },
-            {
-              account: smartAccountClient.account,
-              to: OPTIMISM_USDC_CONTRACT,
-              data: feeData,
-              value: 0n,
-            },
-          ]
-        });
-    */
+    console.log(amountInWei)
+  // Encode the data for the transfer function
+  const data = encodeFunctionData({
+    abi: abi,
+    functionName: 'transfer',
+    args: [recipient, amountInWei],  // Transfer 2 USDC (2000000 units)
+  });
+  console.log(BASE_USDC_CONTRACT)
+  const txHash = await smartAccountClient.sendTransaction({
+    to: BASE_USDC_CONTRACT,  // USDC contract address
+    value: 0n,               // No Ether is sent (USDC is an ERC-20 token)
+    data: data,              // Data to call transfer method in the USDC contract
+  });
    
-    const txHash = await smartAccountClient.sendTransaction({
-      account: smartAccountClient.account,
-      to: BASE_USDC_CONTRACT,
-      data: recipientData,
-      value: 0n,
-    });
-
+  console.log(`User operation included: https://sepolia.etherscan.io/tx/${txHash}`)
+    console.log(txHash)
     return txHash;
   } catch (error) {
     console.error('Error during USDC transfer:', error);
-    throw error.details;
+    throw error;
   }
 };
 

@@ -227,7 +227,7 @@ const AddAccount = ({ navigation, route }) => {
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
-                <CustomButton text='Save' type='primary' size='small' onPress={handleNextStep} />
+                <CustomButton text='Login' type='primary' size='small' onPress={handleNextStep} />
               </View>
             </View>
           </>

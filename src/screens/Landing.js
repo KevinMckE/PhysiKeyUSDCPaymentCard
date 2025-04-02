@@ -36,9 +36,7 @@ const Landing = ({ navigation }) => {
         </View>
         <View style={[{ flex: 2, justifyContent: 'center', gap: 16 }, styles.center]}>
           <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { navigation.navigate('Request') }} />
-          <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
-          <CustomButton text='Card Disable Pass' type='secondary' size='large' onPress={() => { disablePassword(); }} />
-
+          <CustomButton text='Card Login' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
         </View>
         <View style={[{ flex: 1 }, styles.center]}>
           <CustomText size={"small"} color={"#000000"} text={"Don't have a card?"} />

@@ -21,7 +21,7 @@ import TooltipComponent from '../components/ToolTip';
 import LoadingOverlay from '../components/LoadingOverlay';
 // functions
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { readCard } from '../functions/core/readCard';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 // styles
 import styles from '../styles/common';
@@ -110,7 +110,8 @@ const Send = ({ navigation }) => {
 
   const fetchTag = async () => {
     try {
-      let tag = await scanSerialForKey();
+      let result = await readCard();
+      let tag = result.text;
       if (tag) {
         setRecipTag(tag);
         setModalVisible(true);
@@ -123,7 +124,8 @@ const Send = ({ navigation }) => {
 
   const fetchSign = async () => {
     try {
-      let tag = await scanSerialForKey();
+      let result = await readCard();
+      let tag = result.text;
       if (tag) {
         setTagID(tag);
         setSignModalVisible(true);

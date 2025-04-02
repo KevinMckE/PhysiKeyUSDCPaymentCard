@@ -16,7 +16,8 @@ import Text from '../components/CustomText';
 // functions
 import { accountLogin } from '../functions/core/accountFunctions';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { readCard } from '../functions/core/readCard';
+
 // components
 import TransferTutorial from '../components/TransferTutorial';
 // styles
@@ -67,7 +68,8 @@ const Transfer = () => {
 
   const fetchTag = async () => {
     try {
-      let tag = await scanSerialForKey();
+      let result = await readCard();
+      let tag = result.text;
       if (tag) {
         setRecipTag(tag);
         setModalVisible(true);

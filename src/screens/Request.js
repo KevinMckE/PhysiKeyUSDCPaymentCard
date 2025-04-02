@@ -23,7 +23,7 @@ import Text from '../components/CustomText';
 import AccountButton from '../components/AccountButton';
 // functions
 import { accountLogin, transferUSDC } from '../functions/core/accountFunctions';
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { readCard } from '../functions/core/readCard';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
 import { generateRandomString } from '../functions/core/generateRandomString';
 // styles
@@ -165,7 +165,8 @@ const Request = ({ navigation }) => {
   const fetchTag = async () => {
     console.log('fetching tag')
     try {
-      let tag = await scanSerialForKey();
+      let result = await readCard();
+      let tag = result.text;
       if (tag) {
         setTagID(tag);
         setModalVisible(true);
@@ -333,6 +334,8 @@ const Request = ({ navigation }) => {
         source={require('../assets/background.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
+        <LoadingOverlay loading={loading} />
+
         {parseFloat(dailyAmount) >= 10000 ? (
           <View style={{ alignItems: 'center', margin: 16 }}>
             <Text size={"medium"} color={"#ff0000"} text="You have hit your daily transaction limit, please try again later." />

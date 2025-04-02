@@ -75,10 +75,8 @@ const AccountList = ({ data, navigation, setData }) => {
                 >
                   <View style={[styles.listItem, index === data.length - 1 && styles.lastItem]}>
                     <List.Item
+   
                       title={() => (
-                        <Text size="large" text={`${item.key}`} />
-                      )}
-                      description={() => (
                         <Text size="small" text={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`} />
                       )}
                     />

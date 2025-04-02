@@ -12,7 +12,7 @@ import { AccountContext } from '../contexts/AccountContext';
 // functions
 import { getData } from '../functions/core/asyncStorage';
 import { cancelNfc } from '../functions/core/cancelNfcRequest';
-import { scanSerialForKey } from '../functions/core/scanSerialForKey';
+import { readCard } from '../functions/core/readCard';
 // styles
 import styles from '../styles/common';
 
@@ -51,10 +51,15 @@ const Login = ({ navigation }) => {
 
   const fetchTag = async () => {
     try {
-      let tag = await scanSerialForKey();
-      if (tag) {
+      let result = await readCard();
+      console.log(result)
+      if (result.success) {
         setScanModal(false);
-        navigation.navigate('AddAccount', { tag });
+        if (result.resultCode === 0) {
+          navigation.navigate('AddAccount');
+        } else if (result.resultCode === 1) {
+          navigation.navigate('CompleteLogin', { data: result.text });
+        }
       }
     } catch (error) {
       console.log('Cannot complete fetchTag: ', error);
@@ -102,11 +107,10 @@ const Login = ({ navigation }) => {
             </View>
             </>
           )}
-            <View style={[{ flex: 2, justifyContent: 'center' }, styles.center]}>
-              <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Landing'); }} />
-                <CustomButton text='Add' type='primary' size='small' onPress={handleScanCardPress} />
-              </View>
+            <View style={[{ flex: 2, justifyContent: 'center', gap: 16 }, styles.center]}>
+                <CustomButton text='Scan Card' type='primary' size='large' onPress={handleScanCardPress} />
+                <CustomButton text='Go Back' type='secondary' size='large' onPress={() => { navigation.navigate('Landing'); }} />
+    
             </View>
       </ImageBackground>
       {Platform.OS === 'android' && (

@@ -59,11 +59,6 @@ const ZeroFee = ({ navigation }) => {
             onPress={() => { navigation.navigate('Send'); }}
           />
         </View>
-        <View style={{ flex: 3, margin: 16 }}>
-          <Text size={"medium"} color={"#000000"} text={"To learn how:"} />
-          <CustomButton text='Loading Card Tutorial' type='secondary' size='large' onPress={onramp} style={{ marginVertical: 8 }} />
-          <CustomButton text='Cashout Tutorial' type='secondary' size='large' onPress={offramp} />
-        </View>
       </View>
     </ScrollView>
   );

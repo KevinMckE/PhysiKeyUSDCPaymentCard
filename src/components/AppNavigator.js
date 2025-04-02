@@ -18,6 +18,7 @@ import AccountContextProvider from '../contexts/AccountContext';
 // screens
 import Landing from '../screens/Landing';
 import Login from '../screens/Login';
+import CompleteLogin from '../screens/CompleteLogin';
 import AddAccount from '../screens/AddAccount';
 import InstantAcceptConfigure from '../screens/InstantAcceptConfigure';
 import History from '../screens/History';
@@ -68,6 +69,20 @@ const AppNavigator = () => {
               component={AddAccount}
               options={({ navigation }) => ({
                 title: 'Add Account',
+                headerLeft: () => (
+                  <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                  }}>
+                    <Image source={require('../assets/icons/back.png')} style={{ width: 24, height: 24, marginHorizontal: 16 }} />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="CompleteLogin"
+              component={CompleteLogin}
+              options={({ navigation }) => ({
+                title: 'Complete Login',
                 headerLeft: () => (
                   <TouchableOpacity onPress={() => {
                     navigation.goBack();

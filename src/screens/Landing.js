@@ -13,13 +13,13 @@ import { Text } from 'react-native-paper';
 // components
 import CustomButton from '../components/CustomButton';
 import CustomText from '../components/CustomText'
-
+import disablePassword from '../functions/core/disablePassword';
 // styles
 import styles from '../styles/common';
 
 const Landing = ({ navigation }) => {
   const handleLinkPress = () => {
-    navigation.navigate('WebViewScreen', { url: 'https://regencard.app' });
+    navigation.navigate('WebViewScreen', { url: 'https://physikey.xyz' });
   };
 
   return (
@@ -37,6 +37,8 @@ const Landing = ({ navigation }) => {
         <View style={[{ flex: 2, justifyContent: 'center', gap: 16 }, styles.center]}>
           <CustomButton text='Accept Payment' type='primary' size='large' onPress={() => { navigation.navigate('Request') }} />
           <CustomButton text='Card Manager' type='secondary' size='large' onPress={() => { navigation.navigate('Login'); }} />
+          <CustomButton text='Card Disable Pass' type='secondary' size='large' onPress={() => { disablePassword(); }} />
+
         </View>
         <View style={[{ flex: 1 }, styles.center]}>
           <CustomText size={"small"} color={"#000000"} text={"Don't have a card?"} />

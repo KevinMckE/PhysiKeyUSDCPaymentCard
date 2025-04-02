@@ -2,7 +2,7 @@ import { toSimpleSmartAccount } from "permissionless/_esm/accounts"
 import { createPublicClient, http, encodeFunctionData  } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { entryPoint07Address } from "viem/account-abstraction"
-import { sepolia, baseSepolia } from "viem/chains"
+import { baseSepolia } from "viem/chains"
 import { createPimlicoClient } from "permissionless/_esm/clients/pimlico"
 import { createSmartAccountClient } from "permissionless/_esm/"
 
@@ -10,8 +10,7 @@ import { createSmartAccountClient } from "permissionless/_esm/"
 import argon2 from 'react-native-argon2';
 import Web3 from 'web3';
 
-import { WEB3_URL, BASE_USDC_CONTRACT, ACCOUNT_FACTORY_ADDRESS, RPC_URL } from '@env';
-console.log('chain: ', 'https://sepolia.base.org');
+import { BASE_USDC_CONTRACT } from '@env';
 const web3 = new Web3('https://sepolia.base.org');
 const abi = [
   {

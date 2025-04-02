@@ -127,14 +127,6 @@ const Transfer = () => {
                     name="No Fees"
                     component={ZeroFee}
                   />
-                  <Tab.Screen
-                    name="Buy USDC"
-                    component={TransakBuy}
-                  />
-                  <Tab.Screen
-                    name="Sell USDC"
-                    component={TransakSell}
-                  />
                 </Tab.Navigator>
               ) : (
                 <>
@@ -189,10 +181,6 @@ const Transfer = () => {
                 <Tab.Screen
                   name="No Fees"
                   component={ZeroFee}
-                />
-                <Tab.Screen
-                  name="Sell USDC"
-                  component={TransakSell}
                 />
               </Tab.Navigator>
 

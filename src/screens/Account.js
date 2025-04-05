@@ -8,6 +8,7 @@ import AccountCard from '../components/AccountCard';
 import CurrencyCard from '../components/CurrencyCard';
 import RecentTransactionList from '../components/TransactionList';
 import Text from '../components/CustomText';
+import SaveAccount from '../components/SaveAccountModal';
 // context
 import { AccountContext } from '../contexts/AccountContext';
 // styles
@@ -15,7 +16,8 @@ import styles from '../styles/common';
 
 const Account = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance, isCard } = useContext(AccountContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const { activity, publicKey, accountName, balance, setNewActivity, setNewBalance, isCard, setNewAccount } = useContext(AccountContext);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -27,7 +29,7 @@ const Account = ({ navigation }) => {
   }, []);
 
   const handleCopyToClipboard = () => {
-    trigger("impactLight", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
+    trigger("impactHeavy", { enableVibrateFallback: true, ignoreAndroidSystemSettings: false });
     Clipboard.setString(publicKey);
   };
 
@@ -38,14 +40,19 @@ const Account = ({ navigation }) => {
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <View style={styles.textContainer}>
-          <Text size={"small"} color={"#000000"} text={"Account"} />
           <Pressable
-            onPress={() => {
-              navigation.navigate('AccountSettings', { navigation });
+            onPress={() => setModalVisible(true)}
+            style={{
+              backgroundColor: '#fff',
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 15,
+              alignItems: 'center',
             }}
           >
-            <Text size={"small"} color={"#000000"} text={"View Details >"} />
+            <Text size={"small"} color={"#000000"} text={"Save Account"} />
           </Pressable>
+
         </View>
         <Pressable onPress={handleCopyToClipboard}>
           <AccountCard
@@ -76,8 +83,14 @@ const Account = ({ navigation }) => {
           data={activity}
           limit={3}
         />
-        <View style={{ height: 80 }}/>
+        <View style={{ height: 80 }} />
       </ImageBackground>
+      <SaveAccount
+        visible={modalVisible}
+        closeModal={() => setModalVisible(false)}
+        address={publicKey}
+        title="Save Account"
+      />
     </ScrollView>
   );
 }

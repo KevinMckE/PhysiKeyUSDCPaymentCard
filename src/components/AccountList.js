@@ -73,10 +73,12 @@ const AccountList = ({ data, navigation, setData }) => {
                     navigation.navigate('Home');
                   }}
                 >
-                  <View style={[styles.listItem, index === data.length - 1 && styles.lastItem]}>
+                  <View style={styles.listItem}>
                     <List.Item
-   
                       title={() => (
+                        <Text size="large" text={`${item.key}`} />
+                      )}
+                      description={() => (
                         <Text size="small" text={`${item.value ? item.value.slice(0, 10) + '...' + item.value.slice(-10) : ''}`} />
                       )}
                     />
@@ -131,8 +133,5 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 16,
-  },
-  lastItem: {
-    borderBottomWidth: 0,
   },
 });

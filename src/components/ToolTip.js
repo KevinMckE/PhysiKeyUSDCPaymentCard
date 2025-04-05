@@ -6,7 +6,7 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 const TooltipComponent = ({ tooltipVisible, setTooltipVisible, title, text, content }) => (
   <>
     <TouchableOpacity style={styles.topContainer} onPress={() => setTooltipVisible(true)}>
-      <Text size={"large"} color={"#000000"} text={title} />
+      <Text size={"large"} color={"#000000"} text={title} style={{ width: '90%' }}/>
       <Image source={require('../assets/icons/info.png')} style={styles.icon} />
     </TouchableOpacity>
     <Tooltip
@@ -24,7 +24,7 @@ const TooltipComponent = ({ tooltipVisible, setTooltipVisible, title, text, cont
 const styles = StyleSheet.create({
   topContainer: {
     flexDirection: 'row',     
-    alignItems: 'baseline'
+    alignItems: 'baseline',
   },
   icon: {
     marginLeft: 10,          

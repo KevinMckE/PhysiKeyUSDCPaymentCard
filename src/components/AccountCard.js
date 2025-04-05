@@ -11,7 +11,11 @@ const AccountCard = ({ publicKey, accountName, balance }) => {
       <View style={styles.content}>
         <View>
           <View style={styles.name}>
-            <CustomText size={"large"} color={"#000000"} text='Public Address' />
+            <CustomText
+              size="large"
+              color="#000000"
+              text={accountName.length === 0 ? "Public Address" : accountName}
+            />
             <Image
               source={require('../assets/logos/base_logo.png')}
               style={styles.networkIcon}

@@ -79,16 +79,12 @@ const Login = ({ navigation }) => {
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Press button to scan"
-                text="*Requires a Regen Card"
+                text="*Requires an NFC Card"
                 content="You can make multiple accounts using a single card."
               />
             </View>
-            <View style={[{ flex: 4}, styles.center]}>
-            <Image
-                source={require('../assets/card_tap_animation.gif')}
-                style={styles.animationContainer}
-                resizeMode="contain"
-              />
+            <View style={{ flex: 4 }}>
+              <AccountList data={dataList} navigation={navigation} setData={setDataList} />
             </View>
           </>
         ) : (
@@ -98,7 +94,7 @@ const Login = ({ navigation }) => {
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Press button to scan"
-                text="*Requires a Regen Card"
+                text="*Requires an NFC card"
                 content="You can make multiple accounts using a single card."
               />
             </View>

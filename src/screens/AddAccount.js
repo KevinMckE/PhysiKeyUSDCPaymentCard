@@ -103,7 +103,8 @@ const AddAccount = ({ navigation, route }) => {
           }
           if (confirmPassword && confirmPassword.trim() !== '') {
             if (password === confirmPassword) {
-              setNewAccount(randVal, password, label, navigation);
+              setStep(step + 1);
+              //
               setInputError('');
             } else {
               setInputError('The passwords do not match.');
@@ -114,6 +115,7 @@ const AddAccount = ({ navigation, route }) => {
         } else {
           setInputError('Please enter a password.');
         }
+  
         break;
       case 3:
         if (label.trim() !== '') {
@@ -154,9 +156,9 @@ const AddAccount = ({ navigation, route }) => {
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
-                title="(1/2) Scan card again"
-                text="*This is the first step in card setup."
-                content="This will write the necessary details to the card."
+                title="(1/2) This card isn't set up yet"
+                text="*Tap again to set up the card."
+                content="This will write the card code to the card."
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
@@ -182,7 +184,7 @@ const AddAccount = ({ navigation, route }) => {
                 setTooltipVisible={setTooltipVisible}
                 title="(2/2) Final scan"
                 text="*This will complete the card setup."
-                content="This step helps prevent accidental card overrides"
+                content="Helps prevent accidental card overrides."
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
@@ -208,7 +210,8 @@ const AddAccount = ({ navigation, route }) => {
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
                 title="Choose a password"
-                content="Passwords must be 4 characters and may not contain emoji's.  It is important you remember this password."
+                text="*Each new password creates a seperate account when paired with your card. You must remember this password to access your account."
+                content="Passwords must be 4 characters and may not contain emoji's."
               />
             </View>
             <View style={{ flex: 5, margin: 16 }}>
@@ -226,8 +229,8 @@ const AddAccount = ({ navigation, route }) => {
             </View>
             <View style={{ flex: 2 }}>
               <View style={styles.buttonContainer}>
-                <CustomButton text='Go Back' type='secondary' size='small' onPress={() => { navigation.navigate('Login'); }} />
-                <CustomButton text='Login' type='primary' size='small' onPress={handleNextStep} />
+                <CustomButton text='Go Back' type='secondary' size='small' onPress={handleNextStep} />
+                <CustomButton text='Continue' type='primary' size='small' onPress={handleNextStep} />
               </View>
             </View>
           </>
@@ -239,8 +242,8 @@ const AddAccount = ({ navigation, route }) => {
               <TooltipComponent
                 tooltipVisible={tooltipVisible}
                 setTooltipVisible={setTooltipVisible}
-                title="Name this account"
-                content="Names can be any length or character but must be unique."
+                title="Save account?"
+                text="*This will store your public address on this device only.  You can login without saving and save a later time."
               />
             </View>
             <View style={{ flex: 4, margin: 16 }}>
@@ -259,9 +262,10 @@ const AddAccount = ({ navigation, route }) => {
             </View>
             
             <View style={{ flex: 2 }}>
+              <CustomButton text='Login & Save' type='primary' size='Large' onPress={() => { Keyboard.dismiss(); handleNextStep(); }} style={{ alignSelf: 'center', marginBottom: 16 }}/>
               <View style={styles.buttonContainer}>
                 <CustomButton text='Go Back' type='secondary' size='small' onPress={handlePreviousStep} />
-                <CustomButton text='Login' type='primary' size='small' onPress={() => { Keyboard.dismiss(); handleNextStep(); }} />
+                <CustomButton text='Login' type='secondary' size='small' onPress={() => { Keyboard.dismiss();  setNewAccount(randVal, password, '', navigation); }} />
               </View>
             </View>
           </>

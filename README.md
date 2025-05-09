@@ -56,17 +56,28 @@ All transaction flows are managed within screens (in screens/).
 Each flow step is conditionally rendered inside the same screen.
 
 Example: `SendModal.tsx`
-- Case 0 – Enter Recipient
-  - Input saved to state.
-  - Validated as Bitcoin address.
-  - If valid, advance to Case 1.
-- Case 1 – Enter Amount
-  - Amount saved to state.
-  - handleAmountChange() validates input.
-  - If valid, runs handleSign().
-- handleSign():
-  - Uses modal state to call imported helper functions.
-  - Calls signTransaction() from functions/.
-  - On success, proceeds to Case 2.
-- Case 2 – Display Result
-  - Shows transaction hash or confirmation.
+- Step 0 – Enter Recipient
+  - User enters or scans a recipient Ethereum address.
+  - Value saved to `recipientKey`.
+  - If non-empty, advances to Step 1.
+  - NFC scan sets `recipTag`, which is used to fetch recipient address via `handlePasswords()`.
+- Step 1 – Enter Amount
+  - User inputs amount in USDC.
+  - Input validated via `handleAmountChange()` using a regex.
+  - Must be greater than 0 and less than 3000.
+  - If valid, advances to Step 2.
+- Step 2 – Sign & Send
+  - User scans their Regen Card to sign the transaction.
+  - `tagID` is set via NFC scan in `fetchSign()`.
+  - Calls `confirmSign(password`) with the tag ID and password.
+    - Executes `transferUSDC(...)`.
+    - On success, sets `success` to `true` and proceeds to Step 3.
+- Step 3 – Display Result
+  - Shows status message `(statusMessage)` and success/failure status.
+  - Error message shown if signing or transfer fail
+  
+Additional Logic 
+  - If `isCard` is true, `instantAcceptSign()` handles signing automatically using saved Keychain password, skipping the password modal.
+  - NFC interactions are handled using `readCard()` and managed with modals (`InputModal`, `AndroidScanModal`).
+  - Keyboard visibility and height are tracked to avoid layout issues.
+

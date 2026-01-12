@@ -1,6 +1,7 @@
 This project is built and maintained by [**Anywhere Blockchain Corp**](AnywhereAccess.io) bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 
+
 **⚠️ Requires a Tatum API Key, Pimlico RPC API key and Transak API key**  
 Change these variables in either:  
 - `.env.mainnet`  
